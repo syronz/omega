@@ -13,11 +13,8 @@ func ProvideInvoiceRepostiory(DB *gorm.DB) InvoiceRepository {
 	return InvoiceRepository{DB: DB}
 }
 
-
-
-func (p *InvoiceRepository) Save(invoice Product) Product {
+func (p *InvoiceRepository) Save(invoice Invoice) Invoice {
 	p.DB.Save(&invoice)
 
 	return invoice
 }
-

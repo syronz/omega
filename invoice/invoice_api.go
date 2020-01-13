@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
-	"strconv"
+	// "strconv"
 )
 
 type InvoiceAPI struct {
@@ -14,8 +14,6 @@ type InvoiceAPI struct {
 func ProvideInvoiceAPI(p InvoiceService) InvoiceAPI {
 	return InvoiceAPI{InvoiceService: p}
 }
-
-
 
 func (p *InvoiceAPI) Create(c *gin.Context) {
 	var invoiceDTO InvoiceDTO
@@ -30,4 +28,3 @@ func (p *InvoiceAPI) Create(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"invoice": ToInvoiceDTO(createdInvoice)})
 }
-

@@ -7,12 +7,18 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
-	"rest-gin-gorm/product"
+	// "rest-gin-gorm/internal"
+	"rest-gin-gorm/internal/one"
 	"rest-gin-gorm/invoice"
+	"rest-gin-gorm/product"
 )
 
 func initDB() *gorm.DB {
-	db, err := gorm.Open("mysql", "root:root@tcp(127.0.0.1:3306)/alpha?charset=utf8&parseTime=True&loc=Local")
+
+	// internal.InternalPing()
+	one.OnePing()
+
+	db, err := gorm.Open("mysql", "root:Qaz1@345@tcp(127.0.0.1:3306)/alpha?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
 		panic(err)
 	}
@@ -27,18 +33,18 @@ func main() {
 	db := initDB()
 	defer db.Close()
 
-	// productAPI := initProductAPI(db)
+	productAPI := InitProductAPI(db)
 
 	r := gin.Default()
 
-	// r.GET("/products", productAPI.FindAll)
-	// r.GET("/products/:id", productAPI.FindByID)
-	// r.POST("/products", productAPI.Create)
-	// r.PUT("/products/:id", productAPI.Update)
-	// r.DELETE("/products/:id", productAPI.Delete)
+	r.GET("/products", productAPI.FindAll)
+	r.GET("/products/:id", productAPI.FindByID)
+	r.POST("/products", productAPI.Create)
+	r.PUT("/products/:id", productAPI.Update)
+	r.DELETE("/products/:id", productAPI.Delete)
 
-	// invoiceAPI := initInvoiceAPI(db)
-	// r.POST("/invoices", invoiceAPI.Create)
+	invoiceAPI := InitInvoiceAPI(db)
+	r.POST("/invoices", invoiceAPI.Create)
 
 	err := r.Run()
 	if err != nil {

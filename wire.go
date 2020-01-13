@@ -4,8 +4,8 @@ package main
 import (
 	"github.com/google/wire"
 	"github.com/jinzhu/gorm"
-	"rest-gin-gorm/product"
 	"rest-gin-gorm/invoice"
+	"rest-gin-gorm/product"
 )
 
 func InitProductAPI(db *gorm.DB) product.ProductAPI {
