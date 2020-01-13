@@ -8,6 +8,7 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
 	"rest-gin-gorm/product"
+	"rest-gin-gorm/invoice"
 )
 
 func initDB() *gorm.DB {
@@ -17,6 +18,7 @@ func initDB() *gorm.DB {
 	}
 
 	db.AutoMigrate(&product.Product{})
+	db.AutoMigrate(&invoice.Invoice{})
 
 	return db
 }
@@ -25,15 +27,18 @@ func main() {
 	db := initDB()
 	defer db.Close()
 
-	productAPI := initProductAPI(db)
+	// productAPI := initProductAPI(db)
 
 	r := gin.Default()
 
-	r.GET("/products", productAPI.FindAll)
-	r.GET("/products/:id", productAPI.FindByID)
-	r.POST("/products", productAPI.Create)
-	r.PUT("/products/:id", productAPI.Update)
-	r.DELETE("/products/:id", productAPI.Delete)
+	// r.GET("/products", productAPI.FindAll)
+	// r.GET("/products/:id", productAPI.FindByID)
+	// r.POST("/products", productAPI.Create)
+	// r.PUT("/products/:id", productAPI.Update)
+	// r.DELETE("/products/:id", productAPI.Delete)
+
+	// invoiceAPI := initInvoiceAPI(db)
+	// r.POST("/invoices", invoiceAPI.Create)
 
 	err := r.Run()
 	if err != nil {
