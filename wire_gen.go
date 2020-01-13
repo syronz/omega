@@ -7,6 +7,7 @@ package main
 
 import (
 	"github.com/jinzhu/gorm"
+	"rest-gin-gorm/invoice"
 	"rest-gin-gorm/product"
 )
 
@@ -16,9 +17,16 @@ import (
 
 // Injectors from wire.go:
 
-func initProductAPI(db *gorm.DB) product.ProductAPI {
+func InitProductAPI(db *gorm.DB) product.ProductAPI {
 	productRepository := product.ProvideProductRepostiory(db)
 	productService := product.ProvideProductService(productRepository)
 	productAPI := product.ProvideProductAPI(productService)
 	return productAPI
+}
+
+func InitInvoiceAPI(db *gorm.DB) invoice.InvoiceAPI {
+	invoiceRepository := invoice.ProvideInvoiceRepostiory(db)
+	invoiceService := invoice.ProvideInvoiceService(invoiceRepository)
+	invoiceAPI := invoice.ProvideInvoiceAPI(invoiceService)
+	return invoiceAPI
 }
