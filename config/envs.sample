@@ -1,0 +1,13 @@
+export SERVER_PORT=8083
+export SERVER_HOST="localhost"
+
+export DATABASE_URL="root:Qaz1@345@tcp(127.0.0.1:3306)/alpha?charset=utf8&parseTime=True&loc=Local"
+export DATABASE_TYPE="mysql"
+
+export AUTOMIGRATE=0
+export JWT_SECRET_KEY="kz86HcnwKSn2k2vk6Ddw04kdck9k9SKedWFdGkwe70"
+
+export LOG_FORMAT="json" #JSON and REGULAR
+export LOG_OUTPUT="stdout" #stdout means the output, otherwise it become the file path
+export LOG_LEVEL="info" #trace debug info warn error fatal panic
+
