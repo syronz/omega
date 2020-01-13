@@ -1,10 +1,12 @@
 //+build wireinject
+
 package main
 
 import (
 	"github.com/google/wire"
 	"github.com/jinzhu/gorm"
 	"rest-gin-gorm/invoice"
+	"rest-gin-gorm/pkg/user"
 	"rest-gin-gorm/product"
 )
 
@@ -18,4 +20,10 @@ func InitInvoiceAPI(db *gorm.DB) invoice.InvoiceAPI {
 	wire.Build(invoice.ProvideInvoiceRepostiory, invoice.ProvideInvoiceService, invoice.ProvideInvoiceAPI)
 
 	return invoice.InvoiceAPI{}
+}
+
+func InitUserAPI(db *gorm.DB) user.UserAPI {
+	wire.Build(user.ProvideUserRepostiory, user.ProvideUserService, user.ProvideUserAPI)
+
+	return user.UserAPI{}
 }

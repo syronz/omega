@@ -10,6 +10,7 @@ import (
 	// "rest-gin-gorm/internal"
 	"rest-gin-gorm/internal/one"
 	"rest-gin-gorm/invoice"
+	"rest-gin-gorm/pkg/user"
 	"rest-gin-gorm/product"
 )
 
@@ -25,6 +26,7 @@ func initDB() *gorm.DB {
 
 	db.AutoMigrate(&product.Product{})
 	db.AutoMigrate(&invoice.Invoice{})
+	db.AutoMigrate(&user.User{})
 
 	return db
 }
@@ -45,6 +47,13 @@ func main() {
 
 	invoiceAPI := InitInvoiceAPI(db)
 	r.POST("/invoices", invoiceAPI.Create)
+
+	userAPI := InitUserAPI(db)
+	r.GET("/users", userAPI.FindAll)
+	r.GET("/users/:id", userAPI.FindByID)
+	r.POST("/users", userAPI.Create)
+	r.PUT("/users/:id", userAPI.Update)
+	r.DELETE("/users/:id", userAPI.Delete)
 
 	err := r.Run()
 	if err != nil {

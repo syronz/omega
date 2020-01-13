@@ -8,6 +8,7 @@ package main
 import (
 	"github.com/jinzhu/gorm"
 	"rest-gin-gorm/invoice"
+	"rest-gin-gorm/pkg/user"
 	"rest-gin-gorm/product"
 )
 
@@ -29,4 +30,11 @@ func InitInvoiceAPI(db *gorm.DB) invoice.InvoiceAPI {
 	invoiceService := invoice.ProvideInvoiceService(invoiceRepository)
 	invoiceAPI := invoice.ProvideInvoiceAPI(invoiceService)
 	return invoiceAPI
+}
+
+func InitUserAPI(db *gorm.DB) user.UserAPI {
+	userRepository := user.ProvideUserRepostiory(db)
+	userService := user.ProvideUserService(userRepository)
+	userAPI := user.ProvideUserAPI(userService)
+	return userAPI
 }
