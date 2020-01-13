@@ -8,6 +8,9 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
 	// "rest-gin-gorm/internal"
+	"fmt"
+	"github.com/sirupsen/logrus"
+	"os"
 	"rest-gin-gorm/internal/one"
 	"rest-gin-gorm/pkg/invoice"
 	"rest-gin-gorm/pkg/product"
@@ -33,10 +36,27 @@ func initDB() *gorm.DB {
 }
 
 func main() {
+	// Log as JSON instead of the default ASCII formatter.
+	logrus.SetFormatter(&logrus.JSONFormatter{})
+
+	// Output to stdout instead of the default stderr
+	// Can be any io.Writer, see below for File example
+	logrus.SetOutput(os.Stdout)
+
+	// Only logrus the warning severity or above.
+	// logrus.SetLevel(logrus.WarnLevel)
+	logrus.SetLevel(logrus.InfoLevel)
+	logrus.Info("THIS IS LOGRUS TEST .................................")
+	log := logrus.New()
+	log.SetFormatter(&logrus.JSONFormatter{})
+
+	fmt.Printf("\n################ %T \n", log)
+	log.Info("THIS IS LOGRUS TEST .................................")
+
 	db := initDB()
 	defer db.Close()
 
-	s := server.Setup(db)
+	s := server.Setup(db, log)
 
 	err := s.Run()
 	if err != nil {

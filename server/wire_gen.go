@@ -7,6 +7,7 @@ package server
 
 import (
 	"github.com/jinzhu/gorm"
+	"github.com/sirupsen/logrus"
 	"rest-gin-gorm/pkg/invoice"
 	"rest-gin-gorm/pkg/product"
 	"rest-gin-gorm/pkg/user"
@@ -28,8 +29,8 @@ func InitInvoiceAPI(db *gorm.DB) invoice.InvoiceAPI {
 	return invoiceAPI
 }
 
-func InitUserAPI(db *gorm.DB) user.UserAPI {
-	userRepository := user.ProvideUserRepostiory(db)
+func InitUserAPI(db *gorm.DB, log *logrus.Logger) user.UserAPI {
+	userRepository := user.ProvideUserRepostiory(db, log)
 	userService := user.ProvideUserService(userRepository)
 	userAPI := user.ProvideUserAPI(userService)
 	return userAPI

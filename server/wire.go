@@ -3,11 +3,13 @@
 package server
 
 import (
-	"github.com/google/wire"
-	"github.com/jinzhu/gorm"
 	"rest-gin-gorm/pkg/invoice"
 	"rest-gin-gorm/pkg/product"
 	"rest-gin-gorm/pkg/user"
+
+	"github.com/google/wire"
+	"github.com/jinzhu/gorm"
+	"github.com/sirupsen/logrus"
 )
 
 func InitProductAPI(db *gorm.DB) product.ProductAPI {
@@ -22,7 +24,7 @@ func InitInvoiceAPI(db *gorm.DB) invoice.InvoiceAPI {
 	return invoice.InvoiceAPI{}
 }
 
-func InitUserAPI(db *gorm.DB) user.UserAPI {
+func InitUserAPI(db *gorm.DB, log *logrus.Logger) user.UserAPI {
 	wire.Build(user.ProvideUserRepostiory, user.ProvideUserService, user.ProvideUserAPI)
 
 	return user.UserAPI{}

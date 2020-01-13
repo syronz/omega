@@ -3,9 +3,10 @@ package server
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
+	"github.com/sirupsen/logrus"
 )
 
-func router(r *gin.Engine, db *gorm.DB) {
+func router(r *gin.Engine, db *gorm.DB, log *logrus.Logger) {
 
 	productAPI := InitProductAPI(db)
 	r.GET("/products", productAPI.FindAll)
@@ -17,7 +18,7 @@ func router(r *gin.Engine, db *gorm.DB) {
 	invoiceAPI := InitInvoiceAPI(db)
 	r.POST("/invoices", invoiceAPI.Create)
 
-	userAPI := InitUserAPI(db)
+	userAPI := InitUserAPI(db, log)
 	r.GET("/users", userAPI.FindAll)
 	r.GET("/users/:id", userAPI.FindByID)
 	r.POST("/users", userAPI.Create)
