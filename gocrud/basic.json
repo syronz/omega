@@ -1,0 +1,17 @@
+{
+	"env": [
+		{
+			"local": {
+				"_URL_":"http://127.0.0.1:8080"
+			}
+		}
+	],
+
+	"header":{
+		"Content-Type": "application/json",
+		"User-Agent": "gocrud/0.1",
+		"Accept": "*/*",
+		"Cache-Control": "no-cache",
+		"Connection": "keep-alive"
+	}
+}

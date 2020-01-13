@@ -11,7 +11,7 @@ import (
 )
 
 func initDB() *gorm.DB {
-	db, err := gorm.Open("mysql", "root:Qaz1@345@tcp(127.0.0.1:3306)/alpha?charset=utf8&parseTime=True&loc=Local")
+	db, err := gorm.Open("mysql", "root:root@tcp(127.0.0.1:3306)/alpha?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
 		panic(err)
 	}
