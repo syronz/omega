@@ -3,17 +3,13 @@
 //go:generate wire
 //+build !wireinject
 
-package main
+package server
 
 import (
 	"github.com/jinzhu/gorm"
-	"rest-gin-gorm/invoice"
+	"rest-gin-gorm/pkg/invoice"
+	"rest-gin-gorm/pkg/product"
 	"rest-gin-gorm/pkg/user"
-	"rest-gin-gorm/product"
-)
-
-import (
-	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 // Injectors from wire.go:

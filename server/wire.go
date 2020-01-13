@@ -1,13 +1,13 @@
 //+build wireinject
 
-package main
+package server
 
 import (
 	"github.com/google/wire"
 	"github.com/jinzhu/gorm"
-	"rest-gin-gorm/invoice"
+	"rest-gin-gorm/pkg/invoice"
+	"rest-gin-gorm/pkg/product"
 	"rest-gin-gorm/pkg/user"
-	"rest-gin-gorm/product"
 )
 
 func InitProductAPI(db *gorm.DB) product.ProductAPI {

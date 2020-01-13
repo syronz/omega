@@ -3,15 +3,16 @@ package main
 import (
 	// "os"
 
-	"github.com/gin-gonic/gin"
+	// "github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 
 	// "rest-gin-gorm/internal"
 	"rest-gin-gorm/internal/one"
-	"rest-gin-gorm/invoice"
+	"rest-gin-gorm/pkg/invoice"
+	"rest-gin-gorm/pkg/product"
 	"rest-gin-gorm/pkg/user"
-	"rest-gin-gorm/product"
+	"rest-gin-gorm/server"
 )
 
 func initDB() *gorm.DB {
@@ -35,27 +36,9 @@ func main() {
 	db := initDB()
 	defer db.Close()
 
-	productAPI := InitProductAPI(db)
+	s := server.Setup(db)
 
-	r := gin.Default()
-
-	r.GET("/products", productAPI.FindAll)
-	r.GET("/products/:id", productAPI.FindByID)
-	r.POST("/products", productAPI.Create)
-	r.PUT("/products/:id", productAPI.Update)
-	r.DELETE("/products/:id", productAPI.Delete)
-
-	invoiceAPI := InitInvoiceAPI(db)
-	r.POST("/invoices", invoiceAPI.Create)
-
-	userAPI := InitUserAPI(db)
-	r.GET("/users", userAPI.FindAll)
-	r.GET("/users/:id", userAPI.FindByID)
-	r.POST("/users", userAPI.Create)
-	r.PUT("/users/:id", userAPI.Update)
-	r.DELETE("/users/:id", userAPI.Delete)
-
-	err := r.Run()
+	err := s.Run()
 	if err != nil {
 		panic(err)
 	}
