@@ -1,10 +1,12 @@
 package user
 
 import (
-	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 	"strconv"
+	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 type UserAPI struct {
@@ -29,6 +31,7 @@ func (p *UserAPI) FindByID(c *gin.Context) {
 }
 
 func (p *UserAPI) Create(c *gin.Context) {
+	time.Sleep(5 * time.Second)
 	var userDTO UserDTO
 	err := c.BindJSON(&userDTO)
 	if err != nil {

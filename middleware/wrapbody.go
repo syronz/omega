@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -41,26 +42,41 @@ func Wrapper(cfg config.CFG) gin.HandlerFunc {
 		fmt.Println(reqBody, path, uri, reqParam, start) // Print request body
 
 		c.Request.Body = rdr2
+		requestIndex++
 
 		blw := &bodyLogWriter{body: bytes.NewBufferString(""), ResponseWriter: c.Writer}
 		c.Writer = blw
+		clientIP := c.ClientIP()
+		referer := c.Request.Referer()
+		clientUserAgent := c.Request.UserAgent()
+		cfg.Logapi.WithFields(logrus.Fields{
+			"clientIP":   clientIP,
+			"method":     c.Request.Method,
+			"uri":        uri,
+			"req_body":   reqBody,
+			"req_params": reqParam,
+			"referer":    referer,
+			"userAgent":  clientUserAgent,
+		}).Info(requestIndex)
+
+		c.Set("msgIndex", requestIndex)
+
 		c.Next()
 
 		stop := time.Since(start)
 		latency := int(math.Ceil(float64(stop.Nanoseconds()) / 1000000.0))
 		statusCode := c.Writer.Status()
-		clientIP := c.ClientIP()
-		clientUserAgent := c.Request.UserAgent()
-		referer := c.Request.Referer()
 		dataLength := c.Writer.Size()
 		if dataLength < 0 {
 			dataLength = 0
 		}
+		resBody := readBody(blw.body)
 
 		// statusCode := c.Writer.Status()
 		// if statusCode >= 400 {
 		//ok this is an request with error, let's make a record for it
 		// now print body (or log in your preferred way)
+		msgIndex, _ := c.Get("msgIndex")
 		fmt.Println("Response body: " + blw.body.String())
 		cfg.Debug(blw.body, latency, statusCode, clientIP, clientUserAgent, referer, dataLength)
 		cfg.Logapi.WithFields(logrus.Fields{
@@ -74,19 +90,34 @@ func Wrapper(cfg config.CFG) gin.HandlerFunc {
 			"referer":    referer,
 			"dataLength": dataLength,
 			"userAgent":  clientUserAgent,
-			"response":   stripQutations(blw.body.String()),
-		}).Info(requestIndex)
-		requestIndex++
+			// "response":   stripQutations(blw.body.String()),
+			"response": resBody,
+		}).Info(msgIndex)
 
 		// }
 	}
 }
 
-func readBody(reader io.Reader) string {
+func readBody(reader io.Reader) interface{} {
 	buf := new(bytes.Buffer)
 	buf.ReadFrom(reader)
 
-	return stripQutations(buf.String())
+	// return stripQutations(buf.String())
+
+	var obj interface{}
+
+	// json.Unmarshal(buf, &obj)
+	// if err := json.NewEncoder(buf).Encode(&obj); err != nil {
+	if err := json.NewDecoder(buf).Decode(&obj); err != nil {
+		// res.WriteHeader(res, "whoops", http.StatusInternalServerError)
+		// return
+		fmt.Println(err)
+	}
+
+	fmt.Printf("!!!!!!!!!!!++++++++++++++++++++++++++++++++++ %+v \n\n", obj)
+
+	return obj
+
 	// s := strings.Replace(buf.String(), "\"", "", -1)
 	// return s
 }

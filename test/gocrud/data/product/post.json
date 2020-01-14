@@ -3,7 +3,7 @@
 	"url":"_URL_/products",
 	"authorization":"Bearer _TOKEN2_",
 	"payload": {
-		"code": "cstd23332",
+		"code": "_RANDOM_NAME_",
 		"price": "3000"
 	}
 }
