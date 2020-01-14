@@ -12,12 +12,11 @@ func Setup() (cfg config.CFG, env config.Environment) {
 		log.Fatalln(err)
 	}
 
-	// the last true means filename and line number should be printed
 	logParam := LogParam{
 		format:  env.Log.Format,
 		output:  env.Log.Output,
 		level:   env.Log.Level,
-		hasHook: true,
+		hasHook: true, // true means filename and line number should be printed
 	}
 	cfg.Log = initLog(logParam)
 
