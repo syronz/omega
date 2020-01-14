@@ -1,9 +1,9 @@
 package initiate
 
 import (
-	"rest-gin-gorm/pkg/invoice"
-	"rest-gin-gorm/pkg/product"
-	"rest-gin-gorm/pkg/user"
+	"omega/pkg/invoice"
+	"omega/pkg/product"
+	"omega/pkg/user"
 
 	"github.com/jinzhu/gorm"
 )

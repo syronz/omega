@@ -1,7 +1,7 @@
 package user
 
 import (
-	"rest-gin-gorm/config"
+	"omega/config"
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"

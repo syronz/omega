@@ -1,18 +1,23 @@
 package config
 
-// Environment directly fetch os envs with getting help from envconfig
+// Environment directly fetch os envs with getting help from env
 type Environment struct {
 	Server struct {
-		Port string `envconfig:"SERVER_PORT"`
-		Host string `envconfig:"SERVER_HOST"`
+		Port string `env:"SERVER_PORT"`
+		ADDR string `env:"SERVER_ADDR"`
 	}
 	Database struct {
-		URL  string `envconfig:"DATABASE_URL"`
-		Type string `envconfig:"DATABASE_Type"`
+		URL  string `env:"DATABASE_URL,required"`
+		Type string `env:"DATABASE_TYPE,required"`
 	}
 	Log struct {
-		Format string `envconfig:"LOG_FORMAT"`
-		Output string `envconfig:"LOG_OUTPUT"`
-		Level  string `envconfig:"LOG_Level"`
+		Format string `env:"LOG_FORMAT,required"`
+		Output string `env:"LOG_OUTPUT,required"`
+		Level  string `env:"LOG_LEVEL,required"`
+	}
+	Logapi struct {
+		Format string `env:"LOGAPI_FORMAT,required"`
+		Output string `env:"LOGAPI_OUTPUT,required"`
+		Level  string `env:"LOGAPI_LEVEL,required"`
 	}
 }

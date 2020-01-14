@@ -3,10 +3,10 @@
 package server
 
 import (
-	"rest-gin-gorm/config"
-	"rest-gin-gorm/pkg/invoice"
-	"rest-gin-gorm/pkg/product"
-	"rest-gin-gorm/pkg/user"
+	"omega/config"
+	"omega/pkg/invoice"
+	"omega/pkg/product"
+	"omega/pkg/user"
 
 	"github.com/google/wire"
 )

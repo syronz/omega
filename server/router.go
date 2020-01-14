@@ -1,7 +1,7 @@
 package server
 
 import (
-	"rest-gin-gorm/config"
+	"omega/config"
 
 	"github.com/gin-gonic/gin"
 )

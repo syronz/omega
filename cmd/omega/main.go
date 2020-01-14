@@ -1,18 +1,19 @@
 package main
 
 import (
-	"rest-gin-gorm/initiate"
-	"rest-gin-gorm/server"
+	"fmt"
+	"omega/initiate"
+	"omega/server"
 )
 
 func main() {
 
-	cfg := initiate.Setup()
+	cfg, env := initiate.Setup()
 	defer cfg.DB.Close()
 
 	s := server.Setup(cfg)
 
-	err := s.Run()
+	err := s.Run(fmt.Sprintf("%v:%v", env.Server.ADDR, env.Server.Port))
 	if err != nil {
 		cfg.Log.Fatal(err)
 	}

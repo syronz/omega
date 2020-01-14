@@ -1,7 +1,7 @@
 package invoice
 
 import (
-	"rest-gin-gorm/pkg/product"
+	"omega/pkg/product"
 )
 
 type InvoiceDTO struct {
