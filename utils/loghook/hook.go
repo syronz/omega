@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+// Hook is a struct for hold main fields
 type Hook struct {
 	Field     string
 	Skip      int
@@ -14,15 +15,18 @@ type Hook struct {
 	Formatter func(file, function string, line int) string
 }
 
+// Levels return all levels of the hook
 func (hook *Hook) Levels() []logrus.Level {
 	return hook.levels
 }
 
+// Fire add new data to the entry.Data
 func (hook *Hook) Fire(entry *logrus.Entry) error {
 	entry.Data[hook.Field] = hook.Formatter(findCaller(hook.Skip))
 	return nil
 }
 
+// NewHook is used for intiate an object of the Hook
 func NewHook(levels ...logrus.Level) *Hook {
 	hook := Hook{
 		Field:  "source",
@@ -70,7 +74,7 @@ func getCaller(skip int) (uintptr, string, int) {
 	n := 0
 	for i := len(file) - 1; i > 0; i-- {
 		if file[i] == '/' {
-			n += 1
+			n++
 			if n >= 2 {
 				file = file[i+1:]
 				break
