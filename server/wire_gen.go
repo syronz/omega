@@ -6,8 +6,7 @@
 package server
 
 import (
-	"github.com/jinzhu/gorm"
-	"github.com/sirupsen/logrus"
+	"rest-gin-gorm/config"
 	"rest-gin-gorm/pkg/invoice"
 	"rest-gin-gorm/pkg/product"
 	"rest-gin-gorm/pkg/user"
@@ -15,22 +14,22 @@ import (
 
 // Injectors from wire.go:
 
-func InitProductAPI(db *gorm.DB) product.ProductAPI {
-	productRepository := product.ProvideProductRepostiory(db)
+func initProductAPI(c config.CFG) product.ProductAPI {
+	productRepository := product.ProvideProductRepostiory(c)
 	productService := product.ProvideProductService(productRepository)
 	productAPI := product.ProvideProductAPI(productService)
 	return productAPI
 }
 
-func InitInvoiceAPI(db *gorm.DB) invoice.InvoiceAPI {
-	invoiceRepository := invoice.ProvideInvoiceRepostiory(db)
+func initInvoiceAPI(c config.CFG) invoice.InvoiceAPI {
+	invoiceRepository := invoice.ProvideInvoiceRepostiory(c)
 	invoiceService := invoice.ProvideInvoiceService(invoiceRepository)
 	invoiceAPI := invoice.ProvideInvoiceAPI(invoiceService)
 	return invoiceAPI
 }
 
-func InitUserAPI(db *gorm.DB, log *logrus.Logger) user.UserAPI {
-	userRepository := user.ProvideUserRepostiory(db, log)
+func initUserAPI(c config.CFG) user.UserAPI {
+	userRepository := user.ProvideUserRepostiory(c)
 	userService := user.ProvideUserService(userRepository)
 	userAPI := user.ProvideUserAPI(userService)
 	return userAPI

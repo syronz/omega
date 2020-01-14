@@ -1,6 +1,8 @@
 package user
 
 import (
+	"rest-gin-gorm/config"
+
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/sirupsen/logrus"
@@ -11,8 +13,8 @@ type UserRepository struct {
 	Log *logrus.Logger
 }
 
-func ProvideUserRepostiory(DB *gorm.DB, Log *logrus.Logger) UserRepository {
-	return UserRepository{DB: DB, Log: Log}
+func ProvideUserRepostiory(c config.CFG) UserRepository {
+	return UserRepository{DB: c.DB, Log: c.Log}
 }
 
 func (p *UserRepository) FindAll() []User {

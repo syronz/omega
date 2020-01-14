@@ -1,5 +1,6 @@
 package config
 
+// Environment directly fetch os envs with getting help from envconfig
 type Environment struct {
 	Server struct {
 		Port string `envconfig:"SERVER_PORT"`

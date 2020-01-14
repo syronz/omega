@@ -1,6 +1,8 @@
 package product
 
 import (
+	"rest-gin-gorm/config"
+
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
@@ -9,8 +11,8 @@ type ProductRepository struct {
 	DB *gorm.DB
 }
 
-func ProvideProductRepostiory(DB *gorm.DB) ProductRepository {
-	return ProductRepository{DB: DB}
+func ProvideProductRepostiory(c config.CFG) ProductRepository {
+	return ProductRepository{DB: c.DB}
 }
 
 func (p *ProductRepository) FindAll() []Product {

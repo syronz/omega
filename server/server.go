@@ -1,17 +1,16 @@
 package server
 
 import (
+	"rest-gin-gorm/config"
+
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
-	"github.com/sirupsen/logrus"
-	// "rest-gin-gorm/tools/log"
 )
 
-func Setup(db *gorm.DB, log *logrus.Logger) *gin.Engine {
-	log.Info("this is log >>>>>>>>>>>>>!!!!!!!!!!!!!!!!!!!")
+// Setup integrate middleware and static route finally initiate router
+func Setup(c config.CFG) *gin.Engine {
 
 	r := gin.Default()
 
-	router(r, db, log)
+	router(r, c)
 	return r
 }

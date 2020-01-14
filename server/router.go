@@ -1,24 +1,24 @@
 package server
 
 import (
+	"rest-gin-gorm/config"
+
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
-	"github.com/sirupsen/logrus"
 )
 
-func router(r *gin.Engine, db *gorm.DB, log *logrus.Logger) {
+func router(r *gin.Engine, c config.CFG) {
 
-	productAPI := InitProductAPI(db)
+	productAPI := initProductAPI(c)
 	r.GET("/products", productAPI.FindAll)
 	r.GET("/products/:id", productAPI.FindByID)
 	r.POST("/products", productAPI.Create)
 	r.PUT("/products/:id", productAPI.Update)
 	r.DELETE("/products/:id", productAPI.Delete)
 
-	invoiceAPI := InitInvoiceAPI(db)
+	invoiceAPI := initInvoiceAPI(c)
 	r.POST("/invoices", invoiceAPI.Create)
 
-	userAPI := InitUserAPI(db, log)
+	userAPI := initUserAPI(c)
 	r.GET("/users", userAPI.FindAll)
 	r.GET("/users/:id", userAPI.FindByID)
 	r.POST("/users", userAPI.Create)
