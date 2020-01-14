@@ -20,4 +20,12 @@ and
 
 https://github.com/qiangxue/go-restful-api
 
+### Run
+in the main directory
+
+```
+source config/envs.sample
+reflex -r '\.go' -s -- sh -c 'go run cmd/omega/main.go'
+```
+
 

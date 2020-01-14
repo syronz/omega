@@ -4,6 +4,7 @@ import (
 	envEngine "github.com/caarlos0/env/v6"
 	"log"
 	"omega/config"
+	"omega/utils/glog"
 )
 
 // Setup initiate all difirent parts like log and database connection and generate cfg
@@ -19,6 +20,7 @@ func Setup() (cfg config.CFG, env config.Environment) {
 		hasHook: true, // true means filename and line number should be printed
 	}
 	cfg.Log = initLog(logParam)
+	glog.GlobalLog.Logrus = cfg.Log
 
 	logAPIParam := LogParam{
 		format:  env.Logapi.Format,
@@ -27,6 +29,7 @@ func Setup() (cfg config.CFG, env config.Environment) {
 		hasHook: false,
 	}
 	cfg.Logapi = initLog(logAPIParam)
+	glog.GlobalLog.Logapi = cfg.Logapi
 
 	if env.Database.Type == "" || env.Database.URL == "" {
 		cfg.Log.Warn(env)

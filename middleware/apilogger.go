@@ -3,7 +3,6 @@ package middleware
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"math"
@@ -12,6 +11,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	"omega/utils/glog"
 )
 
 type bodyLogWriter struct {
@@ -39,20 +39,20 @@ func APILogger(cfg config.CFG) gin.HandlerFunc {
 		blw := &bodyLogWriter{body: bytes.NewBufferString(""), ResponseWriter: c.Writer}
 		c.Writer = blw
 
-		logRequest(cfg, c, requestIndex, rdr)
+		logRequest(c, requestIndex, rdr)
 
 		c.Next()
 
 		stop := time.Since(start)
 		latency := int(math.Ceil(float64(stop.Nanoseconds()) / 1000000.0))
 
-		logResponse(cfg, c, latency, blw)
+		logResponse(c, latency, blw)
 
 	}
 }
 
-func logRequest(cfg config.CFG, c *gin.Context, requestIndex uint, rdr io.Reader) {
-	cfg.Logapi.WithFields(logrus.Fields{
+func logRequest(c *gin.Context, requestIndex uint, rdr io.Reader) {
+	glog.GlobalLog.Logapi.WithFields(logrus.Fields{
 		"ip":         c.ClientIP(),
 		"method":     c.Request.Method,
 		"uri":        c.Request.RequestURI,
@@ -65,9 +65,9 @@ func logRequest(cfg config.CFG, c *gin.Context, requestIndex uint, rdr io.Reader
 	c.Set("msgIndex", requestIndex)
 }
 
-func logResponse(cfg config.CFG, c *gin.Context, latency int, blw *bodyLogWriter) {
+func logResponse(c *gin.Context, latency int, blw *bodyLogWriter) {
 	msgIndex, _ := c.Get("msgIndex")
-	cfg.Logapi.WithFields(logrus.Fields{
+	glog.GlobalLog.Logapi.WithFields(logrus.Fields{
 		"status":      c.Writer.Status(),
 		"latency":     latency, // time to process
 		"data_length": c.Writer.Size(),
@@ -78,13 +78,13 @@ func logResponse(cfg config.CFG, c *gin.Context, latency int, blw *bodyLogWriter
 func readBody(reader io.Reader) interface{} {
 	buf := new(bytes.Buffer)
 	if _, err := buf.ReadFrom(reader); err != nil {
-		fmt.Println(err)
+		glog.Debug(err)
 	}
 
 	var obj interface{}
 
 	if err := json.NewDecoder(buf).Decode(&obj); err != nil {
-		fmt.Println(err)
+		glog.Debug(err)
 	}
 
 	return obj
