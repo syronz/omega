@@ -23,17 +23,20 @@ func Setup(c config.CFG) *gin.Engine {
 	}
 	c.Log.Debug(tmp)
 	c.Debug(tmp)
-	c.Log.WithFields(logrus.Fields{
+	c.Logapi.WithFields(logrus.Fields{
 		"user":  fmt.Sprintf("%+v", tmp),
-		"user2": &tmp,
+		"user2": tmp,
 		// "name": "diako",
-	}).Debug("found user")
+	}).Info("found user+++++++++++++++++++++++++")
 	c.Log.Debug("this is here debug !!!!!!!!!!!!!!")
 	c.Log.Info("this is here info !!!!!!!!!!!!!!")
 
 	// r.Use(middleware.Logger(logrus.New()))
-	r.Use(middleware.Logger(c.Logapi))
 
+	// r.Use(middleware.Logger(c))
+	// r.Use(middleware.GinBodyLogMiddleware)
+	r.Use(middleware.Wrapper(c))
 	router(r, c)
+
 	return r
 }

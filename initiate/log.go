@@ -8,6 +8,7 @@ import (
 )
 
 func initLog(format, output, level string, hasHook bool) *logrus.Logger {
+
 	// TODO: switch for each case should be completed
 
 	log := logrus.New()
@@ -24,8 +25,16 @@ func initLog(format, output, level string, hasHook bool) *logrus.Logger {
 	}
 
 	switch output {
-	case "output":
+	case "stdout":
 		log.SetOutput(os.Stdout)
+	default:
+		// log.SetOutput(os.Stdout)
+		file, err := os.OpenFile(output, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+		if err == nil {
+			log.Out = file
+		} else {
+			log.Fatalln("Failed to log to file", output)
+		}
 	}
 
 	switch level {

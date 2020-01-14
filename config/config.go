@@ -14,6 +14,8 @@ type CFG struct {
 	Logapi *logrus.Logger
 }
 
-func (c *CFG) Debug(obj interface{}) {
-	c.Log.Debug(fmt.Sprintf("%+v", obj))
+func (c *CFG) Debug(objs ...interface{}) {
+	for _, v := range objs {
+		c.Log.Debug(fmt.Sprintf("%T :: %+[1]v", v))
+	}
 }

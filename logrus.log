@@ -1,0 +1,3 @@
+{"file":"server/server.go:30","level":"info","msg":"found user+++++++++++++++++++++++++","time":"2020-01-14T15:58:48+03:00","user":"{name:diako age:23}","user2":{}}
+{"file":"server/server.go:30","level":"info","msg":"found user+++++++++++++++++++++++++","time":"2020-01-14T15:58:50+03:00","user":"{name:diako age:23}","user2":{}}
+{"file":"server/server.go:30","level":"info","msg":"found user+++++++++++++++++++++++++","time":"2020-01-14T15:58:54+03:00","user":"{name:diako age:23}","user2":{}}

@@ -13,6 +13,6 @@ export LOG_LEVEL="debug" #trace debug info warn error fatal panic
 
 export LOGAPI_FORMAT="json" #JSON and REGULAR
 export LOGAPI_OUTPUT="log/rms_api_logger.log" #filepath
-export LOGAPI_LEVEL="info" #trace debug info warn error fatal panic
+export LOGAPI_LEVEL="debug" #trace debug info warn error fatal panic
 
 export GIN_MODE=debug #debug, release & test, in the production rename it to the release
