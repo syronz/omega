@@ -13,15 +13,28 @@ func Setup() (cfg config.CFG, env config.Environment) {
 	}
 
 	// the last true means filename and line number should be printed
-	cfg.Log = initLog(env.Log.Format, env.Log.Output, env.Log.Level, true)
-	cfg.Logapi = initLog(env.Logapi.Format, env.Logapi.Output, env.Logapi.Level, false)
+	logParam := LogParam{
+		format:  env.Log.Format,
+		output:  env.Log.Output,
+		level:   env.Log.Level,
+		hasHook: true,
+	}
+	cfg.Log = initLog(logParam)
+
+	logAPIParam := LogParam{
+		format:  env.Logapi.Format,
+		output:  env.Logapi.Output,
+		level:   env.Logapi.Level,
+		hasHook: false,
+	}
+	cfg.Logapi = initLog(logAPIParam)
 
 	if env.Database.Type == "" || env.Database.URL == "" {
 		cfg.Log.Warn(env)
 		cfg.Log.Fatal("Environment is not set for database")
 	}
 
-	cfg.DB = initDB(env.Database.Type, env.Database.URL)
+	cfg.DB = initDB(cfg, env.Database.Type, env.Database.URL)
 
 	return
 }

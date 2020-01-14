@@ -7,37 +7,36 @@ import (
 	"omega/utils/loghook"
 )
 
-func initLog(format, output, level string, hasHook bool) *logrus.Logger {
+func initLog(p LogParam) *logrus.Logger {
 
 	// TODO: switch for each case should be completed
 
 	log := logrus.New()
 
-	if hasHook {
+	if p.hasHook {
 		hook := loghook.NewHook()
 		hook.Field = "file"
 		log.AddHook(hook)
 	}
 
-	switch format {
+	switch p.format {
 	case "json":
 		log.SetFormatter(&logrus.JSONFormatter{})
 	}
 
-	switch output {
+	switch p.output {
 	case "stdout":
 		log.SetOutput(os.Stdout)
 	default:
-		// log.SetOutput(os.Stdout)
-		file, err := os.OpenFile(output, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+		file, err := os.OpenFile(p.output, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 		if err == nil {
 			log.Out = file
 		} else {
-			log.Fatalln("Failed to log to file", output)
+			log.Fatalln("Failed to log to file", p.output)
 		}
 	}
 
-	switch level {
+	switch p.level {
 	case "info":
 		log.SetLevel(logrus.InfoLevel)
 	case "debug":

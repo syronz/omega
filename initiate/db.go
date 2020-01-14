@@ -1,6 +1,7 @@
 package initiate
 
 import (
+	"omega/config"
 	"omega/pkg/invoice"
 	"omega/pkg/product"
 	"omega/pkg/user"
@@ -8,12 +9,11 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-func initDB(dbType string, url string) *gorm.DB {
+func initDB(c config.CFG, dbType string, url string) *gorm.DB {
 
-	// db, err := gorm.Open("mysql", "root:Qaz1@345@tcp(127.0.0.1:3306)/alpha?charset=utf8&parseTime=True&loc=Local")
 	db, err := gorm.Open(dbType, url)
 	if err != nil {
-		panic(err)
+		c.Log.Fatalln(err)
 	}
 
 	db.AutoMigrate(&product.Product{})

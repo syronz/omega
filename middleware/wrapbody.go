@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"math"
 	"omega/config"
-	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -50,15 +49,14 @@ func Wrapper(cfg config.CFG) gin.HandlerFunc {
 		referer := c.Request.Referer()
 		clientUserAgent := c.Request.UserAgent()
 		cfg.Logapi.WithFields(logrus.Fields{
-			"clientIP":   clientIP,
-			"method":     c.Request.Method,
-			"uri":        uri,
-			"req_body":   reqBody,
-			"req_params": reqParam,
-			"referer":    referer,
-			"userAgent":  clientUserAgent,
+			"ip":        clientIP,
+			"method":    c.Request.Method,
+			"uri":       uri,
+			"request":   reqBody,
+			"params":    reqParam,
+			"referer":   referer,
+			"userAgent": clientUserAgent,
 		}).Info(requestIndex)
-
 		c.Set("msgIndex", requestIndex)
 
 		c.Next()
@@ -67,61 +65,36 @@ func Wrapper(cfg config.CFG) gin.HandlerFunc {
 		latency := int(math.Ceil(float64(stop.Nanoseconds()) / 1000000.0))
 		statusCode := c.Writer.Status()
 		dataLength := c.Writer.Size()
-		if dataLength < 0 {
-			dataLength = 0
-		}
+		// if dataLength < 0 {
+		// 	dataLength = 0
+		// }
 		resBody := readBody(blw.body)
 
-		// statusCode := c.Writer.Status()
-		// if statusCode >= 400 {
-		//ok this is an request with error, let's make a record for it
-		// now print body (or log in your preferred way)
-		msgIndex, _ := c.Get("msgIndex")
-		fmt.Println("Response body: " + blw.body.String())
-		cfg.Debug(blw.body, latency, statusCode, clientIP, clientUserAgent, referer, dataLength)
+		msgIndex, ok := c.Get("msgIndex")
+		if !ok {
+			msgIndex = -1
+		}
 		cfg.Logapi.WithFields(logrus.Fields{
-			"statusCode": statusCode,
-			"latency":    latency, // time to process
-			"clientIP":   clientIP,
-			"method":     c.Request.Method,
-			"uri":        uri,
-			"req_body":   reqBody,
-			"req_params": reqParam,
-			"referer":    referer,
-			"dataLength": dataLength,
-			"userAgent":  clientUserAgent,
-			// "response":   stripQutations(blw.body.String()),
-			"response": resBody,
+			"status":      statusCode,
+			"latency":     latency, // time to process
+			"data_length": dataLength,
+			"response":    resBody,
 		}).Info(msgIndex)
 
-		// }
 	}
 }
 
 func readBody(reader io.Reader) interface{} {
 	buf := new(bytes.Buffer)
-	buf.ReadFrom(reader)
-
-	// return stripQutations(buf.String())
-
-	var obj interface{}
-
-	// json.Unmarshal(buf, &obj)
-	// if err := json.NewEncoder(buf).Encode(&obj); err != nil {
-	if err := json.NewDecoder(buf).Decode(&obj); err != nil {
-		// res.WriteHeader(res, "whoops", http.StatusInternalServerError)
-		// return
+	if _, err := buf.ReadFrom(reader); err != nil {
 		fmt.Println(err)
 	}
 
-	fmt.Printf("!!!!!!!!!!!++++++++++++++++++++++++++++++++++ %+v \n\n", obj)
+	var obj interface{}
+
+	if err := json.NewDecoder(buf).Decode(&obj); err != nil {
+		fmt.Println(err)
+	}
 
 	return obj
-
-	// s := strings.Replace(buf.String(), "\"", "", -1)
-	// return s
-}
-
-func stripQutations(str string) string {
-	return strings.Replace(str, "\"", "", -1)
 }
