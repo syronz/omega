@@ -8,13 +8,13 @@ import (
 
 func main() {
 
-	cfg, env := initiate.Setup()
-	defer cfg.DB.Close()
+	engine := initiate.Setup()
+	defer engine.DB.Close()
 
-	s := server.Setup(cfg)
+	s := server.Setup(engine)
 
-	err := s.Run(fmt.Sprintf("%v:%v", env.Server.ADDR, env.Server.Port))
+	err := s.Run(fmt.Sprintf("%v:%v", engine.Environments.Server.ADDR, engine.Environments.Server.Port))
 	if err != nil {
-		cfg.Log.Fatal(err)
+		engine.Log.Fatal(err)
 	}
 }

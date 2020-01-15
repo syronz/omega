@@ -3,42 +3,42 @@ package initiate
 import (
 	envEngine "github.com/caarlos0/env/v6"
 	"log"
-	"omega/config"
+	"omega/internal/core"
 	"omega/internal/glog"
 )
 
 // Setup initiate all different parts like log and database connection and generate cfg
-func Setup() (cfg config.CFG, env config.Environment) {
-	if err := envEngine.Parse(&env); err != nil {
+func Setup() (engine core.Engine) {
+	if err := envEngine.Parse(&engine.Environments); err != nil {
 		log.Fatalln(err)
 	}
 
-	cfg.ENV = env
+	// cfg.Environments = env
 
 	logParam := LogParam{
-		format:       env.Log.Format,
-		output:       env.Log.Output,
-		level:        env.Log.Level,
+		format:       engine.Environments.Log.Format,
+		output:       engine.Environments.Log.Output,
+		level:        engine.Environments.Log.Level,
 		showFileLine: true, // true means filename and line number should be printed
 	}
-	cfg.Log = initLog(logParam)
-	glog.GlobalLog.Logrus = cfg.Log
+	engine.Log = initLog(logParam)
+	glog.GlobalLog.Logrus = engine.Log
 
 	logAPIParam := LogParam{
-		format:       env.Logapi.Format,
-		output:       env.Logapi.Output,
-		level:        env.Logapi.Level,
+		format:       engine.Environments.Logapi.Format,
+		output:       engine.Environments.Logapi.Output,
+		level:        engine.Environments.Logapi.Level,
 		showFileLine: false,
 	}
-	cfg.Logapi = initLog(logAPIParam)
-	glog.GlobalLog.Logapi = cfg.Logapi
+	engine.LogAPI = initLog(logAPIParam)
+	glog.GlobalLog.Logapi = engine.LogAPI
 
-	if env.Database.Type == "" || env.Database.URL == "" {
-		cfg.Log.Warn(env)
-		cfg.Log.Fatal("Environment is not set for database")
+	if engine.Environments.Database.Type == "" || engine.Environments.Database.URL == "" {
+		engine.Log.Warn(engine.Environments)
+		engine.Log.Fatal("Environment is not set for database")
 	}
 
-	cfg.DB = initDB(cfg, env.Database.Type, env.Database.URL)
+	engine.DB = initDB(engine, engine.Environments.Database.Type, engine.Environments.Database.URL)
 
 	return
 }

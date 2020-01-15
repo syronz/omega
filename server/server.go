@@ -1,21 +1,21 @@
 package server
 
 import (
-	"omega/config"
+	"omega/internal/core"
 	"omega/middleware"
 
 	"github.com/gin-gonic/gin"
 )
 
 // Setup integrate middleware and static route finally initiate router
-func Setup(c config.CFG) *gin.Engine {
+func Setup(e core.Engine) *gin.Engine {
 
 	r := gin.Default()
 
-	c.Logapi.Info("Server Started!")
+	e.LogAPI.Info("Server Started!")
 
-	r.Use(middleware.APILogger(c))
-	router(r, c)
+	r.Use(middleware.APILogger())
+	router(r, e)
 
 	return r
 }

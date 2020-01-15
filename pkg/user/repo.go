@@ -1,31 +1,31 @@
 package user
 
 import (
-	"omega/config"
+	"omega/internal/core"
 
 	// "omega/internal/glog"
 
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
-type UserRepository struct {
-	cfg config.CFG
+type Repo struct {
+	engine core.Engine
 }
 
-func ProvideUserRepostiory(c config.CFG) UserRepository {
-	return UserRepository{cfg: c}
+func ProvideRepo(engine core.Engine) Repo {
+	return Repo{engine: engine}
 }
 
-func (p *UserRepository) FindAll() []User {
+func (p *Repo) FindAll() []User {
 	var users []User
-	p.cfg.DB.Find(&users)
+	p.engine.DB.Find(&users)
 
 	return users
 }
 
-func (p *UserRepository) FindByID(id uint) User {
+func (p *Repo) FindByID(id uint) User {
 	var user User
-	_ = p.cfg.DB.First(&user, id).Error
+	_ = p.engine.DB.First(&user, id).Error
 
 	user.Extra = struct {
 		LastVisit string
@@ -40,16 +40,16 @@ func (p *UserRepository) FindByID(id uint) User {
 	return user
 }
 
-func (p *UserRepository) Save(user User) (s4 User) {
-	p.cfg.DB.Create(&user).Scan(&s4)
+func (p *Repo) Save(user User) (s4 User) {
+	p.engine.DB.Create(&user).Scan(&s4)
 
-	// p.cfg.Log.Debug(s4)
+	// p.engine.Log.Debug(s4)
 	// glog.Debug(s4)
 	// err = i.DB.Create(&i.Item).Scan(&item).Error
 
 	return s4
 }
 
-func (p *UserRepository) Delete(user User) {
-	p.cfg.DB.Delete(&user)
+func (p *Repo) Delete(user User) {
+	p.engine.DB.Delete(&user)
 }

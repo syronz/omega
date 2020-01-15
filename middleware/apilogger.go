@@ -6,7 +6,6 @@ import (
 	"io"
 	"io/ioutil"
 	"math"
-	"omega/config"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -25,7 +24,7 @@ func (w bodyLogWriter) Write(b []byte) (int, error) {
 }
 
 // APILogger is used to save requests and response by using logapi
-func APILogger(cfg config.CFG) gin.HandlerFunc {
+func APILogger() gin.HandlerFunc {
 	var requestIndex uint
 
 	return func(c *gin.Context) {

@@ -3,34 +3,36 @@ package user
 import (
 	"log"
 	"net/http"
+	"omega/internal/core"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 	// "omega/internal/glog"
 )
 
-type UserAPI struct {
-	UserService UserService
+type API struct {
+	Service Service
+	engine  core.Engine
 }
 
-func ProvideUserAPI(p UserService) UserAPI {
-	return UserAPI{UserService: p}
+func ProvideAPI(p Service) API {
+	return API{Service: p, engine: p.engine}
 }
 
-func (p *UserAPI) FindAll(c *gin.Context) {
-	users := p.UserService.FindAll()
+func (p *API) FindAll(c *gin.Context) {
+	users := p.Service.FindAll()
 
 	c.JSON(http.StatusOK, gin.H{"users": users})
 }
 
-func (p *UserAPI) FindByID(c *gin.Context) {
+func (p *API) FindByID(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
-	user := p.UserService.FindByID(uint(id))
+	user := p.Service.FindByID(uint(id))
 
 	c.JSON(http.StatusOK, gin.H{"user": user})
 }
 
-func (p *UserAPI) Create(c *gin.Context) {
+func (p *API) Create(c *gin.Context) {
 	var user User
 	err := c.BindJSON(&user)
 	if err != nil {
@@ -39,13 +41,15 @@ func (p *UserAPI) Create(c *gin.Context) {
 		return
 	}
 
-	createdUser := p.UserService.Save(user)
+	p.engine.Debug("INSIDE THE USER API ++++++++++++++++++++++++++++++++++++++++++++++")
+	createdUser := p.Service.Save(user)
 	// glog.Debug(createdUser)
+	p.engine.Debug("INSIDE THE USER API ++++++++++++++++++++++++++++++++++++++++++++++")
 
 	c.JSON(http.StatusOK, gin.H{"user": createdUser})
 }
 
-func (p *UserAPI) Update(c *gin.Context) {
+func (p *API) Update(c *gin.Context) {
 	var user User
 	err := c.BindJSON(&user)
 	if err != nil {
@@ -55,26 +59,26 @@ func (p *UserAPI) Update(c *gin.Context) {
 	}
 
 	id, _ := strconv.Atoi(c.Param("id"))
-	user = p.UserService.FindByID(uint(id))
+	user = p.Service.FindByID(uint(id))
 	if user == (User{}) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
 
-	p.UserService.Save(user)
+	p.Service.Save(user)
 
 	c.Status(http.StatusOK)
 }
 
-func (p *UserAPI) Delete(c *gin.Context) {
+func (p *API) Delete(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
-	user := p.UserService.FindByID(uint(id))
+	user := p.Service.FindByID(uint(id))
 	if user == (User{}) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
 
-	p.UserService.Delete(user)
+	p.Service.Delete(user)
 
 	c.Status(http.StatusOK)
 }

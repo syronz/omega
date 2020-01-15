@@ -6,48 +6,15 @@
 package server
 
 import (
-	"omega/config"
-	"omega/pkg/invoice"
-	"omega/pkg/product"
-	"omega/pkg/sample4"
-	"omega/pkg/sample5"
+	"omega/internal/core"
 	"omega/pkg/user"
 )
 
 // Injectors from wire.go:
 
-func initProductAPI(c config.CFG) product.ProductAPI {
-	productRepository := product.ProvideProductRepostiory(c)
-	productService := product.ProvideProductService(productRepository)
-	productAPI := product.ProvideProductAPI(productService)
-	return productAPI
-}
-
-func initInvoiceAPI(c config.CFG) invoice.InvoiceAPI {
-	invoiceRepository := invoice.ProvideInvoiceRepostiory(c)
-	invoiceService := invoice.ProvideInvoiceService(invoiceRepository)
-	invoiceAPI := invoice.ProvideInvoiceAPI(invoiceService)
-	return invoiceAPI
-}
-
-func initUserAPI(c config.CFG) user.UserAPI {
-	userRepository := user.ProvideUserRepostiory(c)
-	userService := user.ProvideUserService(userRepository)
-	userAPI := user.ProvideUserAPI(userService)
-	return userAPI
-}
-
-func initSample4API(c config.CFG) sample4.Sample4API {
-	sample4Repository := sample4.ProvideSample4Repostiory(c)
-	sample4Service := sample4.ProvideSample4Service(sample4Repository)
-	sample4API := sample4.ProvideSample4API(sample4Service)
-	return sample4API
-}
-
-func initSample5API(c config.CFG) sample5.Sample5API {
-	sample5Repository := sample5.ProvideSample5Repostiory(c)
-	sample5Controller := sample5.ProvideSample5Controller(sample5Repository)
-	sample5Service := sample5.ProvideSample5Service(sample5Controller)
-	sample5API := sample5.ProvideSample5API(sample5Service)
-	return sample5API
+func initUserAPI(e core.Engine) user.API {
+	repo := user.ProvideRepo(e)
+	service := user.ProvideService(repo)
+	api := user.ProvideAPI(service)
+	return api
 }
