@@ -4,7 +4,7 @@ import (
 	envEngine "github.com/caarlos0/env/v6"
 	"log"
 	"omega/config"
-	"omega/utils/glog"
+	"omega/internal/glog"
 )
 
 // Setup initiate all difirent parts like log and database connection and generate cfg

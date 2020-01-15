@@ -4,7 +4,7 @@ import (
 	"os"
 
 	"github.com/sirupsen/logrus"
-	"omega/utils/loghook"
+	"omega/internal/loghook"
 )
 
 func initLog(p LogParam) *logrus.Logger {

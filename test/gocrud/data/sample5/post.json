@@ -1,0 +1,9 @@
+{
+	"method":"post",
+	"url":"_URL_/sample5",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {
+		"code": "_RANDOM_NAME_",
+		"price": _RANDOM_NUMBER_
+	}
+}

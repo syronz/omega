@@ -20,4 +20,7 @@ type Environment struct {
 		Output string `env:"LOGAPI_OUTPUT,required"`
 		Level  string `env:"LOGAPI_LEVEL,required"`
 	}
+	Setting struct {
+		DefaultLanguage string `env:"OMEGA_DEFAULT_LANGUAGE"`
+	}
 }

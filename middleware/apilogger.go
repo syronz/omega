@@ -11,7 +11,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
-	"omega/utils/glog"
+	"omega/internal/glog"
 )
 
 type bodyLogWriter struct {
