@@ -33,16 +33,24 @@ func getCaller(skip int) (uintptr, string, int) {
 		return 0, "", 0
 	}
 
-	n := 0
-	for i := len(file) - 1; i > 0; i-- {
-		if file[i] == '/' {
-			n++
-			if n >= 2 {
-				file = file[i+1:]
-				break
+	// n := 0
+
+	dirs := strings.Split(file, "/")
+	dirs = dirs[len(dirs)-2:]
+	file = strings.Join(dirs, "/")
+	// file = fmt.Sprintf("%v/%v", dirs[len(dirs)-1], dirs[len(dirs)-2])
+
+	/*
+		for i := len(file) - 1; i > 0; i-- {
+			if file[i] == '/' {
+				n++
+				if n >= 2 {
+					file = file[i+1:]
+					break
+				}
 			}
 		}
-	}
+	*/
 
 	return pc, file, line
 }
