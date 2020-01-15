@@ -10,7 +10,7 @@ before_install:
 
 script:
   - go test ./...
-  - go test -race -coverprofile=coverage.txt -covermode=atomic
+  - go test ./... -race -coverprofile=coverage.txt -covermode=atomic
   - $GOPATH/bin/goveralls -service=travis-ci
 
 after_success:
