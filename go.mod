@@ -11,5 +11,6 @@ require (
 	github.com/inconshreveable/log15 v0.0.0-20200109203555-b30bc20e4fd1 // indirect
 	github.com/jinzhu/gorm v1.9.10
 	github.com/mattn/go-colorable v0.1.2 // indirect
+	github.com/mattn/goveralls v0.0.5 // indirect
 	github.com/sirupsen/logrus v1.2.0
 )
