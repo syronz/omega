@@ -1,8 +1,8 @@
 package user
 
 import (
-	// "omega/utils/password"
 	"omega/internal/core"
+	"omega/utils/password"
 )
 
 type Service struct {
@@ -23,10 +23,13 @@ func (p *Service) FindByID(id uint) User {
 }
 
 func (p *Service) Save(user User) User {
-	user.Password = "123456"
-	p.engine.Debug("INSIDE THE SERVICE .....................................")
+	user.Password, _ = password.Hash(user.Password,
+		p.engine.Environments.Setting.PasswordSalt)
+	p.engine.Debug("INSIDE THE SERVICE .....................................",
+		p.engine.Environments.Setting.PasswordSalt)
 
 	s4 := p.Repo.Save(user)
+	s4.Password = ""
 
 	return s4
 }
