@@ -4,9 +4,9 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/gin-gonic/gin"
+	// "omega/internal/glog"
 )
 
 type UserAPI struct {
@@ -20,34 +20,34 @@ func ProvideUserAPI(p UserService) UserAPI {
 func (p *UserAPI) FindAll(c *gin.Context) {
 	users := p.UserService.FindAll()
 
-	c.JSON(http.StatusOK, gin.H{"users": ToUserDTOs(users)})
+	c.JSON(http.StatusOK, gin.H{"users": users})
 }
 
 func (p *UserAPI) FindByID(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	user := p.UserService.FindByID(uint(id))
 
-	c.JSON(http.StatusOK, gin.H{"user": ToUserDTO(user)})
+	c.JSON(http.StatusOK, gin.H{"user": user})
 }
 
 func (p *UserAPI) Create(c *gin.Context) {
-	time.Sleep(5 * time.Second)
-	var userDTO UserDTO
-	err := c.BindJSON(&userDTO)
+	var user User
+	err := c.BindJSON(&user)
 	if err != nil {
 		log.Fatalln(err)
 		c.Status(http.StatusBadRequest)
 		return
 	}
 
-	createdUser := p.UserService.Save(ToUser(userDTO))
+	createdUser := p.UserService.Save(user)
+	// glog.Debug(createdUser)
 
-	c.JSON(http.StatusOK, gin.H{"user": ToUserDTO(createdUser)})
+	c.JSON(http.StatusOK, gin.H{"user": createdUser})
 }
 
 func (p *UserAPI) Update(c *gin.Context) {
-	var userDTO UserDTO
-	err := c.BindJSON(&userDTO)
+	var user User
+	err := c.BindJSON(&user)
 	if err != nil {
 		log.Fatalln(err)
 		c.Status(http.StatusBadRequest)
@@ -55,14 +55,12 @@ func (p *UserAPI) Update(c *gin.Context) {
 	}
 
 	id, _ := strconv.Atoi(c.Param("id"))
-	user := p.UserService.FindByID(uint(id))
+	user = p.UserService.FindByID(uint(id))
 	if user == (User{}) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
 
-	user.Code = userDTO.Code
-	user.Price = userDTO.Price
 	p.UserService.Save(user)
 
 	c.Status(http.StatusOK)

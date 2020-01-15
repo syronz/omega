@@ -22,5 +22,6 @@ type Environment struct {
 	}
 	Setting struct {
 		DefaultLanguage string `env:"OMEGA_DEFAULT_LANGUAGE"`
+		PasswordSalt    string `env:"OMEGA_PASSWORD_SALT"`
 	}
 }

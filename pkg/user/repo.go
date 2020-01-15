@@ -3,40 +3,53 @@ package user
 import (
 	"omega/config"
 
-	"github.com/jinzhu/gorm"
+	// "omega/internal/glog"
+
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/sirupsen/logrus"
 )
 
 type UserRepository struct {
-	DB  *gorm.DB
-	Log *logrus.Logger
+	cfg config.CFG
 }
 
 func ProvideUserRepostiory(c config.CFG) UserRepository {
-	return UserRepository{DB: c.DB, Log: c.Log}
+	return UserRepository{cfg: c}
 }
 
 func (p *UserRepository) FindAll() []User {
 	var users []User
-	p.DB.Find(&users)
+	p.cfg.DB.Find(&users)
 
 	return users
 }
 
 func (p *UserRepository) FindByID(id uint) User {
 	var user User
-	p.DB.First(&user, id)
+	_ = p.cfg.DB.First(&user, id).Error
+
+	user.Extra = struct {
+		LastVisit string
+		Mark      int
+	}{
+		"2019",
+		-15,
+	}
+
+	// glog.Debug(user, id, err)
 
 	return user
 }
 
-func (p *UserRepository) Save(user User) User {
-	p.DB.Save(&user)
+func (p *UserRepository) Save(user User) (s4 User) {
+	p.cfg.DB.Create(&user).Scan(&s4)
 
-	return user
+	// p.cfg.Log.Debug(s4)
+	// glog.Debug(s4)
+	// err = i.DB.Create(&i.Item).Scan(&item).Error
+
+	return s4
 }
 
 func (p *UserRepository) Delete(user User) {
-	p.DB.Delete(&user)
+	p.cfg.DB.Delete(&user)
 }

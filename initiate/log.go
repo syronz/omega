@@ -13,7 +13,7 @@ func initLog(p LogParam) *logrus.Logger {
 
 	log := logrus.New()
 
-	if p.hasHook {
+	if p.showFileLine {
 		hook := loghook.NewHook()
 		hook.Field = "file"
 		log.AddHook(hook)

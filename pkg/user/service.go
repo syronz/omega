@@ -1,5 +1,10 @@
 package user
 
+import (
+	// "omega/utils/password"
+	"omega/internal/glog"
+)
+
 type UserService struct {
 	UserRepository UserRepository
 }
@@ -17,9 +22,11 @@ func (p *UserService) FindByID(id uint) User {
 }
 
 func (p *UserService) Save(user User) User {
-	p.UserRepository.Save(user)
+	user.Password = "123456"
+	glog.Debug(p.UserRepository.cfg.ENV.Setting.PasswordSalt)
+	s4 := p.UserRepository.Save(user)
 
-	return user
+	return s4
 }
 
 func (p *UserService) Delete(user User) {

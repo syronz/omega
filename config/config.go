@@ -9,9 +9,11 @@ import (
 
 // CFG is used as a global struct but it is injected
 type CFG struct {
-	DB     *gorm.DB
-	Log    *logrus.Logger
-	Logapi *logrus.Logger
+	DatabaseMain     *gorm.DB
+	DatabaseActivity *gorm.DB
+	Log              *logrus.Logger
+	Logapi           *logrus.Logger
+	ENV              Environment
 }
 
 // Debug print struct with details with logrus ability

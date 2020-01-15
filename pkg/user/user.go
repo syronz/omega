@@ -2,8 +2,11 @@ package user
 
 import "github.com/jinzhu/gorm"
 
+// User model
 type User struct {
 	gorm.Model
-	Code  string
-	Price uint
+	Name     string      `json:"name"`
+	Username string      `json:"username"`
+	Password string      `json:"password"`
+	Extra    interface{} `sql:"-" json:"extra,omitempty"`
 }

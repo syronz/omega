@@ -7,26 +7,28 @@ import (
 	"omega/internal/glog"
 )
 
-// Setup initiate all difirent parts like log and database connection and generate cfg
+// Setup initiate all different parts like log and database connection and generate cfg
 func Setup() (cfg config.CFG, env config.Environment) {
 	if err := envEngine.Parse(&env); err != nil {
 		log.Fatalln(err)
 	}
 
+	cfg.ENV = env
+
 	logParam := LogParam{
-		format:  env.Log.Format,
-		output:  env.Log.Output,
-		level:   env.Log.Level,
-		hasHook: true, // true means filename and line number should be printed
+		format:       env.Log.Format,
+		output:       env.Log.Output,
+		level:        env.Log.Level,
+		showFileLine: true, // true means filename and line number should be printed
 	}
 	cfg.Log = initLog(logParam)
 	glog.GlobalLog.Logrus = cfg.Log
 
 	logAPIParam := LogParam{
-		format:  env.Logapi.Format,
-		output:  env.Logapi.Output,
-		level:   env.Logapi.Level,
-		hasHook: false,
+		format:       env.Logapi.Format,
+		output:       env.Logapi.Output,
+		level:        env.Logapi.Level,
+		showFileLine: false,
 	}
 	cfg.Logapi = initLog(logAPIParam)
 	glog.GlobalLog.Logapi = cfg.Logapi
