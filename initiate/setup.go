@@ -13,8 +13,6 @@ func Setup() (engine core.Engine) {
 		log.Fatalln(err)
 	}
 
-	// cfg.Environments = env
-
 	logParam := LogParam{
 		format:       engine.Environments.Log.Format,
 		output:       engine.Environments.Log.Output,

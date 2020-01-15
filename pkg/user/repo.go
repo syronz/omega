@@ -2,10 +2,7 @@ package user
 
 import (
 	"omega/internal/core"
-
-	// "omega/internal/glog"
-
-	_ "github.com/jinzhu/gorm/dialects/mysql"
+	// _ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 type Repo struct {

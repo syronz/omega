@@ -15,7 +15,7 @@ func findCaller(skip int) (string, string, int) {
 	for i := 0; i < 10; i++ {
 		pc, file, line = getCaller(skip + i)
 		if !(strings.HasPrefix(file, "logrus") ||
-			strings.HasPrefix(file, "config") ||
+			strings.HasPrefix(file, "core") ||
 			strings.HasPrefix(file, "glog")) {
 			break
 		}
@@ -35,24 +35,9 @@ func getCaller(skip int) (uintptr, string, int) {
 		return 0, "", 0
 	}
 
-	// n := 0
-
 	dirs := strings.Split(file, "/")
 	dirs = dirs[len(dirs)-2:]
 	file = strings.Join(dirs, "/")
-	// file = fmt.Sprintf("%v/%v", dirs[len(dirs)-1], dirs[len(dirs)-2])
-
-	/*
-		for i := len(file) - 1; i > 0; i-- {
-			if file[i] == '/' {
-				n++
-				if n >= 2 {
-					file = file[i+1:]
-					break
-				}
-			}
-		}
-	*/
 
 	return pc, file, line
 }

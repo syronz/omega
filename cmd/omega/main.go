@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"omega/initiate"
 	"omega/server"
 )

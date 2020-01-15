@@ -41,10 +41,7 @@ func (p *API) Create(c *gin.Context) {
 		return
 	}
 
-	p.engine.Debug("INSIDE THE USER API ++++++++++++++++++++++++++++++++++++++++++++++")
 	createdUser := p.Service.Save(user)
-	// glog.Debug(createdUser)
-	p.engine.Debug("INSIDE THE USER API ++++++++++++++++++++++++++++++++++++++++++++++")
 
 	c.JSON(http.StatusOK, gin.H{"user": createdUser})
 }
