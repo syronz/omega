@@ -12,7 +12,7 @@ func Setup(e core.Engine) *gin.Engine {
 
 	r := gin.Default()
 
-	e.LogAPI.Info("Server Started!")
+	e.Log.Info("Server Started!")
 
 	r.Use(middleware.APILogger())
 	router(r, e)

@@ -52,6 +52,7 @@ func APILogger() gin.HandlerFunc {
 
 func logRequest(c *gin.Context, requestIndex uint, rdr io.Reader) {
 	glog.GlobalLog.Logapi.WithFields(logrus.Fields{
+		"_id":        requestIndex,
 		"ip":         c.ClientIP(),
 		"method":     c.Request.Method,
 		"uri":        c.Request.RequestURI,
@@ -60,18 +61,22 @@ func logRequest(c *gin.Context, requestIndex uint, rdr io.Reader) {
 		"params":     c.Request.URL.Query(),
 		"referer":    c.Request.Referer(),
 		"user_agent": c.Request.UserAgent(),
-	}).Info(requestIndex)
+	}).Info("request")
 	c.Set("msgIndex", requestIndex)
 }
 
 func logResponse(c *gin.Context, latency int, blw *bodyLogWriter) {
-	msgIndex, _ := c.Get("msgIndex")
+	msgIndex, ok := c.Get("msgIndex")
+	if !ok {
+		glog.Debug("there is no msgIndex for element", readBody(blw.body))
+	}
 	glog.GlobalLog.Logapi.WithFields(logrus.Fields{
+		"_id":         msgIndex,
 		"status":      c.Writer.Status(),
 		"latency":     latency, // time to process
 		"data_length": c.Writer.Size(),
 		"response":    readBody(blw.body),
-	}).Info(msgIndex)
+	}).Info("response")
 }
 
 func readBody(reader io.Reader) interface{} {

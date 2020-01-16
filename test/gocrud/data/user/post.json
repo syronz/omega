@@ -3,7 +3,7 @@
 	"url":"_URL_/users",
 	"authorization":"Bearer _TOKEN_",
 	"payload": {
-		"name": "_RANDOM_NAME_",
+		"name2": "_RANDOM_NAME_",
 		"username": "_RANDOM_NAME_",
 		"password": "_RANDOM_NUMBER_"
 	}

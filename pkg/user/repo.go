@@ -38,7 +38,7 @@ func (p *Repo) FindByID(id uint) User {
 }
 
 func (p *Repo) Save(user User) (s4 User) {
-	p.engine.DB.Create(&user).Scan(&s4)
+	p.engine.DB.Save(&user).Scan(&s4)
 
 	// p.engine.Log.Debug(s4)
 	// glog.Debug(s4)
