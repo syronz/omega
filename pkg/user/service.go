@@ -7,11 +7,11 @@ import (
 
 type Service struct {
 	Repo   Repo
-	engine core.Engine
+	Engine core.Engine
 }
 
 func ProvideService(p Repo) Service {
-	return Service{Repo: p, engine: p.engine}
+	return Service{Repo: p, Engine: p.Engine}
 }
 
 func (p *Service) FindAll() []User {
@@ -24,7 +24,7 @@ func (p *Service) FindByID(id uint) User {
 
 func (p *Service) Save(user User) User {
 	user.Password, _ = password.Hash(user.Password,
-		p.engine.Environments.Setting.PasswordSalt)
+		p.Engine.Environments.Setting.PasswordSalt)
 
 	s4 := p.Repo.Save(user)
 	s4.Password = ""

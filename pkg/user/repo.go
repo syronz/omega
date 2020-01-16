@@ -6,23 +6,23 @@ import (
 )
 
 type Repo struct {
-	engine core.Engine
+	Engine core.Engine
 }
 
 func ProvideRepo(engine core.Engine) Repo {
-	return Repo{engine: engine}
+	return Repo{Engine: engine}
 }
 
 func (p *Repo) FindAll() []User {
 	var users []User
-	p.engine.DB.Find(&users)
+	p.Engine.DB.Find(&users)
 
 	return users
 }
 
 func (p *Repo) FindByID(id uint) User {
 	var user User
-	_ = p.engine.DB.First(&user, id).Error
+	_ = p.Engine.DB.First(&user, id).Error
 
 	user.Extra = struct {
 		LastVisit string
@@ -37,10 +37,15 @@ func (p *Repo) FindByID(id uint) User {
 	return user
 }
 
-func (p *Repo) Save(user User) (s4 User) {
-	p.engine.DB.Save(&user).Scan(&s4)
+func (p *Repo) FindByUsername(username string) (user User, err error) {
+	err = p.Engine.DB.Where("username = ?", username).First(&user).Error
+	return
+}
 
-	// p.engine.Log.Debug(s4)
+func (p *Repo) Save(user User) (s4 User) {
+	p.Engine.DB.Save(&user).Scan(&s4)
+
+	// p.Engine.Log.Debug(s4)
 	// glog.Debug(s4)
 	// err = i.DB.Create(&i.Item).Scan(&item).Error
 
@@ -48,5 +53,5 @@ func (p *Repo) Save(user User) (s4 User) {
 }
 
 func (p *Repo) Delete(user User) {
-	p.engine.DB.Delete(&user)
+	p.Engine.DB.Delete(&user)
 }

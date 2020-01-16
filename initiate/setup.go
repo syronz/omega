@@ -2,6 +2,7 @@ package initiate
 
 import (
 	envEngine "github.com/caarlos0/env/v6"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"log"
 	"omega/internal/core"
 	"omega/internal/glog"

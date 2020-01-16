@@ -1,6 +1,0 @@
-{
-	"method":"delete",
-	"url":"_URL_/sample4/1",
-	"authorization":"Bearer _TOKEN_",
-	"payload": {}
-}

@@ -21,9 +21,8 @@ type Environment struct {
 		Level  string `env:"OMEGA_LOGAPI_LEVEL,required"`
 	}
 	Setting struct {
-		DefaultLanguage string `env:"OMEGA_DEFAULT_LANGUAGE"`
-		PasswordSalt    string `env:"OMEGA_PASSWORD_SALT"`
-		AutoMigrate     string `env:"OMEGA_AUTOMIGRATE"`
-		JWTSecretKey    string `env:"OMEGA_JWT_SECRET_KEY,required"`
+		PasswordSalt string `env:"OMEGA_PASSWORD_SALT"`
+		AutoMigrate  string `env:"OMEGA_AUTOMIGRATE"`
+		JWTSecretKey string `env:"OMEGA_JWT_SECRET_KEY,required"`
 	}
 }

@@ -32,7 +32,7 @@ func initLog(p LogParam) *logrus.Logger {
 		if err == nil {
 			log.Out = file
 		} else {
-			log.Fatalln("Failed to log to file", p.output)
+			log.Fatalf("Failed to log to file %v, [initiate/log.go]", p.output)
 		}
 	}
 

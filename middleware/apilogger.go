@@ -31,6 +31,8 @@ func APILogger() gin.HandlerFunc {
 		start := time.Now()
 		buf, _ := ioutil.ReadAll(c.Request.Body)
 		rdr := ioutil.NopCloser(bytes.NewBuffer(buf))
+		c.Accepted = []string{"ako", "diako"}
+		glog.Debug(rdr, c.Accepted)
 		//We have to create a new Buffer, because rdr will be read.
 		c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(buf))
 		requestIndex++
@@ -51,9 +53,10 @@ func APILogger() gin.HandlerFunc {
 }
 
 func logRequest(c *gin.Context, requestIndex uint, rdr io.Reader) {
+	// if c.Request.URL.Path == "
 	glog.GlobalLog.Logapi.WithFields(logrus.Fields{
-		"_id":        requestIndex,
-		"ip":         c.ClientIP(),
+		"_id": requestIndex,
+		// "ip":  c.ClientIP(),
 		"method":     c.Request.Method,
 		"uri":        c.Request.RequestURI,
 		"path":       c.Request.URL.Path,
@@ -62,7 +65,7 @@ func logRequest(c *gin.Context, requestIndex uint, rdr io.Reader) {
 		"referer":    c.Request.Referer(),
 		"user_agent": c.Request.UserAgent(),
 	}).Info("request")
-	c.Set("msgIndex", requestIndex)
+	// c.Set("msgIndex", requestIndex)
 }
 
 func logResponse(c *gin.Context, latency int, blw *bodyLogWriter) {

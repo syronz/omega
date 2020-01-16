@@ -12,11 +12,11 @@ import (
 
 type API struct {
 	Service Service
-	engine  core.Engine
+	Engine  core.Engine
 }
 
 func ProvideAPI(p Service) API {
-	return API{Service: p, engine: p.engine}
+	return API{Service: p, Engine: p.Engine}
 }
 
 func (p *API) FindAll(c *gin.Context) {

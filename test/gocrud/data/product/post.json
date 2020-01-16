@@ -1,9 +1,0 @@
-{
-	"method":"post",
-	"url":"_URL_/products",
-	"authorization":"Bearer _TOKEN2_",
-	"payload": {
-		"code": "_RANDOM_NAME_",
-		"price": "3000"
-	}
-}

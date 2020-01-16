@@ -22,3 +22,10 @@ func (e *Engine) Debug(objs ...interface{}) {
 		e.Log.Debug(fmt.Sprintf("%T :: %+[1]v", v))
 	}
 }
+
+// Debug print struct with details with logrus ability
+func (e *Engine) Error(objs ...interface{}) {
+	for _, v := range objs {
+		e.Log.Error(fmt.Sprintf("%T :: %+[1]v", v))
+	}
+}

@@ -7,6 +7,7 @@ package server
 
 import (
 	"omega/internal/core"
+	"omega/pkg/auth"
 	"omega/pkg/user"
 )
 
@@ -16,5 +17,12 @@ func initUserAPI(e core.Engine) user.API {
 	repo := user.ProvideRepo(e)
 	service := user.ProvideService(repo)
 	api := user.ProvideAPI(service)
+	return api
+}
+
+func initAuthAPI(e core.Engine) auth.API {
+	repo := auth.ProvideRepo(e)
+	service := auth.ProvideService(repo)
+	api := auth.ProvideAPI(service)
 	return api
 }

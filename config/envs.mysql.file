@@ -8,15 +8,17 @@ export OMEGA_AUTOMIGRATE=0
 export OMEGA_JWT_SECRET_KEY="kz86HcnwKSn2k2vk6Ddw04kdck9k9SKedWFdGkwe70"
 
 export OMEGA_LOG_FORMAT="regular" #JSON and REGULAR
-export OMEGA_LOG_OUTPUT="stdout" #stdout means the output, otherwise it become the file path
-export OMEGA_LOG_LEVEL="debug" #trace debug info warn error fatal panic
+export OMEGA_LOG_OUTPUT="log/omega.log" #stdout means the output, otherwise it become the file path
+export OMEGA_LOG_LEVEL="error" #trace debug info warn error fatal panic
 
 export OMEGA_LOGAPI_FORMAT="json" #JSON and REGULAR
-export OMEGA_LOGAPI_OUTPUT="/Users/diako/project/omega/log/rms_api_logger.log" #filepath
+export OMEGA_LOGAPI_OUTPUT="log/rms_api_logger.log" #filepath
 export OMEGA_LOGAPI_LEVEL="debug" #trace debug info warn error fatal panic
 
 #debug, release & test, in the production rename it to the release
 export GIN_MODE=debug 
+
+export OMEGA_DEFAULT_LANGUAGE=en #can be en, ku, ar and etc
 
 #after run OMEGA_PASSWORD_SALT don't change otherwise all passwords are useless
 export OMEGA_PASSWORD_SALT=q7Gcqm9VXMVpf33PbFlYEpkMmDqOn1gRMVsavha9lQ8 
