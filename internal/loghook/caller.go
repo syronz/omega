@@ -15,7 +15,7 @@ func findCaller(skip int) (string, string, int) {
 	for i := 0; i < 10; i++ {
 		pc, file, line = getCaller(skip + i)
 		if !(strings.HasPrefix(file, "logrus") ||
-			strings.HasPrefix(file, "core") ||
+			// strings.HasPrefix(file, "core") ||
 			strings.HasPrefix(file, "glog")) {
 			break
 		}

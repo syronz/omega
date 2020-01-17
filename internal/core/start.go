@@ -18,26 +18,26 @@ func StartEngine() (engine engine.Engine) {
 	env := engine.Environments
 
 	// Server logs's params
-	serverLogParams := LogParam {
-		format:       env.ServerLog.Format,
-		output:       env.ServerLog.Output,
-		level:        env.ServerLog.Level,
+	serverLogParams := LogParam{
+		format:       env.Log.ServerLog.Format,
+		output:       env.Log.ServerLog.Output,
+		level:        env.Log.ServerLog.Level,
 		showFileLine: true, // true means filename and line number should be printed
 	}
 	engine.ServerLog = initLog(serverLogParams)
 	glog.Glog.ServerLog = engine.ServerLog
 
 	// API logs's params
-	apiLogParams := LogParam {
-		format:       env.ApiLog.Format,
-		output:       env.ApiLog.Output,
-		level:        env.ApiLog.Level,
+	apiLogParams := LogParam{
+		format:       env.Log.ApiLog.Format,
+		output:       env.Log.ApiLog.Output,
+		level:        env.Log.ApiLog.Level,
 		showFileLine: false,
 	}
 	engine.ApiLog = initLog(apiLogParams)
 	glog.Glog.ApiLog = engine.ApiLog
 
-	engine.DB = initDB(engine, env.Database.Type, env.Database.DSN)
+	engine.DB = initDB(engine, env.Database.Data.Type, env.Database.Data.DSN)
 
 	return
 }

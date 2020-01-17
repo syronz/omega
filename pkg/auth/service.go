@@ -2,6 +2,7 @@ package auth
 
 import (
 	"omega/engine"
+	"omega/pkg/user"
 	// "omega/utils/password"
 )
 
@@ -18,6 +19,11 @@ func (p *Service) Logout(user Auth) error {
 	return p.Repo.Logout(user)
 }
 
-func (p *Service) Login(auth Auth) (Auth, error) {
-	return p.Repo.Login(auth)
+func (p *Service) Login(auth Auth) (result Auth, err error) {
+	userRepo := user.Repo{Engine: p.Engine}
+	user, err := userRepo.FindByUsername(auth.Username)
+	p.Engine.Debug(user, err)
+
+	return
+
 }

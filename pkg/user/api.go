@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"omega/engine"
 	"omega/internal/response"
-	"strconv"
+	// "strconv"
 )
 
 type API struct {
@@ -18,85 +18,93 @@ func ProvideAPI(p Service) API {
 }
 
 func (p *API) FindAll(c *gin.Context) {
-	res := response.Response{Context: c}
 	users, err := p.Service.FindAll()
+
 	if err != nil {
-		res.Failed(http.StatusExpectationFailed, 1424, "Failed to fetch users data", err)
+		c.JSON(http.StatusInternalServerError, &response.Result{
+			Message: "Failed to fetch users",
+			Code:    1500,
+			Errors:  err,
+		})
 		return
 	}
-	res.Success(http.StatusOK, "", users, 200)
-	return
+
+	c.JSON(http.StatusOK, &response.Result{
+		Data:  users,
+		Count: 200,
+	})
+
 }
 
 func (p *API) FindByID(c *gin.Context) {
-	res := response.Response{Context: c}
-	id, _ := strconv.Atoi(c.Param("id"))
-	user, err := p.Service.FindByID(uint(id))
+	// res := response.Response{Context: c}
+	// id, _ := strconv.Atoi(c.Param("id"))
+	// user, err := p.Service.FindByID(uint(id))
 
-	if err != nil {
-		res.Failed(http.StatusExpectationFailed, 1424, "Failed to fetch user data", err)
-		return
-	}
-	res.Success(http.StatusOK, "", user, 200)
+	// if err != nil {
+	// 	res.Failed(http.StatusExpectationFailed, 1424, "Failed to fetch user data", err)
+	// 	return
+	// }
+	// res.Success(http.StatusOK, "", user, 200)
 	return
 }
 
 func (p *API) Create(c *gin.Context) {
-	res := response.Response{Context: c}
-	var user User
+	// res := response.Response{Context: c}
+	// var user User
 
-	err := c.BindJSON(&user)
-	if err != nil {
-		res.Failed(http.StatusBadRequest, 1400, "missing information", "")
-		return
-	}
+	// err := c.BindJSON(&user)
+	// if err != nil {
+	// 	res.Failed(http.StatusBadRequest, 1400, "missing information", "")
+	// 	return
+	// }
 
-	createdUser, err := p.Service.Save(user)
-	res.Success(http.StatusOK, "", createdUser, 200)
+	// createdUser, err := p.Service.Save(user)
+	// res.Success(http.StatusOK, "", createdUser, 200)
 }
 
 func (p *API) Update(c *gin.Context) {
-	res := response.Response{Context: c}
+	// res := response.Response{Context: c}
 
-	var user User
-	err := c.BindJSON(&user)
+	// var user User
+	// err := c.BindJSON(&user)
 
-	if err != nil {
-		res.Failed(http.StatusBadRequest, 1400, "missing update information", "")
-		return
-	}
+	// if err != nil {
+	// 	res.Failed(http.StatusBadRequest, 1400, "missing update information", "")
+	// 	return
+	// }
 
-	id, _ := strconv.Atoi(c.Param("id"))
-	currentUser, findErr := p.Service.FindByID(uint(id))
-	if currentUser.ID == 0 {
-		res.Failed(http.StatusBadRequest, 1400, findErr.Error(), "")
-		return
-	}
+	// id, _ := strconv.Atoi(c.Param("id"))
+	// currentUser, findErr := p.Service.FindByID(uint(id))
+	// if currentUser.ID == 0 {
+	// 	res.Failed(http.StatusBadRequest, 1400, findErr.Error(), "")
+	// 	return
+	// }
 
-	user.ID = currentUser.ID
-	updatedUser, updateErr := p.Service.Save(user)
-	if updateErr != nil {
-		res.Failed(http.StatusBadRequest, 1400, updateErr.Error(), "")
-		return
-	}
-	res.Success(http.StatusOK, string(updatedUser.ID), updatedUser, 200)
+	// user.ID = currentUser.ID
+	// updatedUser, updateErr := p.Service.Save(user)
+	// if updateErr != nil {
+	// 	res.Failed(http.StatusBadRequest, 1400, updateErr.Error(), "")
+	// 	return
+	// }
+	// res.Success(http.StatusOK, string(updatedUser.ID), updatedUser, 200)
 	return
 }
 
 func (p *API) Delete(c *gin.Context) {
-	res := response.Response{Context: c}
-	id, _ := strconv.Atoi(c.Param("id"))
-	user, err := p.Service.FindByID(uint(id))
-	if err != nil {
-		res.Failed(http.StatusBadRequest, 1400, "user does not exist", "")
-		return
-	}
+	// res := response.Response{Context: c}
+	// id, _ := strconv.Atoi(c.Param("id"))
+	// user, err := p.Service.FindByID(uint(id))
+	// if err != nil {
+	// 	res.Failed(http.StatusBadRequest, 1400, "user does not exist", "")
+	// 	return
+	// }
 
-	err = p.Service.Delete(user)
-	if err != nil {
-		res.Failed(http.StatusBadRequest, 1400, "something went wrong, cannot delete this user", "")
-		return
-	}
-	res.Success(http.StatusOK, "the user successfully deleted", "", 1)
+	// err = p.Service.Delete(user)
+	// if err != nil {
+	// 	res.Failed(http.StatusBadRequest, 1400, "something went wrong, cannot delete this user", "")
+	// 	return
+	// }
+	// res.Success(http.StatusOK, "the user successfully deleted", "", 1)
 	c.Status(http.StatusOK)
 }
