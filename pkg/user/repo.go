@@ -24,14 +24,6 @@ func (p *Repo) FindAll() (users []User, err error) {
 func (p *Repo) FindByID(id uint64) (user User, err error) {
 	err = p.Engine.DB.First(&user, id).Error
 
-	user.Extra = struct {
-		LastVisit string
-		Mark      int
-	}{
-		"2019",
-		-15,
-	}
-
 	return
 }
 

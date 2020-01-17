@@ -30,3 +30,23 @@ func (e *Engine) DumpError(objs ...interface{}) {
 		e.ServerLog.Error(fmt.Sprintf("%T :: %+[1]v", v))
 	}
 }
+
+// CheckError print all errors which happened inside the services, mainly they just have
+// an error and a message
+func (e *Engine) CheckError(err error, message string) {
+	if err != nil {
+		e.ServerLog.WithFields(logrus.Fields{
+			"err": err.Error(),
+		}).Error(message)
+	}
+}
+
+// CheckInfo print all errors which happened inside the services, mainly they just have
+// an error and a message
+func (e *Engine) CheckInfo(err error, message string) {
+	if err != nil {
+		e.ServerLog.WithFields(logrus.Fields{
+			"err": err.Error(),
+		}).Info(message)
+	}
+}

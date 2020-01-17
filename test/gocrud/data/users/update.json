@@ -1,9 +1,11 @@
 {
-	"method":"post",
-	"url":"_URL_/users",
+	"method":"put",
+	"url":"_URL_/users/4",
 	"authorization":"Bearer _TOKEN_",
 	"payload": {
-		"code": "_RANDOM_NAME_",
-		"price": _RANDOM_NUMBER_
+		"name": "Diako",
+		"username": "dawn-paper",
+		"password": "",
+    "phone2": "11111"
 	}
 }

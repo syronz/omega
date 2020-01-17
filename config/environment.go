@@ -19,9 +19,10 @@ type Server struct {
 
 // Setting hold pass-keys and JWT, used for security
 type Setting struct {
-	PasswordSalt string `env:"OMEGA_PASSWORD_SALT"`
-	AutoMigrate  bool   `env:"OMEGA_AUTO_MIGRATE"`
-	JWTSecretKey string `env:"OMEGA_JWT_SECRET_KEY,required"`
+	PasswordSalt  string `env:"OMEGA_PASSWORD_SALT"`
+	AutoMigrate   bool   `env:"OMEGA_AUTO_MIGRATE"`
+	JWTSecretKey  string `env:"OMEGA_JWT_SECRET_KEY,required"`
+	JWTExpiration int    `env:"OMEGA_JWT_EXPIRATION,required"`
 }
 
 // Database hold DB connections, in case we just have one database use same DSN for both

@@ -1,0 +1,9 @@
+{
+	"method":"post",
+	"url":"_URL_/auth/login",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {
+		"username": "user",
+		"password": "user"
+	}
+}

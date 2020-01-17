@@ -8,13 +8,13 @@ import (
 	"strconv"
 )
 
-// API for injecting service
+// API for injecting user service
 type API struct {
 	Service Service
 	Engine  engine.Engine
 }
 
-// ProvideAPI used in wire
+// ProvideAPI for user is used in wire
 func ProvideAPI(p Service) API {
 	return API{Service: p, Engine: p.Engine}
 }
@@ -24,10 +24,11 @@ func (p *API) FindAll(c *gin.Context) {
 	users, err := p.Service.FindAll()
 
 	if err != nil {
+		response.RecordNotFound(c, err, "users")
 		return
 	}
 
-	response.SuccessAll(c, users)
+	response.Success(c, users)
 }
 
 // FindByID is used for fetch a user by his id
@@ -41,30 +42,30 @@ func (p *API) FindByID(c *gin.Context) {
 	user, err := p.Service.FindByID(id)
 
 	if err != nil {
-		response.RecordNotFound(c, err, "User")
+		response.RecordNotFound(c, err, "user")
 		return
 	}
 
-	response.SuccessOne(c, user)
+	response.Success(c, user)
 }
 
 // Create user
 func (p *API) Create(c *gin.Context) {
 	var user User
 
-	err := c.ShouldBindJSON(&user)
+	err := c.BindJSON(&user)
 	if err != nil {
-		response.ErrorInBinding(c, err, "Create User")
+		response.ErrorInBinding(c, err, "create user")
 		return
 	}
 
 	createdUser, err := p.Service.Save(user)
 	if err != nil {
-		response.ErrorInCreating(c, err, "User")
+		response.ErrorOnSave(c, err, "user")
 		return
 	}
 
-	response.SuccessOne(c, createdUser)
+	response.Success(c, createdUser)
 }
 
 // Update user
@@ -77,39 +78,20 @@ func (p *API) Update(c *gin.Context) {
 
 	var user User
 
-	// currentUser, findErr := p.Service.FindByID(uint(id))
-	// if currentUser.ID == 0 {
-	// 	res.Failed(http.StatusBadRequest, 1400, findErr.Error(), "")
-	// 	return
-	// }
-
 	err = c.BindJSON(&user)
 	if err != nil {
-		response.ErrorInBinding(c, err, " Update User")
+		response.ErrorInBinding(c, err, "update user")
 		return
 	}
 	user.ID = id
 
-	createdUser, err := p.Service.Save(user)
+	updatedUser, err := p.Service.Save(user)
 	if err != nil {
-		response.ErrorInCreating(c, err, " Update User")
+		response.ErrorOnSave(c, err, "update user")
 		return
 	}
 
-	_, updateErr := p.Service.Save(user)
-	if updateErr != nil {
-		// res.Failed(http.StatusBadRequest, 1400, updateErr.Error(), "")
-		return
-	}
-
-	response.SuccessOne(c, createdUser)
-
-	// if err != nil {
-	// 	res.Failed(http.StatusBadRequest, 1400, "missing update information", "")
-	// 	return
-	// }
-
-	// res.Success(http.StatusOK, string(updatedUser.ID), updatedUser, 200)
+	response.Success(c, updatedUser)
 }
 
 // Delete user

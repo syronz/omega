@@ -1,41 +1,47 @@
 package user
 
 import (
+	"fmt"
 	"omega/engine"
 	"omega/utils/password"
 )
 
-// Service for injecting repo
+// Service for injecting auth repo
 type Service struct {
 	Repo   Repo
 	Engine engine.Engine
 }
 
-// ProvideService is used in wire
+// ProvideService for user is used in wire
 func ProvideService(p Repo) Service {
 	return Service{Repo: p, Engine: p.Engine}
 }
 
 // FindAll users
-func (p *Service) FindAll() ([]User, error) {
-	return p.Repo.FindAll()
+func (p *Service) FindAll() (users []User, err error) {
+	users, err = p.Repo.FindAll()
+	p.Engine.CheckError(err, "All Users")
+	return
 }
 
 // FindByID for user
-func (p *Service) FindByID(id uint64) (User, error) {
-	return p.Repo.FindByID(id)
+func (p *Service) FindByID(id uint64) (user User, err error) {
+	user, err = p.Repo.FindByID(id)
+	p.Engine.CheckError(err, fmt.Sprintf("User with id %v", id))
+
+	return
 }
 
 // Save user
 func (p *Service) Save(user User) (createdUser User, err error) {
 	user.Password, err = password.Hash(user.Password, p.Engine.Environments.Setting.PasswordSalt)
-	if err != nil {
-		p.Engine.ServerLog.Error(err)
-	}
+	p.Engine.CheckError(err, fmt.Sprintf("Hashing password failed for %+v", user))
+
 	createdUser, err = p.Repo.Save(user)
-	if err != nil {
-		p.Engine.ServerLog.Info(err.Error())
-	}
+	p.Engine.CheckInfo(err, fmt.Sprintf("Failed in saving user for %+v", user))
+
+	createdUser.Password = ""
+
 	return
 }
 

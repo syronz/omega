@@ -6,21 +6,23 @@ export OMEGA_DATABASE_DATA_TYPE="mysql"
 export OMEGA_DATABASE_ACTIVITY_URL="root:Qaz1@345@tcp(127.0.0.1:3306)/omega?charset=utf8&parseTime=True&loc=Local"
 export OMEGA_DATABASE_ACTIVITY_TYPE="mysql"
 
+#after run OMEGA_PASSWORD_SALT don't change otherwise all passwords are useless
+export OMEGA_PASSWORD_SALT=q7Gcqm9VXMVpf33PbFlYEpkMmDqOn1gRMVsavha9lQ8 
 export OMEGA_AUTO_MIGRATE=true
-export OMEGA_JWT_SECRET_KEY="kz86HcnwKSn2k2vk6Ddw04kdck9k9SKedWFdGkwe70"
+export OMEGA_JWT_SECRET_KEY="kz83HcnwKSn0k2vk6Ddw03kdck9k9SKedWFdGkwe70"
+export OMEGA_JWT_EXPIRATION=5000000 #in secound 1 day = 86400, 5 days = 432000
 
 export OMEGA_SERVER_LOG_FORMAT="regular" #JSON and REGULAR
 export OMEGA_SERVER_LOG_OUTPUT="stdout" #stdout means the output, otherwise it become the file path
-export OMEGA_SERVER_LOG_LEVEL="warn" #trace debug info warn error fatal panic
+#export OMEGA_SERVER_LOG_OUTPUT="logs/server.log" #stdout means the output, otherwise it become the file path
+export OMEGA_SERVER_LOG_LEVEL="trace" #trace debug info warn error fatal panic
 
 export OMEGA_API_LOG_FORMAT="json" #JSON and REGULAR
 #export OMEGA_API_LOG_OUTPUT="/Users/diako/project/omega/log/rms_api_logger.log" #filepath
-export OMEGA_API_LOG_OUTPUT="log/rms_api_logger.log" #filepath
+export OMEGA_API_LOG_OUTPUT="logs/api.log" #filepath
 export OMEGA_API_LOG_LEVEL="debug" #trace debug info warn error fatal panic
 
 #debug, release & test, in the production rename it to the release
 export GIN_MODE=debug 
 
-#after run OMEGA_PASSWORD_SALT don't change otherwise all passwords are useless
-export OMEGA_PASSWORD_SALT=q7Gcqm9VXMVpf33PbFlYEpkMmDqOn1gRMVsavha9lQ8 
 

@@ -49,9 +49,9 @@ func APILogger() gin.HandlerFunc {
 }
 
 // Logging Response
-func logRequest(c *gin.Context, reqId uint, reqDataReader io.Reader) {
+func logRequest(c *gin.Context, reqID uint, reqDataReader io.Reader) {
 	glog.Glog.ApiLog.WithFields(logrus.Fields{
-		"reqID": reqId,
+		"reqID": reqID,
 		// "ip":  c.ClientIP(),
 		"method":     c.Request.Method,
 		"uri":        c.Request.RequestURI,
@@ -61,7 +61,7 @@ func logRequest(c *gin.Context, reqId uint, reqDataReader io.Reader) {
 		"referer":    c.Request.Referer(),
 		"user_agent": c.Request.UserAgent(),
 	}).Info("request")
-	c.Set("resID", reqId)
+	c.Set("resID", reqID)
 }
 
 // Logging Response
