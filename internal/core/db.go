@@ -19,7 +19,7 @@ func initDB(e engine.Engine, dbType string, dsn string) *gorm.DB {
 		db.LogMode(true)
 	}
 
-	if e.Environments.Setting.AutoMigrate == true {
+	if e.Environments.Setting.AutoMigrate {
 		db.AutoMigrate(&user.User{})
 	}
 

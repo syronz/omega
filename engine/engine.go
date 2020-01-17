@@ -24,8 +24,8 @@ func (e *Engine) Debug(objs ...interface{}) {
 	}
 }
 
-// Debug print struct with details with logrus ability
-func (e *Engine) Error(objs ...interface{}) {
+// DumpError print struct with details with logrus ability
+func (e *Engine) DumpError(objs ...interface{}) {
 	for _, v := range objs {
 		e.ServerLog.Error(fmt.Sprintf("%T :: %+[1]v", v))
 	}

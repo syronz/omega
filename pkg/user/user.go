@@ -1,12 +1,13 @@
 package user
 
-import "github.com/jinzhu/gorm"
+import "omega/internal/model"
 
 // User model
 type User struct {
-	gorm.Model
-	Name     string      `json:"name,omitempty"`
-	Username string      `json:"username,omitempty"`
-	Password string      `json:"password,omitempty"`
+	// gorm.Model
+	model.FixedCol
+	Name     string      `gorm:"not null;unique" json:"name,omitempty" binding:"required"`
+	Username string      `gorm:"not null;unique" json:"username,omitempty" binding:"required"`
+	Password string      `gorm:"not null" json:"password,omitempty" binding:"required"`
 	Extra    interface{} `sql:"-" json:"extra,omitempty"`
 }

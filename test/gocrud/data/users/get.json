@@ -1,6 +1,7 @@
 {
 	"method":"get",
-	"url":"_URL_/users/4",
+	"url":"_URL_/users/ddd",
+	"url":"_URL_/users/4000",
 	"authorization":"Bearer _TOKEN_",
 	"payload": {}
 }

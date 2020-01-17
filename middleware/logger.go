@@ -41,8 +41,7 @@ func APILogger() gin.HandlerFunc {
 
 		c.Next()
 
-		stop := time.Since(start)
-		latency := int(math.Ceil(float64(stop.Nanoseconds()) / 1000000.0))
+		latency := int(math.Ceil(float64(time.Since(start).Nanoseconds()) / 1000000.0))
 
 		logResponse(c, latency, blw)
 

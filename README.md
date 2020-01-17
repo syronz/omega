@@ -31,3 +31,14 @@ reflex -r '\.go' -s -- sh -c 'go run cmd/omega/main.go'
 ```
 
 
+### Logrus levels
+
+```
+		p.Engine.ServerLog.Trace(err.Error())
+		p.Engine.ServerLog.Debug(err.Error())
+		p.Engine.ServerLog.Info(err.Error())
+		p.Engine.ServerLog.Warn(err.Error())
+		p.Engine.ServerLog.Error(err.Error())
+		p.Engine.ServerLog.Fatal(err.Error())
+		p.Engine.ServerLog.Panic(err.Error())
+```

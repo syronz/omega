@@ -6,12 +6,12 @@ export OMEGA_DATABASE_DATA_TYPE="mysql"
 export OMEGA_DATABASE_ACTIVITY_URL="root:Qaz1@345@tcp(127.0.0.1:3306)/omega?charset=utf8&parseTime=True&loc=Local"
 export OMEGA_DATABASE_ACTIVITY_TYPE="mysql"
 
-export OMEGA_AUTOMIGRATE=0
+export OMEGA_AUTO_MIGRATE=true
 export OMEGA_JWT_SECRET_KEY="kz86HcnwKSn2k2vk6Ddw04kdck9k9SKedWFdGkwe70"
 
 export OMEGA_SERVER_LOG_FORMAT="regular" #JSON and REGULAR
 export OMEGA_SERVER_LOG_OUTPUT="stdout" #stdout means the output, otherwise it become the file path
-export OMEGA_SERVER_LOG_LEVEL="debug" #trace debug info warn error fatal panic
+export OMEGA_SERVER_LOG_LEVEL="warn" #trace debug info warn error fatal panic
 
 export OMEGA_API_LOG_FORMAT="json" #JSON and REGULAR
 #export OMEGA_API_LOG_OUTPUT="/Users/diako/project/omega/log/rms_api_logger.log" #filepath

@@ -6,6 +6,7 @@ import (
 	"os"
 )
 
+// LogParam used for parameter between start and initLog
 type LogParam struct {
 	format       string
 	output       string
@@ -15,8 +16,6 @@ type LogParam struct {
 
 func initLog(p LogParam) *logrus.Logger {
 
-	// TODO: switch for each case should be completed
-
 	log := logrus.New()
 
 	if p.showFileLine {
@@ -25,11 +24,22 @@ func initLog(p LogParam) *logrus.Logger {
 		log.AddHook(hook)
 	}
 
+	setFormat(log, p)
+	setOutput(log, p)
+	setLevel(log, p)
+
+	return log
+}
+
+func setFormat(log *logrus.Logger, p LogParam) {
+	// TODO: should be completed
 	switch p.format {
 	case "json":
 		log.SetFormatter(&logrus.JSONFormatter{})
 	}
+}
 
+func setOutput(log *logrus.Logger, p LogParam) {
 	switch p.output {
 	case "stdout":
 		log.SetOutput(os.Stdout)
@@ -41,13 +51,24 @@ func initLog(p LogParam) *logrus.Logger {
 			log.Fatalf("Failed to write logs to file %v, [core/logs.go]", p.output)
 		}
 	}
+}
+
+func setLevel(log *logrus.Logger, p LogParam) {
 
 	switch p.level {
-	case "info":
-		log.SetLevel(logrus.InfoLevel)
+	case "trace":
+		log.SetLevel(logrus.TraceLevel)
 	case "debug":
 		log.SetLevel(logrus.DebugLevel)
+	case "info":
+		log.SetLevel(logrus.InfoLevel)
+	case "warn":
+		log.SetLevel(logrus.WarnLevel)
+	case "error":
+		log.SetLevel(logrus.ErrorLevel)
+	case "fatal":
+		log.SetLevel(logrus.FatalLevel)
+	case "panic":
+		log.SetLevel(logrus.PanicLevel)
 	}
-
-	return log
 }
