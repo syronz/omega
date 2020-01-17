@@ -1,4 +1,4 @@
-package core
+package engine
 
 import (
 	"fmt"
@@ -7,25 +7,26 @@ import (
 	"omega/config"
 )
 
-// Engine is keep all database connections and log configuration and environments and etc
+// Engine to keep all database connections and
+// logs configuration and environments and etc
 type Engine struct {
 	DB           *gorm.DB
 	ActivityDB   *gorm.DB
-	Log          *logrus.Logger
-	LogAPI       *logrus.Logger
+	ServerLog    *logrus.Logger
+	ApiLog       *logrus.Logger
 	Environments config.Environment
 }
 
 // Debug print struct with details with logrus ability
 func (e *Engine) Debug(objs ...interface{}) {
 	for _, v := range objs {
-		e.Log.Debug(fmt.Sprintf("%T :: %+[1]v", v))
+		e.ServerLog.Debug(fmt.Sprintf("%T :: %+[1]v", v))
 	}
 }
 
 // Debug print struct with details with logrus ability
 func (e *Engine) Error(objs ...interface{}) {
 	for _, v := range objs {
-		e.Log.Error(fmt.Sprintf("%T :: %+[1]v", v))
+		e.ServerLog.Error(fmt.Sprintf("%T :: %+[1]v", v))
 	}
 }

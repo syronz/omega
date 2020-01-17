@@ -1,11 +1,17 @@
-package initiate
+package core
 
 import (
-	"os"
-
 	"github.com/sirupsen/logrus"
 	"omega/internal/loghook"
+	"os"
 )
+
+type LogParam struct {
+	format       string
+	output       string
+	level        string
+	showFileLine bool
+}
 
 func initLog(p LogParam) *logrus.Logger {
 
@@ -32,7 +38,7 @@ func initLog(p LogParam) *logrus.Logger {
 		if err == nil {
 			log.Out = file
 		} else {
-			log.Fatalf("Failed to log to file %v, [initiate/log.go]", p.output)
+			log.Fatalf("Failed to write logs to file %v, [core/logs.go]", p.output)
 		}
 	}
 

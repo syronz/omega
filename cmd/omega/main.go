@@ -2,19 +2,22 @@ package main
 
 import (
 	"fmt"
-	"omega/initiate"
+	"omega/internal/core"
 	"omega/server"
 )
 
 func main() {
 
-	engine := initiate.Setup()
+	engine := core.StartEngine()
 	defer engine.DB.Close()
 
-	s := server.Setup(engine)
+	s := server.Initialize(engine)
 
+	engine.ServerLog.Info("Starting Server...")
 	err := s.Run(fmt.Sprintf("%v:%v", engine.Environments.Server.ADDR, engine.Environments.Server.Port))
 	if err != nil {
-		engine.Log.Fatal(err)
+		engine.ServerLog.Fatal(err)
 	}
+	fmt.Printf("••• Server started \n\n")
+	engine.ServerLog.Info("Server started.")
 }

@@ -2,3 +2,5 @@ session.vim
 /cmd/omega/omega
 cover.out
 coverage.txt
+.idea/
+env

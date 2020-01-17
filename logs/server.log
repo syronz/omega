@@ -1,0 +1,2 @@
+[00] [4 rows affected or returned ]
+[00] DEBU[0084] string :: there is no msgIndex for element    file="middleware/apilogger.go:74"

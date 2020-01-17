@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"omega/internal/core"
 
 	// "io"
 	"io/ioutil"
@@ -13,14 +14,13 @@ import (
 	"strings"
 	"testing"
 
-	"omega/initiate"
 	"omega/internal/glog"
 
 	"github.com/gin-gonic/gin"
 )
 
 func TestLogRequest(t *testing.T) {
-	_ = initiate.Setup()
+	_ = core.StartEngine()
 
 	bbo := ioutil.NopCloser(strings.NewReader("{\"password\":\"k2i\",\"username\":\"diako\"}"))
 	buf := new(bytes.Buffer)
@@ -68,7 +68,7 @@ func TestLogRequest(t *testing.T) {
 	// c.Request.Method = "post"
 
 	// logRequest(&c, 25, bbo)
-	bodyResult := readBody(bbo)
+	bodyResult := getBody(bbo)
 	glog.Debug("@@@@@@@@@@@@@@@@@ THIS IS DEBUG @@@@@@@", bodyResult, req.Body)
 
 	t.Log("This is logRequest test", fmt.Sprintf("%T :: %+[1]v", r), c, requestIndex, bbo)

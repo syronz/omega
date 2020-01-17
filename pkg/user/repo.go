@@ -1,28 +1,24 @@
 package user
 
 import (
-	"omega/internal/core"
-	// _ "github.com/jinzhu/gorm/dialects/mysql"
+	"omega/engine"
 )
 
 type Repo struct {
-	Engine core.Engine
+	Engine engine.Engine
 }
 
-func ProvideRepo(engine core.Engine) Repo {
+func ProvideRepo(engine engine.Engine) Repo {
 	return Repo{Engine: engine}
 }
 
-func (p *Repo) FindAll() []User {
-	var users []User
-	p.Engine.DB.Find(&users)
-
-	return users
+func (p *Repo) FindAll() (users []User, err error) {
+	err = p.Engine.DB.Find(&users).Error
+	return
 }
 
-func (p *Repo) FindByID(id uint) User {
-	var user User
-	_ = p.Engine.DB.First(&user, id).Error
+func (p *Repo) FindByID(id uint) (user User, err error) {
+	err = p.Engine.DB.First(&user, id).Error
 
 	user.Extra = struct {
 		LastVisit string
@@ -32,9 +28,7 @@ func (p *Repo) FindByID(id uint) User {
 		-15,
 	}
 
-	// glog.Debug(user, id, err)
-
-	return user
+	return
 }
 
 func (p *Repo) FindByUsername(username string) (user User, err error) {
@@ -42,16 +36,12 @@ func (p *Repo) FindByUsername(username string) (user User, err error) {
 	return
 }
 
-func (p *Repo) Save(user User) (s4 User) {
-	p.Engine.DB.Save(&user).Scan(&s4)
-
-	// p.Engine.Log.Debug(s4)
-	// glog.Debug(s4)
-	// err = i.DB.Create(&i.Item).Scan(&item).Error
-
-	return s4
+func (p *Repo) Save(user User) (u User, err error) {
+	err = p.Engine.DB.Save(&user).Scan(&u).Error
+	return
 }
 
-func (p *Repo) Delete(user User) {
-	p.Engine.DB.Delete(&user)
+func (p *Repo) Delete(user User) (err error) {
+	err = p.Engine.DB.Delete(&user).Error
+	return
 }

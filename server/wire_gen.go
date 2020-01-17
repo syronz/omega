@@ -6,21 +6,21 @@
 package server
 
 import (
-	"omega/internal/core"
+	"omega/engine"
 	"omega/pkg/auth"
 	"omega/pkg/user"
 )
 
 // Injectors from wire.go:
 
-func initUserAPI(e core.Engine) user.API {
+func initUserAPI(e engine.Engine) user.API {
 	repo := user.ProvideRepo(e)
 	service := user.ProvideService(repo)
 	api := user.ProvideAPI(service)
 	return api
 }
 
-func initAuthAPI(e core.Engine) auth.API {
+func initAuthAPI(e engine.Engine) auth.API {
 	repo := auth.ProvideRepo(e)
 	service := auth.ProvideService(repo)
 	api := auth.ProvideAPI(service)

@@ -1,15 +1,15 @@
 package auth
 
 import (
-	"net/http"
-	"omega/internal/core"
-
 	"github.com/gin-gonic/gin"
+	"net/http"
+	"omega/engine"
+	"omega/internal/response"
 )
 
 type API struct {
 	Service Service
-	Engine  core.Engine
+	Engine  engine.Engine
 }
 
 func ProvideAPI(p Service) API {
@@ -17,19 +17,39 @@ func ProvideAPI(p Service) API {
 }
 
 func (p *API) Logout(c *gin.Context) {
-	users := p.Service.Logout()
+	res := response.Response{Context:c}
 
-	c.JSON(http.StatusOK, gin.H{"users": users})
+	var auth Auth
+	err := c.ShouldBindJSON(&auth)
+	if err != nil {
+		res.Failed(http.StatusUnauthorized, 1401, err.Error(), "")
+		return
+	}
+
+	err = p.Service.Logout(auth)
+	if err != nil {
+		res.Failed(http.StatusUnauthorized, 1401, err.Error(), "")
+		return
+	}
+
+	res.Success(http.StatusOK, "logout success", "", 0)
 }
 
 func (p *API) Login(c *gin.Context) {
+	res := response.Response{Context:c}
+
 	var auth Auth
-	err := c.BindJSON(&auth)
+	err := c.ShouldBindJSON(&auth)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+		res.Failed(http.StatusUnauthorized, 1401, err.Error(), "")
 		return
 	}
-	auth, _ = p.Service.Login(auth)
 
-	c.JSON(http.StatusOK, gin.H{"auth": auth})
+	user, err := p.Service.Login(auth)
+	if err != nil {
+		res.Failed(http.StatusUnauthorized, 1401, err.Error(), "")
+		return
+	}
+
+	res.Success(http.StatusOK, "login success", user, 0)
 }
