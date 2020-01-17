@@ -22,9 +22,7 @@ func CheckToken(e engine.Engine) gin.HandlerFunc {
 		}
 
 		token := tokenArr[0][7:]
-
 		claims := &models.JWTClaims{}
-
 		tkn, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
 			return jwtKey, nil
 		})

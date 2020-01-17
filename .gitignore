@@ -4,5 +4,4 @@ cover.out
 coverage.txt
 .idea/
 env
-logs/*
 log/*

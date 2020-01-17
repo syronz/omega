@@ -30,14 +30,14 @@ func InvalidID(c *gin.Context, err error) {
 func RecordNotFound(c *gin.Context, err error, part string) {
 	if err == gorm.ErrRecordNotFound {
 		c.JSON(http.StatusNotFound, &Result{
-			Message: part + " Not Exist",
+			Message: part + " not exist",
 			Code:    1404,
 			Error:   err.Error(),
 		})
 
 	} else {
 		c.JSON(http.StatusInternalServerError, &Result{
-			Message: "Failed to Fetch " + part,
+			Message: "Failed to fetch " + part,
 			Code:    1500,
 			Error:   err.Error(),
 		})
@@ -49,6 +49,21 @@ func RecordNotFound(c *gin.Context, err error, part string) {
 func Success(c *gin.Context, data interface{}) {
 	c.JSON(http.StatusOK, &Result{
 		Data: data,
+	})
+}
+
+// SuccessDataMessage attach a message to the response
+func SuccessDataMessage(c *gin.Context, data interface{}, msg string) {
+	c.JSON(http.StatusOK, &Result{
+		Data:    data,
+		Message: msg,
+	})
+}
+
+// SuccessMessage attach a message to the response
+func SuccessMessage(c *gin.Context, data interface{}, msg string) {
+	c.JSON(http.StatusOK, &Result{
+		Message: msg,
 	})
 }
 
@@ -77,6 +92,5 @@ func ErrorOnSave(c *gin.Context, err error, part string) {
 			Code:    1500,
 			Error:   errMessage,
 		})
-
 	}
 }

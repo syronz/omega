@@ -78,8 +78,7 @@ func (p *API) Update(c *gin.Context) {
 
 	var user User
 
-	err = c.BindJSON(&user)
-	if err != nil {
+	if err = c.BindJSON(&user); err != nil {
 		response.ErrorInBinding(c, err, "update user")
 		return
 	}
@@ -96,19 +95,32 @@ func (p *API) Update(c *gin.Context) {
 
 // Delete user
 func (p *API) Delete(c *gin.Context) {
-	// res := response.Response{Context: c}
-	// id, _ := strconv.Atoi(c.Param("id"))
-	// user, err := p.Service.FindByID(uint(id))
-	// if err != nil {
-	// 	res.Failed(http.StatusBadRequest, 1400, "user does not exist", "")
-	// 	return
-	// }
+	id, err := strconv.ParseUint(c.Param("id"), 10, 16)
+	if err != nil {
+		response.InvalidID(c, err)
+		return
+	}
 
-	// err = p.Service.Delete(user)
-	// if err != nil {
-	// 	res.Failed(http.StatusBadRequest, 1400, "something went wrong, cannot delete this user", "")
-	// 	return
-	// }
-	// res.Success(http.StatusOK, "the user successfully deleted", "", 1)
+	var user User
+	// user.ID = id
+
+	user, err = p.Service.FindByID(id)
+	if err != nil {
+		// res.Failed(http.StatusBadRequest, 1400, "user does not exist", "")
+		response.RecordNotFound(c, err, "delete user")
+		return
+	}
+
+	err = p.Service.Delete(user)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, &response.Result{
+			Message: "Something went wrong, cannot delete this user",
+			Code:    1500,
+		})
+		return
+	}
+
+	// res.Success(http.StatusOK, "", "", 1)
 	c.Status(http.StatusOK)
+	response.SuccessMessage(c, "", "The user successfully deleted")
 }
