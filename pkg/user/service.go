@@ -24,6 +24,12 @@ func (p *Service) FindAll() (users []User, err error) {
 	return
 }
 
+// List of users
+func (p *Service) List() (users []User, err error) {
+
+	return
+}
+
 // FindByID for user
 func (p *Service) FindByID(id uint64) (user User, err error) {
 	user, err = p.Repo.FindByID(id)

@@ -35,7 +35,9 @@ func setFormat(log *logrus.Logger, p LogParam) {
 	// TODO: should be completed
 	switch p.format {
 	case "json":
-		log.SetFormatter(&logrus.JSONFormatter{})
+		log.SetFormatter(&logrus.JSONFormatter{
+			PrettyPrint: true,
+		})
 	}
 }
 

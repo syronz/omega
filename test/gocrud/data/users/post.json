@@ -4,8 +4,8 @@
 	"authorization":"Bearer _TOKEN_",
 	"payload": {
 		"name": "_RANDOM_NAME_",
-		"username2": "_RANDOM_NAME_",
-		"phone2": "_RANDOM_NUMBER_",
+		"username": "_RANDOM_NAME_",
+		"phone": "_RANDOM_NUMBER_",
 		"password": "_RANDOM_NUMBER_"
 	}
 }

@@ -1,11 +1,13 @@
 package user
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"omega/engine"
+	"omega/internal/param"
 	"omega/internal/response"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
 )
 
 // API for injecting user service
@@ -29,6 +31,16 @@ func (p *API) FindAll(c *gin.Context) {
 	}
 
 	response.Success(c, users)
+}
+
+// List of ousers
+func (p *API) List(c *gin.Context) {
+	params := param.Get(c)
+
+	p.Engine.Debug(params)
+
+	response.SuccessMessage(c, "it works fine")
+
 }
 
 // FindByID is used for fetch a user by his id
@@ -65,7 +77,7 @@ func (p *API) Create(c *gin.Context) {
 		return
 	}
 
-	response.Success(c, createdUser)
+	response.SuccessSave(c, createdUser, "user created")
 }
 
 // Update user
@@ -90,7 +102,7 @@ func (p *API) Update(c *gin.Context) {
 		return
 	}
 
-	response.Success(c, updatedUser)
+	response.SuccessSave(c, updatedUser, "user updated")
 }
 
 // Delete user
@@ -102,11 +114,9 @@ func (p *API) Delete(c *gin.Context) {
 	}
 
 	var user User
-	// user.ID = id
 
 	user, err = p.Service.FindByID(id)
 	if err != nil {
-		// res.Failed(http.StatusBadRequest, 1400, "user does not exist", "")
 		response.RecordNotFound(c, err, "delete user")
 		return
 	}
@@ -120,7 +130,6 @@ func (p *API) Delete(c *gin.Context) {
 		return
 	}
 
-	// res.Success(http.StatusOK, "", "", 1)
 	c.Status(http.StatusOK)
-	response.SuccessMessage(c, "", "The user successfully deleted")
+	response.SuccessSave(c, user, "user successfully deleted")
 }

@@ -16,7 +16,13 @@ func ProvideRepo(engine engine.Engine) Repo {
 
 // FindAll users
 func (p *Repo) FindAll() (users []User, err error) {
-	err = p.Engine.DB.Find(&users).Error
+	err = p.Engine.DB.Select("id, name").Find(&users).Error
+	return
+}
+
+// List users
+func (p *Repo) List() (users []User, err error) {
+	err = p.Engine.DB.Select("id, name").Find(&users).Error
 	return
 }
 

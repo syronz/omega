@@ -12,7 +12,7 @@ export OMEGA_AUTO_MIGRATE=true
 export OMEGA_JWT_SECRET_KEY="kz83HcnwKSn0k2vk6Ddw03kdck9k9SKedWFdGkwe70"
 export OMEGA_JWT_EXPIRATION=5000000 #in secound 1 day = 86400, 5 days = 432000
 
-export OMEGA_SERVER_LOG_FORMAT="regular" #JSON and REGULAR
+export OMEGA_SERVER_LOG_FORMAT="json" #JSON and REGULAR
 #export OMEGA_SERVER_LOG_OUTPUT="stdout" #stdout means the output, otherwise it become the file path
 export OMEGA_SERVER_LOG_OUTPUT="logs/server.log" #stdout means the output, otherwise it become the file path
 export OMEGA_SERVER_LOG_LEVEL="trace" #trace debug info warn error fatal panic

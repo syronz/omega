@@ -44,7 +44,8 @@ func routeNotFound(r *gin.Engine) {
 
 func routeUser(api *gin.RouterGroup, e engine.Engine) {
 	userAPI := initUserAPI(e)
-	api.GET("/users", userAPI.FindAll)
+	api.GET("/all/users", userAPI.FindAll)
+	api.GET("/users", userAPI.List)
 	api.GET("/users/:id", userAPI.FindByID)
 	api.POST("/users", userAPI.Create)
 	api.PUT("/users/:id", userAPI.Update)

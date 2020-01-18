@@ -10,7 +10,6 @@ import (
 
 // Result is a standard output for success and faild requests
 type Result struct {
-	// TODO: by my opinion (DSH) status is't necessery
 	Message string      `json:"message,omitempty"`
 	Data    interface{} `json:"data,omitempty"`
 	Error   interface{} `json:"error,omitempty"`
@@ -52,8 +51,8 @@ func Success(c *gin.Context, data interface{}) {
 	})
 }
 
-// SuccessDataMessage attach a message to the response
-func SuccessDataMessage(c *gin.Context, data interface{}, msg string) {
+// SuccessSave attach a message to the response
+func SuccessSave(c *gin.Context, data interface{}, msg string) {
 	c.JSON(http.StatusOK, &Result{
 		Data:    data,
 		Message: msg,
@@ -61,7 +60,7 @@ func SuccessDataMessage(c *gin.Context, data interface{}, msg string) {
 }
 
 // SuccessMessage attach a message to the response
-func SuccessMessage(c *gin.Context, data interface{}, msg string) {
+func SuccessMessage(c *gin.Context, msg string) {
 	c.JSON(http.StatusOK, &Result{
 		Message: msg,
 	})
