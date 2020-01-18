@@ -16,13 +16,22 @@ export OMEGA_SERVER_LOG_FORMAT="json" #JSON and REGULAR
 #export OMEGA_SERVER_LOG_OUTPUT="stdout" #stdout means the output, otherwise it become the file path
 export OMEGA_SERVER_LOG_OUTPUT="logs/server.log" #stdout means the output, otherwise it become the file path
 export OMEGA_SERVER_LOG_LEVEL="trace" #trace debug info warn error fatal panic
+export OMEGA_SERVER_LOG_JSON_INDENT=true #indenting the json in the file
 
 export OMEGA_API_LOG_FORMAT="json" #JSON and REGULAR
 #export OMEGA_API_LOG_OUTPUT="/Users/diako/project/omega/log/rms_api_logger.log" #filepath
 export OMEGA_API_LOG_OUTPUT="logs/api.log" #filepath
 export OMEGA_API_LOG_LEVEL="debug" #trace debug info warn error fatal panic
+export OMEGA_API_LOG_JSON_INDENT=false #indenting the json in the file
 
 #debug, release & test, in the production rename it to the release
 export GIN_MODE=debug 
+
+
+
+# for running the test 
+export GO111MODULE=on
+export CGO_ENABLED=0
+
 
 

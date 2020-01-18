@@ -40,14 +40,16 @@ type Database struct {
 // Log configuration terms hold here
 type Log struct {
 	ServerLog struct {
-		Format string `env:"OMEGA_SERVER_LOG_FORMAT,required"`
-		Output string `env:"OMEGA_SERVER_LOG_OUTPUT,required"`
-		Level  string `env:"OMEGA_SERVER_LOG_LEVEL,required"`
+		Format     string `env:"OMEGA_SERVER_LOG_FORMAT,required"`
+		Output     string `env:"OMEGA_SERVER_LOG_OUTPUT,required"`
+		Level      string `env:"OMEGA_SERVER_LOG_LEVEL,required"`
+		JSONIndent bool   `env:"OMEGA_SERVER_LOG_JSON_INDENT,required"`
 	}
 
 	ApiLog struct {
-		Format string `env:"OMEGA_API_LOG_FORMAT,required"`
-		Output string `env:"OMEGA_API_LOG_OUTPUT,required"`
-		Level  string `env:"OMEGA_API_LOG_LEVEL,required"`
+		Format     string `env:"OMEGA_API_LOG_FORMAT,required"`
+		Output     string `env:"OMEGA_API_LOG_OUTPUT,required"`
+		Level      string `env:"OMEGA_API_LOG_LEVEL,required"`
+		JSONIndent bool   `env:"OMEGA_API_LOG_JSON_INDENT,required"`
 	}
 }

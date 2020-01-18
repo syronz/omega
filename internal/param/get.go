@@ -24,7 +24,10 @@ func Get(c *gin.Context) (param Param) {
 	}
 
 	param.Order = orderBy + " " + direction
-	param.Columns = c.Query("columns")
+	param.Select = "*"
+	if c.Query("select") != "" {
+		param.Select = c.Query("select")
+	}
 
 	if c.Query("page_size") != "" {
 		param.Limit, err = strconv.ParseUint(c.Query("page_size"), 10, 16)

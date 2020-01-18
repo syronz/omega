@@ -38,8 +38,13 @@ func (p *API) List(c *gin.Context) {
 	params := param.Get(c)
 
 	p.Engine.Debug(params)
+	users, err := p.Service.List(params)
+	if err != nil {
+		response.RecordNotFound(c, err, "users")
+		return
+	}
 
-	response.SuccessMessage(c, "it works fine")
+	response.Success(c, users)
 
 }
 

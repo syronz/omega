@@ -1,6 +1,9 @@
 {
 	"method":"get",
-	"url":"_URL_/users?order_by=name",
+	"url":"_URL_/users?order_by=name&direction=asc&page=3&page_size=3",
+	"url":"_URL_/users?order_by=users.name&direction=asc&page=1&page_size=3&select=id,users.username",
+	"url":"_URL_/users?order_by=name&direction=asc&page=1&page_size=4&search=4350907",
+	"url":"_URL_/users?order_by=name&direction=asc&page=1&page_size=4&search=users.phone>4350907~users.name>black-moon",
 	"authorization":"Bearer _TOKEN_",
 	"payload": {}
 }

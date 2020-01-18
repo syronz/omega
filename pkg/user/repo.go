@@ -2,6 +2,8 @@ package user
 
 import (
 	"omega/engine"
+	"omega/internal/param"
+	"omega/utils/search"
 )
 
 // Repo for injecting engine
@@ -21,8 +23,19 @@ func (p *Repo) FindAll() (users []User, err error) {
 }
 
 // List users
-func (p *Repo) List() (users []User, err error) {
-	err = p.Engine.DB.Select("id, name").Find(&users).Error
+func (p *Repo) List(params param.Param) (users []User, err error) {
+
+	pattern := `(users.name LIKE '%[1]v%%' OR
+		users.username LIKE '%[1]v' OR
+		users.phone LIKE '%[1]v%%')`
+	whereStr := search.Parse(params, pattern)
+
+	err = p.Engine.DB.Select(params.Select).
+		Where(whereStr).
+		Order(params.Order).
+		Limit(params.Limit).
+		Offset(params.Offset).
+		Find(&users).Error
 	return
 }
 

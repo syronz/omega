@@ -3,6 +3,7 @@ package user
 import (
 	"fmt"
 	"omega/engine"
+	"omega/internal/param"
 	"omega/utils/password"
 )
 
@@ -20,12 +21,14 @@ func ProvideService(p Repo) Service {
 // FindAll users
 func (p *Service) FindAll() (users []User, err error) {
 	users, err = p.Repo.FindAll()
-	p.Engine.CheckError(err, "All Users")
+	p.Engine.CheckError(err, "all users")
 	return
 }
 
 // List of users
-func (p *Service) List() (users []User, err error) {
+func (p *Service) List(params param.Param) (users []User, err error) {
+	users, err = p.Repo.List(params)
+	p.Engine.CheckError(err, "users list")
 
 	return
 }

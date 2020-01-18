@@ -11,6 +11,7 @@ type LogParam struct {
 	format       string
 	output       string
 	level        string
+	JSONIndent   bool
 	showFileLine bool
 }
 
@@ -36,7 +37,7 @@ func setFormat(log *logrus.Logger, p LogParam) {
 	switch p.format {
 	case "json":
 		log.SetFormatter(&logrus.JSONFormatter{
-			PrettyPrint: true,
+			PrettyPrint: p.JSONIndent,
 		})
 	}
 }

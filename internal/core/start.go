@@ -37,6 +37,7 @@ func setupServerLog(env config.Environment) *logrus.Logger {
 		format:       env.Log.ServerLog.Format,
 		output:       env.Log.ServerLog.Output,
 		level:        env.Log.ServerLog.Level,
+		JSONIndent:   env.Log.ServerLog.JSONIndent,
 		showFileLine: true, // true means filename and line number should be printed
 	}
 
@@ -49,6 +50,7 @@ func setUpAPILog(env config.Environment) *logrus.Logger {
 		format:       env.Log.ApiLog.Format,
 		output:       env.Log.ApiLog.Output,
 		level:        env.Log.ApiLog.Level,
+		JSONIndent:   env.Log.ApiLog.JSONIndent,
 		showFileLine: false,
 	}
 
