@@ -26,9 +26,14 @@ func (p *Service) FindAll() (users []User, err error) {
 }
 
 // List of users
-func (p *Service) List(params param.Param) (users []User, err error) {
-	users, err = p.Repo.List(params)
+func (p *Service) List(params param.Param) (data map[string]interface{}, err error) {
+	data = make(map[string]interface{})
+
+	data["users"], err = p.Repo.List(params)
 	p.Engine.CheckError(err, "users list")
+
+	data["count"], err = p.Repo.Count(params)
+	p.Engine.CheckError(err, "users count")
 
 	return
 }

@@ -11,6 +11,10 @@ type Repo struct {
 	Engine engine.Engine
 }
 
+var pattern = `(users.name LIKE '%[1]v%%' OR
+		users.username LIKE '%[1]v' OR
+		users.phone LIKE '%[1]v%%')`
+
 // ProvideRepo is used in wire
 func ProvideRepo(engine engine.Engine) Repo {
 	return Repo{Engine: engine}
@@ -24,18 +28,26 @@ func (p *Repo) FindAll() (users []User, err error) {
 
 // List users
 func (p *Repo) List(params param.Param) (users []User, err error) {
-
-	pattern := `(users.name LIKE '%[1]v%%' OR
-		users.username LIKE '%[1]v' OR
-		users.phone LIKE '%[1]v%%')`
-	whereStr := search.Parse(params, pattern)
-
 	err = p.Engine.DB.Select(params.Select).
-		Where(whereStr).
+		Where(search.Parse(params, pattern)).
 		Order(params.Order).
 		Limit(params.Limit).
 		Offset(params.Offset).
 		Find(&users).Error
+
+	for i := range users {
+		users[i].Password = ""
+	}
+
+	return
+}
+
+// Count users
+func (p *Repo) Count(params param.Param) (count uint64, err error) {
+	err = p.Engine.DB.Table("users").
+		Select(params.Select).
+		Where(search.Parse(params, pattern)).
+		Count(&count).Error
 	return
 }
 

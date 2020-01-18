@@ -33,19 +33,18 @@ func (p *API) FindAll(c *gin.Context) {
 	response.Success(c, users)
 }
 
-// List of ousers
+// List of users
 func (p *API) List(c *gin.Context) {
 	params := param.Get(c)
 
 	p.Engine.Debug(params)
-	users, err := p.Service.List(params)
+	data, err := p.Service.List(params)
 	if err != nil {
 		response.RecordNotFound(c, err, "users")
 		return
 	}
 
-	response.Success(c, users)
-
+	response.Success(c, data)
 }
 
 // FindByID is used for fetch a user by his id

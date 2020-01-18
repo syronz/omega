@@ -31,7 +31,10 @@ func (p *Service) Logout(user Auth) error {
 func (p *Service) Login(auth Auth) (userResult user.User, err error) {
 	jwtKey := []byte(p.Engine.Environments.Setting.JWTSecretKey)
 	userRepo := user.Repo{Engine: p.Engine}
-	userResult, err = userRepo.FindByUsername(auth.Username)
+	if userResult, err = userRepo.FindByUsername(auth.Username); err != nil {
+		err = errors.New("Username or Password is wrong")
+		return
+	}
 
 	if password.Verify(auth.Password, userResult.Password,
 		p.Engine.Environments.Setting.PasswordSalt) {
