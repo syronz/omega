@@ -7,9 +7,9 @@ services:
   - mysql
 
 before_install:
+  - mysql -e 'CREATE DATABASE omega_test;'
   - cd cmd/omega
   - go get github.com/mattn/goveralls
-  - mysql -e 'CREATE DATABASE omega_test;'
 
 
 script:

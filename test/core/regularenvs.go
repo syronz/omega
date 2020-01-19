@@ -16,11 +16,11 @@ func getRegularEnvs() config.Environment {
 
 	database := config.Database{
 		Data: config.Data{
-			DSN:  "root@tcp(127.0.0.1:3306)/omega_test?charset=utf8&parseTime=True&loc=Local",
+			DSN:  "travis@tcp(127.0.0.1:3306)/omega_test?charset=utf8&parseTime=True&loc=Local",
 			Type: "mysql",
 		},
 		Activity: config.Activity{
-			DSN:  "root@tcp(127.0.0.1:3306)/omega_test?charset=utf8&parseTime=True&loc=Local",
+			DSN:  "travis@tcp(127.0.0.1:3306)/omega_test?charset=utf8&parseTime=True&loc=Local",
 			Type: "mysql",
 		},
 	}
