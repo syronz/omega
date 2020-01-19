@@ -3,9 +3,14 @@ nguage: go
 go:
   - 1.13.x
 
+services:
+  - mysql
+
 before_install:
   - cd cmd/omega
   - go get github.com/mattn/goveralls
+  - mysql -e 'CREATE DATABASE omega_test;'
+
 
 script:
   - cd ../..
