@@ -11,7 +11,25 @@ import (
 // Get is a function for filling param.Model
 func Get(c *gin.Context) (param Param) {
 	var err error
-	var page uint64
+
+	generateOrder(c, &param)
+	generateSelectedColumns(c, &param)
+	generateLimit(c, &param)
+	generateOffset(c, &param)
+
+	param.Search = strings.TrimSpace(c.Query("search"))
+
+	userID, ok := c.Get("USER_ID")
+	if ok {
+		glog.CheckInfo(err, "User ID is not exist")
+		param.UserID = userID.(uint64)
+	}
+
+	return param
+
+}
+
+func generateOrder(c *gin.Context, param *Param) {
 	orderBy := "id"
 	direction := "desc"
 
@@ -24,11 +42,17 @@ func Get(c *gin.Context) (param Param) {
 	}
 
 	param.Order = orderBy + " " + direction
+}
+
+func generateSelectedColumns(c *gin.Context, param *Param) {
 	param.Select = "*"
 	if c.Query("select") != "" {
 		param.Select = c.Query("select")
 	}
+}
 
+func generateLimit(c *gin.Context, param *Param) {
+	var err error
 	if c.Query("page_size") != "" {
 		param.Limit, err = strconv.ParseUint(c.Query("page_size"), 10, 16)
 		if err != nil {
@@ -37,7 +61,11 @@ func Get(c *gin.Context) (param Param) {
 			param.Limit = 10
 		}
 	}
+}
 
+func generateOffset(c *gin.Context, param *Param) {
+	var page uint64
+	var err error
 	if c.Query("page") != "" {
 		page, err = strconv.ParseUint(c.Query("page"), 10, 16)
 		if err != nil {
@@ -47,16 +75,5 @@ func Get(c *gin.Context) (param Param) {
 		}
 	}
 
-	param.Search = strings.TrimSpace(c.Query("search"))
-
-	userID, ok := c.Get("USER_ID")
-	if ok {
-		glog.CheckInfo(err, "User ID is not exist")
-		param.UserID = userID.(uint64)
-	}
-
 	param.Offset = param.Limit * (page - 1)
-
-	return param
-
 }
