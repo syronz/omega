@@ -1,49 +1,32 @@
 package core
 
-import "omega/config"
+import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"omega/config"
+	"os"
+	"path/filepath"
+	"runtime"
+)
 
 func getRegularEnvs() config.Environment {
-	server := config.Server{
-		Port: "8070",
-		ADDR: "localhost",
+
+	_, dir, _, _ := runtime.Caller(0)
+	dir = filepath.Dir(dir)
+
+	jsonFile, err := os.Open(dir + "/regularenvs.json")
+	if err != nil {
+		fmt.Println(err)
 	}
 
-	setting := config.Setting{
-		PasswordSalt:  "",
-		JWTSecretKey:  "kz84HcnwKSn0k2vk6Ddw03kdck9k9SKedWFdGkwe70",
-		JWTExpiration: 1000000,
-	}
+	fmt.Println("Successfully Opened users.json")
+	defer jsonFile.Close()
 
-	database := config.Database{
-		Data: config.Data{
-			DSN:  "travis@tcp(127.0.0.1:3306)/omega_test?charset=utf8&parseTime=True&loc=Local",
-			Type: "mysql",
-		},
-		Activity: config.Activity{
-			DSN:  "travis@tcp(127.0.0.1:3306)/omega_test?charset=utf8&parseTime=True&loc=Local",
-			Type: "mysql",
-		},
-	}
+	byteValue, _ := ioutil.ReadAll(jsonFile)
 
-	log := config.Log{
-		ServerLog: config.ServerLog{
-			Format:     "json",
-			Output:     "stdout",
-			Level:      "trace",
-			JSONIndent: true,
-		},
-		ApiLog: config.ApiLog{
-			Format:     "json",
-			Output:     "stdout",
-			Level:      "trace",
-			JSONIndent: true,
-		},
-	}
+	var envs config.Environment
+	json.Unmarshal(byteValue, &envs)
+	return envs
 
-	return config.Environment{
-		Server:   server,
-		Setting:  setting,
-		Database: database,
-		Log:      log,
-	}
 }

@@ -1,0 +1,35 @@
+{
+	"server": {
+		"port": "8070",
+		"addr": "localhost"
+	},
+	"setting": {
+		"password_salt":  "",
+		"jwt_secret_key":  "kz84HcnwKSn0k2vk6Ddw03kdck9k9SKedWFdGkwe70",
+		"jwt_expiration": 1000000
+	},
+	"database": {
+		"data": {
+			"dsn":  "travis@tcp(127.0.0.1:3306)/omega_test?charset=utf8&parseTime=True&loc=Local",
+			"type": "mysql"
+		},
+		"activity": {
+			"dsn":  "travis@tcp(127.0.0.1:3306)/omega_test?charset=utf8&parseTime=True&loc=Local",
+			"type": "mysql"
+		}
+	},
+	"log": {
+		"server_log": {
+			"format":     "json",
+			"output":     "stdout",
+			"level":      "trace",
+			"json_indent": true
+		},
+		"api_log": {
+			"format":     "json",
+			"output":     "stdout",
+			"level":      "trace",
+			"json_indent": true
+		}
+	}
+}
