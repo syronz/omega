@@ -1,18 +1,19 @@
 package user
 
 import (
-	"log"
-	"net/http"
-	"net/http/httptest"
-	"omega/engine"
+// "log"
+// "net/http"
+// "net/http/httptest"
+// "omega/engine"
 
-	"testing"
+// "testing"
 
-	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
+// "github.com/gin-gonic/gin"
+// "github.com/jinzhu/gorm"
+// _ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
+/*
 func TestAPICreate(t *testing.T) {
 	resp := httptest.NewRecorder()
 	gin.SetMode(gin.TestMode)
@@ -55,6 +56,7 @@ func TestAPICreate(t *testing.T) {
 	r.ServeHTTP(resp, c.Request)
 	t.Log("it is working fine", resp)
 }
+*/
 
 /*
 func TestAPIFindByID(t *testing.T) {

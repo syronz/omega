@@ -56,4 +56,6 @@ func TestServiceCreate(t *testing.T) {
 		}
 	}
 
+	engine.DB.DropTable(&User{})
+
 }
