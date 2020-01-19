@@ -27,29 +27,40 @@ type Setting struct {
 
 // Database hold DB connections, in case we just have one database use same DSN for both
 type Database struct {
-	Data struct {
-		DSN  string `env:"OMEGA_DATABASE_DATA_URL,required"`
-		Type string `env:"OMEGA_DATABASE_DATA_TYPE,required"`
-	}
-	Activity struct {
-		DSN  string `env:"OMEGA_DATABASE_ACTIVITY_URL,required"`
-		Type string `env:"OMEGA_DATABASE_ACTIVITY_TYPE,required"`
-	}
+	Data     Data
+	Activity Activity
+}
+
+// Data is used inside the Database struct
+type Data struct {
+	DSN  string `env:"OMEGA_DATABASE_DATA_URL,required"`
+	Type string `env:"OMEGA_DATABASE_DATA_TYPE,required"`
+}
+
+// Activity is used inside the Database struct
+type Activity struct {
+	DSN  string `env:"OMEGA_DATABASE_ACTIVITY_URL,required"`
+	Type string `env:"OMEGA_DATABASE_ACTIVITY_TYPE,required"`
 }
 
 // Log configuration terms hold here
 type Log struct {
-	ServerLog struct {
-		Format     string `env:"OMEGA_SERVER_LOG_FORMAT,required"`
-		Output     string `env:"OMEGA_SERVER_LOG_OUTPUT,required"`
-		Level      string `env:"OMEGA_SERVER_LOG_LEVEL,required"`
-		JSONIndent bool   `env:"OMEGA_SERVER_LOG_JSON_INDENT,required"`
-	}
+	ServerLog ServerLog
+	ApiLog    ApiLog
+}
 
-	ApiLog struct {
-		Format     string `env:"OMEGA_API_LOG_FORMAT,required"`
-		Output     string `env:"OMEGA_API_LOG_OUTPUT,required"`
-		Level      string `env:"OMEGA_API_LOG_LEVEL,required"`
-		JSONIndent bool   `env:"OMEGA_API_LOG_JSON_INDENT,required"`
-	}
+// ServerLog is used inside the Log
+type ServerLog struct {
+	Format     string `env:"OMEGA_SERVER_LOG_FORMAT,required"`
+	Output     string `env:"OMEGA_SERVER_LOG_OUTPUT,required"`
+	Level      string `env:"OMEGA_SERVER_LOG_LEVEL,required"`
+	JSONIndent bool   `env:"OMEGA_SERVER_LOG_JSON_INDENT,required"`
+}
+
+// ApiLog is used inside the Log
+type ApiLog struct {
+	Format     string `env:"OMEGA_API_LOG_FORMAT,required"`
+	Output     string `env:"OMEGA_API_LOG_OUTPUT,required"`
+	Level      string `env:"OMEGA_API_LOG_LEVEL,required"`
+	JSONIndent bool   `env:"OMEGA_API_LOG_JSON_INDENT,required"`
 }

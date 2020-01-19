@@ -10,6 +10,7 @@ func main() {
 
 	engine := core.StartEngine()
 	defer engine.DB.Close()
+	defer engine.ActivityDB.Close()
 
 	s := server.Initialize(engine)
 

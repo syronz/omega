@@ -28,10 +28,3 @@ export OMEGA_API_LOG_JSON_INDENT=false #indenting the json in the file
 export GIN_MODE=debug 
 
 
-
-# for running the test 
-export GO111MODULE=on
-export CGO_ENABLED=0
-
-
-

@@ -1,11 +1,20 @@
 package core
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 	"omega/engine"
 	"omega/pkg/user"
+
+	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 )
+
+func swapper(db *gorm.DB, i ...interface{}) {
+	db.AutoMigrate(i...)
+}
+
+func passer(db *gorm.DB, i ...interface{}) {
+	swapper(db, i...)
+}
 
 func initDB(e engine.Engine, dbType string, dsn string) *gorm.DB {
 	db, err := gorm.Open(dbType, dsn)
@@ -19,8 +28,12 @@ func initDB(e engine.Engine, dbType string, dsn string) *gorm.DB {
 		db.LogMode(true)
 	}
 
+	passer(db, &user.User{})
+
 	if e.Environments.Setting.AutoMigrate {
-		db.AutoMigrate(&user.User{})
+		// usObject := swapper(&user.User{})
+		// db.AutoMigrate(usObject)
+		// db.AutoMigrate(&user.User{})
 	}
 
 	return db
