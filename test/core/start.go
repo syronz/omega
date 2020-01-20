@@ -1,12 +1,12 @@
 package core
 
 import (
+	// Import Mysql and Postgress for testing
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"omega/engine"
 	"omega/internal/core/setup"
 	"omega/utils/glog"
-
-	_ "github.com/jinzhu/gorm/dialects/mysql"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 // StartEngine initiate all different parts like logs and database connection and generate cfg

@@ -41,7 +41,7 @@ func (e *Engine) Record(c *gin.Context, event string, data ...interface{}) {
 		UserID:   userID,
 		Username: username,
 		IP:       c.ClientIP(),
-		Path:     c.Request.URL.Path,
+		URI:      c.Request.RequestURI,
 		Before:   string(before),
 		After:    string(after),
 	}
@@ -91,8 +91,4 @@ func (e *Engine) isRecordSetInEnvironment(recordType RecordType) bool {
 		}
 	}
 	return false
-}
-
-func recordActivity(num int, c *gin.Context, recordType RecordType) {
-
 }

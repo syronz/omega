@@ -93,3 +93,10 @@ func ErrorOnSave(c *gin.Context, err error, part string) {
 		})
 	}
 }
+
+// NoPermission is simpoe func for showing this error
+func NoPermission(c *gin.Context) {
+	c.JSON(http.StatusForbidden, &Result{
+		Message: "You don't have permission",
+	})
+}

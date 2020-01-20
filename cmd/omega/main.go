@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"omega/internal/core"
 	"omega/server"
 )

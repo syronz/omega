@@ -23,6 +23,10 @@ func ProvideAPI(p Service) API {
 
 // FindAll users
 func (p *API) FindAll(c *gin.Context) {
+	if p.Engine.CheckAccess(c, "users:all") {
+		response.NoPermission(c)
+		return
+	}
 	users, err := p.Service.FindAll()
 
 	if err != nil {
@@ -35,6 +39,12 @@ func (p *API) FindAll(c *gin.Context) {
 
 // List of users
 func (p *API) List(c *gin.Context) {
+	if p.Engine.CheckAccess(c, "users:read") {
+		p.Engine.Record(c, "user-list-forbidden")
+		response.NoPermission(c)
+		return
+	}
+
 	params := param.Get(c)
 
 	p.Engine.Debug(params)
@@ -44,12 +54,17 @@ func (p *API) List(c *gin.Context) {
 		return
 	}
 
-	p.Engine.Record(c, "user-list", params)
+	p.Engine.Record(c, "user-list")
 	response.Success(c, data)
 }
 
 // FindByID is used for fetch a user by his id
 func (p *API) FindByID(c *gin.Context) {
+	if p.Engine.CheckAccess(c, "users:read") {
+		p.Engine.Record(c, "user-id-forbidden")
+		response.NoPermission(c)
+		return
+	}
 	id, err := strconv.ParseUint(c.Param("id"), 10, 16)
 	if err != nil {
 		response.InvalidID(c, err)
@@ -63,6 +78,7 @@ func (p *API) FindByID(c *gin.Context) {
 		return
 	}
 
+	p.Engine.Record(c, "user-id")
 	response.Success(c, user)
 }
 
@@ -73,6 +89,12 @@ func (p *API) Create(c *gin.Context) {
 	err := c.BindJSON(&user)
 	if err != nil {
 		response.ErrorInBinding(c, err, "create user")
+		return
+	}
+
+	if p.Engine.CheckAccess(c, "users:write") {
+		p.Engine.Record(c, "user-create-forbidden", nil, user)
+		response.NoPermission(c)
 		return
 	}
 
@@ -101,6 +123,11 @@ func (p *API) Update(c *gin.Context) {
 		return
 	}
 	user.ID = id
+	if p.Engine.CheckAccess(c, "users:write") {
+		p.Engine.Record(c, "user-update-forbidden", nil, user)
+		response.NoPermission(c)
+		return
+	}
 
 	userBefore, err := p.Service.FindByID(id)
 	if err != nil {
@@ -126,6 +153,11 @@ func (p *API) Delete(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 16)
 	if err != nil {
 		response.InvalidID(c, err)
+		return
+	}
+	if p.Engine.CheckAccess(c, "users:write") {
+		p.Engine.Record(c, "user-delete-forbidden", nil, id)
+		response.NoPermission(c)
 		return
 	}
 

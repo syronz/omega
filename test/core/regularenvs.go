@@ -2,9 +2,9 @@ package core
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"omega/config"
+	"omega/utils/glog"
 	"os"
 	"path/filepath"
 	"runtime"
@@ -16,17 +16,15 @@ func getRegularEnvs() config.Environment {
 	dir = filepath.Dir(dir)
 
 	jsonFile, err := os.Open(dir + "/regularenvs.json")
-	if err != nil {
-		fmt.Println(err)
-	}
+	glog.CheckError(err, "can't open the config file")
 
-	fmt.Println("Successfully Opened users.json")
 	defer jsonFile.Close()
 
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 
 	var envs config.Environment
-	json.Unmarshal(byteValue, &envs)
-	return envs
+	err = json.Unmarshal(byteValue, &envs)
+	glog.CheckError(err, "error in unmarshal JSON")
 
+	return envs
 }

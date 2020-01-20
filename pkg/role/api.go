@@ -35,6 +35,12 @@ func (p *API) FindAll(c *gin.Context) {
 
 // List of roles
 func (p *API) List(c *gin.Context) {
+	if p.Engine.CheckAccess(c, "roles:read") {
+		p.Engine.Record(c, "role-list-forbidden")
+		response.NoPermission(c)
+		return
+	}
+
 	params := param.Get(c)
 
 	p.Engine.Debug(params)
@@ -50,6 +56,11 @@ func (p *API) List(c *gin.Context) {
 
 // FindByID is used for fetch a role by his id
 func (p *API) FindByID(c *gin.Context) {
+	if p.Engine.CheckAccess(c, "roles:read") {
+		p.Engine.Record(c, "role-id-forbidden")
+		response.NoPermission(c)
+		return
+	}
 	id, err := strconv.ParseUint(c.Param("id"), 10, 16)
 	if err != nil {
 		response.InvalidID(c, err)
@@ -73,6 +84,12 @@ func (p *API) Create(c *gin.Context) {
 	err := c.BindJSON(&role)
 	if err != nil {
 		response.ErrorInBinding(c, err, "create role")
+		return
+	}
+
+	if p.Engine.CheckAccess(c, "role:write") {
+		p.Engine.Record(c, "role-create-forbidden", nil, role)
+		response.NoPermission(c)
 		return
 	}
 
@@ -102,6 +119,12 @@ func (p *API) Update(c *gin.Context) {
 	}
 	role.ID = id
 
+	if p.Engine.CheckAccess(c, "role:write") {
+		p.Engine.Record(c, "role-update-forbidden", nil, role)
+		response.NoPermission(c)
+		return
+	}
+
 	roleBefore, err := p.Service.FindByID(id)
 	if err != nil {
 		response.RecordNotFound(c, err, "update role")
@@ -123,6 +146,12 @@ func (p *API) Delete(c *gin.Context) {
 	id, err := strconv.ParseUint(c.Param("id"), 10, 16)
 	if err != nil {
 		response.InvalidID(c, err)
+		return
+	}
+
+	if p.Engine.CheckAccess(c, "role:write") {
+		p.Engine.Record(c, "role-delete-forbidden", nil, id)
+		response.NoPermission(c)
 		return
 	}
 

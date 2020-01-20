@@ -9,7 +9,7 @@ type Activity struct {
 	UserID   uint64 `json:"user_id"`
 	Username string `gorm:"index:username_idx" json:"username"`
 	IP       string `json:"ip"`
-	Path     string `json:"path"`
+	URI      string `json:"uri"`
 	Before   string `gorm:"type:text" json:"before"`
 	After    string `gorm:"type:text" json:"after"`
 }
