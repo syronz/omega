@@ -46,6 +46,7 @@ func (p *Repo) List(params param.Param) (users []User, err error) {
 func (p *Repo) Count(params param.Param) (count uint64, err error) {
 	err = p.Engine.DB.Table("users").
 		Select(params.Select).
+		Where("deleted_at = null").
 		Where(search.Parse(params, pattern)).
 		Count(&count).Error
 	return

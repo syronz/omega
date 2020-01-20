@@ -1,0 +1,10 @@
+{
+	"method":"put",
+	"url":"_URL_/roles/3",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {
+		"name": "Admin",
+		"resources": "users:read users:write users:report activities:self activities:all roles:read roles:write",
+		"description": "Admin privileges"
+	}
+}

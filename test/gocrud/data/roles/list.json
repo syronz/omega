@@ -1,0 +1,7 @@
+{
+	"method":"get",
+	"url":"_URL_/roles?order_by=id&direction=desc&page=1&page_size=3",
+	"url":"_URL_/roles?order_by=id&direction=desc&page=1&page_size=3&search=Admin",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {}
+}

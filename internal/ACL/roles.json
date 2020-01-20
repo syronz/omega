@@ -1,0 +1,23 @@
+[
+  {
+    "role": "Admin",
+    "id": 1,
+    "resources": [
+      "user:write",
+      "user:read",
+      "user:report",
+      "activity:self",
+      "activity:all"
+    ]
+  },
+  {
+    "role": "Cashier",
+    "id": 2,
+    "resources": [
+      "user:read",
+      "activity:self",
+      "activity:all"
+    ]
+  }
+
+]

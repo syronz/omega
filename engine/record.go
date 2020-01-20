@@ -52,12 +52,11 @@ func (e *Engine) Record(c *gin.Context, event string, data ...interface{}) {
 
 func (e *Engine) fillBeforeAfter(recordType RecordType, data ...interface{}) (before, after []byte) {
 	var err error
-	switch {
-	case recordType == writeBefore || recordType == writeBoth:
+	if recordType == writeBefore || recordType == writeBoth {
 		before, err = json.Marshal(data[0])
 		e.CheckError(err, "error in encoding data to before-json")
-		fallthrough
-	case recordType == writeAfter || recordType == writeBoth:
+	}
+	if recordType == writeAfter || recordType == writeBoth {
 		after, err = json.Marshal(data[1])
 		e.CheckError(err, "error in encoding data to after-json")
 	}

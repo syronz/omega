@@ -7,6 +7,7 @@ import (
 	"omega/engine"
 	"omega/pkg/activity"
 	"omega/pkg/auth"
+	"omega/pkg/role"
 	"omega/pkg/user"
 )
 
@@ -23,4 +24,9 @@ func initAuthAPI(e engine.Engine) auth.API {
 func initActivityAPI(e engine.Engine) activity.API {
 	wire.Build(activity.ProvideRepo, activity.ProvideService, activity.ProvideAPI)
 	return activity.API{}
+}
+
+func initRoleAPI(e engine.Engine) role.API {
+	wire.Build(role.ProvideRepo, role.ProvideService, role.ProvideAPI)
+	return role.API{}
 }

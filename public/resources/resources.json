@@ -1,0 +1,18 @@
+[
+  {
+    "group": "users",
+    "resources": [
+      "user:write",
+      "user:read",
+      "user:report"
+    ]
+  },
+  {
+    "group": "activity",
+    "resources": [
+      "activity:self",
+      "activity:all"
+    ]
+  }
+
+]

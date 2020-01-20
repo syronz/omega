@@ -9,6 +9,7 @@ import (
 	"omega/engine"
 	"omega/pkg/activity"
 	"omega/pkg/auth"
+	"omega/pkg/role"
 	"omega/pkg/user"
 )
 
@@ -32,5 +33,12 @@ func initActivityAPI(e engine.Engine) activity.API {
 	repo := activity.ProvideRepo(e)
 	service := activity.ProvideService(repo)
 	api := activity.ProvideAPI(service)
+	return api
+}
+
+func initRoleAPI(e engine.Engine) role.API {
+	repo := role.ProvideRepo(e)
+	service := role.ProvideService(repo)
+	api := role.ProvideAPI(service)
 	return api
 }

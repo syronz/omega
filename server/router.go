@@ -10,6 +10,10 @@ import (
 )
 
 func router(r *gin.Engine, e engine.Engine) {
+
+	// static files
+	r.Static("/public", "./public")
+
 	// Root "/"
 	routeRoot(r)
 
@@ -23,6 +27,7 @@ func router(r *gin.Engine, e engine.Engine) {
 		api.Use(middleware.CheckToken(e))
 		routeUser(api, e)
 		routeActivity(api, e)
+		routeRole(api, e)
 	}
 
 }
@@ -62,4 +67,14 @@ func routeActivity(api *gin.RouterGroup, e engine.Engine) {
 	activityAPI := initActivityAPI(e)
 	api.GET("/activities", activityAPI.List)
 	api.GET("/activities/:id", activityAPI.FindByID)
+}
+
+func routeRole(api *gin.RouterGroup, e engine.Engine) {
+	roleAPI := initRoleAPI(e)
+	api.GET("/all/roles", roleAPI.FindAll)
+	api.GET("/roles", roleAPI.List)
+	api.GET("/roles/:id", roleAPI.FindByID)
+	api.POST("/roles", roleAPI.Create)
+	api.PUT("/roles/:id", roleAPI.Update)
+	api.DELETE("/roles/:id", roleAPI.Delete)
 }
