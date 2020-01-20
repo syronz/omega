@@ -51,6 +51,7 @@ func (p *API) Login(c *gin.Context) {
 
 	user, err := p.Service.Login(auth)
 	if err != nil {
+		p.Engine.Record(c, "auth-login-failed", auth.Username, len(auth.Password))
 		c.JSON(http.StatusUnauthorized, &response.Result{
 			Message: "Username or Password is wrong",
 			Code:    1401,
@@ -59,5 +60,8 @@ func (p *API) Login(c *gin.Context) {
 		return
 	}
 
+	user.Password = ""
+	user.Extra = ""
+	p.Engine.Record(c, "auth-login-success", user)
 	response.Success(c, user)
 }

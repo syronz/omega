@@ -44,6 +44,7 @@ func (p *API) List(c *gin.Context) {
 		return
 	}
 
+	p.Engine.Record(c, "user-list", params)
 	response.Success(c, data)
 }
 
@@ -81,7 +82,8 @@ func (p *API) Create(c *gin.Context) {
 		return
 	}
 
-	response.SuccessSave(c, createdUser, "user created")
+	p.Engine.Record(c, "user-create", nil, user)
+	response.SuccessSave(c, createdUser, "user/create")
 }
 
 // Update user
@@ -100,12 +102,22 @@ func (p *API) Update(c *gin.Context) {
 	}
 	user.ID = id
 
+	userBefore, err := p.Service.FindByID(id)
+	if err != nil {
+		response.RecordNotFound(c, err, "update user")
+		return
+	}
+
 	updatedUser, err := p.Service.Save(user)
 	if err != nil {
 		response.ErrorOnSave(c, err, "update user")
 		return
 	}
 
+	userBefore.Password = ""
+	updatedUser.Password = ""
+
+	p.Engine.Record(c, "user-update", userBefore, updatedUser)
 	response.SuccessSave(c, updatedUser, "user updated")
 }
 
@@ -134,6 +146,7 @@ func (p *API) Delete(c *gin.Context) {
 		return
 	}
 
-	c.Status(http.StatusOK)
+	user.Password = ""
+	p.Engine.Record(c, "user-delete", user)
 	response.SuccessSave(c, user, "user successfully deleted")
 }

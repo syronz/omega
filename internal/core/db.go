@@ -2,13 +2,13 @@ package core
 
 import (
 	"omega/engine"
-	"omega/pkg/user"
+	// "omega/pkg/user"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 )
 
-func initDB(e engine.Engine, dbType string, dsn string) *gorm.DB {
+func initDB(e engine.Engine, dbType string, dsn string, models ...interface{}) *gorm.DB {
 	db, err := gorm.Open(dbType, dsn)
 	if err != nil {
 		e.ServerLog.Fatalln(err)
@@ -21,7 +21,7 @@ func initDB(e engine.Engine, dbType string, dsn string) *gorm.DB {
 	}
 
 	if e.Environments.Setting.AutoMigrate {
-		db.AutoMigrate(&user.User{})
+		db.AutoMigrate(models...)
 	}
 
 	return db

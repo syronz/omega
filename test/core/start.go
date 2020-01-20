@@ -23,6 +23,7 @@ func StartEngine(models ...interface{}) (engine engine.Engine) {
 	glog.Glog.ApiLog = engine.ApiLog
 
 	engine.DB = initDB(engine, env.Database.Data.Type, env.Database.Data.DSN, models...)
+	engine.ActivityDB = initDB(engine, env.Database.Activity.Type, env.Database.Activity.DSN, models...)
 
 	return
 }

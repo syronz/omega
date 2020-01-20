@@ -5,6 +5,8 @@ import (
 	"omega/engine"
 	"omega/internal/core/setup"
 	"omega/internal/glog"
+	"omega/internal/models"
+	"omega/pkg/user"
 
 	envEngine "github.com/caarlos0/env/v6"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -25,7 +27,11 @@ func StartEngine() (engine engine.Engine) {
 	engine.ApiLog = setup.APILog(env)
 	glog.Glog.ApiLog = engine.ApiLog
 
-	engine.DB = initDB(engine, env.Database.Data.Type, env.Database.Data.DSN)
+	engine.DB = initDB(engine, env.Database.Data.Type, env.Database.Data.DSN,
+		&user.User{},
+	)
+	engine.ActivityDB = initDB(engine, env.Database.Activity.Type, env.Database.Activity.DSN,
+		&models.Activity{})
 
 	return
 }

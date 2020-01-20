@@ -23,6 +23,8 @@ type Setting struct {
 	AutoMigrate   bool   `env:"OMEGA_AUTO_MIGRATE" json:"auto_migrate"`
 	JWTSecretKey  string `env:"OMEGA_JWT_SECRET_KEY,required" json:"jwt_secret_key"`
 	JWTExpiration int    `env:"OMEGA_JWT_EXPIRATION,required" json:"jwt_expiration"`
+	RecordRead    bool   `env:"OMEGA_RECORD_READ" json:"record_read"`
+	RecordWrite   bool   `env:"OMEGA_RECORD_WRITE" json:"record_write"`
 }
 
 // Database hold DB connections, in case we just have one database use same DSN for both

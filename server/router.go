@@ -22,6 +22,7 @@ func router(r *gin.Engine, e engine.Engine) {
 
 		api.Use(middleware.CheckToken(e))
 		routeUser(api, e)
+		routeActivity(api, e)
 	}
 
 }
@@ -55,4 +56,10 @@ func routeUser(api *gin.RouterGroup, e engine.Engine) {
 func routeAuth(api *gin.RouterGroup, e engine.Engine) {
 	authAPI := initAuthAPI(e)
 	api.POST("/auth/login", authAPI.Login)
+}
+
+func routeActivity(api *gin.RouterGroup, e engine.Engine) {
+	activityAPI := initActivityAPI(e)
+	api.GET("/activities", activityAPI.List)
+	api.GET("/activities/:id", activityAPI.FindByID)
 }

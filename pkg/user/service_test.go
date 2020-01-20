@@ -3,7 +3,6 @@ package user
 import (
 	"errors"
 	"omega/test/core"
-	// "omega/utils/glog"
 	"testing"
 
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -15,11 +14,24 @@ func checkUserResponse(user, resp User) (err error) {
 		err = errors.New("Name isn't equal")
 		return
 	}
+	if user.Username != resp.Username {
+		err = errors.New("Username isn't equal")
+		return
+	}
+	if user.Phone != resp.Phone {
+		err = errors.New("Phone isn't equal")
+		return
+	}
+	if user.Password != "" {
+		err = errors.New("Password isn't empty")
+		return
+	}
 	return
 }
 
 func TestServiceCreate(t *testing.T) {
 	engine := core.StartEngine(&User{})
+	engine.DB.Exec("TRUNCATE TABLE users;")
 
 	repo := ProvideRepo(engine)
 	service := ProvideService(repo)
@@ -39,7 +51,7 @@ func TestServiceCreate(t *testing.T) {
 			out: User{
 				Name:     "Diako",
 				Username: "diako",
-				Password: "123456",
+				Password: "",
 				Phone:    "07505149171",
 			},
 			err: nil,
@@ -55,7 +67,5 @@ func TestServiceCreate(t *testing.T) {
 			t.Error(err)
 		}
 	}
-
-	engine.DB.DropTable(&User{})
 
 }

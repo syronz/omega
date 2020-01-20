@@ -1,9 +1,10 @@
-package user
+package activity
 
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"net/http/httptest"
+	"omega/internal/models"
 	"omega/test/core"
 	"testing"
 )
@@ -17,14 +18,14 @@ func TestAPICreate(t *testing.T) {
 		c.Set("profile", "myfakeprofile")
 	})
 
-	engine := core.StartEngine(&User{})
+	engine := core.StartEngine(&models.Activity{})
 
 	repo := ProvideRepo(engine)
 	service := ProvideService(repo)
 	api := ProvideAPI(service)
 
 	r.GET("/test", func(c *gin.Context) {
-		api.FindAll(c)
+		api.List(c)
 
 		c.Status(200)
 	})
