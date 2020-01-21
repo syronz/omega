@@ -3,6 +3,7 @@
 	"url":"_URL_/users",
 	"authorization":"Bearer _TOKEN_",
 	"payload": {
+		"role_id": 1,
 		"name": "User",
 		"username": "user",
 		"password": "user",

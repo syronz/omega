@@ -59,6 +59,19 @@ func (p *Service) Save(user User) (createdUser User, err error) {
 	return
 }
 
+// func (p *Service) SaveSimple(model interface{}) (createdUser interface{}, err error) {
+// 	user := *(model.(*User))
+// 	user.Password, err = password.Hash(user.Password, p.Engine.Environments.Setting.PasswordSalt)
+// 	p.Engine.CheckError(err, fmt.Sprintf("Hashing password failed for %+v", user))
+
+// 	createdUser, err = p.Repo.Save(user)
+// 	p.Engine.CheckInfo(err, fmt.Sprintf("Failed in saving user for %+v", user))
+
+// 	// createdUser.Password = ""
+
+// 	return
+// }
+
 // Delete user
 func (p *Service) Delete(user User) error {
 	return p.Repo.Delete(user)

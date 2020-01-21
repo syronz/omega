@@ -12,7 +12,7 @@ func migrateRoles(e engine.Engine) {
 	roles := []role.Role{
 		{
 			Name:        "Admin",
-			Resources:   "users:read users:write users:report activities:self activities:all roles:read roles:write",
+			Resources:   "user:read user:write user:report activities:self activities:all roles:read roles:write",
 			Description: "admin has all privileges - do not edit",
 		},
 		{

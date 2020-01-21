@@ -53,7 +53,8 @@ func routeUser(api *gin.RouterGroup, e engine.Engine) {
 	api.GET("/all/users", userAPI.FindAll)
 	api.GET("/users", userAPI.List)
 	api.GET("/users/:id", userAPI.FindByID)
-	api.POST("/users", userAPI.Create)
+	// api.POST("/users", userAPI.Create)
+	api.POST("/users", userAPI.BuildCreate)
 	api.PUT("/users/:id", userAPI.Update)
 	api.DELETE("/users/:id", userAPI.Delete)
 }

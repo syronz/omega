@@ -6,14 +6,13 @@ import (
 )
 
 // CheckAccess compare the given resource with list of user's resources
-func (e *Engine) CheckAccess(c *gin.Context, resouce string) bool {
+func (e *Engine) CheckAccess(c *gin.Context, resource string) bool {
 	var userID uint64
 
 	if userIDtmp, ok := c.Get("USER_ID"); ok {
 		userID = userIDtmp.(uint64)
 	}
 
-	// var resources []string
 	resources := struct {
 		Resources string
 	}{}
@@ -22,6 +21,9 @@ func (e *Engine) CheckAccess(c *gin.Context, resouce string) bool {
 		Joins("INNER JOIN roles ON users.role_id = roles.id").
 		Where("users.id = ?", userID).Scan(&resources).Error
 
-	return !strings.Contains(resources.Resources, resouce)
+	result := strings.Contains(resources.Resources, resource)
+
+	e.Debug("!!!!!!!!!!!!+++++++++++!!!!!!!!!!!!", result, resources.Resources, resource)
+	return result
 
 }
