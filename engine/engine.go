@@ -14,7 +14,7 @@ type Engine struct {
 	DB           *gorm.DB
 	ActivityDB   *gorm.DB
 	ServerLog    *logrus.Logger
-	ApiLog       *logrus.Logger
+	APILog       *logrus.Logger
 	Environments config.Environment
 }
 

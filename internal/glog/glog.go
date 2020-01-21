@@ -10,7 +10,7 @@ import (
 // Log is main struct for this package
 type Log struct {
 	ServerLog *logrus.Logger
-	ApiLog    *logrus.Logger
+	APILog    *logrus.Logger
 }
 
 // Glog is a global variable for initiate logrus

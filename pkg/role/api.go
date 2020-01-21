@@ -36,8 +36,7 @@ func (p *API) FindAll(c *gin.Context) {
 // List of roles
 func (p *API) List(c *gin.Context) {
 	if p.Engine.CheckAccess(c, "roles:read") {
-		p.Engine.Record(c, "role-list-forbidden")
-		response.NoPermission(c)
+		response.NoPermissionRecord(c, p.Engine, "role-list-forbidden")
 		return
 	}
 
@@ -57,8 +56,7 @@ func (p *API) List(c *gin.Context) {
 // FindByID is used for fetch a role by his id
 func (p *API) FindByID(c *gin.Context) {
 	if p.Engine.CheckAccess(c, "roles:read") {
-		p.Engine.Record(c, "role-id-forbidden")
-		response.NoPermission(c)
+		response.NoPermissionRecord(c, p.Engine, "role-view-forbidden")
 		return
 	}
 	id, err := strconv.ParseUint(c.Param("id"), 10, 16)
@@ -74,6 +72,7 @@ func (p *API) FindByID(c *gin.Context) {
 		return
 	}
 
+	p.Engine.Record(c, "role-view")
 	response.Success(c, role)
 }
 
@@ -88,8 +87,7 @@ func (p *API) Create(c *gin.Context) {
 	}
 
 	if p.Engine.CheckAccess(c, "role:write") {
-		p.Engine.Record(c, "role-create-forbidden", nil, role)
-		response.NoPermission(c)
+		response.NoPermissionRecord(c, p.Engine, "role-create-forbidden", nil, role)
 		return
 	}
 
@@ -118,10 +116,8 @@ func (p *API) Update(c *gin.Context) {
 		return
 	}
 	role.ID = id
-
 	if p.Engine.CheckAccess(c, "role:write") {
-		p.Engine.Record(c, "role-update-forbidden", nil, role)
-		response.NoPermission(c)
+		response.NoPermissionRecord(c, p.Engine, "role-update-forbidden", nil, role)
 		return
 	}
 
@@ -150,8 +146,7 @@ func (p *API) Delete(c *gin.Context) {
 	}
 
 	if p.Engine.CheckAccess(c, "role:write") {
-		p.Engine.Record(c, "role-delete-forbidden", nil, id)
-		response.NoPermission(c)
+		response.NoPermissionRecord(c, p.Engine, "role-delete-forbidden", nil, id)
 		return
 	}
 

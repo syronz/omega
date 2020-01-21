@@ -50,7 +50,7 @@ func APILogger() gin.HandlerFunc {
 
 // Logging Response
 func logRequest(c *gin.Context, reqID uint, reqDataReader io.Reader) {
-	glog.Glog.ApiLog.WithFields(logrus.Fields{
+	glog.Glog.APILog.WithFields(logrus.Fields{
 		"reqID": reqID,
 		// "ip":  c.ClientIP(),
 		"method":     c.Request.Method,
@@ -70,7 +70,7 @@ func logResponse(c *gin.Context, latency int, blw *bodyLogWriter) {
 	if !ok {
 		glog.Debug("there is no resIndex for element", getBody(blw.body))
 	}
-	glog.Glog.ApiLog.WithFields(logrus.Fields{
+	glog.Glog.APILog.WithFields(logrus.Fields{
 		"resID":       resID,
 		"status":      c.Writer.Status(),
 		"latency":     latency, // time to process

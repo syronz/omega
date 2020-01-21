@@ -2,6 +2,7 @@ package response
 
 import (
 	"net/http"
+	"omega/engine"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -96,6 +97,14 @@ func ErrorOnSave(c *gin.Context, err error, part string) {
 
 // NoPermission is simpoe func for showing this error
 func NoPermission(c *gin.Context) {
+	c.JSON(http.StatusForbidden, &Result{
+		Message: "You don't have permission",
+	})
+}
+
+// NoPermissionRecord is simpoe func for showing this error
+func NoPermissionRecord(c *gin.Context, e engine.Engine, msg string, data ...interface{}) {
+	e.Record(c, msg, data...)
 	c.JSON(http.StatusForbidden, &Result{
 		Message: "You don't have permission",
 	})

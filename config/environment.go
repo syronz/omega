@@ -48,7 +48,7 @@ type Activity struct {
 // Log configuration terms hold here
 type Log struct {
 	ServerLog ServerLog `json:"server_log"`
-	ApiLog    ApiLog    `json:"api_log"`
+	APILog    APILog    `json:"api_log"`
 }
 
 // ServerLog is used inside the Log
@@ -59,8 +59,8 @@ type ServerLog struct {
 	JSONIndent bool   `env:"OMEGA_SERVER_LOG_JSON_INDENT,required" json:"json_indent"`
 }
 
-// ApiLog is used inside the Log
-type ApiLog struct {
+// APILog is used inside the Log
+type APILog struct {
 	Format     string `env:"OMEGA_API_LOG_FORMAT,required" json:"format"`
 	Output     string `env:"OMEGA_API_LOG_OUTPUT,required" json:"output"`
 	Level      string `env:"OMEGA_API_LOG_LEVEL,required" json:"level"`

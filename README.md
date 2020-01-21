@@ -1,6 +1,5 @@
 # OMEGA
 
-
 [![BuildStatus](https://api.travis-ci.org/syronz/omega.svg?branch=master)](http://travis-ci.org/syronz/omega) 
 [![ReportCard](https://goreportcard.com/badge/github.com/syronz/omega)](https://goreportcard.com/report/github.com/syronz/omega) 
 [![codecov](https://codecov.io/gh/syronz/omega/branch/master/graph/badge.svg)](https://codecov.io/gh/syronz/omega)
@@ -13,33 +12,32 @@
 [![GoDoc](https://godoc.org/github.com/syronz/omega?status.png)](https://godoc.org/github.com/syronz/omega)
 [![MIT license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
 
-
 Simple app for analyzing golnag clean design.
 Inspired by
 
-https://hellokoding.com/crud-restful-apis-with-go-modules-wire-gin-gorm-and-mysql/
+[https://hellokoding.com/crud-restful-apis-with-go-modules-wire-gin-gorm-and-mysql](https://hellokoding.com/crud-restful-apis-with-go-modules-wire-gin-gorm-and-mysql)
 
 and 
 
-https://github.com/qiangxue/go-restful-api
+[https://github.com/qiangxue/go-restful-api](https://github.com/qiangxue/go-restful-api)
 
-### Run
+## Run
 in the main directory
 
-```
+```bash
 source config/envs.sample
 reflex -r '\.go' -s -- sh -c 'go run cmd/omega/main.go'
 ```
 
 
-### Logrus levels
+## Logrus levels
 
-```
-		p.Engine.ServerLog.Trace(err.Error())
-		p.Engine.ServerLog.Debug(err.Error())
-		p.Engine.ServerLog.Info(err.Error())
-		p.Engine.ServerLog.Warn(err.Error())
-		p.Engine.ServerLog.Error(err.Error())
-		p.Engine.ServerLog.Fatal(err.Error())
-		p.Engine.ServerLog.Panic(err.Error())
+```go
+p.Engine.ServerLog.Trace(err.Error())
+p.Engine.ServerLog.Debug(err.Error())
+p.Engine.ServerLog.Info(err.Error())
+p.Engine.ServerLog.Warn(err.Error())
+p.Engine.ServerLog.Error(err.Error())
+p.Engine.ServerLog.Fatal(err.Error())
+p.Engine.ServerLog.Panic(err.Error())
 ```

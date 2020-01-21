@@ -23,7 +23,7 @@ func ProvideAPI(p Service) API {
 
 // FindAll users
 func (p *API) FindAll(c *gin.Context) {
-	if p.Engine.CheckAccess(c, "users:all") {
+	if p.Engine.CheckAccess(c, "users:names") {
 		response.NoPermission(c)
 		return
 	}
@@ -40,8 +40,7 @@ func (p *API) FindAll(c *gin.Context) {
 // List of users
 func (p *API) List(c *gin.Context) {
 	if p.Engine.CheckAccess(c, "users:read") {
-		p.Engine.Record(c, "user-list-forbidden")
-		response.NoPermission(c)
+		response.NoPermissionRecord(c, p.Engine, "user-list-forbidden")
 		return
 	}
 
@@ -61,8 +60,7 @@ func (p *API) List(c *gin.Context) {
 // FindByID is used for fetch a user by his id
 func (p *API) FindByID(c *gin.Context) {
 	if p.Engine.CheckAccess(c, "users:read") {
-		p.Engine.Record(c, "user-id-forbidden")
-		response.NoPermission(c)
+		response.NoPermissionRecord(c, p.Engine, "user-view-forbidden")
 		return
 	}
 	id, err := strconv.ParseUint(c.Param("id"), 10, 16)
@@ -78,7 +76,7 @@ func (p *API) FindByID(c *gin.Context) {
 		return
 	}
 
-	p.Engine.Record(c, "user-id")
+	p.Engine.Record(c, "user-view")
 	response.Success(c, user)
 }
 
@@ -93,8 +91,7 @@ func (p *API) Create(c *gin.Context) {
 	}
 
 	if p.Engine.CheckAccess(c, "users:write") {
-		p.Engine.Record(c, "user-create-forbidden", nil, user)
-		response.NoPermission(c)
+		response.NoPermissionRecord(c, p.Engine, "user-create-forbidden", nil, user)
 		return
 	}
 
@@ -124,8 +121,7 @@ func (p *API) Update(c *gin.Context) {
 	}
 	user.ID = id
 	if p.Engine.CheckAccess(c, "users:write") {
-		p.Engine.Record(c, "user-update-forbidden", nil, user)
-		response.NoPermission(c)
+		response.NoPermissionRecord(c, p.Engine, "user-update-forbidden", nil, user)
 		return
 	}
 
@@ -156,8 +152,7 @@ func (p *API) Delete(c *gin.Context) {
 		return
 	}
 	if p.Engine.CheckAccess(c, "users:write") {
-		p.Engine.Record(c, "user-delete-forbidden", nil, id)
-		response.NoPermission(c)
+		response.NoPermissionRecord(c, p.Engine, "user-delete-forbidden", nil, id)
 		return
 	}
 

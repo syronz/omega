@@ -19,8 +19,8 @@ func StartEngine(models ...interface{}) (engine engine.Engine) {
 	engine.ServerLog = setup.ServerLog(env)
 	glog.Glog.ServerLog = engine.ServerLog
 
-	engine.ApiLog = setup.APILog(env)
-	glog.Glog.ApiLog = engine.ApiLog
+	engine.APILog = setup.APILog(env)
+	glog.Glog.APILog = engine.APILog
 
 	engine.DB = initDB(engine, env.Database.Data.Type, env.Database.Data.DSN, models...)
 	engine.ActivityDB = initDB(engine, env.Database.Activity.Type, env.Database.Activity.DSN, models...)

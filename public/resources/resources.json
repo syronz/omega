@@ -2,6 +2,7 @@
   {
     "group": "users",
     "resources": [
+      "user:names",
       "user:write",
       "user:read",
       "user:report"
