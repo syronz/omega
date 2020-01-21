@@ -3,6 +3,7 @@ package core
 import (
 	"log"
 	"omega/engine"
+	"omega/internal/core/migrate"
 	"omega/internal/core/setup"
 	"omega/internal/glog"
 
@@ -25,6 +26,8 @@ func StartEngine() (engine engine.Engine) {
 
 	engine.DB = initDataDB(engine, env.Database.Data.Type, env.Database.Data.DSN)
 	engine.ActivityDB = initActivityDB(engine, env.Database.Activity.Type, env.Database.Activity.DSN)
+
+	migrate.InsertData(engine)
 
 	return
 }

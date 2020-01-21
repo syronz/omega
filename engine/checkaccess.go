@@ -18,7 +18,7 @@ func (e *Engine) CheckAccess(c *gin.Context, resouce string) bool {
 		Resources string
 	}{}
 
-	err := e.DB.Table("users").Select("roles.resources").
+	_ = e.DB.Table("users").Select("roles.resources").
 		Joins("INNER JOIN roles ON users.role_id = roles.id").
 		Where("users.id = ?", userID).Scan(&resources).Error
 
