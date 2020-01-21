@@ -48,7 +48,7 @@ func (p *Service) FindByID(id uint64) (role Role, err error) {
 // Save role
 func (p *Service) Save(role Role) (createdRole Role, err error) {
 	createdRole, err = p.Repo.Save(role)
-	p.Engine.CheckInfo(err, fmt.Sprintf("Failed in saving role for %+v", role))
+	// p.Engine.CheckInfo(err, fmt.Sprintf("Failed in saving role for %+v", role))
 
 	return
 }

@@ -25,9 +25,19 @@ func initDataDB(e engine.Engine, dbType string, dsn string) *gorm.DB {
 	if e.Environments.Setting.AutoMigrate {
 		db.AutoMigrate(&role.Role{})
 		db.AutoMigrate(&user.User{}).AddForeignKey("role_id", "roles(id)", "RESTRICT", "RESTRICT")
-	}
 
-	// db.Model(&user.User{}).Related(&role.Role{})
+		roleRepo := role.ProvideRepo(e)
+		roleService := role.ProvideService(roleRepo)
+		roleObj := role.Role{
+			Name:        "Admin",
+			Resources:   "users:read users:write users:report activities:self activities:all roles:read roles:write",
+			Description: "admin has all privileges",
+		}
+
+		_, _ = roleService, roleObj
+		_, _ = roleService.Save(roleObj)
+
+	}
 
 	return db
 }
