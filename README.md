@@ -1,6 +1,7 @@
 # OMEGA
 
-[![BuildStatus](https://api.travis-ci.org/syronz/omega.svg?branch=master)](http://travis-ci.org/syronz/omega) 
+[![BuildStatus](https://api.travis-ci.org/syronz/omega.svg?branch=master)](http://travis-ci.org/syronz/omega) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fsyronz%2Fomega.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fsyronz%2Fomega?ref=badge_shield)
+
 [![ReportCard](https://goreportcard.com/badge/github.com/syronz/omega)](https://goreportcard.com/report/github.com/syronz/omega) 
 [![codecov](https://codecov.io/gh/syronz/omega/branch/master/graph/badge.svg)](https://codecov.io/gh/syronz/omega)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/6938819425f94f6f9d8046b4fdfdcbc1)](https://www.codacy.com/manual/syronz/omega?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=syronz/omega&amp;utm_campaign=Badge_Grade)
@@ -41,3 +42,7 @@ p.Engine.ServerLog.Error(err.Error())
 p.Engine.ServerLog.Fatal(err.Error())
 p.Engine.ServerLog.Panic(err.Error())
 ```
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fsyronz%2Fomega.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fsyronz%2Fomega?ref=badge_large)
