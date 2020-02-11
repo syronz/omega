@@ -3,8 +3,8 @@
   "url":"_URL_/users",
   "authorization":"Bearer _TOKEN_",
   "payload": {
-    "role_id":4,
-    "name": "_RANDOM_NAME_",
+    "role_id":1,
+    "name": "RANDOM_NAME_",
     "username": "_RANDOM_NAME_",
     "phone": "_RANDOM_NUMBER_",
     "password": "_RANDOM_NUMBER_"

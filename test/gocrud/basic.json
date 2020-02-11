@@ -3,7 +3,7 @@
 		{
 			"local": {
 				"_URL_":"http://127.0.0.1:8083/api/omega/v1",
-        "_TOKEN_":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpZCI6NywiZXhwIjoxNTg0MzAwMjQwfQ.ppHMz6kT2JlM-6B9TG8pORNyBL2oAFqanykcH4_AKFc"
+        "_TOKEN_":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXIiLCJpZCI6NTEsImV4cCI6MTU4NTM2MTI0NH0.2utSygAybMpEnRi8A2CXUwiUK20kvcezFgKum-ioSzM"
 			}
 		}
 	],

@@ -29,7 +29,6 @@ source config/envs.sample
 reflex -r '\.go' -s -- sh -c 'go run cmd/omega/main.go'
 ```
 
-
 ## Logrus levels
 
 ```go

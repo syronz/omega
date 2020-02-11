@@ -61,7 +61,7 @@ func (p *API) Login(c *gin.Context) {
 	}
 
 	user.Password = ""
-	user.Extra = ""
+	// user.Extra = ""
 	p.Engine.Record(c, "auth-login-success", user)
 	response.Success(c, user)
 }
