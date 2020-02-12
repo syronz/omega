@@ -5,3 +5,6 @@ coverage.txt
 .idea/
 env
 logs/*
+**/.DS_Store
+**/~$*
+
