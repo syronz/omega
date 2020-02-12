@@ -23,7 +23,6 @@ func (e *Engine) CheckAccess(c *gin.Context, resource string) bool {
 
 	result := strings.Contains(resources.Resources, resource)
 
-	e.Debug("!!!!!!!!!!!!+++++++++++!!!!!!!!!!!!", result, resources.Resources, resource)
 	return result
 
 }
