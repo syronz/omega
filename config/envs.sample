@@ -29,4 +29,5 @@ export OMEGA_API_LOG_JSON_INDENT=false #indenting the json in the file
 #debug, release & test, in the production rename it to the release
 export GIN_MODE=debug 
 
-
+export OMEGA_CLOUD_PORT=9093
+export OMEGA_CLOUD_ADDR="localhost"

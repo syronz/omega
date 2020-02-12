@@ -1,10 +1,13 @@
-package server
+package cloud
 
 import (
 	// "github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
+	"net/http"
 	"omega/engine"
+	"omega/internal/response"
 	"omega/middleware"
+
+	"github.com/gin-gonic/gin"
 )
 
 // Initialize integrate middleware and
@@ -24,7 +27,28 @@ func Initialize(e engine.Engine) *gin.Engine {
 	//	//MaxAge: 12 * time.Hour,
 	//}))
 
+	r.GET("/api/cloud/v1", func(c *gin.Context) {
+		c.JSON(http.StatusOK, response.Result{
+			Message: "Omega API Cloud v1.0",
+		})
+	})
+
+	routeRoot(r)
+
 	r.Use(middleware.APILogger())
-	router(r, e)
+
+	// api := r.Group("/api/cloud/v1")
+	// {
+	// }
+
+	// router(r, e)
 	return r
+}
+
+func routeRoot(r *gin.Engine) {
+	r.GET("/", func(c *gin.Context) {
+		c.JSON(http.StatusOK, response.Result{
+			Message: "Omega API Cloud v1.0",
+		})
+	})
 }

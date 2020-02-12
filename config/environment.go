@@ -3,6 +3,7 @@ package config
 // Environment directly fetch os envs with getting help from env
 type Environment struct {
 	Server   `json:"server"`
+	Cloud    `json:"cloud"`
 	Setting  `json:"setting"`
 	Database `json:"database"`
 	Log      `json:"log"`
@@ -15,6 +16,15 @@ type Server struct {
 	TLSKey   string `env:"OMEGA_TLS_KEY" json:"tls_key"`
 	TLSCert  string `env:"OMEGA_TLS_CERT" json:"tls_cert"`
 	TimeZone string `env:"OMEGA_TIME_ZONE" json:"time_zone"`
+}
+
+// Cloud hold gin and tls configuration
+type Cloud struct {
+	Port     string `env:"OMEGA_CLOUD_PORT" json:"port"`
+	ADDR     string `env:"OMEGA_CLOUD_ADDR" json:"addr"`
+	TLSKey   string `env:"OMEGA_CLOUD_TLS_KEY" json:"tls_key"`
+	TLSCert  string `env:"OMEGA_CLOUD_TLS_CERT" json:"tls_cert"`
+	TimeZone string `env:"OMEGA_CLOUD_TIME_ZONE" json:"time_zone"`
 }
 
 // Setting hold pass-keys and JWT, used for security
