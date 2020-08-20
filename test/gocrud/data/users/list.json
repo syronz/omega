@@ -1,9 +1,0 @@
-{
-	"method":"get",
-	"url":"_URL_/users?order_by=name&direction=asc&page=1&page_size=4&search=4350907",
-	"url":"_URL_/users?order_by=name&direction=asc&page=1&page_size=4&search=users.phone>4419814~users.username>diako&select=*",
-	"url":"_URL_/users?order_by=users.name&direction=asc&page=1&page_size=3&select=id,users.username",
-	"url":"_URL_/users?order_by=id&direction=desc&page=1&page_size=3",
-	"authorization":"Bearer _TOKEN_",
-	"payload": {}
-}

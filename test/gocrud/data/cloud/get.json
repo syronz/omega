@@ -1,6 +1,0 @@
-{
-	"method":"get",
-	"url":"_URL_",
-	"authorization":"Bearer _TOKEN_",
-	"payload": {}
-}
