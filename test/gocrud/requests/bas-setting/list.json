@@ -1,0 +1,7 @@
+{
+  "method":"get",
+	"url":"_URL_/settings?search=1001101000000011&page_size=30",
+	"url":"_URL_/settings?page_size=30",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {}
+}

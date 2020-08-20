@@ -1,0 +1,10 @@
+{
+  "method":"post",
+	"url":"_URL_/roles",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {
+		"name": "_RANDOM_NAME_ _RANDOM_NUMBER_",
+		"resources": "_RANDOM_NAME_",
+		"description": "_RANDOM_NUMBER_"
+	}
+}

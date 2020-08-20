@@ -1,0 +1,10 @@
+{
+  "method":"put",
+	"url":"_URL_/roles/1001101000000018",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {
+		"name": "_RANDOM_NAME_ _RANDOM_NUMBER_",
+		"resources": "_RANDOM_NAME_",
+		"description": "this is edidted"
+	}
+}

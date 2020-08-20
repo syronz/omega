@@ -1,0 +1,6 @@
+{
+  "method":"get",
+	"url":"_URL_/excel/roles",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {}
+}

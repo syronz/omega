@@ -1,0 +1,6 @@
+{
+	"method":"get",
+	"url":"_URL_/temporary/token",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {}
+}

@@ -1,0 +1,7 @@
+{
+  "method":"get",
+	"url":"_URL_/settings/1001101000000002",
+	"url":"_URL_/settings?search=property>sell_invoice_location_selection_level",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {}
+}

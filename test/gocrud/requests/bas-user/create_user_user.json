@@ -1,0 +1,12 @@
+{
+  "method":"post",
+	"url":"_URL_/users",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {
+    "role_id":1,
+    "name": "user",
+    "username": "user",
+    "phone": "_RANDOM_NUMBER_",
+    "password": "88888888"
+	}
+}

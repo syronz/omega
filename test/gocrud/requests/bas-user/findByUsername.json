@@ -1,0 +1,6 @@
+{
+  "method":"get",
+	"url":"_URL_/username/super",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {}
+}

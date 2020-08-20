@@ -1,0 +1,6 @@
+{
+	"data_dir":"requests",
+	"base_path":"basic.json",
+  "timeout":70
+}
+

@@ -1,0 +1,10 @@
+{
+  "method":"get",
+	"url":"_URL_/activities",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {
+		"name": "_RANDOM_NAME_",
+		"resources": "_RANDOM_NAME_",
+		"description": "_RANDOM_NUMBER_"
+	}
+}

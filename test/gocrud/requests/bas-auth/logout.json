@@ -1,0 +1,6 @@
+{
+	"method":"post",
+	"url":"_URL_/logout",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {}
+}

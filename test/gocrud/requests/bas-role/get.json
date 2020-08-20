@@ -1,0 +1,6 @@
+{
+  "method":"get",
+	"url":"_URL_/roles/1001101000000017",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {}
+}

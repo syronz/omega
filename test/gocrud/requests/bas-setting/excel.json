@@ -1,0 +1,7 @@
+{
+  "method":"get",
+	"url":"_URL_/excel/settings?select=settings.id",
+	"url":"_URL_/excel/settings",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {}
+}

@@ -1,0 +1,30 @@
+{
+	"core": {
+    "port": "8184",
+    "addr": "localhost",
+    "database_data_dsn":  "travis@tcp(127.0.0.1:3306)/omega_test?charset=utf8&parseTime=True&loc=Local",
+    "database_data_type": "mysql",
+    "database_data_log": "false",
+    "database_activity_dsn":  "travis@tcp(127.0.0.1:3306)/omega_test?charset=utf8&parseTime=True&loc=Local",
+    "database_activity_type": "mysql",
+    "database_activity_log": "false",
+    "auto_migrate": "true",
+    "server_log_format":     "json",
+    "server_log_output":     "/Users/diako/project/omega-project/omega/logs/server.log",
+    "server_log_level":      "warn",
+    "server_log_json_indent": "true",
+    "api_log_format":     "json",
+    "api_log_output":     "stdout",
+    "api_log_level":      "fatal",
+    "api_log_json_indent": "true",
+    "terms_path": "/Users/diako/project/omega-project/omega/terms.json",
+    "default_language": "ku",
+    "translate_in_backend": "true",
+    "excel_max_rows": "100000"
+  },
+  "base": {
+    "password_salt":  "",
+    "jwt_secret_key":  "kz84HcnwKSn0k2vk2Ddw04kdck8k7SKedWFdGkwe20",
+    "jwt_expiration": "10000"
+  }
+}
