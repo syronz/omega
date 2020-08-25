@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"omega/domain/base/basevent"
 	"omega/domain/base/basmodel"
-	"omega/domain/base/basresource"
 	"omega/domain/service"
 	"omega/internal/core"
 	"omega/internal/param"
@@ -36,11 +35,6 @@ func (p *BasUserAPI) FindByID(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 	var err error
 	var user basmodel.BasUser
-
-	if resp.CheckAccess(basresource.BasUserRead) {
-		resp.Status(http.StatusForbidden).Error(term.You_dont_have_permission).JSON()
-		return
-	}
 
 	if user.ID, err = types.StrToRowID(c.Param("userID")); err != nil {
 		resp.Error(term.Invalid_ID).JSON()
@@ -80,11 +74,6 @@ func (p *BasUserAPI) FindByUsername(c *gin.Context) {
 func (p *BasUserAPI) List(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 
-	if resp.CheckAccess(basresource.BasUserRead) {
-		resp.Status(http.StatusForbidden).Error(term.You_dont_have_permission).JSON()
-		return
-	}
-
 	params := param.Get(c, p.Engine, thisBasUsers)
 
 	data, err := p.Service.List(params)
@@ -104,11 +93,6 @@ func (p *BasUserAPI) Create(c *gin.Context) {
 
 	var user basmodel.BasUser
 	resp := response.New(p.Engine, c)
-
-	if resp.CheckAccess(basresource.BasUserWrite) {
-		resp.Error(term.You_dont_have_permission).JSON()
-		return
-	}
 
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.AbortWithStatusJSON(http.StatusNotAcceptable, err)
@@ -134,11 +118,6 @@ func (p *BasUserAPI) Create(c *gin.Context) {
 func (p *BasUserAPI) Update(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 	var err error
-
-	if resp.CheckAccess(basresource.BasUserWrite) {
-		resp.Error(term.You_dont_have_permission).JSON()
-		return
-	}
 
 	var user, userBefore, userUpdated basmodel.BasUser
 
@@ -176,11 +155,6 @@ func (p *BasUserAPI) Delete(c *gin.Context) {
 	var err error
 	var user basmodel.BasUser
 
-	if resp.CheckAccess(basresource.BasUserWrite) {
-		resp.Status(http.StatusForbidden).Error(term.You_dont_have_permission).JSON()
-		return
-	}
-
 	if user.ID, err = types.StrToRowID(c.Param("userID")); err != nil {
 		p.Engine.CheckError(err, err.Error())
 		resp.Error(term.Invalid_ID).JSON()
@@ -205,11 +179,6 @@ func (p *BasUserAPI) Excel(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 
 	params := param.Get(c, p.Engine, thisBasUsers)
-
-	if resp.CheckAccess(basresource.BasUserExcel) {
-		resp.Status(http.StatusForbidden).Error(term.You_dont_have_permission).JSON()
-		return
-	}
 
 	users, err := p.Service.Excel(params)
 	if err != nil {

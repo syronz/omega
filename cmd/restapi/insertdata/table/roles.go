@@ -1,13 +1,12 @@
 package table
 
 import (
+	"omega/domain/base"
 	"omega/domain/base/basmodel"
 	"omega/domain/base/basrepo"
-	"omega/domain/base/basresource"
 	"omega/domain/service"
 	"omega/internal/core"
 	"omega/internal/types"
-	"strings"
 )
 
 // InsertBasRoles for add required roles
@@ -21,12 +20,13 @@ func InsertBasRoles(engine *core.Engine) {
 				ID: 1,
 			},
 			Name: "Admin",
-			Resources: strings.Join([]string{
-				basresource.BasSettingRead, basresource.BasSettingWrite, basresource.BasSettingExcel,
-				basresource.BasUserNames, basresource.BasUserWrite, basresource.BasUserRead, basresource.BasUserReport, basresource.BasUserExcel,
-				basresource.BasActivitySelf, basresource.BasActivityAll,
-				basresource.BasRoleRead, basresource.BasRoleWrite, basresource.BasRoleExcel,
-			}, ", "),
+			Resources: types.ResourceJoin([]types.Resource{
+				// base.BasSettingRead, base.BasSettingWrite, base.BasSettingExcel,
+				base.BasUserNames, base.BasUserWrite, base.BasUserRead, base.BasUserReport, base.BasUserExcel,
+				base.BasActivitySelf, base.BasActivityAll,
+				base.BasRoleRead, base.BasRoleWrite, base.BasRoleExcel,
+				// base.BasPing,
+			}),
 			Description: "admin has all privileges - do not edit",
 		},
 		{
@@ -34,9 +34,9 @@ func InsertBasRoles(engine *core.Engine) {
 				ID: 2,
 			},
 			Name: "Cashier",
-			Resources: strings.Join([]string{
-				basresource.BasActivitySelf,
-			}, ", "),
+			Resources: types.ResourceJoin([]types.Resource{
+				base.BasActivitySelf,
+			}),
 			Description: "cashier has privileges for adding transactions - after migration reset",
 		},
 		{
@@ -44,12 +44,12 @@ func InsertBasRoles(engine *core.Engine) {
 				ID: 3,
 			},
 			Name: "Reader",
-			Resources: strings.Join([]string{
-				basresource.SupperAccess,
-				basresource.BasSettingRead, basresource.BasSettingExcel,
-				basresource.BasUserNames, basresource.BasUserRead, basresource.BasUserReport, basresource.BasUserExcel,
-				basresource.BasRoleRead, basresource.BasRoleExcel,
-			}, ", "),
+			Resources: types.ResourceJoin([]types.Resource{
+				base.SupperAccess,
+				base.BasSettingRead, base.BasSettingExcel,
+				base.BasUserNames, base.BasUserRead, base.BasUserReport, base.BasUserExcel,
+				base.BasRoleRead, base.BasRoleExcel,
+			}),
 			Description: "Reade can see all part without changes",
 		},
 	}

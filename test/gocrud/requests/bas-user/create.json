@@ -4,7 +4,7 @@
   "authorization":"Bearer _TOKEN_",
   "payload": {
     "role_id":1,
-    "username": "_RANDOM_NAME_",
+    "username3": "_RANDOM_NAME_",
     "password": "1234567890",
     "language":"ku"
   }

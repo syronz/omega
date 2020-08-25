@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"omega/domain/base/basevent"
 	"omega/domain/base/basmodel"
-	"omega/domain/base/basresource"
 	"omega/domain/service"
 	"omega/internal/core"
 	"omega/internal/param"
@@ -35,11 +34,6 @@ func (p *BasSettingAPI) FindByID(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 	var err error
 	var setting basmodel.BasSetting
-
-	if resp.CheckAccess(basresource.BasSettingRead) {
-		resp.Status(http.StatusForbidden).Error(term.You_dont_have_permission).JSON()
-		return
-	}
 
 	if setting.ID, err = types.StrToRowID(c.Param("settingID")); err != nil {
 		resp.Status(http.StatusNotAcceptable).Error(err).MessageT(term.Invalid_ID).JSON()
@@ -75,11 +69,6 @@ func (p *BasSettingAPI) FindByProperty(c *gin.Context) {
 func (p *BasSettingAPI) List(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 
-	if resp.CheckAccess(basresource.BasSettingRead) {
-		resp.Status(http.StatusForbidden).Error(term.You_dont_have_permission).JSON()
-		return
-	}
-
 	params := param.Get(c, p.Engine, thisBasSettings)
 
 	data, err := p.Service.List(params)
@@ -98,11 +87,6 @@ func (p *BasSettingAPI) List(c *gin.Context) {
 func (p *BasSettingAPI) Update(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 	var err error
-
-	if resp.CheckAccess(basresource.BasSettingWrite) {
-		resp.Error(term.You_dont_have_permission).JSON()
-		return
-	}
 
 	var setting, settingBefore, settingUpdated basmodel.BasSetting
 
@@ -140,11 +124,6 @@ func (p *BasSettingAPI) Delete(c *gin.Context) {
 	var err error
 	var setting basmodel.BasSetting
 
-	if resp.CheckAccess(basresource.BasSettingWrite) {
-		resp.Status(http.StatusForbidden).Error(term.You_dont_have_permission).JSON()
-		return
-	}
-
 	if setting.ID, err = types.StrToRowID(c.Param("settingID")); err != nil {
 		p.Engine.CheckError(err, err.Error())
 		resp.Error(term.Invalid_ID).JSON()
@@ -165,11 +144,6 @@ func (p *BasSettingAPI) Delete(c *gin.Context) {
 // Excel generate excel files based on search
 func (p *BasSettingAPI) Excel(c *gin.Context) {
 	resp := response.New(p.Engine, c)
-
-	if resp.CheckAccess(basresource.BasSettingExcel) {
-		resp.Status(http.StatusForbidden).Error(term.You_dont_have_permission).JSON()
-		return
-	}
 
 	params := param.Get(c, p.Engine, thisBasSettings)
 	settings, err := p.Service.Excel(params)

@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"omega/domain/base/basevent"
 	"omega/domain/base/basmodel"
-	"omega/domain/base/basresource"
 	"omega/domain/service"
 	"omega/internal/core"
 	"omega/internal/param"
@@ -36,11 +35,6 @@ func (p *BasRoleAPI) FindByID(c *gin.Context) {
 	var err error
 	var role basmodel.BasRole
 
-	if resp.CheckAccess(basresource.BasRoleRead) {
-		resp.Status(http.StatusForbidden).Error(term.You_dont_have_permission).JSON()
-		return
-	}
-
 	if role.ID, err = types.StrToRowID(c.Param("roleID")); err != nil {
 		resp.Error(term.Invalid_ID).JSON()
 		return
@@ -61,11 +55,6 @@ func (p *BasRoleAPI) FindByID(c *gin.Context) {
 func (p *BasRoleAPI) List(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 
-	if resp.CheckAccess(basresource.BasRoleRead) {
-		resp.Status(http.StatusForbidden).Error(term.You_dont_have_permission).JSON()
-		return
-	}
-
 	params := param.Get(c, p.Engine, thisBasRoles)
 
 	data, err := p.Service.List(params)
@@ -84,11 +73,6 @@ func (p *BasRoleAPI) List(c *gin.Context) {
 func (p *BasRoleAPI) Create(c *gin.Context) {
 	var role basmodel.BasRole
 	resp := response.New(p.Engine, c)
-
-	if resp.CheckAccess(basresource.BasRoleWrite) {
-		resp.Status(http.StatusForbidden).Error(term.You_dont_have_permission).JSON()
-		return
-	}
 
 	if err := c.ShouldBindJSON(&role); err != nil {
 		c.AbortWithStatusJSON(http.StatusNotAcceptable, err)
@@ -114,11 +98,6 @@ func (p *BasRoleAPI) Create(c *gin.Context) {
 func (p *BasRoleAPI) Update(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 	var err error
-
-	if resp.CheckAccess(basresource.BasRoleWrite) {
-		resp.Status(http.StatusForbidden).Error(term.You_dont_have_permission).JSON()
-		return
-	}
 
 	var role, roleBefore, roleUpdated basmodel.BasRole
 
@@ -156,11 +135,6 @@ func (p *BasRoleAPI) Delete(c *gin.Context) {
 	var err error
 	var role basmodel.BasRole
 
-	if resp.CheckAccess(basresource.BasRoleWrite) {
-		resp.Status(http.StatusForbidden).Error(term.You_dont_have_permission).JSON()
-		return
-	}
-
 	if role.ID, err = types.StrToRowID(c.Param("roleID")); err != nil {
 		resp.Error(term.Invalid_ID).JSON()
 		return
@@ -182,11 +156,6 @@ func (p *BasRoleAPI) Delete(c *gin.Context) {
 // Excel generate excel files based on search
 func (p *BasRoleAPI) Excel(c *gin.Context) {
 	resp := response.New(p.Engine, c)
-
-	if resp.CheckAccess(basresource.BasRoleExcel) {
-		resp.Status(http.StatusForbidden).Error(term.You_dont_have_permission).JSON()
-		return
-	}
 
 	params := param.Get(c, p.Engine, thisBasRoles)
 	roles, err := p.Service.Excel(params)

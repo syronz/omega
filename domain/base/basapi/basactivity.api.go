@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"omega/domain/base/basevent"
 	"omega/domain/base/basmodel"
-	"omega/domain/base/basresource"
 	"omega/domain/service"
 	"omega/internal/core"
 	"omega/internal/param"
@@ -52,11 +51,6 @@ func (p *BasActivityAPI) Create(c *gin.Context) {
 // List of activities
 func (p *BasActivityAPI) List(c *gin.Context) {
 	resp := response.New(p.Engine, c)
-
-	if resp.CheckAccess(basresource.BasActivityAll) {
-		resp.Status(http.StatusForbidden).Error(term.You_dont_have_permission).JSON()
-		return
-	}
 
 	params := param.Get(c, p.Engine, thisActivities)
 

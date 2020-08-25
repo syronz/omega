@@ -40,3 +40,7 @@ p.Engine.ServerLog.Error(err.Error())
 p.Engine.ServerLog.Fatal(err.Error())
 p.Engine.ServerLog.Panic(err.Error())
 ```
+
+#TODO
+[ ] if types.Resource not used in core it should moved to the base domain, in the future I decide about that
+

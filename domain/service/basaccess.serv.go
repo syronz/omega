@@ -27,11 +27,8 @@ func init() {
 }
 
 // CheckAccess is used inside each method to findout if user has permission or not
-func (p *AccessServ) CheckAccess(c *gin.Context, resource string) bool {
+func (p *AccessServ) CheckAccess(c *gin.Context, resource types.Resource) bool {
 	var userID types.RowID
-
-	p.Engine.Debug(thisCache)
-	// thisCache++
 
 	if userIDtmp, ok := c.Get("USER_ID"); ok {
 		userID = userIDtmp.(types.RowID)
@@ -49,7 +46,7 @@ func (p *AccessServ) CheckAccess(c *gin.Context, resource string) bool {
 		BasAccessAddToCache(userID, resources)
 	}
 
-	return !strings.Contains(resources, resource)
+	return !strings.Contains(resources, string(resource))
 
 }
 

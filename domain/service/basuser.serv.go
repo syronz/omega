@@ -9,6 +9,7 @@ import (
 	"omega/internal/core"
 	"omega/internal/core/action"
 	"omega/internal/param"
+	"omega/internal/term"
 	"omega/internal/types"
 	"omega/utils/password"
 )
@@ -64,6 +65,11 @@ func (p *BasUserServ) List(params param.Param) (data map[string]interface{}, err
 func (p *BasUserServ) Create(user basmodel.BasUser,
 	params param.Param) (createdBasUser basmodel.BasUser, err error) {
 
+	if err = user.Validate(action.Create); err != nil {
+		p.Engine.CheckError(err, term.Validation_failed)
+		return
+	}
+
 	fmt.Printf(">>>>>>>>>>>>>>>>>>>>>>>>> %p \n", p.Engine)
 	var oo core.Engine
 	reg := p.Engine
@@ -90,9 +96,9 @@ func (p *BasUserServ) Create(user basmodel.BasUser,
 	}
 
 	// time.Sleep(30 * time.Second)
-	tx.Rollback()
+	// tx.Rollback()
 
-	// tx.Commit()
+	tx.Commit()
 	// p.Engine.DB = original
 	p.Engine = reg
 
