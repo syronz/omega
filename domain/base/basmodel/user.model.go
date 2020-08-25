@@ -11,8 +11,13 @@ import (
 	"strings"
 )
 
-// BasUser model
-type BasUser struct {
+const (
+	// UserTable is used inside the repo layer
+	UserTable = "bas_users"
+)
+
+// User model
+type User struct {
 	ID        types.RowID `gorm:"not null;unique" json:"id"`
 	RoleID    types.RowID `gorm:"index:role_id_idx" json:"role_id"`
 	Username  string      `gorm:"not null;unique" json:"username,omitempty"`
@@ -25,7 +30,7 @@ type BasUser struct {
 }
 
 // Pattern returns the search pattern to be used inside the gorm's where
-func (p BasUser) Pattern() string {
+func (p User) Pattern() string {
 	return `(
 		bas_users.username LIKE '%[1]v%%' OR
 		bas_users.id = '%[1]v' OR
@@ -35,7 +40,7 @@ func (p BasUser) Pattern() string {
 }
 
 // Columns return list of total columns according to request, useful for inner joins
-func (p BasUser) Columns(variate string) (string, error) {
+func (p User) Columns(variate string) (string, error) {
 	full := []string{
 		"bas_users.id",
 		"bas_users.role_id",
@@ -49,7 +54,7 @@ func (p BasUser) Columns(variate string) (string, error) {
 }
 
 // Validate check the type of
-func (p *BasUser) Validate(act action.Action) error {
+func (p *User) Validate(act action.Action) error {
 	fieldError := core.NewFieldError(term.Error_in_users_form)
 
 	switch act {

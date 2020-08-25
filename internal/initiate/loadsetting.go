@@ -20,8 +20,8 @@ func LoadSetting(engine *core.Engine) {
 		},
 	}
 
-	settingRepo := basrepo.ProvideBasSettingRepo(engine)
-	var settings []basmodel.BasSetting
+	settingRepo := basrepo.ProvideSettingRepo(engine)
+	var settings []basmodel.Setting
 	var err error
 	if settings, err = settingRepo.List(params); err != nil {
 		engine.ServerLog.Fatal(err, "failed in loading settings")

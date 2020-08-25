@@ -13,29 +13,29 @@ import (
 )
 
 // Base Domain
-func initBasSettingAPI(e *core.Engine) basapi.BasSettingAPI {
-	wire.Build(basrepo.ProvideBasSettingRepo, service.ProvideBasSettingService,
-		basapi.ProvideBasSettingAPI)
-	return basapi.BasSettingAPI{}
+func initSettingAPI(e *core.Engine) basapi.SettingAPI {
+	wire.Build(basrepo.ProvideSettingRepo, service.ProvideBasSettingService,
+		basapi.ProvideSettingAPI)
+	return basapi.SettingAPI{}
 }
 
-func initBasRoleAPI(e *core.Engine) basapi.BasRoleAPI {
-	wire.Build(basrepo.ProvideBasRoleRepo, service.ProvideBasRoleService,
-		basapi.ProvideBasRoleAPI)
-	return basapi.BasRoleAPI{}
+func initRoleAPI(e *core.Engine) basapi.RoleAPI {
+	wire.Build(basrepo.ProvideRoleRepo, service.ProvideBasRoleService,
+		basapi.ProvideRoleAPI)
+	return basapi.RoleAPI{}
 }
 
-func initBasUserAPI(engine *core.Engine) basapi.BasUserAPI {
-	wire.Build(basrepo.ProvideBasUserRepo, service.ProvideBasUserService, basapi.ProvideBasUserAPI)
-	return basapi.BasUserAPI{}
+func initUserAPI(engine *core.Engine) basapi.UserAPI {
+	wire.Build(basrepo.ProvideUserRepo, service.ProvideBasUserService, basapi.ProvideUserAPI)
+	return basapi.UserAPI{}
 }
 
-func initBasAuthAPI(e *core.Engine) basapi.BasAuthAPI {
-	wire.Build(service.ProvideBasAuthService, basapi.ProvideBasAuthAPI)
-	return basapi.BasAuthAPI{}
+func initAuthAPI(e *core.Engine) basapi.AuthAPI {
+	wire.Build(service.ProvideBasAuthService, basapi.ProvideAuthAPI)
+	return basapi.AuthAPI{}
 }
 
-func initBasActivityAPI(engine *core.Engine) basapi.BasActivityAPI {
-	wire.Build(basrepo.ProvideBasActivityRepo, service.ProvideBasActivityService, basapi.ProvideBasActivityAPI)
-	return basapi.BasActivityAPI{}
+func initActivityAPI(engine *core.Engine) basapi.ActivityAPI {
+	wire.Build(basrepo.ProvideActivityRepo, service.ProvideBasActivityService, basapi.ProvideActivityAPI)
+	return basapi.ActivityAPI{}
 }

@@ -9,23 +9,23 @@ import (
 	"omega/internal/types"
 )
 
-// InsertBasRoles for add required roles
-func InsertBasRoles(engine *core.Engine) {
+// InsertRoles for add required roles
+func InsertRoles(engine *core.Engine) {
 	engine.DB.Exec("UPDATE bas_roles SET deleted_at = null WHERE id IN (1,2,3)")
-	roleRepo := basrepo.ProvideBasRoleRepo(engine)
+	roleRepo := basrepo.ProvideRoleRepo(engine)
 	roleService := service.ProvideBasRoleService(roleRepo)
-	roles := []basmodel.BasRole{
+	roles := []basmodel.Role{
 		{
 			GormCol: types.GormCol{
 				ID: 1,
 			},
 			Name: "Admin",
 			Resources: types.ResourceJoin([]types.Resource{
-				// base.BasSettingRead, base.BasSettingWrite, base.BasSettingExcel,
-				base.BasUserNames, base.BasUserWrite, base.BasUserRead, base.BasUserReport, base.BasUserExcel,
-				base.BasActivitySelf, base.BasActivityAll,
-				base.BasRoleRead, base.BasRoleWrite, base.BasRoleExcel,
-				// base.BasPing,
+				base.SettingRead, base.SettingWrite, base.SettingExcel,
+				base.UserNames, base.UserWrite, base.UserRead, base.UserReport, base.UserExcel,
+				base.ActivitySelf, base.ActivityAll,
+				base.RoleRead, base.RoleWrite, base.RoleExcel,
+				// base.Ping,
 			}),
 			Description: "admin has all privileges - do not edit",
 		},
@@ -35,7 +35,7 @@ func InsertBasRoles(engine *core.Engine) {
 			},
 			Name: "Cashier",
 			Resources: types.ResourceJoin([]types.Resource{
-				base.BasActivitySelf,
+				base.ActivitySelf,
 			}),
 			Description: "cashier has privileges for adding transactions - after migration reset",
 		},
@@ -46,9 +46,9 @@ func InsertBasRoles(engine *core.Engine) {
 			Name: "Reader",
 			Resources: types.ResourceJoin([]types.Resource{
 				base.SupperAccess,
-				base.BasSettingRead, base.BasSettingExcel,
-				base.BasUserNames, base.BasUserRead, base.BasUserReport, base.BasUserExcel,
-				base.BasRoleRead, base.BasRoleExcel,
+				base.SettingRead, base.SettingExcel,
+				base.UserNames, base.UserRead, base.UserReport, base.UserExcel,
+				base.RoleRead, base.RoleExcel,
 			}),
 			Description: "Reade can see all part without changes",
 		},

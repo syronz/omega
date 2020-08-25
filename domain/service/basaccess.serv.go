@@ -9,15 +9,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// AccessServ defining auth service
-type AccessServ struct {
+// BasAccessServ defining auth service
+type BasAccessServ struct {
 	Repo   basrepo.AccessRepo
 	Engine *core.Engine
 }
 
-// ProvideAccessService for auth is used in wire
-func ProvideAccessService(p basrepo.AccessRepo) AccessServ {
-	return AccessServ{Repo: p, Engine: p.Engine}
+// ProvideBasAccessService for auth is used in wire
+func ProvideBasAccessService(p basrepo.AccessRepo) BasAccessServ {
+	return BasAccessServ{Repo: p, Engine: p.Engine}
 }
 
 var thisCache map[types.RowID]string
@@ -27,7 +27,7 @@ func init() {
 }
 
 // CheckAccess is used inside each method to findout if user has permission or not
-func (p *AccessServ) CheckAccess(c *gin.Context, resource types.Resource) bool {
+func (p *BasAccessServ) CheckAccess(c *gin.Context, resource types.Resource) bool {
 	var userID types.RowID
 
 	if userIDtmp, ok := c.Get("USER_ID"); ok {

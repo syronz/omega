@@ -9,11 +9,12 @@ import (
 	"omega/internal/types"
 )
 
-// InsertBasSettings for add required settings
-func InsertBasSettings(engine *core.Engine) {
-	settingRepo := basrepo.ProvideBasSettingRepo(engine)
+// InsertSettings for add required settings
+func InsertSettings(engine *core.Engine) {
+	// engine.DB.Exec(fmt.Sprintf("TRUNCATE TABLE %v", basmodel.SettingTable))
+	settingRepo := basrepo.ProvideSettingRepo(engine)
 	settingService := service.ProvideBasSettingService(settingRepo)
-	settings := []basmodel.BasSetting{
+	settings := []basmodel.Setting{
 		{
 			FixedCol: types.FixedCol{
 				ID: 1,

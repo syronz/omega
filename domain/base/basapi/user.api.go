@@ -16,25 +16,25 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const thisBasUser = "user"
-const thisBasUsers = "users"
+const thisUser = "user"
+const thisUsers = "users"
 
-// BasUserAPI for injecting user service
-type BasUserAPI struct {
+// UserAPI for injecting user service
+type UserAPI struct {
 	Service service.BasUserServ
 	Engine  *core.Engine
 }
 
-// ProvideBasUserAPI for user is used in wire
-func ProvideBasUserAPI(c service.BasUserServ) BasUserAPI {
-	return BasUserAPI{Service: c, Engine: c.Engine}
+// ProvideUserAPI for user is used in wire
+func ProvideUserAPI(c service.BasUserServ) UserAPI {
+	return UserAPI{Service: c, Engine: c.Engine}
 }
 
 // FindByID is used for fetch a user by it's id
-func (p *BasUserAPI) FindByID(c *gin.Context) {
+func (p *UserAPI) FindByID(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 	var err error
-	var user basmodel.BasUser
+	var user basmodel.User
 
 	if user.ID, err = types.StrToRowID(c.Param("userID")); err != nil {
 		resp.Error(term.Invalid_ID).JSON()
@@ -48,14 +48,14 @@ func (p *BasUserAPI) FindByID(c *gin.Context) {
 
 	user.Password = ""
 
-	resp.Record(basevent.BasUserView)
+	resp.Record(basevent.UserView)
 	resp.Status(http.StatusOK).
-		MessageT(term.V_info, thisBasUser).
+		MessageT(term.V_info, thisUser).
 		JSON(user)
 }
 
 // FindByUsername is used when we try to find a user with username
-func (p *BasUserAPI) FindByUsername(c *gin.Context) {
+func (p *UserAPI) FindByUsername(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 	username := c.Param("username")
 
@@ -71,10 +71,10 @@ func (p *BasUserAPI) FindByUsername(c *gin.Context) {
 }
 
 // List of users
-func (p *BasUserAPI) List(c *gin.Context) {
+func (p *UserAPI) List(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 
-	params := param.Get(c, p.Engine, thisBasUsers)
+	params := param.Get(c, p.Engine, thisUsers)
 
 	data, err := p.Service.List(params)
 	if err != nil {
@@ -82,16 +82,16 @@ func (p *BasUserAPI) List(c *gin.Context) {
 		return
 	}
 
-	resp.Record(basevent.BasUserList)
+	resp.Record(basevent.UserList)
 	resp.Status(http.StatusOK).
-		MessageT(term.List_of_V, thisBasUsers).
+		MessageT(term.List_of_V, thisUsers).
 		JSON(data)
 }
 
 // Create user
-func (p *BasUserAPI) Create(c *gin.Context) {
+func (p *UserAPI) Create(c *gin.Context) {
 
-	var user basmodel.BasUser
+	var user basmodel.User
 	resp := response.New(p.Engine, c)
 
 	if err := c.ShouldBindJSON(&user); err != nil {
@@ -99,27 +99,27 @@ func (p *BasUserAPI) Create(c *gin.Context) {
 		return
 	}
 
-	params := param.Get(c, p.Engine, thisBasUsers)
-	createdBasUser, err := p.Service.Create(user, params)
+	params := param.Get(c, p.Engine, thisUsers)
+	createdUser, err := p.Service.Create(user, params)
 	if err != nil {
 		resp.Error(err).JSON()
 		return
 	}
 
 	user.Password = ""
-	resp.Record(basevent.BasUserCreate, nil, user)
+	resp.Record(basevent.UserCreate, nil, user)
 
 	resp.Status(http.StatusOK).
 		Message(term.User_created_successfully).
-		JSON(createdBasUser)
+		JSON(createdUser)
 }
 
 // Update user
-func (p *BasUserAPI) Update(c *gin.Context) {
+func (p *UserAPI) Update(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 	var err error
 
-	var user, userBefore, userUpdated basmodel.BasUser
+	var user, userBefore, userUpdated basmodel.User
 
 	if user.ID, err = types.StrToRowID(c.Param("userID")); err != nil {
 		resp.Error(term.Invalid_ID).JSON()
@@ -141,19 +141,19 @@ func (p *BasUserAPI) Update(c *gin.Context) {
 		return
 	}
 
-	resp.Record(basevent.BasUserUpdate, userBefore, userUpdated)
+	resp.Record(basevent.UserUpdate, userBefore, userUpdated)
 
 	resp.Status(http.StatusOK).
-		MessageT(term.V_updated_successfully, thisBasUser).
+		MessageT(term.V_updated_successfully, thisUser).
 		JSON(userUpdated)
 
 }
 
 // Delete user
-func (p *BasUserAPI) Delete(c *gin.Context) {
+func (p *UserAPI) Delete(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 	var err error
-	var user basmodel.BasUser
+	var user basmodel.User
 
 	if user.ID, err = types.StrToRowID(c.Param("userID")); err != nil {
 		p.Engine.CheckError(err, err.Error())
@@ -161,24 +161,24 @@ func (p *BasUserAPI) Delete(c *gin.Context) {
 		return
 	}
 
-	params := param.Get(c, p.Engine, thisBasUser)
+	params := param.Get(c, p.Engine, thisUser)
 
 	if user, err = p.Service.Delete(user.ID, params); err != nil {
 		resp.Status(http.StatusInternalServerError).Error(err).JSON()
 		return
 	}
 
-	resp.Record(basevent.BasUserDelete, user)
+	resp.Record(basevent.UserDelete, user)
 	resp.Status(http.StatusOK).
-		MessageT(term.V_deleted_successfully, thisBasUser).
+		MessageT(term.V_deleted_successfully, thisUser).
 		JSON()
 }
 
 // Excel generate excel files based on search
-func (p *BasUserAPI) Excel(c *gin.Context) {
+func (p *UserAPI) Excel(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 
-	params := param.Get(c, p.Engine, thisBasUsers)
+	params := param.Get(c, p.Engine, thisUsers)
 
 	users, err := p.Service.Excel(params)
 	if err != nil {
@@ -199,7 +199,7 @@ func (p *BasUserAPI) Excel(c *gin.Context) {
 		SetColWidth("L", "M", 20).
 		Active("Summary").
 		Active("Nodes").
-		WriteHeader("ID", "BasUsername", "Role", "Language", "Email")
+		WriteHeader("ID", "Username", "Role", "Language", "Email")
 
 	for i, v := range users {
 		extra := v.Extra.(map[string]interface{})
@@ -226,7 +226,7 @@ func (p *BasUserAPI) Excel(c *gin.Context) {
 		return
 	}
 
-	resp.Record(basevent.BasUserExcel)
+	resp.Record(basevent.UserExcel)
 
 	c.Header("Content-Description", "File Transfer")
 	c.Header("Content-Disposition", "attachment; filename="+downloadName)

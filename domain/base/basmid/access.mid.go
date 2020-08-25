@@ -26,7 +26,7 @@ func (p *accessMid) Check(resource types.Resource) gin.HandlerFunc {
 
 	return func(c *gin.Context) {
 
-		accessService := service.ProvideAccessService(basrepo.ProvideAccessRepo(p.engine))
+		accessService := service.ProvideBasAccessService(basrepo.ProvideAccessRepo(p.engine))
 		accessResult := accessService.CheckAccess(c, resource)
 		if accessResult {
 			//TODO: Implement custom error handling

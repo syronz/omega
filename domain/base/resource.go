@@ -6,23 +6,23 @@ import "omega/internal/types"
 const (
 	SupperAccess types.Resource = "supper:access"
 
-	BasUserNames  types.Resource = "user:names"
-	BasUserWrite  types.Resource = "user:write"
-	BasUserRead   types.Resource = "user:read"
-	BasUserReport types.Resource = "user:report"
-	BasUserExcel  types.Resource = "user:excel"
+	UserNames  types.Resource = "user:names"
+	UserWrite  types.Resource = "user:write"
+	UserRead   types.Resource = "user:read"
+	UserReport types.Resource = "user:report"
+	UserExcel  types.Resource = "user:excel"
 
-	BasRoleRead  types.Resource = "role:read"
-	BasRoleWrite types.Resource = "role:write"
-	BasRoleExcel types.Resource = "role:excel"
+	RoleRead  types.Resource = "role:read"
+	RoleWrite types.Resource = "role:write"
+	RoleExcel types.Resource = "role:excel"
 
-	BasSettingNames types.Resource = "setting:names"
-	BasSettingRead  types.Resource = "setting:read"
-	BasSettingWrite types.Resource = "setting:write"
-	BasSettingExcel types.Resource = "setting:excel"
+	SettingNames types.Resource = "setting:names"
+	SettingRead  types.Resource = "setting:read"
+	SettingWrite types.Resource = "setting:write"
+	SettingExcel types.Resource = "setting:excel"
 
-	BasActivitySelf types.Resource = "activity:self"
-	BasActivityAll  types.Resource = "activity:all"
+	ActivitySelf types.Resource = "activity:self"
+	ActivityAll  types.Resource = "activity:all"
 
-	BasPing types.Resource = "ping"
+	Ping types.Resource = "ping"
 )

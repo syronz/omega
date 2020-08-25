@@ -15,7 +15,7 @@ import (
 func initRoleTest() (engine *core.Engine, roleServ BasRoleServ) {
 	logQuery, debugLevel := initServiceTest()
 	engine = kernel.StartMotor(logQuery, debugLevel)
-	roleServ = ProvideBasRoleService(basrepo.ProvideBasRoleRepo(engine))
+	roleServ = ProvideBasRoleService(basrepo.ProvideRoleRepo(engine))
 
 	return
 }
@@ -25,12 +25,12 @@ func TestRoleCreate(t *testing.T) {
 	regularParam := getRegularParam("bas_roles.id asc")
 
 	samples := []struct {
-		in     basmodel.BasRole
+		in     basmodel.Role
 		params param.Param
 		err    error
 	}{
 		{
-			in: basmodel.BasRole{
+			in: basmodel.Role{
 				Name:        "created 1",
 				Resources:   basresource.SupperAccess,
 				Description: "created 1",
@@ -39,7 +39,7 @@ func TestRoleCreate(t *testing.T) {
 			err:    nil,
 		},
 		{
-			in: basmodel.BasRole{
+			in: basmodel.Role{
 				Name:        "created 1",
 				Resources:   basresource.SupperAccess,
 				Description: "created 1",
@@ -48,7 +48,7 @@ func TestRoleCreate(t *testing.T) {
 			err:    errors.New("duplicate"),
 		},
 		{
-			in: basmodel.BasRole{
+			in: basmodel.Role{
 				Name:      "minimum fields",
 				Resources: basresource.SupperAccess,
 			},
@@ -56,7 +56,7 @@ func TestRoleCreate(t *testing.T) {
 			err:    nil,
 		},
 		{
-			in: basmodel.BasRole{
+			in: basmodel.Role{
 				Name:        "long name: big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name",
 				Resources:   basresource.SupperAccess,
 				Description: "created 2",
@@ -65,7 +65,7 @@ func TestRoleCreate(t *testing.T) {
 			err:    errors.New("data too long for name"),
 		},
 		{
-			in: basmodel.BasRole{
+			in: basmodel.Role{
 				Resources:   basresource.SupperAccess,
 				Description: "created 3",
 			},
@@ -87,11 +87,11 @@ func TestRoleUpdate(t *testing.T) {
 	_, roleServ := initRoleTest()
 
 	samples := []struct {
-		in  basmodel.BasRole
+		in  basmodel.Role
 		err error
 	}{
 		{
-			in: basmodel.BasRole{
+			in: basmodel.Role{
 				GormCol: types.GormCol{
 					ID: 1001101000000005,
 				},
@@ -102,7 +102,7 @@ func TestRoleUpdate(t *testing.T) {
 			err: nil,
 		},
 		{
-			in: basmodel.BasRole{
+			in: basmodel.Role{
 				GormCol: types.GormCol{
 					ID: 1001101000000006,
 				},

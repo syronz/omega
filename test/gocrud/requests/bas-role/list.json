@@ -2,8 +2,8 @@
   "method":"get",
 	"url":"_URL_/roles?order_by=bas_roles.id&direction=asc&page_size=4",
 	"url":"_URL_/roles?order_by=bas_roles.id&direction=asc&page_size=4&search=1001101000000003",
-	"url":"_URL_/roles?select=bas_roles.name,bas_roles.id",
 	"url":"_URL_/roles?search=6934334",
+	"url":"_URL_/roles?select=bas_roles.name,bas_roles.id",
 	"authorization":"Bearer _TOKEN_",
 	"payload": {}
 }

@@ -9,11 +9,11 @@ import (
 	"omega/internal/core/lang"
 )
 
-// InsertBasUsers for add required users
-func InsertBasUsers(engine *core.Engine) {
-	userRepo := basrepo.ProvideBasUserRepo(engine)
+// InsertUsers for add required users
+func InsertUsers(engine *core.Engine) {
+	userRepo := basrepo.ProvideUserRepo(engine)
 	userService := service.ProvideBasUserService(userRepo)
-	users := []basmodel.BasUser{
+	users := []basmodel.User{
 		{
 			ID:       1,
 			RoleID:   1,

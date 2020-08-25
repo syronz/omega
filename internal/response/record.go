@@ -8,6 +8,6 @@ import (
 
 // Record is used for saving activity
 func (r *Response) Record(ev types.Event, data ...interface{}) {
-	activityServ := service.ProvideBasActivityService(basrepo.ProvideBasActivityRepo(r.Engine))
+	activityServ := service.ProvideBasActivityService(basrepo.ProvideActivityRepo(r.Engine))
 	activityServ.Record(r.Context, ev, data...)
 }

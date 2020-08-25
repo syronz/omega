@@ -15,25 +15,25 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const thisBasRole = "role"
-const thisBasRoles = "bas_roles"
+const thisRole = "role"
+const thisRoles = "bas_roles"
 
-// BasRoleAPI for injecting role service
-type BasRoleAPI struct {
+// RoleAPI for injecting role service
+type RoleAPI struct {
 	Service service.BasRoleServ
 	Engine  *core.Engine
 }
 
-// ProvideBasRoleAPI for role is used in wire
-func ProvideBasRoleAPI(c service.BasRoleServ) BasRoleAPI {
-	return BasRoleAPI{Service: c, Engine: c.Engine}
+// ProvideRoleAPI for role is used in wire
+func ProvideRoleAPI(c service.BasRoleServ) RoleAPI {
+	return RoleAPI{Service: c, Engine: c.Engine}
 }
 
 // FindByID is used for fetch a role by it's id
-func (p *BasRoleAPI) FindByID(c *gin.Context) {
+func (p *RoleAPI) FindByID(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 	var err error
-	var role basmodel.BasRole
+	var role basmodel.Role
 
 	if role.ID, err = types.StrToRowID(c.Param("roleID")); err != nil {
 		resp.Error(term.Invalid_ID).JSON()
@@ -45,17 +45,17 @@ func (p *BasRoleAPI) FindByID(c *gin.Context) {
 		return
 	}
 
-	resp.Record(basevent.BasRoleView)
+	resp.Record(basevent.RoleView)
 	resp.Status(http.StatusOK).
-		MessageT(term.V_info, thisBasRole).
+		MessageT(term.V_info, thisRole).
 		JSON(role)
 }
 
 // List of roles
-func (p *BasRoleAPI) List(c *gin.Context) {
+func (p *RoleAPI) List(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 
-	params := param.Get(c, p.Engine, thisBasRoles)
+	params := param.Get(c, p.Engine, thisRoles)
 
 	data, err := p.Service.List(params)
 	if err != nil {
@@ -63,15 +63,15 @@ func (p *BasRoleAPI) List(c *gin.Context) {
 		return
 	}
 
-	resp.Record(basevent.BasRoleList)
+	resp.Record(basevent.RoleList)
 	resp.Status(http.StatusOK).
-		MessageT(term.List_of_V, thisBasRoles).
+		MessageT(term.List_of_V, thisRoles).
 		JSON(data)
 }
 
 // Create role
-func (p *BasRoleAPI) Create(c *gin.Context) {
-	var role basmodel.BasRole
+func (p *RoleAPI) Create(c *gin.Context) {
+	var role basmodel.Role
 	resp := response.New(p.Engine, c)
 
 	if err := c.ShouldBindJSON(&role); err != nil {
@@ -79,27 +79,27 @@ func (p *BasRoleAPI) Create(c *gin.Context) {
 		return
 	}
 
-	params := param.Get(c, p.Engine, thisBasRoles)
+	params := param.Get(c, p.Engine, thisRoles)
 
-	createdBasRole, err := p.Service.Create(role, params)
+	createdRole, err := p.Service.Create(role, params)
 	if err != nil {
 		resp.Error(err).JSON()
 		return
 	}
 
-	resp.Record(basevent.BasRoleCreate, nil, role)
+	resp.Record(basevent.RoleCreate, nil, role)
 
 	resp.Status(http.StatusOK).
-		MessageT(term.V_created_successfully, thisBasRole).
-		JSON(createdBasRole)
+		MessageT(term.V_created_successfully, thisRole).
+		JSON(createdRole)
 }
 
 // Update role
-func (p *BasRoleAPI) Update(c *gin.Context) {
+func (p *RoleAPI) Update(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 	var err error
 
-	var role, roleBefore, roleUpdated basmodel.BasRole
+	var role, roleBefore, roleUpdated basmodel.Role
 
 	role.ID, err = types.StrToRowID(c.Param("roleID"))
 	if err != nil {
@@ -122,42 +122,42 @@ func (p *BasRoleAPI) Update(c *gin.Context) {
 		return
 	}
 
-	resp.Record(basevent.BasRoleUpdate, roleBefore, role)
+	resp.Record(basevent.RoleUpdate, roleBefore, role)
 
 	resp.Status(http.StatusOK).
-		MessageT(term.V_updated_successfully, thisBasRole).
+		MessageT(term.V_updated_successfully, thisRole).
 		JSON(roleUpdated)
 }
 
 // Delete role
-func (p *BasRoleAPI) Delete(c *gin.Context) {
+func (p *RoleAPI) Delete(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 	var err error
-	var role basmodel.BasRole
+	var role basmodel.Role
 
 	if role.ID, err = types.StrToRowID(c.Param("roleID")); err != nil {
 		resp.Error(term.Invalid_ID).JSON()
 		return
 	}
 
-	params := param.Get(c, p.Engine, thisBasRoles)
+	params := param.Get(c, p.Engine, thisRoles)
 
 	if role, err = p.Service.Delete(role.ID, params); err != nil {
 		resp.Status(http.StatusInternalServerError).Error(err).JSON()
 		return
 	}
 
-	resp.Record(basevent.BasRoleDelete, role)
+	resp.Record(basevent.RoleDelete, role)
 	resp.Status(http.StatusOK).
-		MessageT(term.V_deleted_successfully, thisBasRole).
+		MessageT(term.V_deleted_successfully, thisRole).
 		JSON()
 }
 
 // Excel generate excel files based on search
-func (p *BasRoleAPI) Excel(c *gin.Context) {
+func (p *RoleAPI) Excel(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 
-	params := param.Get(c, p.Engine, thisBasRoles)
+	params := param.Get(c, p.Engine, thisRoles)
 	roles, err := p.Service.Excel(params)
 	if err != nil {
 		resp.Status(http.StatusNotFound).Error(term.Record_Not_Found).JSON()
@@ -165,9 +165,9 @@ func (p *BasRoleAPI) Excel(c *gin.Context) {
 	}
 
 	ex := excel.New("role")
-	ex.AddSheet("BasRoles").
+	ex.AddSheet("Roles").
 		AddSheet("Summary").
-		Active("BasRoles").
+		Active("Roles").
 		SetPageLayout("landscape", "A4").
 		SetPageMargins(0.2).
 		SetHeaderFooter().
@@ -176,7 +176,7 @@ func (p *BasRoleAPI) Excel(c *gin.Context) {
 		SetColWidth("D", "E", 40).
 		Active("Summary").
 		SetColWidth("A", "D", 20).
-		Active("BasRoles").
+		Active("Roles").
 		WriteHeader("ID", "Name", "Resources", "Description", "Updated At").
 		SetSheetFields("ID", "Name", "Resources", "Description", "UpdatedAt").
 		WriteData(roles).
@@ -190,7 +190,7 @@ func (p *BasRoleAPI) Excel(c *gin.Context) {
 		return
 	}
 
-	resp.Record(basevent.BasRoleExcel)
+	resp.Record(basevent.RoleExcel)
 
 	c.Header("Content-Description", "File Transfer")
 	c.Header("Content-Disposition", "attachment; filename="+downloadName)

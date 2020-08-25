@@ -5,8 +5,13 @@ import (
 	"omega/utils/helper"
 )
 
-// BasActivity model
-type BasActivity struct {
+const (
+	// ActivityTable is used inside the repo layer
+	ActivityTable = "bas_activities"
+)
+
+// Activity model
+type Activity struct {
 	types.FixedCol
 	Event    string      `gorm:"index:event_idx" json:"event"`
 	UserID   types.RowID `json:"user_id"`
@@ -18,7 +23,7 @@ type BasActivity struct {
 }
 
 // Pattern returns the search pattern to be used inside the gorm's where
-func (p BasActivity) Pattern() string {
+func (p Activity) Pattern() string {
 	return `(
 		bas_activities.id = '%[1]v' OR
 		bas_activities.event LIKE '%[1]v%%' OR
@@ -32,7 +37,7 @@ func (p BasActivity) Pattern() string {
 }
 
 // Columns return list of total columns according to request, useful for inner joins
-func (p BasActivity) Columns(variate string) (string, error) {
+func (p Activity) Columns(variate string) (string, error) {
 	full := []string{
 		"bas_activities.id",
 		"bas_activities.event",

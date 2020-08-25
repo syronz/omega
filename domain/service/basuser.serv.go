@@ -16,19 +16,19 @@ import (
 
 // BasUserServ for injecting auth basrepo
 type BasUserServ struct {
-	Repo   basrepo.BasUserRepo
+	Repo   basrepo.UserRepo
 	Engine *core.Engine
 }
 
 // ProvideBasUserService for user is used in wire
-func ProvideBasUserService(p basrepo.BasUserRepo) BasUserServ {
+func ProvideBasUserService(p basrepo.UserRepo) BasUserServ {
 	return BasUserServ{Repo: p, Engine: p.Engine}
 }
 
 // FindByID for getting user by it's id
-func (p *BasUserServ) FindByID(id types.RowID) (user basmodel.BasUser, err error) {
+func (p *BasUserServ) FindByID(id types.RowID) (user basmodel.User, err error) {
 	if user, err = p.Repo.FindByID(id); err != nil {
-		p.Engine.CheckError(err, fmt.Sprintf("BasUser with id %v", id))
+		p.Engine.CheckError(err, fmt.Sprintf("User with id %v", id))
 		return
 	}
 
@@ -36,9 +36,9 @@ func (p *BasUserServ) FindByID(id types.RowID) (user basmodel.BasUser, err error
 }
 
 // FindByUsername find user with username
-func (p *BasUserServ) FindByUsername(username string) (user basmodel.BasUser, err error) {
+func (p *BasUserServ) FindByUsername(username string) (user basmodel.User, err error) {
 	user, err = p.Repo.FindByUsername(username)
-	p.Engine.CheckError(err, fmt.Sprintf("BasUser with username %v", username))
+	p.Engine.CheckError(err, fmt.Sprintf("User with username %v", username))
 
 	return
 }
@@ -62,8 +62,8 @@ func (p *BasUserServ) List(params param.Param) (data map[string]interface{}, err
 	return
 }
 
-func (p *BasUserServ) Create(user basmodel.BasUser,
-	params param.Param) (createdBasUser basmodel.BasUser, err error) {
+func (p *BasUserServ) Create(user basmodel.User,
+	params param.Param) (createdUser basmodel.User, err error) {
 
 	if err = user.Validate(action.Create); err != nil {
 		p.Engine.CheckError(err, term.Validation_failed)
@@ -88,8 +88,8 @@ func (p *BasUserServ) Create(user basmodel.BasUser,
 	// p.Engine.DB = tx
 	oo.DB = tx
 
-	// if createdBasUser, err = p.CreateRollback(user, params); err != nil {
-	if createdBasUser, err = p.Repo.Create(user); err != nil {
+	// if createdUser, err = p.CreateRollback(user, params); err != nil {
+	if createdUser, err = p.Repo.Create(user); err != nil {
 		tx.Rollback()
 		p.Engine = reg
 		return
@@ -105,8 +105,8 @@ func (p *BasUserServ) Create(user basmodel.BasUser,
 	return
 }
 
-func (p *BasUserServ) CreateRollback(user basmodel.BasUser,
-	params param.Param) (createdBasUser basmodel.BasUser, err error) {
+func (p *BasUserServ) CreateRollback(user basmodel.User,
+	params param.Param) (createdUser basmodel.User, err error) {
 
 	if err = user.Validate(action.Create); err != nil {
 		p.Engine.CheckError(err, "Failed in validation")
@@ -116,7 +116,7 @@ func (p *BasUserServ) CreateRollback(user basmodel.BasUser,
 	user.Password, err = password.Hash(user.Password, p.Engine.Envs[base.PasswordSalt])
 	p.Engine.CheckError(err, fmt.Sprintf("Hashing password failed for %+v", user))
 
-	if createdBasUser, err = p.Repo.Create(user); err != nil {
+	if createdUser, err = p.Repo.Create(user); err != nil {
 		// tx.Rollback()
 		p.Engine.DB.Rollback()
 		p.Engine.CheckInfo(err, fmt.Sprintf("Failed in saving user for %+v", user))
@@ -124,16 +124,16 @@ func (p *BasUserServ) CreateRollback(user basmodel.BasUser,
 	// tx.Commit()
 	// p.Engine.DB = original
 
-	createdBasUser.Password = ""
+	createdUser.Password = ""
 
 	return
 }
 
 // Save user
-func (p *BasUserServ) Save(user basmodel.BasUser) (createdBasUser basmodel.BasUser, err error) {
+func (p *BasUserServ) Save(user basmodel.User) (createdUser basmodel.User, err error) {
 
-	var oldBasUser basmodel.BasUser
-	oldBasUser, _ = p.FindByID(user.ID)
+	var oldUser basmodel.User
+	oldUser, _ = p.FindByID(user.ID)
 
 	if user.ID > 0 {
 		if err = user.Validate(action.Update); err != nil {
@@ -145,7 +145,7 @@ func (p *BasUserServ) Save(user basmodel.BasUser) (createdBasUser basmodel.BasUs
 			user.Password, err = password.Hash(user.Password, p.Engine.Envs[base.PasswordSalt])
 			p.Engine.CheckError(err, fmt.Sprintf("Hashing password failed for %+v", user))
 		} else {
-			user.Password = oldBasUser.Password
+			user.Password = oldUser.Password
 		}
 
 	} else {
@@ -157,19 +157,19 @@ func (p *BasUserServ) Save(user basmodel.BasUser) (createdBasUser basmodel.BasUs
 		p.Engine.CheckError(err, fmt.Sprintf("Hashing password failed for %+v", user))
 	}
 
-	if createdBasUser, err = p.Repo.Update(user); err != nil {
+	if createdUser, err = p.Repo.Update(user); err != nil {
 		p.Engine.CheckInfo(err, fmt.Sprintf("Failed in saving user for %+v", user))
 	}
 
 	BasAccessDeleteFromCache(user.ID)
 
-	createdBasUser.Password = ""
+	createdUser.Password = ""
 
 	return
 }
 
 // Excel is used for export excel file
-func (p *BasUserServ) Excel(params param.Param) (users []basmodel.BasUser, err error) {
+func (p *BasUserServ) Excel(params param.Param) (users []basmodel.User, err error) {
 	params.Limit = p.Engine.Envs.ToUint64(core.ExcelMaxRows)
 	params.Offset = 0
 	params.Order = "bas_users.id ASC"
@@ -181,7 +181,7 @@ func (p *BasUserServ) Excel(params param.Param) (users []basmodel.BasUser, err e
 }
 
 // Delete user, it is hard delete, by deleting account related to the user
-func (p *BasUserServ) Delete(userID types.RowID, params param.Param) (user basmodel.BasUser, err error) {
+func (p *BasUserServ) Delete(userID types.RowID, params param.Param) (user basmodel.User, err error) {
 	if user, err = p.FindByID(userID); err != nil {
 		return user, core.NewErrorWithStatus(err.Error(), http.StatusNotFound)
 	}

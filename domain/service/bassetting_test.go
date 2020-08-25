@@ -14,7 +14,7 @@ import (
 func initSettingTest() (engine *core.Engine, settingServ BasSettingServ) {
 	logQuery, debugLevel := initServiceTest()
 	engine = kernel.StartMotor(logQuery, debugLevel)
-	settingServ = ProvideBasSettingService(basrepo.ProvideBasSettingRepo(engine))
+	settingServ = ProvideBasSettingService(basrepo.ProvideSettingRepo(engine))
 
 	return
 }
@@ -23,11 +23,11 @@ func TestSettingUpdate(t *testing.T) {
 	_, settingServ := initSettingTest()
 
 	samples := []struct {
-		in  basmodel.BasSetting
+		in  basmodel.Setting
 		err error
 	}{
 		{
-			in: basmodel.BasSetting{
+			in: basmodel.Setting{
 				FixedCol: types.FixedCol{
 					ID: 20,
 				},
@@ -39,7 +39,7 @@ func TestSettingUpdate(t *testing.T) {
 			err: nil,
 		},
 		{
-			in: basmodel.BasSetting{
+			in: basmodel.Setting{
 				FixedCol: types.FixedCol{
 					ID: 21,
 				},

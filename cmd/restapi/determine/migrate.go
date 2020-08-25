@@ -1,6 +1,7 @@
 package determine
 
 import (
+	"fmt"
 	"omega/domain/base/basmodel"
 	"omega/internal/core"
 )
@@ -8,10 +9,10 @@ import (
 // Migrate the database for creating tables
 func Migrate(engine *core.Engine) {
 	// Base Domain
-	engine.DB.AutoMigrate(&basmodel.BasSetting{})
-	engine.DB.AutoMigrate(&basmodel.BasRole{})
-	engine.DB.AutoMigrate(&basmodel.BasUser{}).
-		AddForeignKey("role_id", "bas_roles(id)", "SET NULL", "SET NULL")
-	engine.ActivityDB.AutoMigrate(&basmodel.BasActivity{})
+	engine.DB.Table(basmodel.SettingTable).AutoMigrate(&basmodel.Setting{})
+	engine.DB.Table(basmodel.RoleTable).AutoMigrate(&basmodel.Role{})
+	engine.DB.Table(basmodel.UserTable).AutoMigrate(&basmodel.User{}).
+		AddForeignKey("role_id", fmt.Sprintf("%v(id)", basmodel.RoleTable), "RESTRICTED", "RESTRICTED")
+	engine.ActivityDB.Table(basmodel.ActivityTable).AutoMigrate(&basmodel.Activity{})
 
 }

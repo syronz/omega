@@ -8,7 +8,7 @@ import (
 
 // CheckAccess is a helper for checking the permission for each method
 func (r *Response) CheckAccess(resource types.Resource) bool {
-	accessService := service.ProvideAccessService(basrepo.ProvideAccessRepo(r.Engine))
+	accessService := service.ProvideBasAccessService(basrepo.ProvideAccessRepo(r.Engine))
 
 	return accessService.CheckAccess(r.Context, resource)
 }

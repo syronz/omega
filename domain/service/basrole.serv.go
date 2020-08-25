@@ -14,19 +14,19 @@ import (
 
 // BasRoleServ for injecting auth basrepo
 type BasRoleServ struct {
-	Repo   basrepo.BasRoleRepo
+	Repo   basrepo.RoleRepo
 	Engine *core.Engine
 }
 
 // ProvideBasRoleService for role is used in wire
-func ProvideBasRoleService(p basrepo.BasRoleRepo) BasRoleServ {
+func ProvideBasRoleService(p basrepo.RoleRepo) BasRoleServ {
 	return BasRoleServ{Repo: p, Engine: p.Engine}
 }
 
 // FindByID for getting role by it's id
-func (p *BasRoleServ) FindByID(id types.RowID) (role basmodel.BasRole, err error) {
+func (p *BasRoleServ) FindByID(id types.RowID) (role basmodel.Role, err error) {
 	role, err = p.Repo.FindByID(id)
-	p.Engine.CheckError(err, fmt.Sprintf("BasRole with id %v", id))
+	p.Engine.CheckError(err, fmt.Sprintf("Role with id %v", id))
 
 	return
 }
@@ -49,14 +49,14 @@ func (p *BasRoleServ) List(params param.Param) (data map[string]interface{}, err
 }
 
 // Create a role
-func (p *BasRoleServ) Create(role basmodel.BasRole, params param.Param) (createdBasRole basmodel.BasRole, err error) {
+func (p *BasRoleServ) Create(role basmodel.Role, params param.Param) (createdRole basmodel.Role, err error) {
 
 	if err = role.Validate(action.Save); err != nil {
 		p.Engine.CheckError(err, term.Validation_failed)
 		return
 	}
 
-	createdBasRole, err = p.Repo.Create(role)
+	createdRole, err = p.Repo.Create(role)
 
 	p.Engine.CheckInfo(err, fmt.Sprintf("Failed in creating role for %+v", role))
 
@@ -64,14 +64,14 @@ func (p *BasRoleServ) Create(role basmodel.BasRole, params param.Param) (created
 }
 
 // Save a role, if it is exist update it, if not create it
-func (p *BasRoleServ) Save(role basmodel.BasRole) (savedBasRole basmodel.BasRole, err error) {
+func (p *BasRoleServ) Save(role basmodel.Role) (savedRole basmodel.Role, err error) {
 
 	if err = role.Validate(action.Save); err != nil {
 		p.Engine.CheckError(err, "validation failed")
 		return
 	}
 
-	savedBasRole, err = p.Repo.Update(role)
+	savedRole, err = p.Repo.Update(role)
 	p.Engine.CheckInfo(err, fmt.Sprintf("Failed in updating role for %+v", role))
 	if err == nil {
 		BasAccessResetFullCache()
@@ -81,7 +81,7 @@ func (p *BasRoleServ) Save(role basmodel.BasRole) (savedBasRole basmodel.BasRole
 }
 
 // Delete role, it is soft delete
-func (p *BasRoleServ) Delete(roleID types.RowID, params param.Param) (role basmodel.BasRole, err error) {
+func (p *BasRoleServ) Delete(roleID types.RowID, params param.Param) (role basmodel.Role, err error) {
 
 	if role, err = p.FindByID(roleID); err != nil {
 		return
@@ -107,7 +107,7 @@ func (p *BasRoleServ) HardDelete(roleID types.RowID) error {
 }
 
 // Excel is used for export excel file
-func (p *BasRoleServ) Excel(params param.Param) (roles []basmodel.BasRole, err error) {
+func (p *BasRoleServ) Excel(params param.Param) (roles []basmodel.Role, err error) {
 	params.Limit = p.Engine.Envs.ToUint64(core.ExcelMaxRows)
 	params.Offset = 0
 	params.Order = "bas_roles.id ASC"

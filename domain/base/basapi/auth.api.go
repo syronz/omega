@@ -13,20 +13,20 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// BasAuthAPI for injecting auth service
-type BasAuthAPI struct {
+// AuthAPI for injecting auth service
+type AuthAPI struct {
 	Service service.BasAuthServ
 	Engine  *core.Engine
 }
 
-// ProvideBasAuthAPI for auth used in wire
-func ProvideBasAuthAPI(p service.BasAuthServ) BasAuthAPI {
-	return BasAuthAPI{Service: p, Engine: p.Engine}
+// ProvideAuthAPI for auth used in wire
+func ProvideAuthAPI(p service.BasAuthServ) AuthAPI {
+	return AuthAPI{Service: p, Engine: p.Engine}
 }
 
 // Login auth
-func (p *BasAuthAPI) Login(c *gin.Context) {
-	var auth basmodel.BasAuth
+func (p *AuthAPI) Login(c *gin.Context) {
+	var auth basmodel.Auth
 	resp := response.New(p.Engine, c)
 
 	if err := c.BindJSON(&auth); err != nil {
@@ -51,9 +51,9 @@ func (p *BasAuthAPI) Login(c *gin.Context) {
 }
 
 // Logout will erase the resources from access.Cache
-func (p *BasAuthAPI) Logout(c *gin.Context) {
+func (p *AuthAPI) Logout(c *gin.Context) {
 	resp := response.New(p.Engine, c)
-	params := param.Get(c, p.Engine, thisBasUsers)
+	params := param.Get(c, p.Engine, thisUsers)
 	p.Engine.Debug(params.UserID)
 	p.Service.Logout(params)
 	resp.Record(basevent.BasLogout)
@@ -63,8 +63,8 @@ func (p *BasAuthAPI) Logout(c *gin.Context) {
 }
 
 // TemporaryToken is used for creating temporary access token for download excel and etc
-func (p *BasAuthAPI) TemporaryToken(c *gin.Context) {
-	// var auth basmodel.BasAuth
+func (p *AuthAPI) TemporaryToken(c *gin.Context) {
+	// var auth basmodel.Auth
 	resp := response.New(p.Engine, c)
 
 	params := param.Get(c, p.Engine, "users")

@@ -13,23 +13,23 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const thisBasActivity = "activity"
+const thisActivity = "activity"
 const thisActivities = "bas_activities"
 
-// BasActivityAPI for injecting activity service
-type BasActivityAPI struct {
+// ActivityAPI for injecting activity service
+type ActivityAPI struct {
 	Service service.BasActivityServ
 	Engine  *core.Engine
 }
 
-// ProvideBasActivityAPI for activity is used in wire
-func ProvideBasActivityAPI(c service.BasActivityServ) BasActivityAPI {
-	return BasActivityAPI{Service: c, Engine: c.Engine}
+// ProvideActivityAPI for activity is used in wire
+func ProvideActivityAPI(c service.BasActivityServ) ActivityAPI {
+	return ActivityAPI{Service: c, Engine: c.Engine}
 }
 
 // Create activity
-func (p *BasActivityAPI) Create(c *gin.Context) {
-	var activity basmodel.BasActivity
+func (p *ActivityAPI) Create(c *gin.Context) {
+	var activity basmodel.Activity
 	resp := response.New(p.Engine, c)
 
 	if err := c.ShouldBindJSON(&activity); err != nil {
@@ -37,7 +37,7 @@ func (p *BasActivityAPI) Create(c *gin.Context) {
 		return
 	}
 
-	createdBasActivity, err := p.Service.Save(activity)
+	createdActivity, err := p.Service.Save(activity)
 	if err != nil {
 		c.JSON(403, gin.H{"error": err.Error()})
 		return
@@ -45,11 +45,11 @@ func (p *BasActivityAPI) Create(c *gin.Context) {
 
 	resp.Status(203).
 		Message("activity created successfully").
-		JSON(createdBasActivity)
+		JSON(createdActivity)
 }
 
 // List of activities
-func (p *BasActivityAPI) List(c *gin.Context) {
+func (p *ActivityAPI) List(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 
 	params := param.Get(c, p.Engine, thisActivities)
@@ -60,7 +60,7 @@ func (p *BasActivityAPI) List(c *gin.Context) {
 		return
 	}
 
-	resp.Record(basevent.BasActivityAll)
+	resp.Record(basevent.ActivityAll)
 	resp.Status(http.StatusOK).
 		MessageT(term.List_of_V, thisActivities).
 		JSON(data)

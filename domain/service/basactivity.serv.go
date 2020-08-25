@@ -25,18 +25,18 @@ const (
 
 // BasActivityServ for injecting auth basrepo
 type BasActivityServ struct {
-	Repo   basrepo.BasActivityRepo
+	Repo   basrepo.ActivityRepo
 	Engine *core.Engine
 }
 
 // ProvideBasActivityService for activity is used in wire
-func ProvideBasActivityService(p basrepo.BasActivityRepo) BasActivityServ {
+func ProvideBasActivityService(p basrepo.ActivityRepo) BasActivityServ {
 	return BasActivityServ{Repo: p, Engine: p.Engine}
 }
 
 // Save activity
-func (p *BasActivityServ) Save(activity basmodel.BasActivity) (createdBasActivity basmodel.BasActivity, err error) {
-	createdBasActivity, err = p.Repo.Save(activity)
+func (p *BasActivityServ) Save(activity basmodel.Activity) (createdActivity basmodel.Activity, err error) {
+	createdActivity, err = p.Repo.Save(activity)
 
 	// p.Engine.CheckInfo(err, fmt.Sprintf("Failed in saving activity for %+v", activity))
 
@@ -69,7 +69,7 @@ func (p *BasActivityServ) Record(c *gin.Context, ev types.Event, data ...interfa
 		username = usernameTmp.(string)
 	}
 
-	activity := basmodel.BasActivity{
+	activity := basmodel.Activity{
 		Event:    ev.String(),
 		UserID:   userID,
 		Username: username,

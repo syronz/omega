@@ -15,25 +15,25 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const thisBasSetting = "setting"
-const thisBasSettings = "settings"
+const thisSetting = "setting"
+const thisSettings = "settings"
 
-// BasSettingAPI for injecting setting service
-type BasSettingAPI struct {
+// SettingAPI for injecting setting service
+type SettingAPI struct {
 	Service service.BasSettingServ
 	Engine  *core.Engine
 }
 
-// ProvideBasSettingAPI for setting is used in wire
-func ProvideBasSettingAPI(c service.BasSettingServ) BasSettingAPI {
-	return BasSettingAPI{Service: c, Engine: c.Engine}
+// ProvideSettingAPI for setting is used in wire
+func ProvideSettingAPI(c service.BasSettingServ) SettingAPI {
+	return SettingAPI{Service: c, Engine: c.Engine}
 }
 
 // FindByID is used for fetch a setting by it's id
-func (p *BasSettingAPI) FindByID(c *gin.Context) {
+func (p *SettingAPI) FindByID(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 	var err error
-	var setting basmodel.BasSetting
+	var setting basmodel.Setting
 
 	if setting.ID, err = types.StrToRowID(c.Param("settingID")); err != nil {
 		resp.Status(http.StatusNotAcceptable).Error(err).MessageT(term.Invalid_ID).JSON()
@@ -45,14 +45,14 @@ func (p *BasSettingAPI) FindByID(c *gin.Context) {
 		return
 	}
 
-	resp.Record(basevent.BasSettingView)
+	resp.Record(basevent.SettingView)
 	resp.Status(http.StatusOK).
-		MessageT(term.V_info, thisBasSetting).
+		MessageT(term.V_info, thisSetting).
 		JSON(setting)
 }
 
 // FindByProperty is used when we try to find a setting with property
-func (p *BasSettingAPI) FindByProperty(c *gin.Context) {
+func (p *SettingAPI) FindByProperty(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 	property := c.Param("property")
 
@@ -66,10 +66,10 @@ func (p *BasSettingAPI) FindByProperty(c *gin.Context) {
 }
 
 // List of settings
-func (p *BasSettingAPI) List(c *gin.Context) {
+func (p *SettingAPI) List(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 
-	params := param.Get(c, p.Engine, thisBasSettings)
+	params := param.Get(c, p.Engine, thisSettings)
 
 	data, err := p.Service.List(params)
 	if err != nil {
@@ -77,18 +77,18 @@ func (p *BasSettingAPI) List(c *gin.Context) {
 		return
 	}
 
-	resp.Record(basevent.BasSettingList)
+	resp.Record(basevent.SettingList)
 	resp.Status(http.StatusOK).
-		MessageT(term.List_of_V, thisBasSettings).
+		MessageT(term.List_of_V, thisSettings).
 		JSON(data)
 }
 
 // Update setting
-func (p *BasSettingAPI) Update(c *gin.Context) {
+func (p *SettingAPI) Update(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 	var err error
 
-	var setting, settingBefore, settingUpdated basmodel.BasSetting
+	var setting, settingBefore, settingUpdated basmodel.Setting
 
 	if setting.ID, err = types.StrToRowID(c.Param("settingID")); err != nil {
 		resp.Error(term.Invalid_ID).JSON()
@@ -110,19 +110,19 @@ func (p *BasSettingAPI) Update(c *gin.Context) {
 		return
 	}
 
-	resp.Record(basevent.BasSettingUpdate, settingBefore, settingUpdated)
+	resp.Record(basevent.SettingUpdate, settingBefore, settingUpdated)
 
 	resp.Status(http.StatusOK).
-		MessageT(term.V_updated_successfully, thisBasSetting).
+		MessageT(term.V_updated_successfully, thisSetting).
 		JSON(settingUpdated)
 
 }
 
 // Delete setting
-func (p *BasSettingAPI) Delete(c *gin.Context) {
+func (p *SettingAPI) Delete(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 	var err error
-	var setting basmodel.BasSetting
+	var setting basmodel.Setting
 
 	if setting.ID, err = types.StrToRowID(c.Param("settingID")); err != nil {
 		p.Engine.CheckError(err, err.Error())
@@ -135,17 +135,17 @@ func (p *BasSettingAPI) Delete(c *gin.Context) {
 		return
 	}
 
-	resp.Record(basevent.BasSettingDelete, setting)
+	resp.Record(basevent.SettingDelete, setting)
 	resp.Status(http.StatusOK).
-		MessageT(term.V_deleted_successfully, thisBasSetting).
+		MessageT(term.V_deleted_successfully, thisSetting).
 		JSON()
 }
 
 // Excel generate excel files based on search
-func (p *BasSettingAPI) Excel(c *gin.Context) {
+func (p *SettingAPI) Excel(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 
-	params := param.Get(c, p.Engine, thisBasSettings)
+	params := param.Get(c, p.Engine, thisSettings)
 	settings, err := p.Service.Excel(params)
 	if err != nil {
 		resp.Status(http.StatusNotFound).Error(term.Record_Not_Found).JSON()
@@ -165,7 +165,7 @@ func (p *BasSettingAPI) Excel(c *gin.Context) {
 		SetColWidth("L", "M", 20).
 		Active("Summary").
 		Active("Nodes").
-		WriteHeader("ID", "Name", "BasSettingname", "Code", "Status", "Role",
+		WriteHeader("ID", "Name", "Settingname", "Code", "Status", "Role",
 			"Language", "Type", "Email", "Readonly", "Direction", "Created At",
 			"Updated At").
 		SetSheetFields("ID", "Name", "LegalName", "ServerAddress", "Expiration", "Plan",
@@ -181,7 +181,7 @@ func (p *BasSettingAPI) Excel(c *gin.Context) {
 		return
 	}
 
-	resp.Record(basevent.BasSettingExcel)
+	resp.Record(basevent.SettingExcel)
 
 	c.Header("Content-Description", "File Transfer")
 	c.Header("Content-Disposition", "attachment; filename="+downloadName)

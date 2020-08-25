@@ -27,15 +27,15 @@ func ProvideBasAuthService(engine *core.Engine) BasAuthServ {
 	return BasAuthServ{Engine: engine}
 }
 
-// Login BasUser
-func (p *BasAuthServ) Login(auth basmodel.BasAuth) (user basmodel.BasUser, err error) {
+// Login User
+func (p *BasAuthServ) Login(auth basmodel.Auth) (user basmodel.User, err error) {
 	if err = auth.Validate(action.Login); err != nil {
 		return
 	}
 
 	jwtKey := p.Engine.Envs.ToByte(base.JWTSecretKey)
 
-	userServ := ProvideBasUserService(basrepo.ProvideBasUserRepo(p.Engine))
+	userServ := ProvideBasUserService(basrepo.ProvideUserRepo(p.Engine))
 	if user, err = userServ.FindByUsername(auth.Username); err != nil {
 		err = errors.New(term.Username_or_password_is_wrong)
 		return
