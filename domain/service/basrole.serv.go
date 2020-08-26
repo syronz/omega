@@ -7,9 +7,12 @@ import (
 	"omega/domain/base/basrepo"
 	"omega/internal/core"
 	"omega/internal/core/action"
+	"omega/internal/core/corerr"
 	"omega/internal/param"
 	"omega/internal/term"
 	"omega/internal/types"
+
+	"github.com/jinzhu/gorm"
 )
 
 // BasRoleServ for injecting auth basrepo
@@ -26,6 +29,11 @@ func ProvideBasRoleService(p basrepo.RoleRepo) BasRoleServ {
 // FindByID for getting role by it's id
 func (p *BasRoleServ) FindByID(id types.RowID) (role basmodel.Role, err error) {
 	role, err = p.Repo.FindByID(id)
+	if gorm.IsRecordNotFoundError(err
+) {
+		err = corerr.NewNotFound("role", "id", id.ToString())
+
+	}
 	p.Engine.CheckError(err, fmt.Sprintf("Role with id %v", id))
 
 	return
