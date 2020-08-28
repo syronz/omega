@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"omega/domain/base"
 	"omega/internal/core"
+	"omega/pkg/glog"
 	"strings"
 
 	"omega/internal/response"
@@ -36,7 +37,7 @@ func AuthGuard(engine *core.Engine) gin.HandlerFunc {
 		claims := &types.JWTClaims{}
 
 		if tkn, err := jwt.ParseWithClaims(token, claims, fJWT); err != nil {
-			engine.Debug(err)
+			glog.Debug(err)
 			checkErr(c, err, engine)
 			return
 		} else if !tkn.Valid {

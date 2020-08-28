@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"math"
 	"omega/internal/core"
+	"omega/pkg/glog"
 	"strings"
 	"time"
 
@@ -56,7 +57,6 @@ func logRequest(engine *core.Engine, c *gin.Context, reqID uint, reqDataReader i
 	request := getBody(engine, reqDataReader)
 	// prevent to save the passwords
 	if strings.Contains(c.Request.URL.Path, "login") {
-		engine.Debug(request)
 		request = nil
 	}
 	engine.APILog.WithFields(logrus.Fields{
@@ -77,7 +77,7 @@ func logRequest(engine *core.Engine, c *gin.Context, reqID uint, reqDataReader i
 func logResponse(engine *core.Engine, c *gin.Context, latency int, blw *bodyLogWriter) {
 	resID, ok := c.Get("resID")
 	if !ok {
-		engine.Debug("there is no resIndex for element", getBody(engine, blw.body))
+		glog.Debug("there is no resIndex for element", getBody(engine, blw.body))
 	}
 	engine.APILog.WithFields(logrus.Fields{
 		"resID":       resID,
@@ -93,14 +93,14 @@ func getBody(engine *core.Engine, reader io.Reader) interface{} {
 
 	buf := new(bytes.Buffer)
 	if _, err := buf.ReadFrom(reader); err != nil {
-		engine.Debug(err)
+		glog.Debug(err)
 	}
 
 	var obj interface{}
 
 	if err := json.NewDecoder(buf).Decode(&obj); err != nil {
 		if err.Error() != "EOF" {
-			engine.Debug(err, obj, err.Error())
+			glog.Debug(err, obj, err.Error())
 		}
 	}
 

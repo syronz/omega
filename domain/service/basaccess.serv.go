@@ -4,6 +4,7 @@ import (
 	"omega/domain/base/basrepo"
 	"omega/internal/core"
 	"omega/internal/types"
+	"omega/pkg/glog"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -42,7 +43,7 @@ func (p *BasAccessServ) CheckAccess(c *gin.Context, resource types.Resource) boo
 	if resources, ok = thisCache[userID]; !ok {
 		var err error
 		resources, err = p.Repo.GetUserResources(userID)
-		p.Engine.CheckError(err, "error in finding the resources for user", userID)
+		glog.CheckError(err, "error in finding the resources for user", userID)
 		BasAccessAddToCache(userID, resources)
 	}
 
@@ -50,7 +51,7 @@ func (p *BasAccessServ) CheckAccess(c *gin.Context, resource types.Resource) boo
 
 }
 
-// AddResourceToCache add the resources to the thisCache
+// BasAccessAddToCache add the resources to the thisCache
 func BasAccessAddToCache(userID types.RowID, resources string) {
 	thisCache[userID] = resources
 }

@@ -11,6 +11,7 @@ import (
 	"omega/internal/param"
 	"omega/internal/term"
 	"omega/internal/types"
+	"omega/pkg/glog"
 	"omega/utils/password"
 )
 
@@ -28,7 +29,7 @@ func ProvideBasUserService(p basrepo.UserRepo) BasUserServ {
 // FindByID for getting user by it's id
 func (p *BasUserServ) FindByID(id types.RowID) (user basmodel.User, err error) {
 	if user, err = p.Repo.FindByID(id); err != nil {
-		p.Engine.CheckError(err, fmt.Sprintf("User with id %v", id))
+		glog.CheckError(err, fmt.Sprintf("User with id %v", id))
 		return
 	}
 
@@ -38,7 +39,7 @@ func (p *BasUserServ) FindByID(id types.RowID) (user basmodel.User, err error) {
 // FindByUsername find user with username
 func (p *BasUserServ) FindByUsername(username string) (user basmodel.User, err error) {
 	user, err = p.Repo.FindByUsername(username)
-	p.Engine.CheckError(err, fmt.Sprintf("User with username %v", username))
+	glog.CheckError(err, fmt.Sprintf("User with username %v", username))
 
 	return
 }
@@ -48,16 +49,14 @@ func (p *BasUserServ) List(params param.Param) (data map[string]interface{}, err
 
 	data = make(map[string]interface{})
 
-	p.Engine.Debug(params)
-
 	data["list"], err = p.Repo.List(params)
-	p.Engine.CheckError(err, "users list")
+	glog.CheckError(err, "users list")
 	if err != nil {
 		return
 	}
 
 	data["count"], err = p.Repo.Count(params)
-	p.Engine.CheckError(err, "users count")
+	glog.CheckError(err, "users count")
 
 	return
 }
@@ -66,7 +65,7 @@ func (p *BasUserServ) Create(user basmodel.User,
 	params param.Param) (createdUser basmodel.User, err error) {
 
 	if err = user.Validate(action.Create); err != nil {
-		p.Engine.CheckError(err, term.Validation_failed)
+		glog.CheckError(err, term.Validation_failed)
 		return
 	}
 
@@ -109,12 +108,12 @@ func (p *BasUserServ) CreateRollback(user basmodel.User,
 	params param.Param) (createdUser basmodel.User, err error) {
 
 	if err = user.Validate(action.Create); err != nil {
-		p.Engine.CheckError(err, "Failed in validation")
+		glog.CheckError(err, "Failed in validation")
 		return
 	}
 
 	user.Password, err = password.Hash(user.Password, p.Engine.Envs[base.PasswordSalt])
-	p.Engine.CheckError(err, fmt.Sprintf("Hashing password failed for %+v", user))
+	glog.CheckError(err, fmt.Sprintf("Hashing password failed for %+v", user))
 
 	if createdUser, err = p.Repo.Create(user); err != nil {
 		// tx.Rollback()
@@ -137,24 +136,22 @@ func (p *BasUserServ) Save(user basmodel.User) (createdUser basmodel.User, err e
 
 	if user.ID > 0 {
 		if err = user.Validate(action.Update); err != nil {
-			p.Engine.Debug(err)
 			return
 		}
 
 		if user.Password != "" {
 			user.Password, err = password.Hash(user.Password, p.Engine.Envs[base.PasswordSalt])
-			p.Engine.CheckError(err, fmt.Sprintf("Hashing password failed for %+v", user))
+			glog.CheckError(err, fmt.Sprintf("Hashing password failed for %+v", user))
 		} else {
 			user.Password = oldUser.Password
 		}
 
 	} else {
 		if err = user.Validate(action.Create); err != nil {
-			p.Engine.Debug(err)
 			return
 		}
 		user.Password, err = password.Hash(user.Password, p.Engine.Envs[base.PasswordSalt])
-		p.Engine.CheckError(err, fmt.Sprintf("Hashing password failed for %+v", user))
+		glog.CheckError(err, fmt.Sprintf("Hashing password failed for %+v", user))
 	}
 
 	if createdUser, err = p.Repo.Update(user); err != nil {
@@ -175,7 +172,7 @@ func (p *BasUserServ) Excel(params param.Param) (users []basmodel.User, err erro
 	params.Order = "bas_users.id ASC"
 
 	users, err = p.Repo.List(params)
-	p.Engine.CheckError(err, "users excel")
+	glog.CheckError(err, "users excel")
 
 	return
 }
@@ -187,7 +184,7 @@ func (p *BasUserServ) Delete(userID types.RowID, params param.Param) (user basmo
 	}
 
 	if err = p.Repo.Delete(user); err != nil {
-		p.Engine.CheckError(err, fmt.Sprintf("error in deleting user %+v", user))
+		glog.CheckError(err, fmt.Sprintf("error in deleting user %+v", user))
 	}
 
 	return

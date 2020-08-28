@@ -11,6 +11,7 @@ import (
 	"omega/internal/response"
 	"omega/internal/term"
 	"omega/internal/types"
+	"omega/pkg/glog"
 	"omega/utils/excel"
 
 	"github.com/gin-gonic/gin"
@@ -156,7 +157,6 @@ func (p *UserAPI) Delete(c *gin.Context) {
 	var user basmodel.User
 
 	if user.ID, err = types.StrToRowID(c.Param("userID")); err != nil {
-		p.Engine.CheckError(err, err.Error())
 		resp.Error(term.Invalid_ID).JSON()
 		return
 	}
@@ -211,7 +211,7 @@ func (p *UserAPI) Excel(c *gin.Context) {
 			v.Email,
 		}
 		err = ex.File.SetSheetRow(ex.ActiveSheet, fmt.Sprint("A", i+2), column)
-		p.Engine.CheckError(err, "Error in writing to the excel in user")
+		glog.CheckError(err, "Error in writing to the excel in user")
 	}
 
 	ex.Sheets[ex.ActiveSheet].Row = len(users) + 1

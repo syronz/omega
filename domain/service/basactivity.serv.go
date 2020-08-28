@@ -9,6 +9,7 @@ import (
 	"omega/internal/core"
 	"omega/internal/param"
 	"omega/internal/types"
+	"omega/pkg/glog"
 
 	"github.com/gin-gonic/gin"
 )
@@ -80,18 +81,18 @@ func (p *BasActivityServ) Record(c *gin.Context, ev types.Event, data ...interfa
 	}
 
 	_, err := p.Repo.Save(activity)
-	p.Engine.CheckError(err, fmt.Sprintf("Failed in saving activity for %+v", activity))
+	glog.CheckError(err, fmt.Sprintf("Failed in saving activity for %+v", activity))
 }
 
 func (p *BasActivityServ) fillBeforeAfter(recordType RecordType, data ...interface{}) (before, after []byte) {
 	var err error
 	if recordType == writeBefore || recordType == writeBoth {
 		before, err = json.Marshal(data[0])
-		p.Engine.CheckError(err, "error in encoding data to before-json")
+		glog.CheckError(err, "error in encoding data to before-json")
 	}
 	if recordType == writeAfter || recordType == writeBoth {
 		after, err = json.Marshal(data[1])
-		p.Engine.CheckError(err, "error in encoding data to after-json")
+		glog.CheckError(err, "error in encoding data to after-json")
 	}
 
 	return
@@ -132,13 +133,13 @@ func (p *BasActivityServ) List(params param.Param) (data map[string]interface{},
 	data = make(map[string]interface{})
 
 	data["list"], err = p.Repo.List(params)
-	p.Engine.CheckError(err, "activities list")
+	glog.CheckError(err, "activities list")
 	if err != nil {
 		return
 	}
 
 	data["count"], err = p.Repo.Count(params)
-	p.Engine.CheckError(err, "activities count")
+	glog.CheckError(err, "activities count")
 
 	return
 }

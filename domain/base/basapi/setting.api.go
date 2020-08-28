@@ -125,7 +125,6 @@ func (p *SettingAPI) Delete(c *gin.Context) {
 	var setting basmodel.Setting
 
 	if setting.ID, err = types.StrToRowID(c.Param("settingID")); err != nil {
-		p.Engine.CheckError(err, err.Error())
 		resp.Error(term.Invalid_ID).JSON()
 		return
 	}

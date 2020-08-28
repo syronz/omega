@@ -54,7 +54,6 @@ func (p *AuthAPI) Login(c *gin.Context) {
 func (p *AuthAPI) Logout(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 	params := param.Get(c, p.Engine, thisUsers)
-	p.Engine.Debug(params.UserID)
 	p.Service.Logout(params)
 	resp.Record(base.BasLogout)
 	resp.Status(http.StatusOK).

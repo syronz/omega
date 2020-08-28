@@ -11,6 +11,7 @@ import (
 	"omega/internal/param"
 	"omega/internal/term"
 	"omega/internal/types"
+	"omega/pkg/glog"
 
 	"github.com/jinzhu/gorm"
 )
@@ -33,7 +34,7 @@ func (p *BasRoleServ) FindByID(id types.RowID) (role basmodel.Role, err error) {
 		err = corerr.NewNotFound("role", "id", id.ToString())
 
 	}
-	p.Engine.CheckError(err, fmt.Sprintf("Role with id %v", id))
+	glog.CheckError(err, fmt.Sprintf("Role with id %v", id))
 
 	return
 }
@@ -44,13 +45,13 @@ func (p *BasRoleServ) List(params param.Param) (data map[string]interface{}, err
 	data = make(map[string]interface{})
 
 	data["list"], err = p.Repo.List(params)
-	p.Engine.CheckError(err, "roles list")
+	glog.CheckError(err, "roles list")
 	if err != nil {
 		return
 	}
 
 	data["count"], err = p.Repo.Count(params)
-	p.Engine.CheckError(err, "roles count")
+	glog.CheckError(err, "roles count")
 
 	return
 }
@@ -59,7 +60,7 @@ func (p *BasRoleServ) List(params param.Param) (data map[string]interface{}, err
 func (p *BasRoleServ) Create(role basmodel.Role, params param.Param) (createdRole basmodel.Role, err error) {
 
 	if err = role.Validate(action.Save); err != nil {
-		p.Engine.CheckError(err, term.Validation_failed)
+		glog.CheckError(err, term.Validation_failed)
 		return
 	}
 
@@ -74,7 +75,7 @@ func (p *BasRoleServ) Create(role basmodel.Role, params param.Param) (createdRol
 func (p *BasRoleServ) Save(role basmodel.Role) (savedRole basmodel.Role, err error) {
 
 	if err = role.Validate(action.Save); err != nil {
-		p.Engine.CheckError(err, "validation failed")
+		glog.CheckError(err, "validation failed")
 		return
 	}
 
@@ -120,7 +121,7 @@ func (p *BasRoleServ) Excel(params param.Param) (roles []basmodel.Role, err erro
 	params.Order = "bas_roles.id ASC"
 
 	roles, err = p.Repo.List(params)
-	p.Engine.CheckError(err, "roles excel")
+	glog.CheckError(err, "roles excel")
 
 	return
 }

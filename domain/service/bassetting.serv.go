@@ -10,6 +10,7 @@ import (
 	"omega/internal/initiate"
 	"omega/internal/param"
 	"omega/internal/types"
+	"omega/pkg/glog"
 )
 
 // BasSettingServ for injecting auth basrepo
@@ -34,7 +35,7 @@ func (p *BasSettingServ) FindByID(id types.RowID) (setting basmodel.Setting, err
 // FindByProperty find setting with property
 func (p *BasSettingServ) FindByProperty(property string) (setting basmodel.Setting, err error) {
 	setting, err = p.Repo.FindByProperty(property)
-	p.Engine.CheckError(err, fmt.Sprintf("Setting with property %v", property))
+	glog.CheckError(err, fmt.Sprintf("Setting with property %v", property))
 
 	return
 }
@@ -48,13 +49,13 @@ func (p *BasSettingServ) List(params param.Param) (data map[string]interface{}, 
 	params.Pagination.Order = "id asc"
 
 	data["list"], err = p.Repo.List(params)
-	p.Engine.CheckError(err, "settings list")
+	glog.CheckError(err, "settings list")
 	if err != nil {
 		return
 	}
 
 	data["count"], err = p.Repo.Count(params)
-	p.Engine.CheckError(err, "settings count")
+	glog.CheckError(err, "settings count")
 
 	return
 }
@@ -62,7 +63,7 @@ func (p *BasSettingServ) List(params param.Param) (data map[string]interface{}, 
 // Save setting
 func (p *BasSettingServ) Save(setting basmodel.Setting) (savedSetting basmodel.Setting, err error) {
 	if err = setting.Validate(action.Save); err != nil {
-		p.Engine.Debug(err)
+		glog.CheckError(err, "Error in saving setting")
 		return
 	}
 
@@ -95,7 +96,7 @@ func (p *BasSettingServ) Excel(params param.Param) (settings []basmodel.Setting,
 	params.Order = "bas_settings.id ASC"
 
 	settings, err = p.Repo.List(params)
-	p.Engine.CheckError(err, "settings excel")
+	glog.CheckError(err, "settings excel")
 
 	return
 }

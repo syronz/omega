@@ -3,6 +3,7 @@ package param
 import (
 	"omega/internal/core"
 	"omega/internal/types"
+	"omega/pkg/glog"
 	"strconv"
 	"strings"
 
@@ -63,7 +64,7 @@ func generateLimit(c *gin.Context, param *Param, engine *core.Engine) {
 		param.Limit, err = strconv.ParseUint(c.Query("page_size"), 10, 16)
 		if err != nil {
 			// TODO: get path from gin.Context
-			engine.CheckError(err, "Limit is not number")
+			glog.CheckError(err, "Limit is not a number")
 			param.Limit = 10
 		}
 	}
@@ -77,7 +78,7 @@ func generateOffset(c *gin.Context, param *Param, engine *core.Engine) {
 		page, err = strconv.ParseUint(c.Query("page"), 10, 16)
 		if err != nil {
 			// TODO: get path from gin.Context
-			engine.CheckError(err, "Offset is not a positive number")
+			glog.CheckError(err, "Offset is not a positive number")
 			page = 0
 		}
 	}

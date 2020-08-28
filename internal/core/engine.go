@@ -26,7 +26,7 @@ type Engine struct {
 }
 
 // Debug print struct with details with logrus ability
-func (e *Engine) Debug(objs ...interface{}) {
+func (e *Engine) Debug2(objs ...interface{}) {
 	for _, v := range objs {
 		parts := make(map[string]interface{}, 2)
 		parts["type"] = fmt.Sprintf("%T", v)
@@ -39,13 +39,13 @@ func (e *Engine) Debug(objs ...interface{}) {
 
 // CheckError print all errors which happened inside the services, mainly they just have
 // an error and a message
-func (e *Engine) CheckError(err error, message string, data ...interface{}) {
+func (e *Engine) CheckError2(err error, message string, data ...interface{}) {
 	if err != nil {
 		e.ServerLog.WithFields(logrus.Fields{
 			"err": err.Error(),
 		}).Error(message)
 		if data != nil {
-			e.Debug(data...)
+			e.Debug2(data...)
 		}
 	}
 }
@@ -58,7 +58,7 @@ func (e *Engine) CheckInfo(err error, message string, data ...interface{}) {
 			"err": err.Error(),
 		}).Info(message)
 		if data != nil {
-			e.Debug(data...)
+			e.Debug2(data...)
 		}
 	}
 }

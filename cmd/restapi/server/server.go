@@ -8,6 +8,7 @@ import (
 	"omega/internal/middleware"
 	"omega/internal/response"
 	"omega/internal/term"
+	"omega/pkg/glog"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -51,7 +52,8 @@ func Start(engine *core.Engine) *gin.Engine {
 		IdleTimeout:  360 * time.Second,
 	}
 
-	engine.ServerLog.Info("Rest-API starting server on ", engine.Envs[core.Addr], ":", engine.Envs[core.Port], "***********************************************************************")
+	// engine.ServerLog.Info("Rest-API starting server on ", engine.Envs[core.Addr], ":", engine.Envs[core.Port], "***********************************************************************")
+	glog.Debug("Rest-API starting server on ", engine.Envs[core.Addr], ":", engine.Envs[core.Port], "***********************************************************************")
 	fmt.Printf("Rest-API starting server on %v:%v\n", engine.Envs[core.Addr], engine.Envs[core.Port])
 	if err := srv.ListenAndServe(); err != nil {
 		log.Fatalln(err)
