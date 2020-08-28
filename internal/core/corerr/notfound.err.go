@@ -1,6 +1,9 @@
 package corerr
 
-import "fmt"
+import (
+	"fmt"
+	"omega/pkg/dict"
+)
 
 type notFound struct {
 	Part  string
@@ -19,4 +22,15 @@ func NewNotFound(part, field, value string) error {
 		field,
 		value,
 	}
+}
+
+func (p CustomError) NotFound(part, field, value, path string) error {
+	return &CustomError{
+		Code:    p.Code,
+		Type:    "Not Found",
+		Title:   "not found happened",
+		Message: dict.T(Record__NotFoundIn_, dict.Ku, field, value, part),
+		Path:    path,
+	}
+
 }

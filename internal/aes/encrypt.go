@@ -2,7 +2,7 @@ package aes
 
 import (
 	"omega/internal/consts"
-	"omega/utils/random"
+	"omega/pkg/random"
 
 	goaes "github.com/syronz/goAES"
 )

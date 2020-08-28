@@ -3,8 +3,10 @@ package response
 import (
 	"net/http"
 	"omega/internal/core"
+	"omega/internal/core/corerr"
 	"omega/internal/term"
 	"omega/pkg/dict"
+	"omega/pkg/glog"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -12,10 +14,11 @@ import (
 
 // Result is a standard output for success and faild requests
 type Result struct {
-	Message string                 `json:"message,omitempty"`
-	Data    interface{}            `json:"data,omitempty"`
-	Error   interface{}            `json:"error,omitempty"`
-	Extra   map[string]interface{} `json:"extra,omitempty"`
+	Message     string                 `json:"message,omitempty"`
+	Data        interface{}            `json:"data,omitempty"`
+	Error       interface{}            `json:"error,omitempty"`
+	Extra       map[string]interface{} `json:"extra,omitempty"`
+	CustomError corerr.CustomError     `json:"custom_error,omitempty"`
 }
 
 // Response holding method related to response
@@ -93,6 +96,12 @@ func (r *Response) JSON(data ...interface{}) {
 		}
 		r.status = errorCast.Status
 
+	case *corerr.CustomError:
+		errorCast := r.Result.Error.(*corerr.CustomError)
+		r.Result.Message = errorCast.Message
+		glog.Debug(errorCast)
+		r.Result.CustomError = *errorCast
+
 	case error:
 		if r.status == 0 {
 			r.status = http.StatusInternalServerError
@@ -142,9 +151,10 @@ func (r *Response) JSON(data ...interface{}) {
 		})
 	} else {
 		r.Context.JSON(r.status, &Result{
-			Message: r.Result.Message,
-			Error:   errText,
-			Data:    finalData,
+			Message:     r.Result.Message,
+			Error:       errText,
+			Data:        finalData,
+			CustomError: r.Result.CustomError,
 		})
 	}
 }

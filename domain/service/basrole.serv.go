@@ -2,7 +2,7 @@ package service
 
 import (
 	"fmt"
-	"net/http"
+	"omega/domain/base"
 	"omega/domain/base/basmodel"
 	"omega/domain/base/basrepo"
 	"omega/internal/core"
@@ -28,13 +28,14 @@ func ProvideBasRoleService(p basrepo.RoleRepo) BasRoleServ {
 }
 
 // FindByID for getting role by it's id
-func (p *BasRoleServ) FindByID(id types.RowID) (role basmodel.Role, err error) {
+func (p *BasRoleServ) FindByID(params param.Param, id types.RowID) (role basmodel.Role, err error) {
 	role, err = p.Repo.FindByID(id)
 	if gorm.IsRecordNotFoundError(err) {
-		err = corerr.NewNotFound("role", "id", id.ToString())
-
+		// err = corerr.NewNotFound("role", "id", id.ToString())
+		err = corerr.New(params.Language, base.Domain, "E231422", err, id).
+			NotFound(basmodel.RolePart, "id", id.ToString(), "users/"+id.ToString())
 	}
-	glog.CheckError(err, fmt.Sprintf("Role with id %v", id))
+	// glog.CheckError(err, fmt.Sprintf("Role with id %v", id))
 
 	return
 }
@@ -91,7 +92,7 @@ func (p *BasRoleServ) Save(role basmodel.Role) (savedRole basmodel.Role, err err
 // Delete role, it is soft delete
 func (p *BasRoleServ) Delete(roleID types.RowID, params param.Param) (role basmodel.Role, err error) {
 
-	if role, err = p.FindByID(roleID); err != nil {
+	if role, err = p.FindByID(params, roleID); err != nil {
 		return
 	}
 
@@ -100,18 +101,6 @@ func (p *BasRoleServ) Delete(roleID types.RowID, params param.Param) (role basmo
 		BasAccessResetFullCache()
 	}
 	return
-}
-
-// HardDelete will delete the role permanently
-func (p *BasRoleServ) HardDelete(roleID types.RowID) error {
-	role, err := p.FindByID(roleID)
-	if err != nil {
-		return core.NewErrorWithStatus(err.Error(), http.StatusNotFound)
-	}
-
-	BasAccessResetFullCache()
-
-	return p.Repo.Delete(role)
 }
 
 // Excel is used for export excel file

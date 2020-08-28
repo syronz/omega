@@ -48,6 +48,10 @@ func Info(data ...interface{}) {
 	logger.Info(data...)
 }
 
+func Error(data ...interface{}) {
+	logger.Error(data...)
+}
+
 func Fatal(data ...interface{}) {
 	logger.Fatal(data...)
 }

@@ -10,6 +10,7 @@ import (
 const (
 	// RoleTable is used inside the repo layer
 	RoleTable = "bas_roles"
+	RolePart  = "role"
 )
 
 // Role model

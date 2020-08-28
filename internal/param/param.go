@@ -2,6 +2,7 @@ package param
 
 import (
 	"omega/internal/types"
+	"omega/pkg/dict"
 )
 
 // Param for describing request's parameter
@@ -10,7 +11,7 @@ type Param struct {
 	Search       string
 	PreCondition string
 	UserID       types.RowID
-	Language     string
+	Language     dict.Language
 }
 
 // Pagination is a struct, contains the fields which affected the front-end pagination

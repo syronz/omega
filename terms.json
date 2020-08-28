@@ -27,7 +27,7 @@
 	"accepted values for type are: %v": { "en": "accepted values for type are: %v", "ku": "datay regapedraw bo type awanan %v", "ar": "accepted values for type are: %v" },
 	"%v is not valid": { "en": "%v is not valid", "ku": "%v halaya", "ar": "%v is not valid" },
 	"invalid id": { "en": "invalid id", "ku": "ideka halaya", "ar": "invalid id" },
-	"record not found": { "en": "record not found", "ku": "record booni nie", "ar": "record not found" },
+	"record %v:%v not found in %v": { "en": "record %v:%v not found in %v", "ku": "recordi %v:%v booni nie la %v", "ar": "record %v:%v not found in %v" },
 	"%v deleted successfully": { "en": "%v deleted successfully", "ku": "%v ba sarkawtuyi delete boo", "ar": "%v deleted successfully" },
 	"list of %v": { "en": "list of %v", "ku": "listi %v", "ar": "list of %v" },
 	"route not found": { "en": "route not found", "ku": "route booni nie", "ar": "al route la moujood" },

@@ -27,10 +27,11 @@ func Get(c *gin.Context, engine *core.Engine, part string) (param Param) {
 		param.UserID = userID.(types.RowID)
 	}
 
-	language, ok := c.Get("LANGUAGE")
-	if ok {
-		param.Language = language.(string)
-	}
+	// language, ok := c.Get("LANGUAGE")
+	// if ok {
+	// 	param.Language = language.(string)
+	// }
+	param.Language = core.GetLang(c, engine)
 
 	return param
 }

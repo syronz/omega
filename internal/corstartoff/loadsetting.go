@@ -1,4 +1,4 @@
-package initiate
+package corstartoff
 
 import (
 	"omega/domain/base/basmodel"

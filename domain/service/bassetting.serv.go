@@ -7,7 +7,7 @@ import (
 	"omega/domain/base/basrepo"
 	"omega/internal/core"
 	"omega/internal/core/coract"
-	"omega/internal/initiate"
+	"omega/internal/corstartoff"
 	"omega/internal/param"
 	"omega/internal/types"
 	"omega/pkg/glog"
@@ -75,7 +75,7 @@ func (p *BasSettingServ) Save(setting basmodel.Setting) (savedSetting basmodel.S
 // Update setting
 func (p *BasSettingServ) Update(setting basmodel.Setting) (savedSetting basmodel.Setting, err error) {
 	savedSetting, err = p.Repo.Update(setting)
-	initiate.LoadSetting(p.Engine)
+	corstartoff.LoadSetting(p.Engine)
 
 	return
 }

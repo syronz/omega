@@ -5,7 +5,7 @@ import (
 	"omega/cmd/restapi/server"
 	"omega/cmd/restapi/startoff"
 	"omega/internal/core"
-	"omega/internal/initiate"
+	"omega/internal/corstartoff"
 	"omega/pkg/dict"
 	"omega/pkg/glog"
 
@@ -23,25 +23,16 @@ func main() {
 		engine.Envs[core.ServerLogLevel],
 		engine.Envs.ToBool(core.ServerLogJSONIndent),
 		true)
-	glog.Debug("hello")
-
-	// log2 := glog.New(engine.Envs[core.APILogFormat],
-	// 	engine.Envs[core.APILogOutput],
-	// 	engine.Envs[core.APILogLevel],
-	// 	engine.Envs.ToBool(core.APILogJSONIndent),
-	// 	true)
 
 	dict.Init(engine.Envs[core.TermsPath])
 
-	// logparam.APILog(engine)
-	// initiate.LoadTerms(engine)
-	initiate.ConnectDB(engine, false)
-	initiate.ConnectActivityDB(engine)
-
+	corstartoff.ConnectDB(engine, false)
+	corstartoff.ConnectActivityDB(engine)
 	startoff.Migrate(engine)
+
 	insertdata.Insert(engine)
 
-	initiate.LoadSetting(engine)
+	corstartoff.LoadSetting(engine)
 
 	server.Start(engine)
 

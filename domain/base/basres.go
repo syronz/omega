@@ -4,6 +4,8 @@ import "omega/internal/types"
 
 // list of resources for base domain
 const (
+	Domain string = "base"
+
 	SupperAccess types.Resource = "supper:access"
 
 	UserWrite types.Resource = "user:write"

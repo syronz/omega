@@ -11,6 +11,7 @@ import (
 	"omega/internal/term"
 	"omega/internal/types"
 	"omega/pkg/excel"
+	"omega/pkg/glog"
 
 	"github.com/gin-gonic/gin"
 )
@@ -40,7 +41,10 @@ func (p *RoleAPI) FindByID(c *gin.Context) {
 		return
 	}
 
-	if role, err = p.Service.FindByID(role.ID); err != nil {
+	params := param.Get(c, p.Engine, thisRoles)
+	glog.Debug(params)
+
+	if role, err = p.Service.FindByID(params, role.ID); err != nil {
 		resp.Status(http.StatusNotFound).Error(err).MessageT(term.Record_Not_Found).JSON()
 		return
 	}
@@ -112,7 +116,9 @@ func (p *RoleAPI) Update(c *gin.Context) {
 		return
 	}
 
-	if roleBefore, err = p.Service.FindByID(role.ID); err != nil {
+	params := param.Get(c, p.Engine, thisRoles)
+
+	if roleBefore, err = p.Service.FindByID(params, role.ID); err != nil {
 		resp.Status(http.StatusNotFound).Error(term.Record_Not_Found).JSON()
 		return
 	}

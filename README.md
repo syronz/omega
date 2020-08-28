@@ -32,16 +32,63 @@ reflex -r '\.go' -s -- sh -c 'go run cmd/omega/main.go'
 ## Logrus levels
 
 ```go
-p.Engine.ServerLog.Trace(err.Error())
-p.Engine.ServerLog.Debug(err.Error())
-p.Engine.ServerLog.Info(err.Error())
-p.Engine.ServerLog.Warn(err.Error())
-p.Engine.ServerLog.Error(err.Error())
-p.Engine.ServerLog.Fatal(err.Error())
-p.Engine.ServerLog.Panic(err.Error())
+plog.ServerLog.Trace(err.Error())
+plog.ServerLog.Debug(err.Error())
+plog.ServerLog.Info(err.Error())
+plog.ServerLog.Warn(err.Error())
+plog.ServerLog.Error(err.Error())
+plog.ServerLog.Fatal(err.Error())
+plog.ServerLog.Panic(err.Error())
 ```
 
 #TODO
 [ ] if types.Resource not used in core it should moved to the base domain, in the future I decide about that
 
 [ ] apilogger should be moved to other place
+
+# Requesed RMS part
+1. inventory import should lock the price for agent
+2. transfer should be like bellow:
+  location a => location b
+  item | QTY | Price | Total
+  -----|-----|-------|-------
+  item1| 32  | 30000 | 960000
+3. expiration date on direct-recharge invoice
+4. bulk direct recharge
+5. finance report: separate direct recharge
+6.
+7. notification or approve management for return items
+8. unique serial for serial base items
+9. special process for updating the phone
+10. enable static ip
+
+
+# Custom Error
+```JSON
+  {
+    "type": "http//link.com/to/order",
+    "title": "duplication",
+    "message": "user with this name already exist",
+    "code": "E321343",
+    "path": "users/32",
+    "invalid-params": [ 
+      {
+        "name": "age",
+        "reason": "must be a positive integer"
+      },
+      {
+        "name": "color",
+        "reason": "must be 'green', 'red' or 'blue'"
+      }
+    ]
+
+{
+  "type": "https://example.com/probs/out-of-credit",
+  "title": "You do not have enough credit.",
+  "detail": "Your current balance is 30, but that costs 50.",
+  "instance": "/account/12345/msgs/abc",
+  "balance": 30,
+  "accounts": ["/account/12345",
+                "/account/67890"]
+}
+```

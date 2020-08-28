@@ -8,10 +8,10 @@ import (
 
 // GetLang return suitable language according to 1.query, 2.JWT, 3.environment
 func GetLang(c *gin.Context, engine *Engine) dict.Language {
-	var langLevel string
+	var langLevel dict.Language
 
 	// priority 4: get from environment
-	langLevel = engine.Envs[DefaultLanguage]
+	langLevel = dict.Language(engine.Envs[DefaultLanguage])
 
 	// priority 3: get lang from company default language in the database
 	// TODO: complete this part
@@ -19,21 +19,21 @@ func GetLang(c *gin.Context, engine *Engine) dict.Language {
 	// priority 2
 	langJWT, ok := c.Get("LANGUAGE")
 	if ok {
-		langLevel = langJWT.(string)
+		langLevel = langJWT.(dict.Language)
 	}
 
 	// priority 1
 	langQuery := c.Query("lang")
 	if langQuery != "" {
-		langLevel = langQuery
+		langLevel = dict.Language(langQuery)
 	}
 
 	switch langLevel {
-	case "en":
+	case dict.En:
 		return dict.En
-	case "ku":
+	case dict.Ku:
 		return dict.Ku
-	case "ar":
+	case dict.Ar:
 		return dict.Ar
 	}
 
