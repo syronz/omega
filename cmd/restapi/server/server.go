@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"omega/cmd/restapi/determine"
 	"omega/internal/core"
 	"omega/internal/middleware"
 	"omega/internal/response"
@@ -39,7 +38,7 @@ func Start(engine *core.Engine) *gin.Engine {
 
 	rg := r.Group("/api/restapi/v1")
 	{
-		determine.Route(*rg, engine)
+		Route(*rg, engine)
 	}
 
 	srv := &http.Server{

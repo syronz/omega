@@ -29,8 +29,7 @@ func ProvideBasRoleService(p basrepo.RoleRepo) BasRoleServ {
 // FindByID for getting role by it's id
 func (p *BasRoleServ) FindByID(id types.RowID) (role basmodel.Role, err error) {
 	role, err = p.Repo.FindByID(id)
-	if gorm.IsRecordNotFoundError(err
-) {
+	if gorm.IsRecordNotFoundError(err) {
 		err = corerr.NewNotFound("role", "id", id.ToString())
 
 	}

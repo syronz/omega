@@ -6,17 +6,14 @@ import "omega/internal/types"
 const (
 	SupperAccess types.Resource = "supper:access"
 
-	UserNames  types.Resource = "user:names"
-	UserWrite  types.Resource = "user:write"
-	UserRead   types.Resource = "user:read"
-	UserReport types.Resource = "user:report"
-	UserExcel  types.Resource = "user:excel"
+	UserWrite types.Resource = "user:write"
+	UserRead  types.Resource = "user:read"
+	UserExcel types.Resource = "user:excel"
 
 	RoleRead  types.Resource = "role:read"
 	RoleWrite types.Resource = "role:write"
 	RoleExcel types.Resource = "role:excel"
 
-	SettingNames types.Resource = "setting:names"
 	SettingRead  types.Resource = "setting:read"
 	SettingWrite types.Resource = "setting:write"
 	SettingExcel types.Resource = "setting:excel"

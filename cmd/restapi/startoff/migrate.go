@@ -1,4 +1,4 @@
-package determine
+package startoff
 
 import (
 	"fmt"

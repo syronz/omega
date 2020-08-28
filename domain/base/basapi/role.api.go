@@ -2,7 +2,7 @@ package basapi
 
 import (
 	"net/http"
-	"omega/domain/base/basevent"
+	"omega/domain/base"
 	"omega/domain/base/basmodel"
 	"omega/domain/service"
 	"omega/internal/core"
@@ -45,7 +45,7 @@ func (p *RoleAPI) FindByID(c *gin.Context) {
 		return
 	}
 
-	resp.Record(basevent.RoleView)
+	resp.Record(base.ViewRole)
 	resp.Status(http.StatusOK).
 		MessageT(term.V_info, thisRole).
 		JSON(role)
@@ -63,7 +63,7 @@ func (p *RoleAPI) List(c *gin.Context) {
 		return
 	}
 
-	resp.Record(basevent.RoleList)
+	resp.Record(base.ListRole)
 	resp.Status(http.StatusOK).
 		MessageT(term.List_of_V, thisRoles).
 		JSON(data)
@@ -87,7 +87,7 @@ func (p *RoleAPI) Create(c *gin.Context) {
 		return
 	}
 
-	resp.Record(basevent.RoleCreate, nil, role)
+	resp.Record(base.CreateRole, nil, role)
 
 	resp.Status(http.StatusOK).
 		MessageT(term.V_created_successfully, thisRole).
@@ -122,7 +122,7 @@ func (p *RoleAPI) Update(c *gin.Context) {
 		return
 	}
 
-	resp.Record(basevent.RoleUpdate, roleBefore, role)
+	resp.Record(base.UpdateRole, roleBefore, role)
 
 	resp.Status(http.StatusOK).
 		MessageT(term.V_updated_successfully, thisRole).
@@ -147,7 +147,7 @@ func (p *RoleAPI) Delete(c *gin.Context) {
 		return
 	}
 
-	resp.Record(basevent.RoleDelete, role)
+	resp.Record(base.DeleteRole, role)
 	resp.Status(http.StatusOK).
 		MessageT(term.V_deleted_successfully, thisRole).
 		JSON()
@@ -190,7 +190,7 @@ func (p *RoleAPI) Excel(c *gin.Context) {
 		return
 	}
 
-	resp.Record(basevent.RoleExcel)
+	resp.Record(base.ExcelRole)
 
 	c.Header("Content-Description", "File Transfer")
 	c.Header("Content-Disposition", "attachment; filename="+downloadName)

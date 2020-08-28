@@ -2,7 +2,7 @@ package basapi
 
 import (
 	"net/http"
-	"omega/domain/base/basevent"
+	"omega/domain/base"
 	"omega/domain/base/basmodel"
 	"omega/domain/service"
 	"omega/internal/core"
@@ -44,7 +44,7 @@ func (p *AuthAPI) Login(c *gin.Context) {
 	userTmp := user
 	userTmp.Extra = nil
 
-	resp.Record(basevent.BasLogin, nil, userTmp)
+	resp.Record(base.BasLogin, nil, userTmp)
 	resp.Status(http.StatusOK).
 		Message(term.User_loged_in_successfully).
 		JSON(user)
@@ -56,7 +56,7 @@ func (p *AuthAPI) Logout(c *gin.Context) {
 	params := param.Get(c, p.Engine, thisUsers)
 	p.Engine.Debug(params.UserID)
 	p.Service.Logout(params)
-	resp.Record(basevent.BasLogout)
+	resp.Record(base.BasLogout)
 	resp.Status(http.StatusOK).
 		Message("user logged out").
 		JSON()

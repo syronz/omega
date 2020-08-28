@@ -2,7 +2,7 @@ package basapi
 
 import (
 	"net/http"
-	"omega/domain/base/basevent"
+	"omega/domain/base"
 	"omega/domain/base/basmodel"
 	"omega/domain/service"
 	"omega/internal/core"
@@ -60,7 +60,7 @@ func (p *ActivityAPI) List(c *gin.Context) {
 		return
 	}
 
-	resp.Record(basevent.ActivityAll)
+	resp.Record(base.AllActivity)
 	resp.Status(http.StatusOK).
 		MessageT(term.List_of_V, thisActivities).
 		JSON(data)

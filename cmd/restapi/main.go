@@ -1,9 +1,9 @@
 package main
 
 import (
-	"omega/cmd/restapi/determine"
 	"omega/cmd/restapi/insertdata"
 	"omega/cmd/restapi/server"
+	"omega/cmd/restapi/startoff"
 	"omega/internal/initiate"
 	"omega/internal/logparam"
 
@@ -14,7 +14,7 @@ import (
 
 func main() {
 
-	engine := determine.LoadEnvs()
+	engine := startoff.LoadEnvs()
 
 	logparam.ServerLog(engine)
 	logparam.APILog(engine)
@@ -22,7 +22,7 @@ func main() {
 	initiate.ConnectDB(engine, false)
 	initiate.ConnectActivityDB(engine)
 
-	determine.Migrate(engine)
+	startoff.Migrate(engine)
 	insertdata.Insert(engine)
 
 	initiate.LoadSetting(engine)

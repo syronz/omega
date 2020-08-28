@@ -1,4 +1,4 @@
-package determine
+package server
 
 import (
 	"omega/domain/base"

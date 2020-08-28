@@ -2,7 +2,7 @@ package basapi
 
 import (
 	"net/http"
-	"omega/domain/base/basevent"
+	"omega/domain/base"
 	"omega/domain/base/basmodel"
 	"omega/domain/service"
 	"omega/internal/core"
@@ -45,7 +45,7 @@ func (p *SettingAPI) FindByID(c *gin.Context) {
 		return
 	}
 
-	resp.Record(basevent.SettingView)
+	resp.Record(base.ViewSetting)
 	resp.Status(http.StatusOK).
 		MessageT(term.V_info, thisSetting).
 		JSON(setting)
@@ -77,7 +77,7 @@ func (p *SettingAPI) List(c *gin.Context) {
 		return
 	}
 
-	resp.Record(basevent.SettingList)
+	resp.Record(base.ListSetting)
 	resp.Status(http.StatusOK).
 		MessageT(term.List_of_V, thisSettings).
 		JSON(data)
@@ -110,7 +110,7 @@ func (p *SettingAPI) Update(c *gin.Context) {
 		return
 	}
 
-	resp.Record(basevent.SettingUpdate, settingBefore, settingUpdated)
+	resp.Record(base.UpdateSetting, settingBefore, settingUpdated)
 
 	resp.Status(http.StatusOK).
 		MessageT(term.V_updated_successfully, thisSetting).
@@ -135,7 +135,7 @@ func (p *SettingAPI) Delete(c *gin.Context) {
 		return
 	}
 
-	resp.Record(basevent.SettingDelete, setting)
+	resp.Record(base.DeleteSetting, setting)
 	resp.Status(http.StatusOK).
 		MessageT(term.V_deleted_successfully, thisSetting).
 		JSON()
@@ -181,7 +181,7 @@ func (p *SettingAPI) Excel(c *gin.Context) {
 		return
 	}
 
-	resp.Record(basevent.SettingExcel)
+	resp.Record(base.ExcelSetting)
 
 	c.Header("Content-Description", "File Transfer")
 	c.Header("Content-Disposition", "attachment; filename="+downloadName)

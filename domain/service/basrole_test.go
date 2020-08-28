@@ -20,7 +20,7 @@ func initRoleTest() (engine *core.Engine, roleServ BasRoleServ) {
 	return
 }
 
-func TestRoleCreate(t *testing.T) {
+func TestCreateRole(t *testing.T) {
 	_, roleServ := initRoleTest()
 	regularParam := getRegularParam("bas_roles.id asc")
 
@@ -83,7 +83,7 @@ func TestRoleCreate(t *testing.T) {
 
 }
 
-func TestRoleUpdate(t *testing.T) {
+func TestUpdateRole(t *testing.T) {
 	_, roleServ := initRoleTest()
 
 	samples := []struct {
@@ -122,7 +122,7 @@ func TestRoleUpdate(t *testing.T) {
 
 }
 
-func TestRoleDelete(t *testing.T) {
+func TestDeleteRole(t *testing.T) {
 	_, roleServ := initRoleTest()
 	regularParam := getRegularParam("bas_roles.id asc")
 
@@ -148,7 +148,7 @@ func TestRoleDelete(t *testing.T) {
 	}
 }
 
-func TestRoleList(t *testing.T) {
+func TestListRole(t *testing.T) {
 	_, roleServ := initRoleTest()
 	regularParam := getRegularParam("bas_roles.id asc")
 	regularParam.Search = "searchTerm1"

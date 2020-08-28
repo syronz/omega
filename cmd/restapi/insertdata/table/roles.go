@@ -22,7 +22,7 @@ func InsertRoles(engine *core.Engine) {
 			Name: "Admin",
 			Resources: types.ResourceJoin([]types.Resource{
 				base.SettingRead, base.SettingWrite, base.SettingExcel,
-				base.UserNames, base.UserWrite, base.UserRead, base.UserReport, base.UserExcel,
+				base.UserWrite, base.UserRead, base.UserExcel,
 				base.ActivitySelf, base.ActivityAll,
 				base.RoleRead, base.RoleWrite, base.RoleExcel,
 				// base.Ping,
@@ -47,7 +47,7 @@ func InsertRoles(engine *core.Engine) {
 			Resources: types.ResourceJoin([]types.Resource{
 				base.SupperAccess,
 				base.SettingRead, base.SettingExcel,
-				base.UserNames, base.UserRead, base.UserReport, base.UserExcel,
+				base.UserRead, base.UserExcel,
 				base.RoleRead, base.RoleExcel,
 			}),
 			Description: "Reade can see all part without changes",

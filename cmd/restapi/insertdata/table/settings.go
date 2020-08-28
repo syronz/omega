@@ -1,7 +1,7 @@
 package table
 
 import (
-	"omega/cmd/restapi/determine/enum/settingfields"
+	"omega/cmd/restapi/enum/settingfields"
 	"omega/domain/base/basmodel"
 	"omega/domain/base/basrepo"
 	"omega/domain/service"

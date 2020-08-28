@@ -19,7 +19,7 @@ func initSettingTest() (engine *core.Engine, settingServ BasSettingServ) {
 	return
 }
 
-func TestSettingUpdate(t *testing.T) {
+func TestUpdateSetting(t *testing.T) {
 	_, settingServ := initSettingTest()
 
 	samples := []struct {
@@ -60,7 +60,7 @@ func TestSettingUpdate(t *testing.T) {
 
 }
 
-func TestSettingList(t *testing.T) {
+func TestListSetting(t *testing.T) {
 	_, settingServ := initSettingTest()
 	regularParam := getRegularParam("settings.id asc")
 	// regularParam.Search = "searchTerm1"
