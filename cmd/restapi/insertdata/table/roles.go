@@ -7,6 +7,7 @@ import (
 	"omega/domain/service"
 	"omega/internal/core"
 	"omega/internal/types"
+	"omega/pkg/glog"
 )
 
 // InsertRoles for add required roles
@@ -56,7 +57,7 @@ func InsertRoles(engine *core.Engine) {
 
 	for _, v := range roles {
 		if _, err := roleService.Save(v); err != nil {
-			engine.ServerLog.Fatal(err)
+			glog.Fatal(err)
 		}
 
 	}

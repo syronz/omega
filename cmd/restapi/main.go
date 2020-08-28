@@ -7,6 +7,7 @@ import (
 	"omega/internal/core"
 	"omega/internal/initiate"
 	"omega/internal/logparam"
+	"omega/pkg/dict"
 	"omega/pkg/glog"
 
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -25,8 +26,10 @@ func main() {
 		true)
 	glog.Debug("hello")
 
+	dict.Init(engine.Envs[core.TermsPath])
+
 	logparam.APILog(engine)
-	initiate.LoadTerms(engine)
+	// initiate.LoadTerms(engine)
 	initiate.ConnectDB(engine, false)
 	initiate.ConnectActivityDB(engine)
 

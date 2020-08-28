@@ -3,6 +3,7 @@ package core
 import (
 	"fmt"
 	"omega/internal/core/lang"
+	"omega/pkg/dict"
 )
 
 // FieldError is a type of error for demonstrate binding problem
@@ -59,17 +60,17 @@ func (b *FieldError) Translate(engine *Engine, lang lang.Language) {
 		switch v.Params.(type) {
 		case []interface{}:
 			params, _ := v.Params.([]interface{})
-			b.Fields[i].Message = engine.T(v.Term, lang, params...)
+			b.Fields[i].Message = dict.T(v.Term, lang, params...)
 		case []string:
 			params, _ := v.Params.([]string)
 			convertedParams := make([]interface{}, len(params))
 			for i, v := range params {
 				convertedParams[i] = v
 			}
-			b.Fields[i].Message = engine.T(v.Term, lang, convertedParams...)
+			b.Fields[i].Message = dict.T(v.Term, lang, convertedParams...)
 
 		default:
-			b.Fields[i].Message = engine.T(v.Term, lang, v.Params)
+			b.Fields[i].Message = dict.T(v.Term, lang, v.Params)
 		}
 	}
 }

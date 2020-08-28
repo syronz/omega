@@ -7,6 +7,7 @@ import (
 	"omega/domain/service"
 	"omega/internal/core"
 	"omega/internal/types"
+	"omega/pkg/glog"
 )
 
 // InsertSettings for add required settings
@@ -64,7 +65,7 @@ func InsertSettings(engine *core.Engine) {
 
 	for _, v := range settings {
 		if _, err := settingService.Save(v); err != nil {
-			engine.ServerLog.Fatal(err)
+			glog.Fatal(err)
 		}
 
 	}

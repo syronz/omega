@@ -1,10 +1,6 @@
 package term
 
-import (
-	"fmt"
-	"omega/internal/core/lang"
-)
-
+/*
 // Term is list of languages
 type Term struct {
 	En string
@@ -94,3 +90,4 @@ func (d *Dict) TranslateArr(strs []string, language lang.Language) []string {
 // 	return str
 
 // }
+*/

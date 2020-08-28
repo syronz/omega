@@ -12,18 +12,13 @@ type Term struct {
 	Ar string
 }
 
-// TermsMap used for holding language identifier as a string and Term Struct as value
-type TermsMap map[string]Term
-
-// Dict is used for holding terms and related methods
-type Dict struct {
-	Terms TermsMap
-}
+// thisTerms used for holding language identifier as a string and Term Struct as value
+var thisTerms map[string]Term
 
 // SafeTranslate doesn't add !!! around word in case of not exist for translate
-func (d *Dict) SafeTranslate(str string, language lang.Language, params ...interface{}) (string, bool) {
+func SafeTranslate(str string, language lang.Language, params ...interface{}) (string, bool) {
 
-	term, ok := d.Terms[str]
+	term, ok := thisTerms[str]
 	if ok {
 		var pattern string
 
@@ -52,10 +47,10 @@ func (d *Dict) SafeTranslate(str string, language lang.Language, params ...inter
 
 }
 
-// Translate the requested term
-func (d *Dict) Translate(str string, language lang.Language, params ...interface{}) string {
+// T the requested term
+func T(str string, language lang.Language, params ...interface{}) string {
 
-	pattern, ok := d.SafeTranslate(str, language, params...)
+	pattern, ok := SafeTranslate(str, language, params...)
 	if ok {
 		return pattern
 	}
@@ -63,6 +58,7 @@ func (d *Dict) Translate(str string, language lang.Language, params ...interface
 	return "!!! " + str + " !!!"
 }
 
+/*
 // TranslateArr get an array and translate all of them and return back an array
 func (d *Dict) TranslateArr(strs []string, language lang.Language) []string {
 	result := make([]string, len(strs))
@@ -94,3 +90,4 @@ func (d *Dict) TranslateArr(strs []string, language lang.Language) []string {
 // 	return str
 
 // }
+*/

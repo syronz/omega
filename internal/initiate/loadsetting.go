@@ -6,6 +6,7 @@ import (
 	"omega/internal/core"
 	"omega/internal/param"
 	"omega/internal/types"
+	"omega/pkg/glog"
 )
 
 // LoadSetting read settings from database and assign them to the engine.Setting
@@ -24,7 +25,8 @@ func LoadSetting(engine *core.Engine) {
 	var settings []basmodel.Setting
 	var err error
 	if settings, err = settingRepo.List(params); err != nil {
-		engine.ServerLog.Fatal(err, "failed in loading settings")
+		// engine.ServerLog.Fatal(err, "failed in loading settings")
+		glog.Fatal(err, "failed in loading settings")
 	}
 
 	engine.Setting = make(map[types.Setting]types.SettingMap, len(settings))

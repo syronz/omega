@@ -23,7 +23,7 @@ func Get(c *gin.Context, engine *core.Engine, part string) (param Param) {
 
 	userID, ok := c.Get("USER_ID")
 	if ok {
-		engine.CheckInfo(err, "User ID is not exist")
+		glog.CheckInfo(err, "User ID is not exist")
 		param.UserID = userID.(types.RowID)
 	}
 

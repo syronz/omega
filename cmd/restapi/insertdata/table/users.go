@@ -7,6 +7,7 @@ import (
 	"omega/domain/service"
 	"omega/internal/core"
 	"omega/internal/core/lang"
+	"omega/pkg/glog"
 )
 
 // InsertUsers for add required users
@@ -39,7 +40,7 @@ func InsertUsers(engine *core.Engine) {
 
 	for _, v := range users {
 		if _, err := userService.Save(v); err != nil {
-			engine.ServerLog.Fatal(err)
+			glog.Fatal(err)
 		}
 	}
 

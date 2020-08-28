@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"omega/internal/core"
 	"omega/internal/term"
+	"omega/pkg/dict"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -55,7 +56,7 @@ func (r *Response) Message(message string) *Response {
 
 // MessageT get a message and params then translate it
 func (r *Response) MessageT(message string, params ...interface{}) *Response {
-	r.Result.Message = r.Engine.T(message,
+	r.Result.Message = dict.T(message,
 		core.GetLang(r.Context, r.Engine), params...)
 	return r
 }
@@ -84,10 +85,10 @@ func (r *Response) JSON(data ...interface{}) {
 		errorCast := r.Result.Error.(*core.ErrorWithStatus)
 		errText = errorCast.Error()
 		if errorCast.Message == "" {
-			r.Result.Message = r.Engine.T(errText.(string),
+			r.Result.Message = dict.T(errText.(string),
 				core.GetLang(r.Context, r.Engine))
 		} else {
-			r.Result.Message = r.Engine.T(errorCast.Message,
+			r.Result.Message = dict.T(errorCast.Message,
 				core.GetLang(r.Context, r.Engine))
 		}
 		r.status = errorCast.Status
@@ -98,11 +99,11 @@ func (r *Response) JSON(data ...interface{}) {
 		}
 		errorCast := r.Result.Error.(error)
 		errText = errorCast.Error()
-		r.Result.Message, _ = r.Engine.SafeT(errText.(string),
+		r.Result.Message, _ = dict.SafeTranslate(errText.(string),
 			core.GetLang(r.Context, r.Engine))
 		if strings.Contains(strings.ToUpper(errText.(string)), "DUPLICATE") {
 			r.status = http.StatusConflict
-			r.Result.Message = r.Engine.T(term.Duplication_happened,
+			r.Result.Message = dict.T(term.Duplication_happened,
 				core.GetLang(r.Context, r.Engine))
 		}
 
@@ -111,14 +112,14 @@ func (r *Response) JSON(data ...interface{}) {
 		}
 
 		if r.status == http.StatusInternalServerError && r.Result.Message == "" {
-			r.Result.Message, _ = r.Engine.SafeT(term.Internal_Error,
+			r.Result.Message, _ = dict.SafeTranslate(term.Internal_Error,
 				core.GetLang(r.Context, r.Engine))
 		}
 
 	case string:
 		errorCast := r.Result.Error.(string)
 		errText = errorCast
-		r.Result.Message = r.Engine.T(errText.(string), core.GetLang(r.Context, r.Engine))
+		r.Result.Message = dict.T(errText.(string), core.GetLang(r.Context, r.Engine))
 
 	default:
 		errText = "unknown ERROR!!!"

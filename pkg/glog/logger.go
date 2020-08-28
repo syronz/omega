@@ -45,3 +45,11 @@ func CheckInfo(err error, message string, data ...interface{}) {
 		}
 	}
 }
+
+func Info(data ...interface{}) {
+	logger.Info(data...)
+}
+
+func Fatal(data ...interface{}) {
+	logger.Fatal(data...)
+}

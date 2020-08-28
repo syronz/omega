@@ -118,7 +118,7 @@ func (p *BasUserServ) CreateRollback(user basmodel.User,
 	if createdUser, err = p.Repo.Create(user); err != nil {
 		// tx.Rollback()
 		p.Engine.DB.Rollback()
-		p.Engine.CheckInfo(err, fmt.Sprintf("Failed in saving user for %+v", user))
+		glog.CheckInfo(err, fmt.Sprintf("Failed in saving user for %+v", user))
 	}
 	// tx.Commit()
 	// p.Engine.DB = original
@@ -155,7 +155,7 @@ func (p *BasUserServ) Save(user basmodel.User) (createdUser basmodel.User, err e
 	}
 
 	if createdUser, err = p.Repo.Update(user); err != nil {
-		p.Engine.CheckInfo(err, fmt.Sprintf("Failed in saving user for %+v", user))
+		glog.CheckInfo(err, fmt.Sprintf("Failed in saving user for %+v", user))
 	}
 
 	BasAccessDeleteFromCache(user.ID)

@@ -27,7 +27,7 @@ func ProvideBasSettingService(p basrepo.SettingRepo) BasSettingServ {
 // FindByID for getting setting by it's id
 func (p *BasSettingServ) FindByID(id types.RowID) (setting basmodel.Setting, err error) {
 	setting, err = p.Repo.FindByID(id)
-	p.Engine.CheckInfo(err, fmt.Sprintf("Setting with id %v", id))
+	glog.CheckInfo(err, fmt.Sprintf("Setting with id %v", id))
 
 	return
 }

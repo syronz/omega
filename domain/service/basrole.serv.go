@@ -66,7 +66,7 @@ func (p *BasRoleServ) Create(role basmodel.Role, params param.Param) (createdRol
 
 	createdRole, err = p.Repo.Create(role)
 
-	p.Engine.CheckInfo(err, fmt.Sprintf("Failed in creating role for %+v", role))
+	glog.CheckInfo(err, fmt.Sprintf("Failed in creating role for %+v", role))
 
 	return
 }
@@ -80,7 +80,7 @@ func (p *BasRoleServ) Save(role basmodel.Role) (savedRole basmodel.Role, err err
 	}
 
 	savedRole, err = p.Repo.Update(role)
-	p.Engine.CheckInfo(err, fmt.Sprintf("Failed in updating role for %+v", role))
+	glog.CheckInfo(err, fmt.Sprintf("Failed in updating role for %+v", role))
 	if err == nil {
 		BasAccessResetFullCache()
 	}
