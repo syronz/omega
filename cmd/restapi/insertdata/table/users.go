@@ -6,7 +6,7 @@ import (
 	"omega/domain/base/basrepo"
 	"omega/domain/service"
 	"omega/internal/core"
-	"omega/internal/core/lang"
+	"omega/pkg/dict"
 	"omega/pkg/glog"
 )
 
@@ -20,21 +20,21 @@ func InsertUsers(engine *core.Engine) {
 			RoleID:   1,
 			Username: engine.Envs[base.AdminUsername],
 			Password: engine.Envs[base.AdminPassword],
-			Language: string(lang.Ku),
+			Language: string(dict.Ku),
 		},
 		{
 			ID:       2,
 			RoleID:   2,
 			Username: "cashier",
 			Password: "cashier",
-			Language: string(lang.En),
+			Language: string(dict.En),
 		},
 		{
 			ID:       3,
 			RoleID:   3,
 			Username: "reader",
 			Password: "reader",
-			Language: string(lang.Ar),
+			Language: string(dict.Ar),
 		},
 	}
 

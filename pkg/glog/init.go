@@ -1,20 +1,10 @@
 package glog
 
 import (
-	"omega/internal/loghook"
 	"os"
 
 	"github.com/sirupsen/logrus"
 )
-
-// LogParam used for parameter between start and initLog
-type LogParam struct {
-	format       string
-	output       string
-	level        string
-	JSONIndent   bool
-	showFileLine bool
-}
 
 func Init(format, output, level string, indent, file bool) {
 	serverLogParam := LogParam{
@@ -28,11 +18,23 @@ func Init(format, output, level string, indent, file bool) {
 	logger = initLog(serverLogParam)
 }
 
+func New(format, output, level string, indent, file bool) *logrus.Logger {
+	serverLogParam := LogParam{
+		format:       format,
+		output:       output,
+		level:        level,
+		JSONIndent:   indent,
+		showFileLine: file, // true means filename and line number should be printed
+	}
+
+	return initLog(serverLogParam)
+}
+
 func initLog(p LogParam) *logrus.Logger {
 	log := logrus.New()
 
 	if p.showFileLine {
-		hook := loghook.NewHook()
+		hook := NewHook()
 		hook.Field = "file"
 		log.AddHook(hook)
 	}

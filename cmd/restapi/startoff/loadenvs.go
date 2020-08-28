@@ -11,7 +11,7 @@ func LoadEnvs() *core.Engine {
 	var engine core.Engine
 	var envs types.Envs
 
-	envs = make(types.Envs, 28)
+	envs = make(types.Envs, 29)
 
 	envs[core.Port] = os.Getenv("VOIPSERVER_CORE_PORT")
 	envs[core.Addr] = os.Getenv("VOIPSERVER_CORE_ADDR")
@@ -34,6 +34,7 @@ func LoadEnvs() *core.Engine {
 	envs[core.DefaultLanguage] = os.Getenv("VOIPSERVER_CORE_DEFAULT_LANGUAGE")
 	envs[core.TranslateInBackend] = os.Getenv("VOIPSERVER_CORE_TRANSLATE_IN_BACKEND")
 	envs[core.ExcelMaxRows] = os.Getenv("VOIPSERVER_CORE_EXCEL_MAX_ROWS")
+	envs[core.GindMode] = os.Getenv("GIN_MODE")
 
 	envs[base.PasswordSalt] = os.Getenv("VOIPSERVER_BASE_PASSWORD_SALT")
 	envs[base.JWTSecretKey] = os.Getenv("VOIPSERVER_BASE_JWT_SECRET_KEY")

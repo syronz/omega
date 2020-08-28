@@ -7,8 +7,6 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-var logger *logrus.Logger
-
 // Debug print struct with details with logrus ability
 func Debug(objs ...interface{}) {
 	for _, v := range objs {

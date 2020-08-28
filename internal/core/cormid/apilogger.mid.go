@@ -1,4 +1,4 @@
-package middleware
+package cormid
 
 import (
 	"bytes"
@@ -29,6 +29,12 @@ func (w bodyLogWriter) Write(b []byte) (int, error) {
 func APILogger(engine *core.Engine) gin.HandlerFunc {
 	var reqID uint
 
+	logger := glog.New(engine.Envs[core.APILogFormat],
+		engine.Envs[core.APILogOutput],
+		engine.Envs[core.APILogLevel],
+		engine.Envs.ToBool(core.APILogJSONIndent),
+		true)
+
 	return func(c *gin.Context) {
 		start := time.Now()
 		buf, _ := ioutil.ReadAll(c.Request.Body)
@@ -41,25 +47,25 @@ func APILogger(engine *core.Engine) gin.HandlerFunc {
 		blw := &bodyLogWriter{body: bytes.NewBufferString(""), ResponseWriter: c.Writer}
 		c.Writer = blw
 
-		logRequest(engine, c, reqID, reqDataReader)
+		logRequest(logger, c, reqID, reqDataReader)
 
 		c.Next()
 
 		latency := int(math.Ceil(float64(time.Since(start).Nanoseconds()) / 1000000.0))
 
-		logResponse(engine, c, latency, blw)
+		logResponse(logger, c, latency, blw)
 
 	}
 }
 
 // Logging Response
-func logRequest(engine *core.Engine, c *gin.Context, reqID uint, reqDataReader io.Reader) {
-	request := getBody(engine, reqDataReader)
+func logRequest(logger *logrus.Logger, c *gin.Context, reqID uint, reqDataReader io.Reader) {
+	request := getBody(reqDataReader)
 	// prevent to save the passwords
 	if strings.Contains(c.Request.URL.Path, "login") {
 		request = nil
 	}
-	engine.APILog.WithFields(logrus.Fields{
+	logger.WithFields(logrus.Fields{
 		"reqID": reqID,
 		// "ip":  c.ClientIP(),
 		"method":     c.Request.Method,
@@ -74,22 +80,22 @@ func logRequest(engine *core.Engine, c *gin.Context, reqID uint, reqDataReader i
 }
 
 // Logging Response
-func logResponse(engine *core.Engine, c *gin.Context, latency int, blw *bodyLogWriter) {
+func logResponse(logger *logrus.Logger, c *gin.Context, latency int, blw *bodyLogWriter) {
 	resID, ok := c.Get("resID")
 	if !ok {
-		glog.Debug("there is no resIndex for element", getBody(engine, blw.body))
+		glog.Debug("there is no resIndex for element", getBody(blw.body))
 	}
-	engine.APILog.WithFields(logrus.Fields{
+	logger.WithFields(logrus.Fields{
 		"resID":       resID,
 		"status":      c.Writer.Status(),
 		"latency":     latency, // time to process
 		"data_length": c.Writer.Size(),
-		"response":    getBody(engine, blw.body),
+		"response":    getBody(blw.body),
 	}).Info("response")
 }
 
 // Read body
-func getBody(engine *core.Engine, reader io.Reader) interface{} {
+func getBody(reader io.Reader) interface{} {
 
 	buf := new(bytes.Buffer)
 	if _, err := buf.ReadFrom(reader); err != nil {

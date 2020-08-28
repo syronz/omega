@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 	"omega/internal/core"
-	"omega/internal/middleware"
+	"omega/internal/core/cormid"
 	"omega/internal/response"
 	"omega/internal/term"
 	"omega/pkg/glog"
@@ -19,7 +19,12 @@ import (
 // Start initiate the server
 func Start(engine *core.Engine) *gin.Engine {
 
-	r := gin.Default()
+	var r *gin.Engine
+	if engine.Envs[core.GindMode] == "debug" {
+		r = gin.Default()
+	} else {
+		r = gin.New()
+	}
 
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},
@@ -32,7 +37,7 @@ func Start(engine *core.Engine) *gin.Engine {
 		},
 		//MaxAge: 12 * time.Hour,
 	}))
-	r.Use(middleware.APILogger(engine))
+	r.Use(cormid.APILogger(engine))
 
 	// No Route "Not Found"
 	notFoundRoute(r, engine)

@@ -2,32 +2,21 @@ package dict
 
 import (
 	"fmt"
-	"omega/internal/core/lang"
 )
 
-// Term is list of languages
-type Term struct {
-	En string
-	Ku string
-	Ar string
-}
-
-// thisTerms used for holding language identifier as a string and Term Struct as value
-var thisTerms map[string]Term
-
 // SafeTranslate doesn't add !!! around word in case of not exist for translate
-func SafeTranslate(str string, language lang.Language, params ...interface{}) (string, bool) {
+func SafeTranslate(str string, language Language, params ...interface{}) (string, bool) {
 
 	term, ok := thisTerms[str]
 	if ok {
 		var pattern string
 
 		switch language {
-		case lang.En:
+		case En:
 			pattern = term.En
-		case lang.Ku:
+		case Ku:
 			pattern = term.Ku
-		case lang.Ar:
+		case Ar:
 			pattern = term.Ar
 		default:
 			pattern = str
@@ -48,7 +37,7 @@ func SafeTranslate(str string, language lang.Language, params ...interface{}) (s
 }
 
 // T the requested term
-func T(str string, language lang.Language, params ...interface{}) string {
+func T(str string, language Language, params ...interface{}) string {
 
 	pattern, ok := SafeTranslate(str, language, params...)
 	if ok {
@@ -60,7 +49,7 @@ func T(str string, language lang.Language, params ...interface{}) string {
 
 /*
 // TranslateArr get an array and translate all of them and return back an array
-func (d *Dict) TranslateArr(strs []string, language lang.Language) []string {
+func (d *Dict) TranslateArr(strs []string, language Language) []string {
 	result := make([]string, len(strs))
 
 	for i, v := range strs {

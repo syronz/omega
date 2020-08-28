@@ -1,4 +1,4 @@
-package lang
+package dict
 
 // Language is used for type of event
 type Language string
@@ -18,3 +18,13 @@ var Languages = []string{
 	string(Ar),
 	string(Fa),
 }
+
+// Term is list of languages
+type Term struct {
+	En string
+	Ku string
+	Ar string
+}
+
+// thisTerms used for holding language identifier as a string and Term Struct as value
+var thisTerms map[string]Term

@@ -3,9 +3,9 @@ package basmodel
 import (
 	"omega/internal/core"
 	"omega/internal/core/action"
-	"omega/internal/core/lang"
 	"omega/internal/term"
 	"omega/internal/types"
+	"omega/pkg/dict"
 	"omega/utils/helper"
 	"regexp"
 	"strings"
@@ -77,9 +77,9 @@ func (p *User) Validate(act action.Action) error {
 			fieldError.Add(term.V_is_required, "Role", "role_id")
 		}
 
-		if ok, _ := helper.Includes(lang.Languages, p.Language); !ok {
+		if ok, _ := helper.Includes(dict.Languages, p.Language); !ok {
 			fieldError.Add(term.Accepted_values_are_v,
-				strings.Join(lang.Languages, ", "), "language")
+				strings.Join(dict.Languages, ", "), "language")
 		}
 
 		if p.Email != "" {

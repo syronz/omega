@@ -2,7 +2,6 @@ package core
 
 import (
 	"fmt"
-	"omega/internal/core/lang"
 	"omega/pkg/dict"
 )
 
@@ -55,7 +54,7 @@ func (b *FieldError) Set(msg, fieldName string) *FieldError {
 }
 
 // Translate create the final output for fields error
-func (b *FieldError) Translate(engine *Engine, lang lang.Language) {
+func (b *FieldError) Translate(engine *Engine, lang dict.Language) {
 	for i, v := range b.Fields {
 		switch v.Params.(type) {
 		case []interface{}:

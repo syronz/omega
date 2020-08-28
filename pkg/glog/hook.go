@@ -1,4 +1,4 @@
-package loghook
+package glog
 
 import (
 	"encoding/json"
