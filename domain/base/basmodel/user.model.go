@@ -16,15 +16,15 @@ const (
 
 // User model
 type User struct {
-	ID        types.RowID   `gorm:"not null;unique" json:"id"`
-	RoleID    types.RowID   `gorm:"index:role_id_idx" json:"role_id"`
-	Username  string        `gorm:"not null;unique" json:"username,omitempty"`
-	Password  string        `gorm:"not null" json:"password,omitempty"`
-	Language  dict.Language `gorm:"type:varchar(2);default:'en'" json:"language,omitempty"`
-	Email     string        `json:"email,omitempty"`
-	Extra     interface{}   `sql:"-" json:"user_extra,omitempty"`
-	Resources string        `sql:"-" json:"resources,omitempty"`
-	Role      string        `sql:"-" json:"role,omitempty"`
+	ID        types.RowID `gorm:"not null;unique" json:"id"`
+	RoleID    types.RowID `gorm:"index:role_id_idx" json:"role_id"`
+	Username  string      `gorm:"not null;unique" json:"username,omitempty"`
+	Password  string      `gorm:"not null" json:"password,omitempty"`
+	Lang      dict.Lang   `gorm:"type:varchar(2);default:'en'" json:"language,omitempty"`
+	Email     string      `json:"email,omitempty"`
+	Extra     interface{} `sql:"-" json:"user_extra,omitempty"`
+	Resources string      `sql:"-" json:"resources,omitempty"`
+	Role      string      `sql:"-" json:"role,omitempty"`
 }
 
 // Pattern returns the search pattern to be used inside the gorm's where
@@ -75,9 +75,9 @@ func (p *User) Validate(act coract.Action) error {
 			fieldError.Add(term.V_is_required, "Role", "role_id")
 		}
 
-		// if ok, _ := helper.Includes(dict.Languages, p.Language); !ok {
+		// if ok, _ := helper.Includes(dict.Langs, p.Lang); !ok {
 		// 	fieldError.Add(term.Accepted_values_are_v,
-		// 		strings.Join(dict.Languages, ", "), "language")
+		// 		strings.Join(dict.Langs, ", "), "language")
 		// }
 
 		if p.Email != "" {

@@ -5,7 +5,7 @@ import (
 )
 
 // SafeTranslate doesn't add !!! around word in case of not exist for translate
-func SafeTranslate(str string, language Language, params ...interface{}) (string, bool) {
+func SafeTranslate(str string, language Lang, params ...interface{}) (string, bool) {
 
 	term, ok := thisTerms[str]
 	if ok {
@@ -37,7 +37,7 @@ func SafeTranslate(str string, language Language, params ...interface{}) (string
 }
 
 // T the requested term
-func T(str string, language Language, params ...interface{}) string {
+func T(str string, language Lang, params ...interface{}) string {
 
 	pattern, ok := SafeTranslate(str, language, params...)
 	if ok {
@@ -49,7 +49,7 @@ func T(str string, language Language, params ...interface{}) string {
 
 /*
 // TranslateArr get an array and translate all of them and return back an array
-func (d *Dict) TranslateArr(strs []string, language Language) []string {
+func (d *Dict) TranslateArr(strs []string, language Lang) []string {
 	result := make([]string, len(strs))
 
 	for i, v := range strs {

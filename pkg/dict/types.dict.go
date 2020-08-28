@@ -1,18 +1,18 @@
 package dict
 
-// Language is used for type of event
-type Language string
+// Lang is used for type of event
+type Lang string
 
-// Language enums
+// Lang enums
 const (
-	En Language = "en"
-	Ku Language = "ku"
-	Ar Language = "ar"
-	Fa Language = "fa"
+	En Lang = "en"
+	Ku Lang = "ku"
+	Ar Lang = "ar"
+	Fa Lang = "fa"
 )
 
-// Languages represents all accepted languages
-var Languages = []string{
+// Langs represents all accepted languages
+var Langs = []string{
 	string(En),
 	string(Ku),
 	string(Ar),

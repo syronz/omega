@@ -29,7 +29,7 @@ func InsertSettings(engine *core.Engine) {
 			FixedCol: types.FixedCol{
 				ID: 2,
 			},
-			Property:    settingfields.DefaultLanguage,
+			Property:    settingfields.DefaultLang,
 			Value:       "ku",
 			Type:        "string",
 			Description: "in case of user JWT not specified this value has been used",

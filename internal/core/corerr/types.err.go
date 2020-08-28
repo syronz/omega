@@ -21,7 +21,7 @@ func (p CustomError) Error() string {
 }
 
 // New is used for initiating an error
-func New(lang dict.Language, domain, code string, err error, data interface{}) CustomError {
+func New(lang dict.Lang, domain, code string, err error, data interface{}) CustomError {
 	glog.Error(err, data)
 	return CustomError{
 		Code:   code,

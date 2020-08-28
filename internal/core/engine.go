@@ -58,11 +58,11 @@ type Engine struct {
 // }
 
 // T Translating the term
-// func (e *Engine) T2(str string, language lang.Language, params ...interface{}) string {
+// func (e *Engine) T2(str string, language lang.Lang, params ...interface{}) string {
 // 	return e.Dict.Translate(str, language, params...)
 // }
 
 // SafeT Translating the term and if the word won't exist return false
-// func (e *Engine) SafeT(str string, language lang.Language, params ...interface{}) (string, bool) {
+// func (e *Engine) SafeT(str string, language lang.Lang, params ...interface{}) (string, bool) {
 // 	return e.Dict.SafeTranslate(str, language, params...)
 // }

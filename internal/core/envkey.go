@@ -21,7 +21,7 @@ const (
 	APILogLevel          types.Envkey = "API_LOG_LEVEL"
 	APILogJSONIndent     types.Envkey = "API_LOG_JSON_INDENT"
 	TermsPath            types.Envkey = "TERMS_PATH"
-	DefaultLanguage      types.Envkey = "DEFAULT_LANGUAGE"
+	DefaultLang          types.Envkey = "DEFAULT_LANGUAGE"
 	TranslateInBackend   types.Envkey = "TRANSLATE_IN_BACKEND"
 	ExcelMaxRows         types.Envkey = "EXCEL_MAX_ROWS"
 	GindMode             types.Envkey = "GIN_MODE"

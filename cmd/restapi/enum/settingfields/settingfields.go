@@ -8,7 +8,7 @@ import (
 const (
 	CompanyName          types.Setting = "company_name"
 	ReceiptHeader        types.Setting = "receipt_header"
-	DefaultLanguage      types.Setting = "default_language"
+	DefaultLang          types.Setting = "default_language"
 	CompanyLogo          types.Setting = "company_logo"
 	InvoiceLogo          types.Setting = "invoice_logo"
 	InvoiceNumberPattern types.Setting = "invoice_number_pattern"
@@ -19,7 +19,7 @@ const (
 var List = []types.Setting{
 	CompanyName,
 	ReceiptHeader,
-	DefaultLanguage,
+	DefaultLang,
 	CompanyLogo,
 	InvoiceLogo,
 	InvoiceNumberPattern,

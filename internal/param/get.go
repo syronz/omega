@@ -29,9 +29,9 @@ func Get(c *gin.Context, engine *core.Engine, part string) (param Param) {
 
 	// language, ok := c.Get("LANGUAGE")
 	// if ok {
-	// 	param.Language = language.(string)
+	// 	param.Lang = language.(string)
 	// }
-	param.Language = core.GetLang(c, engine)
+	param.Lang = core.GetLang(c, engine)
 
 	return param
 }

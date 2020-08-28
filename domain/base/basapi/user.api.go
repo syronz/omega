@@ -199,7 +199,7 @@ func (p *UserAPI) Excel(c *gin.Context) {
 		SetColWidth("L", "M", 20).
 		Active("Summary").
 		Active("Nodes").
-		WriteHeader("ID", "Username", "Role", "Language", "Email")
+		WriteHeader("ID", "Username", "Role", "Lang", "Email")
 
 	for i, v := range users {
 		extra := v.Extra.(map[string]interface{})
@@ -207,7 +207,7 @@ func (p *UserAPI) Excel(c *gin.Context) {
 			v.ID,
 			v.Username,
 			extra["role"],
-			v.Language,
+			v.Lang,
 			v.Email,
 		}
 		err = ex.File.SetSheetRow(ex.ActiveSheet, fmt.Sprint("A", i+2), column)

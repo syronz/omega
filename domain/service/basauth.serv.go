@@ -49,7 +49,7 @@ func (p *BasAuthServ) Login(auth basmodel.Auth) (user basmodel.User, err error) 
 		claims := &types.JWTClaims{
 			Username: auth.Username,
 			ID:       user.ID,
-			Language: user.Language,
+			Lang:     user.Lang,
 			StandardClaims: jwt.StandardClaims{
 				ExpiresAt: expirationTime.Unix(),
 			},
@@ -84,8 +84,8 @@ func (p *BasAuthServ) TemporaryToken(params param.Param) (tmpKey string, err err
 
 	expirationTime := time.Now().Add(consts.TemporaryTokenDuration * time.Second)
 	claims := &types.JWTClaims{
-		ID:       params.UserID,
-		Language: params.Language,
+		ID:   params.UserID,
+		Lang: params.Lang,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},

@@ -52,7 +52,7 @@ func getRegularParam(order string) (params param.Param) {
 	params.Pagination.Offset = 0
 	params.Search = ""
 	params.UserID = 1
-	params.Language = "ku"
+	params.Lang = "ku"
 
 	return params
 }

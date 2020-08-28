@@ -165,7 +165,7 @@ func (p *SettingAPI) Excel(c *gin.Context) {
 		Active("Summary").
 		Active("Nodes").
 		WriteHeader("ID", "Name", "Settingname", "Code", "Status", "Role",
-			"Language", "Type", "Email", "Readonly", "Direction", "Created At",
+			"Lang", "Type", "Email", "Readonly", "Direction", "Created At",
 			"Updated At").
 		SetSheetFields("ID", "Name", "LegalName", "ServerAddress", "Expiration", "Plan",
 			"Detail", "Phone", "Email", "Website", "Type", "Code", "UpdatedAt").

@@ -32,7 +32,7 @@ type TestEnvs struct {
 		APILogLevel          string `json:"api_log_level"`
 		APILogJSONIndent     string `json:"api_log_json_indent"`
 		TermsPath            string `json:"terms_path"`
-		DefaultLanguage      string `json:"default_language"`
+		DefaultLang          string `json:"default_language"`
 		TranslateInBackend   string `json:"translate_in_backend"`
 		ExcelMaxRows         string `json:"excel_max_rows"`
 	} `json:"core"`
@@ -89,7 +89,7 @@ func LoadTestEnv() *core.Engine {
 	envs[core.APILogLevel] = testEnvs.Core.APILogLevel
 	envs[core.APILogJSONIndent] = testEnvs.Core.APILogJSONIndent
 	envs[core.TermsPath] = testEnvs.Core.TermsPath
-	envs[core.DefaultLanguage] = testEnvs.Core.DefaultLanguage
+	envs[core.DefaultLang] = testEnvs.Core.DefaultLang
 	envs[core.TranslateInBackend] = testEnvs.Core.TranslateInBackend
 	envs[core.ExcelMaxRows] = testEnvs.Core.ExcelMaxRows
 

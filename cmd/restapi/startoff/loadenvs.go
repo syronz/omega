@@ -31,7 +31,7 @@ func LoadEnvs() *core.Engine {
 	envs[core.APILogLevel] = os.Getenv("VOIPSERVER_CORE_API_LOG_LEVEL")
 	envs[core.APILogJSONIndent] = os.Getenv("VOIPSERVER_CORE_API_LOG_JSON_INDENT")
 	envs[core.TermsPath] = os.Getenv("VOIPSERVER_CORE_TERMS_PATH")
-	envs[core.DefaultLanguage] = os.Getenv("VOIPSERVER_CORE_DEFAULT_LANGUAGE")
+	envs[core.DefaultLang] = os.Getenv("VOIPSERVER_CORE_DEFAULT_LANGUAGE")
 	envs[core.TranslateInBackend] = os.Getenv("VOIPSERVER_CORE_TRANSLATE_IN_BACKEND")
 	envs[core.ExcelMaxRows] = os.Getenv("VOIPSERVER_CORE_EXCEL_MAX_ROWS")
 	envs[core.GindMode] = os.Getenv("GIN_MODE")
