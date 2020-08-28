@@ -7,12 +7,12 @@ import (
 	"omega/domain/base/basmodel"
 	"omega/domain/base/basrepo"
 	"omega/internal/core"
-	"omega/internal/core/action"
+	"omega/internal/core/coract"
 	"omega/internal/param"
 	"omega/internal/term"
 	"omega/internal/types"
 	"omega/pkg/glog"
-	"omega/utils/password"
+	"omega/pkg/password"
 )
 
 // BasUserServ for injecting auth basrepo
@@ -64,7 +64,7 @@ func (p *BasUserServ) List(params param.Param) (data map[string]interface{}, err
 func (p *BasUserServ) Create(user basmodel.User,
 	params param.Param) (createdUser basmodel.User, err error) {
 
-	if err = user.Validate(action.Create); err != nil {
+	if err = user.Validate(coract.Create); err != nil {
 		glog.CheckError(err, term.Validation_failed)
 		return
 	}
@@ -107,7 +107,7 @@ func (p *BasUserServ) Create(user basmodel.User,
 func (p *BasUserServ) CreateRollback(user basmodel.User,
 	params param.Param) (createdUser basmodel.User, err error) {
 
-	if err = user.Validate(action.Create); err != nil {
+	if err = user.Validate(coract.Create); err != nil {
 		glog.CheckError(err, "Failed in validation")
 		return
 	}
@@ -135,7 +135,7 @@ func (p *BasUserServ) Save(user basmodel.User) (createdUser basmodel.User, err e
 	oldUser, _ = p.FindByID(user.ID)
 
 	if user.ID > 0 {
-		if err = user.Validate(action.Update); err != nil {
+		if err = user.Validate(coract.Update); err != nil {
 			return
 		}
 
@@ -147,7 +147,7 @@ func (p *BasUserServ) Save(user basmodel.User) (createdUser basmodel.User, err e
 		}
 
 	} else {
-		if err = user.Validate(action.Create); err != nil {
+		if err = user.Validate(coract.Create); err != nil {
 			return
 		}
 		user.Password, err = password.Hash(user.Password, p.Engine.Envs[base.PasswordSalt])

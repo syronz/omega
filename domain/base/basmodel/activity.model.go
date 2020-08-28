@@ -1,8 +1,8 @@
 package basmodel
 
 import (
+	"omega/internal/core"
 	"omega/internal/types"
-	"omega/utils/helper"
 )
 
 const (
@@ -50,5 +50,5 @@ func (p Activity) Columns(variate string) (string, error) {
 		"bas_activities.created_at",
 	}
 
-	return helper.CheckColumns(full, variate)
+	return core.CheckColumns(full, variate)
 }

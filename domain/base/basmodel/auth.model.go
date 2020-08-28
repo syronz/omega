@@ -2,7 +2,7 @@ package basmodel
 
 import (
 	"omega/internal/core"
-	"omega/internal/core/action"
+	"omega/internal/core/coract"
 	"omega/internal/term"
 )
 
@@ -13,11 +13,11 @@ type Auth struct {
 }
 
 // Validate check the type of fields for auth
-func (p *Auth) Validate(act action.Action) error {
+func (p *Auth) Validate(act coract.Action) error {
 	fieldError := core.NewFieldError(term.Error_in_login_form)
 
 	switch act {
-	case action.Login:
+	case coract.Login:
 		if p.Username == "" {
 			fieldError.Add(term.V_is_required, "Username", "username")
 		}

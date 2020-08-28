@@ -2,11 +2,11 @@ package basmodel
 
 import (
 	"omega/internal/core"
-	"omega/internal/core/action"
+	"omega/internal/core/coract"
 	"omega/internal/term"
 	"omega/internal/types"
 	"omega/pkg/dict"
-	"omega/utils/helper"
+	"omega/pkg/helper"
 	"regexp"
 	"strings"
 )
@@ -50,15 +50,15 @@ func (p User) Columns(variate string) (string, error) {
 		"bas_roles.name as role",
 	}
 
-	return helper.CheckColumns(full, variate)
+	return core.CheckColumns(full, variate)
 }
 
 // Validate check the type of
-func (p *User) Validate(act action.Action) error {
+func (p *User) Validate(act coract.Action) error {
 	fieldError := core.NewFieldError(term.Error_in_users_form)
 
 	switch act {
-	case action.Create:
+	case coract.Create:
 
 		if len(p.Password) < 8 {
 			params := []interface{}{"password", 7}
@@ -67,7 +67,7 @@ func (p *User) Validate(act action.Action) error {
 
 		fallthrough
 
-	case action.Update:
+	case coract.Update:
 
 		if p.Username == "" {
 			fieldError.Add(term.V_is_required, "Username", "username")

@@ -2,10 +2,9 @@ package basmodel
 
 import (
 	"omega/internal/core"
-	"omega/internal/core/action"
+	"omega/internal/core/coract"
 	"omega/internal/term"
 	"omega/internal/types"
-	"omega/utils/helper"
 )
 
 const (
@@ -40,15 +39,15 @@ func (p Role) Columns(variate string) (string, error) {
 		"bas_roles.updated_at",
 	}
 
-	return helper.CheckColumns(full, variate)
+	return core.CheckColumns(full, variate)
 }
 
 // Validate check the type of fields
-func (p *Role) Validate(act action.Action) error {
+func (p *Role) Validate(act coract.Action) error {
 	fieldError := core.NewFieldError(term.Error_in_role_form)
 
 	switch act {
-	case action.Save:
+	case coract.Save:
 		if p.Name == "" {
 			fieldError.Add(term.V_is_required, "Name", "name")
 		}

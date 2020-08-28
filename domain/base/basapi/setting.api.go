@@ -10,7 +10,7 @@ import (
 	"omega/internal/response"
 	"omega/internal/term"
 	"omega/internal/types"
-	"omega/utils/excel"
+	"omega/pkg/excel"
 
 	"github.com/gin-gonic/gin"
 )

@@ -7,11 +7,11 @@ import (
 	"omega/domain/base/basrepo"
 	"omega/internal/consts"
 	"omega/internal/core"
-	"omega/internal/core/action"
+	"omega/internal/core/coract"
 	"omega/internal/param"
 	"omega/internal/term"
 	"omega/internal/types"
-	"omega/utils/password"
+	"omega/pkg/password"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -29,7 +29,7 @@ func ProvideBasAuthService(engine *core.Engine) BasAuthServ {
 
 // Login User
 func (p *BasAuthServ) Login(auth basmodel.Auth) (user basmodel.User, err error) {
-	if err = auth.Validate(action.Login); err != nil {
+	if err = auth.Validate(coract.Login); err != nil {
 		return
 	}
 

@@ -6,7 +6,7 @@ import (
 	"omega/domain/base/basmodel"
 	"omega/domain/base/basrepo"
 	"omega/internal/core"
-	"omega/internal/core/action"
+	"omega/internal/core/coract"
 	"omega/internal/initiate"
 	"omega/internal/param"
 	"omega/internal/types"
@@ -62,7 +62,7 @@ func (p *BasSettingServ) List(params param.Param) (data map[string]interface{}, 
 
 // Save setting
 func (p *BasSettingServ) Save(setting basmodel.Setting) (savedSetting basmodel.Setting, err error) {
-	if err = setting.Validate(action.Save); err != nil {
+	if err = setting.Validate(coract.Save); err != nil {
 		glog.CheckError(err, "Error in saving setting")
 		return
 	}

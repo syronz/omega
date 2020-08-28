@@ -6,7 +6,7 @@ import (
 	"omega/domain/base/basmodel"
 	"omega/domain/base/basrepo"
 	"omega/internal/core"
-	"omega/internal/core/action"
+	"omega/internal/core/coract"
 	"omega/internal/core/corerr"
 	"omega/internal/param"
 	"omega/internal/term"
@@ -59,7 +59,7 @@ func (p *BasRoleServ) List(params param.Param) (data map[string]interface{}, err
 // Create a role
 func (p *BasRoleServ) Create(role basmodel.Role, params param.Param) (createdRole basmodel.Role, err error) {
 
-	if err = role.Validate(action.Save); err != nil {
+	if err = role.Validate(coract.Save); err != nil {
 		glog.CheckError(err, term.Validation_failed)
 		return
 	}
@@ -74,7 +74,7 @@ func (p *BasRoleServ) Create(role basmodel.Role, params param.Param) (createdRol
 // Save a role, if it is exist update it, if not create it
 func (p *BasRoleServ) Save(role basmodel.Role) (savedRole basmodel.Role, err error) {
 
-	if err = role.Validate(action.Save); err != nil {
+	if err = role.Validate(coract.Save); err != nil {
 		glog.CheckError(err, "validation failed")
 		return
 	}

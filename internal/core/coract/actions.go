@@ -1,6 +1,6 @@
-package action
+package coract
 
-// Action is used for type of event
+// Action is used for type of event and it is shared for all domains
 type Action string
 
 // Action enums
