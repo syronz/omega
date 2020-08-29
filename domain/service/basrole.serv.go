@@ -33,9 +33,13 @@ func (p *BasRoleServ) FindByID(params param.Param, id types.RowID) (role basmode
 	if gorm.IsRecordNotFoundError(err) {
 		err = corerr.New("E1032412", params, base.Domain, err, id).
 			NotFound(basmodel.RolesPart, "id", id, "users/"+id.ToString())
-	} else {
+		return
+	}
+
+	if err != nil {
 		err = corerr.New("E1032423", params, base.Domain, err, id).
 			InternalServer(basmodel.RolesPart, "id", id, "users/"+id.ToString())
+		return
 	}
 	// glog.CheckError(err, fmt.Sprintf("Role with id %v", id))
 
@@ -43,18 +47,19 @@ func (p *BasRoleServ) FindByID(params param.Param, id types.RowID) (role basmode
 }
 
 // List of roles, it support pagination and search and return back count
-func (p *BasRoleServ) List(params param.Param) (data map[string]interface{}, err error) {
+func (p *BasRoleServ) List(params param.Param) (roles []basmodel.Role,
+	count uint64, err error) {
 
-	data = make(map[string]interface{})
+	// data = make(map[string]interface{})
 
-	data["list"], err = p.Repo.List(params)
-	glog.CheckError(err, "roles list")
-	if err != nil {
+	if roles, err = p.Repo.List(params); err != nil {
+		glog.CheckError(err, "roles list")
 		return
 	}
 
-	data["count"], err = p.Repo.Count(params)
-	glog.CheckError(err, "roles count")
+	if count, err = p.Repo.Count(params); err != nil {
+		glog.CheckError(err, "roles count")
+	}
 
 	return
 }
@@ -62,7 +67,7 @@ func (p *BasRoleServ) List(params param.Param) (data map[string]interface{}, err
 // Create a role
 func (p *BasRoleServ) Create(role basmodel.Role, params param.Param) (createdRole basmodel.Role, err error) {
 
-	if err = role.Validate(coract.Save); err != nil {
+	if err = role.Validate(coract.Save, params); err != nil {
 		glog.CheckError(err, term.Validation_failed)
 		return
 	}
@@ -76,8 +81,9 @@ func (p *BasRoleServ) Create(role basmodel.Role, params param.Param) (createdRol
 
 // Save a role, if it is exist update it, if not create it
 func (p *BasRoleServ) Save(role basmodel.Role) (savedRole basmodel.Role, err error) {
+	var params param.Param
 
-	if err = role.Validate(coract.Save); err != nil {
+	if err = role.Validate(coract.Save, params); err != nil {
 		glog.CheckError(err, "validation failed")
 		return
 	}

@@ -31,19 +31,17 @@ func ProvideRoleAPI(c service.BasRoleServ) RoleAPI {
 
 // FindByID is used for fetch a role by it's id
 func (p *RoleAPI) FindByID(c *gin.Context) {
-	resp := response.New(p.Engine, c)
+	resp, params := response.NewParam(p.Engine, c, thisRoles)
 	var err error
 	var role basmodel.Role
 
 	if role.ID, err = types.StrToRowID(c.Param("roleID")); err != nil {
-		resp.Error(term.Invalid_ID).JSON()
+		resp.NotBind("E1015984", base.Domain, err, "ID", "/roles/:roleID")
 		return
 	}
 
-	// params := param.Get(c, p.Engine, thisRoles)
-
-	if role, err = p.Service.FindByID(resp.Params(thisRoles), role.ID); err != nil {
-		resp.Status(http.StatusNotFound).Error(err).MessageT(term.Record_Not_Found).JSON()
+	if role, err = p.Service.FindByID(params, role.ID); err != nil {
+		resp.Error(err).JSON()
 		return
 	}
 
@@ -55,12 +53,12 @@ func (p *RoleAPI) FindByID(c *gin.Context) {
 
 // List of roles
 func (p *RoleAPI) List(c *gin.Context) {
-	resp := response.New(p.Engine, c)
+	resp, params := response.NewParam(p.Engine, c, thisRoles)
 
-	params := param.Get(c, p.Engine, thisRoles)
+	data := make(map[string]interface{})
+	var err error
 
-	data, err := p.Service.List(params)
-	if err != nil {
+	if data["list"], data["count"], err = p.Service.List(params); err != nil {
 		resp.Error(err).JSON()
 		return
 	}

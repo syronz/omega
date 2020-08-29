@@ -5,7 +5,6 @@ import (
 	"omega/domain/base"
 	"omega/domain/base/basmid"
 	"omega/internal/core"
-	"omega/internal/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -26,7 +25,7 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 
 	rg.POST("/login", basAuthAPI.Login)
 
-	rg.Use(middleware.AuthGuard(engine))
+	rg.Use(basmid.AuthGuard(engine))
 	access := basmid.NewAccessMid(engine)
 
 	rg.POST("/logout", basAuthAPI.Logout)

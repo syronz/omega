@@ -49,10 +49,15 @@ plog.ServerLog.Panic(err.Error())
 # Requesed RMS part
 1. inventory import should lock the price for agent
 2. transfer should be like bellow:
+
   location a => location b
+
   item | QTY | Price | Total
+
   -----|-----|-------|-------
+
   item1| 32  | 30000 | 960000
+
 3. expiration date on direct-recharge invoice
 4. bulk direct recharge
 5. finance report: separate direct recharge

@@ -8,18 +8,26 @@ import (
 )
 
 type CustomError struct {
-	Code          string      `json:"code,omitempty"`
-	Type          string      `json:"type,omitempty"`
-	Title         string      `json:"title,omitempty"`
-	Domain        string      `json:"domain,omitempty"`
-	Message       string      `json:"message,omitempty"`
-	MessageParams []string    `json:"message_params,omitempty"`
-	Path          string      `json:"path,omitempty"`
-	InvalidParams interface{} `json:"invalid_params,omitempty"`
-	Lang          dict.Lang   `json:"-"`
-	Status        int         `json:"-"`
-	ErrPanel      string      `json:"error_panel,omitempty"`
-	OriginalError string      `json:"original_error,omitempty"`
+	Code          string    `json:"code,omitempty"`
+	Type          string    `json:"type,omitempty"`
+	Title         string    `json:"title,omitempty"`
+	Domain        string    `json:"domain,omitempty"`
+	Message       string    `json:"message,omitempty"`
+	MessageParams []string  `json:"message_params,omitempty"`
+	Path          string    `json:"path,omitempty"`
+	InvalidParams []Field   `json:"invalid_params,omitempty"`
+	Lang          dict.Lang `json:"-"`
+	Status        int       `json:"-"`
+	ErrPanel      string    `json:"error_panel,omitempty"`
+	OriginalError string    `json:"original_error,omitempty"`
+}
+
+// Field is used as an array inside the FieldError
+type Field struct {
+	Field   string      `json:"field,omitempty"`
+	Message string      `json:"message,omitempty"`
+	Term    string      `json:"term,omitempty"`
+	Params  interface{} `json:"params,omitempty"`
 }
 
 func (p CustomError) Error() string {
@@ -29,12 +37,18 @@ func (p CustomError) Error() string {
 // New is used for initiating an error
 func New(code string, params param.Param, domain string, err error, data ...interface{}) CustomError {
 	glog.Error(fmt.Sprintf("%v: %v, ", code, err), data)
+
+	var errStr string
+	if err != nil {
+		errStr = err.Error()
+	}
+
 	return CustomError{
 		Code:     code,
 		Domain:   domain,
 		Lang:     params.Lang,
 		ErrPanel: params.ErrPanel,
 		// OriginalError:      fmt.Errorf("%w with data %v", err, data),
-		OriginalError: err.Error(),
+		OriginalError: errStr,
 	}
 }

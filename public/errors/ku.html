@@ -88,9 +88,9 @@
         </div>
         <ol>
           <li><a href="#NOT_FOUND">NOT_FOUND (404)</a></li>
+          <li><a href="#NOT_BIND">NOT_BIND (422)</a></li>
           <li><a href="#INTERNAL_SERVER_ERROR">INTERNAL_SERVER_ERROR (500)</a></li>
         </ol>
-
 
         <div class="unit-error">
           <h3 id="NOT_FOUND">NOT_FOUND (404)</h3>
@@ -103,6 +103,16 @@
           <p>
             Check the row to find out if it is delted or not! in case of deleted if you have
             permission you can restore it.
+          </p>
+        </div>
+
+        <div class="unit-error">
+          <h3 id="NOT_BIND">NOT_BIND (422)</h3>
+          <p>
+            Not bind means some data sent in the wrong format, for example instead of string, number
+            has been sent. This error mostly happened in the development phase and if end user faced
+            such thing means front-end (website) not works properly, call developer for fix the
+            issue by sending the error code.
           </p>
         </div>
 

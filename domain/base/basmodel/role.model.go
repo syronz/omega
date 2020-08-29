@@ -1,10 +1,14 @@
 package basmodel
 
 import (
+	"omega/domain/base"
 	"omega/internal/core"
 	"omega/internal/core/coract"
+	"omega/internal/core/corerr"
+	"omega/internal/param"
 	"omega/internal/term"
 	"omega/internal/types"
+	"omega/pkg/glog"
 )
 
 const (
@@ -45,8 +49,10 @@ func (p Role) Columns(variate string) (string, error) {
 }
 
 // Validate check the type of fields
-func (p *Role) Validate(act coract.Action) error {
-	fieldError := core.NewFieldError(term.Error_in_role_form)
+func (p *Role) Validate(act coract.Action, params param.Param) error {
+	// fieldError := core.NewFieldError(term.Error_in_role_form)
+	fieldError := corerr.New("E1062183", params, base.Domain, nil).
+		NewInvalidParams(RolePart, "roles/[roleID]")
 
 	switch act {
 	case coract.Save:
@@ -64,9 +70,13 @@ func (p *Role) Validate(act coract.Action) error {
 
 	}
 
-	if fieldError.HasError() {
-		return fieldError
-	}
-	return nil
+	// if fieldError.HasError() {
+	// 	return fieldError
+	// }
+
+	glog.Debug(fieldError, fieldError.Final())
+
+	// return nil
+	return fieldError.Final()
 
 }

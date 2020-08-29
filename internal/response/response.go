@@ -28,6 +28,7 @@ type Response struct {
 	Engine  *core.Engine
 	Context *gin.Context
 	abort   bool
+	params  param.Param
 }
 
 // New initiate the Response object
@@ -38,9 +39,21 @@ func New(engine *core.Engine, context *gin.Context) *Response {
 	}
 }
 
+// NewParam initiate the Response object and params
+func NewParam(engine *core.Engine, context *gin.Context,
+	part string) (*Response, param.Param) {
+	params := param.Get(context, engine, part)
+	return &Response{
+		Engine:  engine,
+		Context: context,
+		params:  params,
+	}, params
+}
+
 // Params will return the JWT and uri parameters
 func (r *Response) Params(part string) param.Param {
-	return param.Get(r.Context, r.Engine, part)
+	r.params = param.Get(r.Context, r.Engine, part)
+	return r.params
 }
 
 // Error is used for add error to the result

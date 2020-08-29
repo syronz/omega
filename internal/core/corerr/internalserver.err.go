@@ -13,7 +13,7 @@ func (p CustomError) InternalServer(part, field string, value interface{}, path 
 		Code:          p.Code,
 		Type:          p.ErrPanel + string(p.Lang),
 		Title:         dict.T(InternalServerError, p.Lang),
-		Message:       dict.T(Internal_Server_Error_Happened_Please_Aware_Administration_And_Gave_Him_Error_Code, p.Lang),
+		Message:       dict.T(Internal_Server_Error_Happened___, p.Lang),
 		Path:          path,
 		Status:        http.StatusInternalServerError,
 		OriginalError: p.OriginalError,
