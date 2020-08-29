@@ -12,6 +12,7 @@ type Param struct {
 	PreCondition string
 	UserID       types.RowID
 	Lang         dict.Lang
+	ErrPanel     string
 }
 
 // Pagination is a struct, contains the fields which affected the front-end pagination

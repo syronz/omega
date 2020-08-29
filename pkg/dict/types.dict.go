@@ -28,3 +28,4 @@ type Term struct {
 
 // thisTerms used for holding language identifier as a string and Term Struct as value
 var thisTerms map[string]Term
+var translateInBackend bool

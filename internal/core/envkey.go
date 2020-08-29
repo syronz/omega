@@ -24,5 +24,7 @@ const (
 	DefaultLang          types.Envkey = "DEFAULT_LANGUAGE"
 	TranslateInBackend   types.Envkey = "TRANSLATE_IN_BACKEND"
 	ExcelMaxRows         types.Envkey = "EXCEL_MAX_ROWS"
+	ErrPanel             types.Envkey = "ERR_PANEL"
+	OriginalError        types.Envkey = "ORIGINAL_ERROR"
 	GindMode             types.Envkey = "GIN_MODE"
 )

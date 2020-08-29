@@ -33,6 +33,8 @@ func Get(c *gin.Context, engine *core.Engine, part string) (param Param) {
 	// }
 	param.Lang = core.GetLang(c, engine)
 
+	param.ErrPanel = engine.Envs[core.ErrPanel]
+
 	return param
 }
 

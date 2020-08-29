@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"omega/internal/core"
 	"omega/internal/core/corerr"
+	"omega/internal/param"
 	"omega/internal/term"
 	"omega/pkg/dict"
 	"omega/pkg/glog"
@@ -36,6 +37,11 @@ func New(engine *core.Engine, context *gin.Context) *Response {
 		Engine:  engine,
 		Context: context,
 	}
+}
+
+// Params will return the JWT and uri parameters
+func (r *Response) Params(part string) param.Param {
+	return param.Get(r.Context, r.Engine, part)
 }
 
 // Error is used for add error to the result
@@ -101,6 +107,7 @@ func (r *Response) JSON(data ...interface{}) {
 		r.Result.Message = errorCast.Message
 		glog.Debug(errorCast)
 		r.Result.CustomError = *errorCast
+		r.status = errorCast.Status
 
 	case error:
 		if r.status == 0 {

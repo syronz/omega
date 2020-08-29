@@ -6,6 +6,9 @@ import (
 
 // SafeTranslate doesn't add !!! around word in case of not exist for translate
 func SafeTranslate(str string, language Lang, params ...interface{}) (string, bool) {
+	if !translateInBackend {
+		return str, true
+	}
 
 	term, ok := thisTerms[str]
 	if ok {
@@ -38,6 +41,9 @@ func SafeTranslate(str string, language Lang, params ...interface{}) (string, bo
 
 // T the requested term
 func T(str string, language Lang, params ...interface{}) string {
+	if !translateInBackend {
+		return str
+	}
 
 	pattern, ok := SafeTranslate(str, language, params...)
 	if ok {

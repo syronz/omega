@@ -31,9 +31,11 @@ func ProvideBasRoleService(p basrepo.RoleRepo) BasRoleServ {
 func (p *BasRoleServ) FindByID(params param.Param, id types.RowID) (role basmodel.Role, err error) {
 	role, err = p.Repo.FindByID(id)
 	if gorm.IsRecordNotFoundError(err) {
-		// err = corerr.NewNotFound("role", "id", id.ToString())
-		err = corerr.New(params.Lang, base.Domain, "E231422", err, id).
-			NotFound(basmodel.RolePart, "id", id.ToString(), "users/"+id.ToString())
+		err = corerr.New("E1032412", params, base.Domain, err, id).
+			NotFound(basmodel.RolesPart, "id", id, "users/"+id.ToString())
+	} else {
+		err = corerr.New("E1032423", params, base.Domain, err, id).
+			NotFound(basmodel.RolesPart, "id", id, "users/"+id.ToString())
 	}
 	// glog.CheckError(err, fmt.Sprintf("Role with id %v", id))
 

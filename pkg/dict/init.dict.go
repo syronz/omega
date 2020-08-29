@@ -7,13 +7,9 @@ import (
 )
 
 // Init terms and put in the main map
-func Init(termsPath string) {
-	// dict := Dict{}
+func Init(termsPath string, backendTranslation bool) {
 	thisTerms = make(map[string]Term)
-
-	// get current directory
-	// _, dir, _, _ := runtime.Caller(0)
-	// termPath := filepath.Join(filepath.Dir(dir), "../..", "env", "terms.json")
+	translateInBackend = backendTranslation
 
 	file, err := os.Open(termsPath)
 	if err != nil {

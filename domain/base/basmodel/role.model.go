@@ -11,6 +11,7 @@ const (
 	// RoleTable is used inside the repo layer
 	RoleTable = "bas_roles"
 	RolePart  = "role"
+	RolesPart = "roles"
 )
 
 // Role model
