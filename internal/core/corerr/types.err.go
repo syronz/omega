@@ -27,8 +27,8 @@ func (p CustomError) Error() string {
 }
 
 // New is used for initiating an error
-func New(code string, params param.Param, domain string, err error, data interface{}) CustomError {
-	glog.Error(err, data)
+func New(code string, params param.Param, domain string, err error, data ...interface{}) CustomError {
+	glog.Error(fmt.Sprintf("%v: %v, ", code, err), data)
 	return CustomError{
 		Code:     code,
 		Domain:   domain,

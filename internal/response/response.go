@@ -7,7 +7,6 @@ import (
 	"omega/internal/param"
 	"omega/internal/term"
 	"omega/pkg/dict"
-	"omega/pkg/glog"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -105,7 +104,6 @@ func (r *Response) JSON(data ...interface{}) {
 	case *corerr.CustomError:
 		errorCast := r.Result.Error.(*corerr.CustomError)
 		r.Result.Message = errorCast.Message
-		glog.Debug(errorCast)
 		r.Result.CustomError = *errorCast
 		r.status = errorCast.Status
 

@@ -8,6 +8,7 @@ package server
 import (
 	"omega/domain/base/basapi"
 	"omega/domain/base/basrepo"
+	"omega/domain/html/htmapi"
 	"omega/domain/service"
 	"omega/internal/core"
 )
@@ -15,35 +16,40 @@ import (
 // Injectors from wire.go:
 
 func initSettingAPI(e *core.Engine) basapi.SettingAPI {
-	basSettingRepo := basrepo.ProvideSettingRepo(e)
-	basBasSettingServ := service.ProvideBasSettingService(basSettingRepo)
-	basSettingAPI := basapi.ProvideSettingAPI(basBasSettingServ)
-	return basSettingAPI
+	settingRepo := basrepo.ProvideSettingRepo(e)
+	basSettingServ := service.ProvideBasSettingService(settingRepo)
+	settingAPI := basapi.ProvideSettingAPI(basSettingServ)
+	return settingAPI
 }
 
 func initRoleAPI(e *core.Engine) basapi.RoleAPI {
-	basRoleRepo := basrepo.ProvideRoleRepo(e)
-	basBasRoleServ := service.ProvideBasRoleService(basRoleRepo)
-	basRoleAPI := basapi.ProvideRoleAPI(basBasRoleServ)
-	return basRoleAPI
+	roleRepo := basrepo.ProvideRoleRepo(e)
+	basRoleServ := service.ProvideBasRoleService(roleRepo)
+	roleAPI := basapi.ProvideRoleAPI(basRoleServ)
+	return roleAPI
 }
 
 func initUserAPI(engine *core.Engine) basapi.UserAPI {
-	basUserRepo := basrepo.ProvideUserRepo(engine)
-	basBasUserServ := service.ProvideBasUserService(basUserRepo)
-	basUserAPI := basapi.ProvideUserAPI(basBasUserServ)
-	return basUserAPI
+	userRepo := basrepo.ProvideUserRepo(engine)
+	basUserServ := service.ProvideBasUserService(userRepo)
+	userAPI := basapi.ProvideUserAPI(basUserServ)
+	return userAPI
 }
 
 func initAuthAPI(e *core.Engine) basapi.AuthAPI {
-	basBasAuthServ := service.ProvideBasAuthService(e)
-	basAuthAPI := basapi.ProvideAuthAPI(basBasAuthServ)
-	return basAuthAPI
+	basAuthServ := service.ProvideBasAuthService(e)
+	authAPI := basapi.ProvideAuthAPI(basAuthServ)
+	return authAPI
 }
 
 func initActivityAPI(engine *core.Engine) basapi.ActivityAPI {
-	basActivityRepo := basrepo.ProvideActivityRepo(engine)
-	basBasActivityServ := service.ProvideBasActivityService(basActivityRepo)
-	basActivityAPI := basapi.ProvideActivityAPI(basBasActivityServ)
-	return basActivityAPI
+	activityRepo := basrepo.ProvideActivityRepo(engine)
+	basActivityServ := service.ProvideBasActivityService(activityRepo)
+	activityAPI := basapi.ProvideActivityAPI(basActivityServ)
+	return activityAPI
+}
+
+func initErrDescAPI(e *core.Engine) htmapi.ErrDescAPI {
+	errDescAPI := htmapi.GenErrDescAPI(e)
+	return errDescAPI
 }

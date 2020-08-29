@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+  <head>
+    <title> Error List </title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: #e8eaed;
+        font-family: arial;
+      }
+
+      .container {
+        display: grid;
+        grid-template-columns: 1fr 5fr 1fr;
+        grid-gap: 20px;
+        margin-top: 10px;
+      }
+
+      article {
+        grid-column: 2;
+        background-color: white;
+        padding: 20px;
+        border: 1px solid  #b8cacb; 
+        border-radius: 2px;
+        box-shadow: 0 1px 2px 0 rgba(60,64,67,.3), 0 1px 3px 1px rgba(60,64,67,.15);
+      }
+
+      article > .desc{
+        padding: 15px 0;
+      }
+
+      article p {
+        margin: 10px 0;
+      }
+
+      article li {
+        margin: 10px 0;
+      }
+
+      @media only screen and (max-width: 600px) {
+        .container {
+          display: grid;
+          grid-template-columns: 1fr;
+          grid-gap: 20px;
+          margin-top: 10px;
+        }
+        article {
+          grid-column: 1;
+          margin: 0 10px;
+        }
+      }
+
+      article > ol {
+        margin-left: 17px;
+      }
+
+      h1 {
+        margin-bottom: 20px;
+      }
+
+      h3 {
+        color: #48487a;
+        font-weight: 100;
+        grid-column: 1;
+        margin-top: 40px;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container"> 
+      <article>
+        <h1> Errors </h1>
+        <div class="desc">
+          <p>
+            This document identifies some of the error codes and messages that OMEGA's API return.
+          </p>
+          <p>
+            This page lists errors by their HTTP status codes as defined in RFC https://tools.ietf.org/html/rfc7231.
+          </p>
+            Error is follewed standards defined in RFC https://tools.ietf.org/html/rfc7807
+          </p>
+        </div>
+        <ol>
+          <li><a href="#NOT_FOUND">NOT_FOUND (404)</a></li>
+          <li><a href="#INTERNAL_SERVER_ERROR">INTERNAL_SERVER_ERROR (500)</a></li>
+        </ol>
+
+
+        <div class="unit-error">
+          <h3 id="NOT_FOUND">NOT_FOUND (404)</h3>
+          <p>
+            The requested operation failed because a resource associated with the request could not
+            be found. A resource associated with the request could not be found. If you have not
+            used this API in the last two weeks, please re-deploy the App Engine app and try calling
+            it again.
+          </p>
+          <p>
+            Check the row to find out if it is delted or not! in case of deleted if you have
+            permission you can restore it.
+          </p>
+        </div>
+
+        <div class="unit-error">
+          <h3 id="INTERNAL_SERVER_ERROR">INTERNAL_SERVER_ERROR (500)</h3>
+          <p>
+            The request failed due to an internal error. It may because of database connection or
+            other third party not respond properly. In this case just administrator can fix the issue
+            if error remains
+          </p>
+        </div>
+      </article>
+    </div>
+  </body>
+</html>

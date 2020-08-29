@@ -1,6 +1,7 @@
 package server
 
 import (
+	"net/http"
 	"omega/domain/base"
 	"omega/domain/base/basmid"
 	"omega/internal/core"
@@ -17,6 +18,11 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 	basRoleAPI := initRoleAPI(engine)
 	basSettingAPI := initSettingAPI(engine)
 	basActivityAPI := initActivityAPI(engine)
+
+	// Html Domain
+	htmErrDescAPI := initErrDescAPI(engine)
+	rg.GET("/error-list", htmErrDescAPI.List)
+	rg.StaticFS("/public", http.Dir("public"))
 
 	rg.POST("/login", basAuthAPI.Login)
 
@@ -49,14 +55,4 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 
 	rg.GET("/activities", access.Check(base.ActivityAll), basActivityAPI.List)
 
-	//TODO: delete below
-	rg.GET("/ping", access.Check(base.Ping), pong)
-
-}
-
-func pong(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"status":  "posted",
-		"message": "hello diako",
-	})
 }

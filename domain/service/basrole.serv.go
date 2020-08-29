@@ -35,7 +35,7 @@ func (p *BasRoleServ) FindByID(params param.Param, id types.RowID) (role basmode
 			NotFound(basmodel.RolesPart, "id", id, "users/"+id.ToString())
 	} else {
 		err = corerr.New("E1032423", params, base.Domain, err, id).
-			NotFound(basmodel.RolesPart, "id", id, "users/"+id.ToString())
+			InternalServer(basmodel.RolesPart, "id", id, "users/"+id.ToString())
 	}
 	// glog.CheckError(err, fmt.Sprintf("Role with id %v", id))
 
