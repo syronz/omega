@@ -64,7 +64,7 @@ func (p *BasUserServ) List(params param.Param) (data map[string]interface{}, err
 func (p *BasUserServ) Create(user basmodel.User,
 	params param.Param) (createdUser basmodel.User, err error) {
 
-	if err = user.Validate(coract.Create); err != nil {
+	if err = user.Validate(coract.Create, params); err != nil {
 		glog.CheckError(err, term.Validation_failed)
 		return
 	}
@@ -104,38 +104,14 @@ func (p *BasUserServ) Create(user basmodel.User,
 	return
 }
 
-func (p *BasUserServ) CreateRollback(user basmodel.User,
-	params param.Param) (createdUser basmodel.User, err error) {
-
-	if err = user.Validate(coract.Create); err != nil {
-		glog.CheckError(err, "Failed in validation")
-		return
-	}
-
-	user.Password, err = password.Hash(user.Password, p.Engine.Envs[base.PasswordSalt])
-	glog.CheckError(err, fmt.Sprintf("Hashing password failed for %+v", user))
-
-	if createdUser, err = p.Repo.Create(user); err != nil {
-		// tx.Rollback()
-		p.Engine.DB.Rollback()
-		glog.CheckInfo(err, fmt.Sprintf("Failed in saving user for %+v", user))
-	}
-	// tx.Commit()
-	// p.Engine.DB = original
-
-	createdUser.Password = ""
-
-	return
-}
-
 // Save user
-func (p *BasUserServ) Save(user basmodel.User) (createdUser basmodel.User, err error) {
+func (p *BasUserServ) Save(user basmodel.User, params param.Param) (createdUser basmodel.User, err error) {
 
 	var oldUser basmodel.User
 	oldUser, _ = p.FindByID(user.ID)
 
 	if user.ID > 0 {
-		if err = user.Validate(coract.Update); err != nil {
+		if err = user.Validate(coract.Update, params); err != nil {
 			return
 		}
 
@@ -147,7 +123,7 @@ func (p *BasUserServ) Save(user basmodel.User) (createdUser basmodel.User, err e
 		}
 
 	} else {
-		if err = user.Validate(coract.Create); err != nil {
+		if err = user.Validate(coract.Create, params); err != nil {
 			return
 		}
 		user.Password, err = password.Hash(user.Password, p.Engine.Envs[base.PasswordSalt])

@@ -25,7 +25,7 @@ func (p *ActivityRepo) Save(activity basmodel.Activity) (u basmodel.Activity, er
 
 // List of activities
 func (p *ActivityRepo) List(params param.Param) (activities []basmodel.Activity, err error) {
-	columns, err := basmodel.Activity{}.Columns(params.Select)
+	columns, err := basmodel.Activity{}.Columns(params.Select, params)
 	if err != nil {
 		return
 	}

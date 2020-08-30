@@ -36,7 +36,7 @@ func (p *UserRepo) FindByUsername(username string) (user basmodel.User, err erro
 
 // List of users
 func (p *UserRepo) List(params param.Param) (users []basmodel.User, err error) {
-	columns, err := basmodel.User{}.Columns(params.Select)
+	columns, err := basmodel.User{}.Columns(params.Select, params)
 	if err != nil {
 		return
 	}

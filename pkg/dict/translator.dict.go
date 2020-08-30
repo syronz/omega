@@ -5,7 +5,7 @@ import (
 )
 
 // SafeTranslate doesn't add !!! around word in case of not exist for translate
-func SafeTranslate(str string, language Lang, params ...interface{}) (string, bool) {
+func SafeTranslate(str string, lang Lang, params ...interface{}) (string, bool) {
 	if !translateInBackend {
 		return str, true
 	}
@@ -14,7 +14,7 @@ func SafeTranslate(str string, language Lang, params ...interface{}) (string, bo
 	if ok {
 		var pattern string
 
-		switch language {
+		switch lang {
 		case En:
 			pattern = term.En
 		case Ku:
@@ -23,6 +23,15 @@ func SafeTranslate(str string, language Lang, params ...interface{}) (string, bo
 			pattern = term.Ar
 		default:
 			pattern = str
+		}
+
+		// if type of param is dict.R then translate it
+		for i, v := range params {
+			switch v.(type) {
+			case R:
+				term := v.(R)
+				params[i] = T(string(term), lang)
+			}
 		}
 
 		if params != nil {
@@ -40,12 +49,12 @@ func SafeTranslate(str string, language Lang, params ...interface{}) (string, bo
 }
 
 // T the requested term
-func T(str string, language Lang, params ...interface{}) string {
+func T(str string, lang Lang, params ...interface{}) string {
 	if !translateInBackend {
 		return str
 	}
 
-	pattern, ok := SafeTranslate(str, language, params...)
+	pattern, ok := SafeTranslate(str, lang, params...)
 	if ok {
 		return pattern
 	}
@@ -55,11 +64,11 @@ func T(str string, language Lang, params ...interface{}) string {
 
 /*
 // TranslateArr get an array and translate all of them and return back an array
-func (d *Dict) TranslateArr(strs []string, language Lang) []string {
+func (d *Dict) TranslateArr(strs []string, lang Lang) []string {
 	result := make([]string, len(strs))
 
 	for i, v := range strs {
-		result[i] = d.Translate(v, language)
+		result[i] = d.Translate(v, lang)
 	}
 
 	return result
@@ -67,11 +76,11 @@ func (d *Dict) TranslateArr(strs []string, language Lang) []string {
 }
 
 // TODO: should be developed for translate words and params
-// func (d *Dict) safeTranslate(str interface{}, language string) string {
+// func (d *Dict) safeTranslate(str interface{}, lang string) string {
 // 	term, ok := d.Terms[str]
 // 	if ok {
 
-// 		switch language {
+// 		switch lang {
 // 		case "en":
 // 			str = term.En
 // 		case "ku":

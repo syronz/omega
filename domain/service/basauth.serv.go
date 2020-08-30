@@ -28,8 +28,8 @@ func ProvideBasAuthService(engine *core.Engine) BasAuthServ {
 }
 
 // Login User
-func (p *BasAuthServ) Login(auth basmodel.Auth) (user basmodel.User, err error) {
-	if err = auth.Validate(coract.Login); err != nil {
+func (p *BasAuthServ) Login(auth basmodel.Auth, params param.Param) (user basmodel.User, err error) {
+	if err = auth.Validate(coract.Login, params); err != nil {
 		return
 	}
 

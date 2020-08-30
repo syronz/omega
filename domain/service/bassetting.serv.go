@@ -61,8 +61,8 @@ func (p *BasSettingServ) List(params param.Param) (data map[string]interface{}, 
 }
 
 // Save setting
-func (p *BasSettingServ) Save(setting basmodel.Setting) (savedSetting basmodel.Setting, err error) {
-	if err = setting.Validate(coract.Save); err != nil {
+func (p *BasSettingServ) Save(setting basmodel.Setting, params param.Param) (savedSetting basmodel.Setting, err error) {
+	if err = setting.Validate(coract.Save, params); err != nil {
 		glog.CheckError(err, "Error in saving setting")
 		return
 	}
@@ -73,7 +73,12 @@ func (p *BasSettingServ) Save(setting basmodel.Setting) (savedSetting basmodel.S
 }
 
 // Update setting
-func (p *BasSettingServ) Update(setting basmodel.Setting) (savedSetting basmodel.Setting, err error) {
+func (p *BasSettingServ) Update(setting basmodel.Setting, params param.Param) (savedSetting basmodel.Setting, err error) {
+	if err = setting.Validate(coract.Update, params); err != nil {
+		glog.CheckError(err, "Error in saving setting")
+		return
+	}
+
 	savedSetting, err = p.Repo.Update(setting)
 	corstartoff.LoadSetting(p.Engine)
 

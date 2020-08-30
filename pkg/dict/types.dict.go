@@ -3,20 +3,21 @@ package dict
 // Lang is used for type of event
 type Lang string
 
+// R is used for parameters which we want to translated
+type R string
+
 // Lang enums
 const (
 	En Lang = "en"
 	Ku Lang = "ku"
 	Ar Lang = "ar"
-	Fa Lang = "fa"
 )
 
 // Langs represents all accepted languages
-var Langs = []string{
-	string(En),
-	string(Ku),
-	string(Ar),
-	string(Fa),
+var Langs = []Lang{
+	En,
+	Ku,
+	Ar,
 }
 
 // Term is list of languages

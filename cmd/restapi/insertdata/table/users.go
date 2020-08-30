@@ -6,6 +6,7 @@ import (
 	"omega/domain/base/basrepo"
 	"omega/domain/service"
 	"omega/internal/core"
+	"omega/internal/param"
 	"omega/pkg/dict"
 	"omega/pkg/glog"
 )
@@ -14,6 +15,7 @@ import (
 func InsertUsers(engine *core.Engine) {
 	userRepo := basrepo.ProvideUserRepo(engine)
 	userService := service.ProvideBasUserService(userRepo)
+	params := param.Param{}
 	users := []basmodel.User{
 		{
 			ID:       1,
@@ -39,7 +41,7 @@ func InsertUsers(engine *core.Engine) {
 	}
 
 	for _, v := range users {
-		if _, err := userService.Save(v); err != nil {
+		if _, err := userService.Save(v, params); err != nil {
 			glog.Fatal(err)
 		}
 	}

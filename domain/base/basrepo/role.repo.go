@@ -29,7 +29,7 @@ func (p *RoleRepo) FindByID(id types.RowID) (role basmodel.Role, err error) {
 
 // List of roles
 func (p *RoleRepo) List(params param.Param) (roles []basmodel.Role, err error) {
-	columns, err := basmodel.Role{}.Columns(params.Select)
+	columns, err := basmodel.Role{}.Columns(params.Select, params)
 	if err != nil {
 		return
 	}

@@ -1,9 +1,10 @@
 package basmodel
 
 import (
-	"omega/internal/core"
+	"omega/domain/base"
 	"omega/internal/core/coract"
-	"omega/internal/term"
+	"omega/internal/core/corerr"
+	"omega/internal/param"
 )
 
 // Auth model
@@ -13,22 +14,19 @@ type Auth struct {
 }
 
 // Validate check the type of fields for auth
-func (p *Auth) Validate(act coract.Action) error {
-	fieldError := core.NewFieldError(term.Error_in_login_form)
+func (p *Auth) Validate(act coract.Action, params param.Param) error {
+	fieldError := corerr.NewSilent("E1014832", params, base.Domain, nil)
 
 	switch act {
 	case coract.Login:
 		if p.Username == "" {
-			fieldError.Add(term.V_is_required, "Username", "username")
+			fieldError.Add("username", corerr.V_is_required, "username")
 		}
 
 		if p.Password == "" {
-			fieldError.Add(term.V_is_required, "Password", "password")
+			fieldError.Add("password", corerr.V_is_required, "password")
 		}
 	}
 
-	if fieldError.HasError() {
-		return fieldError
-	}
-	return nil
+	return fieldError.Final()
 }

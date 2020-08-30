@@ -2,13 +2,12 @@ package basmodel
 
 import (
 	"omega/domain/base"
-	"omega/internal/core"
 	"omega/internal/core/coract"
 	"omega/internal/core/corerr"
+	"omega/internal/core/validator"
 	"omega/internal/param"
-	"omega/internal/term"
 	"omega/internal/types"
-	"omega/pkg/glog"
+	"omega/pkg/dict"
 )
 
 const (
@@ -35,7 +34,7 @@ func (p Role) Pattern() string {
 }
 
 // Columns return list of total columns according to request, useful for inner joins
-func (p Role) Columns(variate string) (string, error) {
+func (p Role) Columns(variate string, params param.Param) (string, error) {
 	full := []string{
 		"bas_roles.id",
 		"bas_roles.name",
@@ -45,38 +44,30 @@ func (p Role) Columns(variate string) (string, error) {
 		"bas_roles.updated_at",
 	}
 
-	return core.CheckColumns(full, variate)
+	return validator.CheckColumns(full, variate, params)
 }
 
 // Validate check the type of fields
 func (p *Role) Validate(act coract.Action, params param.Param) error {
-	// fieldError := core.NewFieldError(term.Error_in_role_form)
-	fieldError := corerr.New("E1062183", params, base.Domain, nil).
-		NewInvalidParams(RolePart, "roles/[roleID]")
+	fieldError := corerr.NewSilent("E1062183", params, base.Domain, nil).
+		FieldError("roles/[:roleID]", corerr.Validation_failed_for_V, dict.R("role"))
 
 	switch act {
 	case coract.Save:
 		if p.Name == "" {
-			fieldError.Add(term.V_is_required, "Name", "name")
+			fieldError.Add("name", corerr.V_is_required, dict.R("Name"))
 		}
 
 		if len(p.Name) < 5 {
-			fieldError.Add(term.Name_at_least_be_5_character, nil, "name")
+			fieldError.Add("name", corerr.Minimum_accepted_character_for_V_is_V,
+				dict.R("Name"), 5)
 		}
 
 		if p.Resources == "" {
-			fieldError.Add(term.V_is_required, "Resources", "resources")
+			fieldError.Add("resources", corerr.V_is_required, "Resources")
 		}
 
 	}
 
-	// if fieldError.HasError() {
-	// 	return fieldError
-	// }
-
-	glog.Debug(fieldError, fieldError.Final())
-
-	// return nil
 	return fieldError.Final()
-
 }

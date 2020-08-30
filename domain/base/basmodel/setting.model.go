@@ -1,9 +1,11 @@
 package basmodel
 
 import (
-	"omega/internal/core"
+	"omega/domain/base"
 	"omega/internal/core/coract"
-	"omega/internal/term"
+	"omega/internal/core/corerr"
+	"omega/internal/core/validator"
+	"omega/internal/param"
 	"omega/internal/types"
 )
 
@@ -33,7 +35,7 @@ func (p Setting) Pattern() string {
 }
 
 // Columns return list of total columns according to request, useful for inner joins
-func (p Setting) Columns(variate string) (string, error) {
+func (p Setting) Columns(variate string, params param.Param) (string, error) {
 	full := []string{
 		"bas_settings.id",
 		"bas_settings.property",
@@ -42,24 +44,25 @@ func (p Setting) Columns(variate string) (string, error) {
 		"bas_settings.description",
 	}
 
-	return core.CheckColumns(full, variate)
+	return validator.CheckColumns(full, variate, params)
 }
 
 // Validate check the type of fields
-func (p *Setting) Validate(act coract.Action) error {
-	fieldError := core.NewFieldError(term.Error_in_role_form)
+func (p *Setting) Validate(act coract.Action, params param.Param) error {
+	fieldError := corerr.NewSilent("E1072908", params, base.Domain, nil)
 
 	switch act {
 	case coract.Save:
 		if p.Property == "" {
-			fieldError.Add(term.V_is_required, "Property", "property")
+			fieldError.Add("property", corerr.V_is_required, "property")
+		}
+		fallthrough
+	case coract.Update:
+		if p.Value == "" {
+			fieldError.Add("value", corerr.V_is_required, "value")
 		}
 	}
 
-	if fieldError.HasError() {
-		return fieldError
-	}
-
-	return nil
+	return fieldError.Final()
 
 }

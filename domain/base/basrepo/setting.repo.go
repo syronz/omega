@@ -32,7 +32,7 @@ func (p *SettingRepo) FindByProperty(property string) (setting basmodel.Setting,
 
 // List of settings
 func (p *SettingRepo) List(params param.Param) (settings []basmodel.Setting, err error) {
-	columns, err := basmodel.Setting{}.Columns(params.Select)
+	columns, err := basmodel.Setting{}.Columns(params.Select, params)
 	if err != nil {
 		return
 	}
@@ -65,11 +65,13 @@ func (p *SettingRepo) Save(setting basmodel.Setting) (u basmodel.Setting, err er
 
 // Update SettingRepo
 func (p *SettingRepo) Update(setting basmodel.Setting) (u basmodel.Setting, err error) {
+	id := setting.ID
+	setting.ID = 0
 	setting.Property = ""
 	setting.Type = ""
 	setting.Description = ""
-	err = p.Engine.DB.Table(basmodel.SettingTable).Model(&setting).Updates(&setting).Error
-	p.Engine.DB.Table(basmodel.SettingTable).Where("id = ?", setting.ID).Find(&u)
+	err = p.Engine.DB.Table(basmodel.SettingTable).Where("id = ?", id).Updates(&setting).Error
+	p.Engine.DB.Table(basmodel.SettingTable).Where("id = ?", id).Find(&u)
 	return
 }
 

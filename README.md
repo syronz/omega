@@ -44,7 +44,9 @@ plog.ServerLog.Panic(err.Error())
 #TODO
 [ ] if types.Resource not used in core it should moved to the base domain, in the future I decide about that
 
-[ ] apilogger should be moved to other place
+[x] apilogger should be moved to other place
+
+[ ] implement refresh token
 
 # Requesed RMS part
 1. inventory import should lock the price for agent

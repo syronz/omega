@@ -27,14 +27,14 @@ func ProvideAuthAPI(p service.BasAuthServ) AuthAPI {
 // Login auth
 func (p *AuthAPI) Login(c *gin.Context) {
 	var auth basmodel.Auth
-	resp := response.New(p.Engine, c)
+	resp, params := response.NewParam(p.Engine, c, thisUsers)
 
 	if err := c.BindJSON(&auth); err != nil {
 		c.AbortWithStatusJSON(http.StatusNotAcceptable, err)
 		return
 	}
 
-	user, err := p.Service.Login(auth)
+	user, err := p.Service.Login(auth, params)
 	if err != nil {
 		resp.Error(err).JSON()
 		resp.Record(term.Auth_login_failed, auth.Username, len(auth.Password))

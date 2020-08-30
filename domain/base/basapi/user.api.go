@@ -101,6 +101,9 @@ func (p *UserAPI) Create(c *gin.Context) {
 	}
 
 	params := param.Get(c, p.Engine, thisUsers)
+
+	glog.Debug(params, user)
+
 	createdUser, err := p.Service.Create(user, params)
 	if err != nil {
 		resp.Error(err).JSON()
@@ -117,7 +120,7 @@ func (p *UserAPI) Create(c *gin.Context) {
 
 // Update user
 func (p *UserAPI) Update(c *gin.Context) {
-	resp := response.New(p.Engine, c)
+	resp, params := response.NewParam(p.Engine, c, thisUser)
 	var err error
 
 	var user, userBefore, userUpdated basmodel.User
@@ -137,7 +140,7 @@ func (p *UserAPI) Update(c *gin.Context) {
 		return
 	}
 
-	if userUpdated, err = p.Service.Save(user); err != nil {
+	if userUpdated, err = p.Service.Save(user, params); err != nil {
 		resp.Error(err).JSON()
 		return
 	}

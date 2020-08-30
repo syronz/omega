@@ -75,7 +75,7 @@ func (b *FieldError) Translate(engine *Engine, lang dict.Lang) {
 }
 
 // HasError check the length of the Fields
-func (b *FieldError) HasError() bool {
+func (b *FieldError) HasError2() bool {
 	return len(b.Fields) > 0
 }
 
