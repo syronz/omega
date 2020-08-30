@@ -1,6 +1,7 @@
 package table
 
 import (
+	"fmt"
 	"omega/domain/base"
 	"omega/domain/base/basmodel"
 	"omega/domain/base/basrepo"
@@ -42,6 +43,7 @@ func InsertUsers(engine *core.Engine) {
 
 	for _, v := range users {
 		if _, err := userService.Save(v, params); err != nil {
+			fmt.Printf(">>>>>>>>>>>>>>>>> $$$ %+v \n", err)
 			glog.Fatal(err)
 		}
 	}

@@ -26,6 +26,7 @@ func (p *CustomError) SetMsg(msg string, msgParams ...interface{}) *CustomError 
 	p.MessageParams = make([]interface{}, len(msgParams), len(msgParams))
 	copy(p.MessageParams, msgParams)
 	p.Message = dict.T(msg, p.Lang, msgParams...)
+	p.Type = p.ErrPanel + string(p.Lang) + ".html#VALIDATION_FAILED"
 	return p
 }
 

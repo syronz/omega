@@ -58,26 +58,26 @@ func (p User) Columns(variate string, params param.Param) (string, error) {
 
 // Validate check the type of
 func (p *User) Validate(act coract.Action, params param.Param) error {
-	fieldError := corerr.NewSilent("E1052981", params, base.Domain, nil)
-	// FieldError("users/[:userID]", corerr.Validation_failed_for_V, dict.R("user"))
+	fieldError := corerr.NewSilent("E1052981", params, base.Domain, nil).
+		FieldError("users/[:userID]", corerr.Validation_failed_for_V, dict.R("user"))
 
 	switch act {
 	case coract.Create:
-		// fieldError
-		fieldError.SetPath("/users").SetMsg(corerr.Validation_failed_for_V_V, dict.R("create"), dict.R("user"))
+		fieldError.SetPath("/users").
+			SetMsg(corerr.Validation_failed_for_V_V, dict.R("create"), dict.R("user"))
 
-		if len(p.Password) < consts.MinimumPasswordChar {
-			fieldError.Add("password", corerr.Mi
-			nimum_accepted_character_for_V_is_V,
-				dict.R("password"), consts.MinimumPasswordChar)
-		}
-
-		fallthrough
+		validatePassword(fieldError, p.Password)
 
 	case coract.Update:
+		fieldError.SetPath("/users/:userID").
+			SetMsg(corerr.Validation_failed_for_V_V, dict.R("update"), dict.R("user"))
 
-		if p.Username == "" {
-			fieldError.Add("username", corerr.V_is_required, dict.R("Username"))
+		// if p.Username == "" {
+		// 	fieldError.Add("username", corerr.V_is_required, dict.R("Username"))
+		// }
+
+		if p.Password != "" {
+			validatePassword(fieldError, p.Password)
 		}
 
 		if p.RoleID == 0 {
@@ -100,8 +100,16 @@ func (p *User) Validate(act coract.Action, params param.Param) error {
 			}
 		}
 
+	case coract.Save:
+		fieldError.SetPath("/users/:userID").SetMsg(corerr.Validation_failed_for_V_V, dict.R("update"), dict.R("user"))
 	}
 
 	return fieldError.Final()
+}
 
+func validatePassword(fieldError *corerr.CustomError, password string) {
+	if len(password) < consts.MinimumPasswordChar {
+		fieldError.Add("password", corerr.Minimum_accepted_character_for_V_is_V,
+			dict.R("password"), consts.MinimumPasswordChar)
+	}
 }

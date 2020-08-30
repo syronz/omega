@@ -5,7 +5,7 @@
   "payload": {
     "role_id":100000,
     "username": "_RANDOM_NAME_",
-    "password": "1234567890",
+    "password2": "1234567890",
     "language":"ku",
     "email":"sabina.diako@gmail.com"
   }

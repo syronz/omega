@@ -18,7 +18,7 @@ type CustomError struct {
 	InvalidParams []Field       `json:"invalid_params,omitempty"`
 	Lang          dict.Lang     `json:"-"`
 	Status        int           `json:"-"`
-	ErrPanel      string        `json:"error_panel,omitempty"`
+	ErrPanel      string        `json:"-"`
 	OriginalError string        `json:"original_error,omitempty"`
 }
 
@@ -30,7 +30,8 @@ type Field struct {
 }
 
 func (p CustomError) Error() string {
-	return fmt.Sprintf("custom error with code %v", p.Code)
+	return fmt
+	.Sprintf("custom error with code:%v, msg:%q, invalid_params:%v", p.Code, p.Message, p.InvalidParams)
 }
 
 // NewSilent is used for initiating an error
