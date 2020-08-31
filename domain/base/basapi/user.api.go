@@ -33,7 +33,7 @@ func ProvideUserAPI(c service.BasUserServ) UserAPI {
 
 // FindByID is used for fetch a user by it's id
 func (p *UserAPI) FindByID(c *gin.Context) {
-	resp := response.New(p.Engine, c)
+	resp, params := response.NewParam(p.Engine, c, thisUsers)
 	var err error
 	var user basmodel.User
 
@@ -42,7 +42,7 @@ func (p *UserAPI) FindByID(c *gin.Context) {
 		return
 	}
 
-	if user, err = p.Service.FindByID(user.ID); err != nil {
+	if user, err = p.Service.FindByID(user.ID, params); err != nil {
 		resp.Status(http.StatusNotFound).Error(err).MessageT(term.Record_Not_Found).JSON()
 		return
 	}
@@ -102,8 +102,6 @@ func (p *UserAPI) Create(c *gin.Context) {
 
 	params := param.Get(c, p.Engine, thisUsers)
 
-	glog.Debug(params, user)
-
 	createdUser, err := p.Service.Create(user, params)
 	if err != nil {
 		resp.Error(err).JSON()
@@ -135,8 +133,9 @@ func (p *UserAPI) Update(c *gin.Context) {
 		return
 	}
 
-	if userBefore, err = p.Service.FindByID(user.ID); err != nil {
-		resp.Status(http.StatusNotFound).Error(term.Record_Not_Found).JSON()
+	if userBefore, err = p.Service.FindByID(user.ID, params); err != nil {
+		// resp.Status(http.StatusNotFound).Error(term.Record_Not_Found).JSON()
+		resp.Error(err).JSON()
 		return
 	}
 

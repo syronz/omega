@@ -23,12 +23,16 @@ func Debug(objs ...interface{}) {
 // an error and a message
 func CheckError(err error, message string, data ...interface{}) {
 	if err != nil {
-		logger.WithFields(logrus.Fields{
-			"err": err.Error(),
-		}).Error(message)
-		if data != nil {
-			logger.Debug(data...)
-		}
+		LogError(err, message, data...)
+	}
+}
+
+func LogError(err error, message string, data ...interface{}) {
+	logger.WithFields(logrus.Fields{
+		"err": err.Error(),
+	}).Error(message)
+	if data != nil {
+		logger.Debug(data...)
 	}
 }
 

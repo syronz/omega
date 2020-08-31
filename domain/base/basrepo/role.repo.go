@@ -56,7 +56,7 @@ func (p *RoleRepo) Count(params param.Param) (count uint64, err error) {
 // Update RoleRepo
 func (p *RoleRepo) Update(role basmodel.Role) (u basmodel.Role, err error) {
 	err = p.Engine.DB.Table(basmodel.RoleTable).Save(&role).Error
-	p.Engine.DB.Where("id = ?", role.ID).Find(&u)
+	p.Engine.DB.Table(basmodel.RoleTable).Where("id = ?", role.ID).Find(&u)
 	return
 }
 

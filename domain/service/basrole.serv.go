@@ -11,7 +11,9 @@ import (
 	"omega/internal/param"
 	"omega/internal/term"
 	"omega/internal/types"
+	"omega/pkg/dict"
 	"omega/pkg/glog"
+	"strings"
 
 	"github.com/jinzhu/gorm"
 )
@@ -30,15 +32,16 @@ func ProvideBasRoleService(p basrepo.RoleRepo) BasRoleServ {
 // FindByID for getting role by it's id
 func (p *BasRoleServ) FindByID(params param.Param, id types.RowID) (role basmodel.Role, err error) {
 	role, err = p.Repo.FindByID(id)
+
 	if gorm.IsRecordNotFoundError(err) {
 		err = corerr.New("E1032412", params, base.Domain, err, id).
-			NotFound(basmodel.RolesPart, "id", id, "users/"+id.ToString())
+			NotFound(basmodel.RolesPart, "id", id, "roles/"+id.ToString())
 		return
 	}
 
 	if err != nil {
 		err = corerr.New("E1032423", params, base.Domain, err, id).
-			InternalServer(basmodel.RolesPart, "id", id, "users/"+id.ToString())
+			InternalServer("roles/" + id.ToString())
 		return
 	}
 	// glog.CheckError(err, fmt.Sprintf("Role with id %v", id))
@@ -72,9 +75,17 @@ func (p *BasRoleServ) Create(role basmodel.Role, params param.Param) (createdRol
 		return
 	}
 
-	createdRole, err = p.Repo.Create(role)
-
-	glog.CheckInfo(err, fmt.Sprintf("Failed in creating role for %+v", role))
+	if createdRole, err = p.Repo.Create(role); err != nil {
+		if strings.Contains(strings.ToUpper(err.Error()), "DUPLICATE") {
+			err = corerr.New("E1074134", params, base.Domain, err, role).
+				FieldError("/roles", corerr.Duplication_happened).
+				Add("name", corerr.This_V_already_exist, dict.R("name"))
+			return
+		}
+		err = corerr.New("E10522393", params, base.Domain, err, role.Name, role.Resources, role.Description).
+			InternalServer("/roles")
+		return
+	}
 
 	return
 }

@@ -16,4 +16,7 @@ const (
 	Minimum_accepted_character_for_V_is_V = "minimum accepted character for %v is %v"
 	V_is_required                         = "%v is required"
 	Accepted_value_for_V_are_V            = "accepted value for %v are: [%v]"
+	V_not_exist                           = "%v not exist"
+	Duplication_happened                  = "duplication happened"
+	This_V_already_exist                  = "this %v already exist"
 )

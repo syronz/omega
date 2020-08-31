@@ -3,9 +3,9 @@
   "url":"_URL_/users",
   "authorization":"Bearer _TOKEN_",
   "payload": {
-    "role_id":100000,
+    "role_id":1000000,
     "username": "_RANDOM_NAME_",
-    "password2": "1234567890",
+    "password": "1234567890",
     "language":"ku",
     "email":"sabina.diako@gmail.com"
   }

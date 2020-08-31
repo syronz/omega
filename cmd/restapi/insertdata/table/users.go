@@ -29,14 +29,14 @@ func InsertUsers(engine *core.Engine) {
 			ID:       2,
 			RoleID:   2,
 			Username: "cashier",
-			Password: "cashier",
+			Password: "cashier2020",
 			Lang:     dict.En,
 		},
 		{
 			ID:       3,
 			RoleID:   3,
 			Username: "reader",
-			Password: "reader",
+			Password: "reader2020",
 			Lang:     dict.Ar,
 		},
 	}

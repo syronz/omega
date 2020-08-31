@@ -19,6 +19,17 @@ type Engine struct {
 	Setting    map[types.Setting]types.SettingMap
 }
 
+// Clone return an engine just like before
+func (e *Engine) Clone() *Engine {
+	var DB gorm.DB
+	DB = *e.DB
+	var clonedEngine Engine
+	clonedEngine = *e
+	clonedEngine.DB = &DB
+
+	return &clonedEngine
+}
+
 // Debug print struct with details with logrus ability
 // func (e *Engine) Debug2(objs ...interface{}) {
 // 	for _, v := range objs {

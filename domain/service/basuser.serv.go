@@ -8,11 +8,16 @@ import (
 	"omega/domain/base/basrepo"
 	"omega/internal/core"
 	"omega/internal/core/coract"
+	"omega/internal/core/corerr"
 	"omega/internal/param"
 	"omega/internal/term"
 	"omega/internal/types"
+	"omega/pkg/dict"
 	"omega/pkg/glog"
 	"omega/pkg/password"
+	"strings"
+
+	"github.com/jinzhu/gorm"
 )
 
 // BasUserServ for injecting auth basrepo
@@ -27,9 +32,16 @@ func ProvideBasUserService(p basrepo.UserRepo) BasUserServ {
 }
 
 // FindByID for getting user by it's id
-func (p *BasUserServ) FindByID(id types.RowID) (user basmodel.User, err error) {
+func (p *BasUserServ) FindByID(id types.RowID, params param.Param) (user basmodel.User, err error) {
 	if user, err = p.Repo.FindByID(id); err != nil {
-		glog.CheckError(err, fmt.Sprintf("User with id %v", id))
+		if gorm.IsRecordNotFoundError(err) {
+			err = corerr.New("E1039228", params, base.Domain, err, id).
+				NotFound(basmodel.UsersPart, "id", id, "users/"+id.ToString())
+			return
+		}
+
+		err = corerr.New("E1072451", params, base.Domain, err, id).
+			InternalServer("users/" + id.ToString())
 		return
 	}
 
@@ -61,45 +73,51 @@ func (p *BasUserServ) List(params param.Param) (data map[string]interface{}, err
 	return
 }
 
+// Create a new user
 func (p *BasUserServ) Create(user basmodel.User,
 	params param.Param) (createdUser basmodel.User, err error) {
 
 	if err = user.Validate(coract.Create, params); err != nil {
-		glog.CheckError(err, term.Validation_failed)
+		glog.LogError(err, term.Validation_failed)
 		return
 	}
 
-	fmt.Printf(">>>>>>>>>>>>>>>>>>>>>>>>> %p \n", p.Engine)
-	var oo core.Engine
-	reg := p.Engine
-	oo = *p.Engine
-	fmt.Printf(">>>>>>>>>>>>>>>>>>>>>>>>> %p \n", &oo)
-	p.Repo.Engine = &oo
+	clonedEngine := p.Engine.Clone()
+	clonedEngine.DB = clonedEngine.DB.Begin()
 
-	// original := p.Engine.DB
-	tx := p.Engine.DB.Begin()
 	defer func() {
 		if r := recover(); r != nil {
-			tx.Rollback()
-			p.Engine = reg
+			glog.LogError(fmt.Errorf("panic happened in transaction mode for %v", basmodel.UserPart), "rollback recover")
+			clonedEngine.DB.Rollback()
 		}
 	}()
-	// p.Engine.DB = tx
-	oo.DB = tx
 
-	// if createdUser, err = p.CreateRollback(user, params); err != nil {
-	if createdUser, err = p.Repo.Create(user); err != nil {
-		tx.Rollback()
-		p.Engine = reg
+	userRepo := basrepo.ProvideUserRepo(clonedEngine)
+
+	if createdUser, err = userRepo.Create(user); err != nil {
+		if strings.Contains(strings.ToUpper(err.Error()), "FOREIGN") {
+			err = corerr.New("E1055299", params, base.Domain, err, user).
+				FieldError("/users", corerr.V_is_not_valid, dict.R("role")).
+				Add("role_id", corerr.V_not_exist, dict.R("role"))
+			clonedEngine.DB.Rollback()
+			return
+		}
+
+		if strings.Contains(strings.ToUpper(err.Error()), "DUPLICATE") {
+			err = corerr.New("E1085215", params, base.Domain, err, user).
+				FieldError("/users", corerr.Duplication_happened).
+				Add("username", corerr.This_V_already_exist, dict.R("username"))
+			clonedEngine.DB.Rollback()
+			return
+		}
+
+		err = corerr.New("E1087211", params, base.Domain, err, user).
+			InternalServer("/users")
+		clonedEngine.DB.Rollback()
 		return
 	}
 
-	// time.Sleep(30 * time.Second)
-	// tx.Rollback()
-
-	tx.Commit()
-	// p.Engine.DB = original
-	p.Engine = reg
+	clonedEngine.DB.Commit()
 
 	return
 }
@@ -108,7 +126,7 @@ func (p *BasUserServ) Create(user basmodel.User,
 func (p *BasUserServ) Save(user basmodel.User, params param.Param) (createdUser basmodel.User, err error) {
 
 	var oldUser basmodel.User
-	oldUser, _ = p.FindByID(user.ID)
+	oldUser, _ = p.FindByID(user.ID, params)
 
 	if user.ID > 0 {
 		if err = user.Validate(coract.Update, params); err != nil {
@@ -155,7 +173,7 @@ func (p *BasUserServ) Excel(params param.Param) (users []basmodel.User, err erro
 
 // Delete user, it is hard delete, by deleting account related to the user
 func (p *BasUserServ) Delete(userID types.RowID, params param.Param) (user basmodel.User, err error) {
-	if user, err = p.FindByID(userID); err != nil {
+	if user, err = p.FindByID(userID, params); err != nil {
 		return user, core.NewErrorWithStatus(err.Error(), http.StatusNotFound)
 	}
 

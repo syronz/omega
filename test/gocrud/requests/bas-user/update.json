@@ -1,12 +1,12 @@
 {
   "method":"put",
-  "url":"_URL_/users/1017102000000018",
+  "url":"_URL_/users/2",
   "authorization":"Bearer _TOKEN_",
   "payload": {
-    "role_id":1001101000000001,
+    "role_id":1,
     "username2": "_RANDOM_NAME_",
     "username": "white-forest",
     "password": "1234567890",
-    "language":"fa"
+    "language":"ku"
   }
 }

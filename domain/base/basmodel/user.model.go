@@ -17,6 +17,8 @@ import (
 const (
 	// UserTable is used inside the repo layer
 	UserTable = "bas_users"
+	UserPart  = "user"
+	UsersPart = "users"
 )
 
 // User model
@@ -59,57 +61,80 @@ func (p User) Columns(variate string, params param.Param) (string, error) {
 // Validate check the type of
 func (p *User) Validate(act coract.Action, params param.Param) error {
 	fieldError := corerr.NewSilent("E1052981", params, base.Domain, nil).
-		FieldError("users/[:userID]", corerr.Validation_failed_for_V, dict.R("user"))
+		FieldError("/users/[:userID]", corerr.Validation_failed_for_V, dict.R("user"))
 
 	switch act {
 	case coract.Create:
 		fieldError.SetPath("/users").
 			SetMsg(corerr.Validation_failed_for_V_V, dict.R("create"), dict.R("user"))
 
-		validatePassword(fieldError, p.Password)
+		validateUserUsername(fieldError, p.Username)
+		validateUserPassword(fieldError, p.Password)
+		validateUserRole(fieldError, p.RoleID)
+		validateUserLang(fieldError, p.Lang)
+		validateUserEmail(fieldError, p.Email)
 
 	case coract.Update:
 		fieldError.SetPath("/users/:userID").
 			SetMsg(corerr.Validation_failed_for_V_V, dict.R("update"), dict.R("user"))
 
-		// if p.Username == "" {
-		// 	fieldError.Add("username", corerr.V_is_required, dict.R("Username"))
-		// }
+		validateUserUsername(fieldError, p.Username)
 
 		if p.Password != "" {
-			validatePassword(fieldError, p.Password)
+			validateUserPassword(fieldError, p.Password)
 		}
 
-		if p.RoleID == 0 {
-			fieldError.Add("role_id", corerr.V_is_required, dict.R("Role"))
-		}
+		validateUserRole(fieldError, p.RoleID)
+		validateUserLang(fieldError, p.Lang)
+		validateUserEmail(fieldError, p.Email)
 
-		if ok, _ := helper.Includes(dict.Langs, p.Lang); !ok {
-			var str []string
-			for _, v := range dict.Langs {
-				str = append(str, string(v))
-			}
-			fieldError.Add("language", corerr.Accepted_value_for_V_are_V, dict.R("Resource"),
-				strings.Join(str, ", "))
-		}
-
-		if p.Email != "" {
-			re := regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
-			if !re.MatchString(p.Email) {
-				fieldError.Add("email", corerr.V_is_not_valid, dict.R("Email"))
-			}
-		}
-
-	case coract.Save:
-		fieldError.SetPath("/users/:userID").SetMsg(corerr.Validation_failed_for_V_V, dict.R("update"), dict.R("user"))
+	//for default we validate all fields
+	default:
+		validateUserUsername(fieldError, p.Username)
+		validateUserPassword(fieldError, p.Password)
+		validateUserRole(fieldError, p.RoleID)
+		validateUserLang(fieldError, p.Lang)
+		validateUserEmail(fieldError, p.Email)
 	}
 
 	return fieldError.Final()
 }
 
-func validatePassword(fieldError *corerr.CustomError, password string) {
+func validateUserPassword(fieldError *corerr.CustomError, password string) {
 	if len(password) < consts.MinimumPasswordChar {
 		fieldError.Add("password", corerr.Minimum_accepted_character_for_V_is_V,
 			dict.R("password"), consts.MinimumPasswordChar)
+	}
+}
+
+func validateUserUsername(fieldError *corerr.CustomError, username string) {
+	if username == "" {
+		fieldError.Add("username", corerr.V_is_required, dict.R("Username"))
+	}
+}
+
+func validateUserRole(fieldError *corerr.CustomError, roleID types.RowID) {
+	if roleID == 0 {
+		fieldError.Add("role_id", corerr.V_is_required, dict.R("Role"))
+	}
+}
+
+func validateUserLang(fieldError *corerr.CustomError, lang dict.Lang) {
+	if ok, _ := helper.Includes(dict.Langs, lang); !ok {
+		var str []string
+		for _, v := range dict.Langs {
+			str = append(str, string(v))
+		}
+		fieldError.Add("language", corerr.Accepted_value_for_V_are_V, dict.R("Resource"),
+			strings.Join(str, ", "))
+	}
+}
+
+func validateUserEmail(fieldError *corerr.CustomError, email string) {
+	if email != "" {
+		re := regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
+		if !re.MatchString(email) {
+			fieldError.Add("email", corerr.V_is_not_valid, dict.R("Email"))
+		}
 	}
 }

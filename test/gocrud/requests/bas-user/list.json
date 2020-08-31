@@ -2,6 +2,7 @@
   "method":"get",
 	"url":"_URL_/users?search=1001101000000011",
 	"url":"_URL_/users?order_by=bas_users.id&direction=desc&page_size=2",
+	"url":"_URL_/users?order_by=bas_users.id&direction=asc&page_size=5",
 	"authorization":"Bearer _TOKEN_",
 	"payload": {}
 }

@@ -20,6 +20,7 @@ type CustomError struct {
 	Status        int           `json:"-"`
 	ErrPanel      string        `json:"-"`
 	OriginalError string        `json:"original_error,omitempty"`
+	Data          []interface{} `json:"data,omitempty"`
 }
 
 // Field is used as an array inside the FieldError
@@ -30,8 +31,11 @@ type Field struct {
 }
 
 func (p CustomError) Error() string {
-	return fmt
-	.Sprintf("custom error with code:%v, msg:%q, invalid_params:%v", p.Code, p.Message, p.InvalidParams)
+	errStr := fmt.Sprintf("custom error with code:%v, msg:%v", p.Code, p.Message)
+	if len(p.InvalidParams) > 0 {
+		errStr += fmt.Sprintf(", invalid_params:%+v", p.InvalidParams)
+	}
+	return errStr
 }
 
 // NewSilent is used for initiating an error
@@ -42,12 +46,12 @@ func NewSilent(code string, params param.Param, domain string, err error, data .
 	}
 
 	return CustomError{
-		Code:     code,
-		Domain:   domain,
-		Lang:     params.Lang,
-		ErrPanel: params.ErrPanel,
-		// OriginalError:      fmt.Errorf("%w with data %v", err, data),
+		Code:          code,
+		Domain:        domain,
+		Lang:          params.Lang,
+		ErrPanel:      params.ErrPanel,
 		OriginalError: errStr,
+		Data:          data,
 	}
 }
 
