@@ -44,7 +44,7 @@
 	"error in saving company": { "en": "error in saving company", "ku": "hala la save krdni compania", "ar": "error in saving company" },
 	"error in saving node": { "en": "error in saving node", "ku": "hala la save krdni liq", "ar": "error in saving node" },
 	"error in account's url": { "en": "error in account's url", "ku": "hala la urli account daya", "ar": "error in account's url" },
-	"error in account's fomr": { "en": "error in account's fomr", "ku": "hala la formi account daya", "ar": "error in account's fomr" },
+	"error in account's form": { "en": "error in account's form", "ku": "hala la formi account daya", "ar": "error in account's form" },
 	"accepted values are: %v": { "en": "accepted values are: %v", "ku": "data qabul kraw awanan %v", "ar": "accepted values are: %v" },
 	"error in deleting user": { "en": "error in deleting user", "ku": "hala la delete krdni user", "ar": "error in deleting user" },
 	"error in deleting account": { "en": "error in deleting account", "ku": "hala la delete krdni account", "ar": "error in deleting account" },

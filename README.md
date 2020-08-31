@@ -12,6 +12,7 @@
 [![GoDoc](https://godoc.org/github.com/syronz/omega?status.png)](https://godoc.org/github.com/syronz/omega)
 [![MIT license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
 
+good day Mr. analysing excuze
 Simple app for analyzing golnag clean design.
 Inspired by
 
