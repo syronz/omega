@@ -1,11 +1,16 @@
 package basrepo
 
 import (
+	// "github.com/cockroachdb/errors"
+	"omega/domain/base"
 	"omega/domain/base/basmodel"
 	"omega/internal/core"
+	// "omega/internal/core/corerr"
 	"omega/internal/param"
 	"omega/internal/search"
 	"omega/internal/types"
+	"omega/pkg/chainerr"
+	"strings"
 )
 
 // UserRepo for injecting engine
@@ -72,6 +77,10 @@ func (p *UserRepo) Update(user basmodel.User) (u basmodel.User, err error) {
 // Create UserRepo
 func (p *UserRepo) Create(user basmodel.User) (u basmodel.User, err error) {
 	err = p.Engine.DB.Table(basmodel.UserTable).Create(&user).Scan(&u).Error
+	if strings.Contains(strings.ToUpper(err.Error()), "FOREIGN") {
+		err = chainerr.NewForeignKey(err, base.Domain)
+		// err = chainerr.AddMessage(err, corerr.V_is_not_valid, "role")
+	}
 	return
 }
 

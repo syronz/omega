@@ -95,10 +95,12 @@ func (p *BasUserServ) Create(user basmodel.User,
 	userRepo := basrepo.ProvideUserRepo(clonedEngine)
 
 	if createdUser, err = userRepo.Create(user); err != nil {
+		// err = chainerr.AddCode(err, "E1055299")
+
 		if strings.Contains(strings.ToUpper(err.Error()), "FOREIGN") {
-			err = corerr.New("E1055299", params, base.Domain, err, user).
-				FieldError("/users", corerr.V_is_not_valid, dict.R("role")).
-				Add("role_id", corerr.V_not_exist, dict.R("role"))
+			// err = corerr.New("E1055299", params, base.Domain, err, user).
+			// 	FieldError("/users", corerr.V_is_not_valid, dict.R("role")).
+			// 	Add("role_id", corerr.V_not_exist, dict.R("role"))
 			clonedEngine.DB.Rollback()
 			return
 		}
