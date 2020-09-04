@@ -1,13 +1,10 @@
 package basmodel
 
 import (
-	"omega/domain/base"
 	"omega/internal/core/coract"
-	"omega/internal/core/corerr"
 	"omega/internal/core/validator"
 	"omega/internal/param"
 	"omega/internal/types"
-	"omega/pkg/dict"
 )
 
 const (
@@ -49,25 +46,26 @@ func (p Role) Columns(variate string, params param.Param) (string, error) {
 
 // Validate check the type of fields
 func (p *Role) Validate(act coract.Action, params param.Param) error {
-	fieldError := corerr.NewSilent("E1062183", params, base.Domain, nil).
-		FieldError("roles/[:roleID]", corerr.Validation_failed_for_V, dict.R("role"))
+	// fieldError := corerr.NewSilent("E1062183", params, base.Domain, nil).
+	// 	FieldError("roles/[:roleID]", corerr.Validation_failed_for_V, dict.R("role"))
 
-	switch act {
-	case coract.Save:
-		if p.Name == "" {
-			fieldError.Add("name", corerr.V_is_required, dict.R("Name"))
-		}
+	// switch act {
+	// case coract.Save:
+	// 	if p.Name == "" {
+	// 		fieldError.Add("name", corerr.V_is_required, dict.R("Name"))
+	// 	}
 
-		if len(p.Name) < 5 {
-			fieldError.Add("name", corerr.Minimum_accepted_character_for_V_is_V,
-				dict.R("Name"), 5)
-		}
+	// 	if len(p.Name) < 5 {
+	// 		fieldError.Add("name", corerr.Minimum_accepted_character_for_V_is_V,
+	// 			dict.R("Name"), 5)
+	// 	}
 
-		if p.Resources == "" {
-			fieldError.Add("resources", corerr.V_is_required, "Resources")
-		}
+	// 	if p.Resources == "" {
+	// 		fieldError.Add("resources", corerr.V_is_required, "Resources")
+	// 	}
 
-	}
+	// }
 
-	return fieldError.Final()
+	// return fieldError.Final()
+	return nil
 }

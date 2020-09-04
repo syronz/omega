@@ -11,7 +11,6 @@ import (
 	"omega/internal/response"
 	"omega/internal/term"
 	"omega/internal/types"
-	"omega/pkg/chainerr"
 	"omega/pkg/excel"
 	"omega/pkg/glog"
 
@@ -105,7 +104,6 @@ func (p *UserAPI) Create(c *gin.Context) {
 
 	createdUser, err := p.Service.Create(user, params)
 	if err != nil {
-		err = chainerr.AddPath(err, "/users")
 		resp.Error(err).JSON()
 		return
 	}

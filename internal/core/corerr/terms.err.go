@@ -17,6 +17,6 @@ const (
 	V_is_required                         = "%v is required"
 	Accepted_value_for_V_are_V            = "accepted value for %v are: [%v]"
 	V_not_exist                           = "%v not exist"
-	Duplication_happened                  = "duplication happened"
+	DuplicationHappened                   = "duplication happened"
 	This_V_already_exist                  = "this %v already exist"
 )

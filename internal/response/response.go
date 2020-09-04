@@ -1,24 +1,22 @@
 package response
 
 import (
-	"net/http"
+	"errors"
 	"omega/internal/core"
-	"omega/internal/core/corerr"
 	"omega/internal/param"
-	"omega/internal/term"
 	"omega/pkg/dict"
-	"strings"
+	"omega/pkg/limberr"
 
 	"github.com/gin-gonic/gin"
 )
 
 // Result is a standard output for success and faild requests
 type Result struct {
-	Message     string                 `json:"message,omitempty"`
-	Data        interface{}            `json:"data,omitempty"`
-	Error       interface{}            `json:"error,omitempty"`
-	Extra       map[string]interface{} `json:"extra,omitempty"`
-	CustomError corerr.CustomError     `json:"custom_error,omitempty"`
+	Message string                 `json:"message,omitempty"`
+	Data    interface{}            `json:"data,omitempty"`
+	Error   error                  `json:"error,omitempty"`
+	Extra   map[string]interface{} `json:"extra,omitempty"`
+	// CustomError corerr.CustomError     `json:"custom_error,omitempty"`
 }
 
 // Response holding method related to response
@@ -57,8 +55,13 @@ func (r *Response) Params(part string) param.Param {
 }
 
 // Error is used for add error to the result
-func (r *Response) Error(error interface{}, data ...interface{}) *Response {
-	r.Result.Error = error
+func (r *Response) Error(err interface{}, data ...interface{}) *Response {
+	if errCast, ok := err.(string); ok {
+		r.Result.Error = errors.New(errCast)
+	}
+	if errCast, ok := err.(error); ok {
+		r.Result.Error = errCast
+	}
 	r.Result.Data = data
 	return r
 }
@@ -88,69 +91,20 @@ func (r *Response) Abort() *Response {
 	return r
 }
 
+func translator(lang dict.Lang) limberr.Translator {
+	return func(str string, params ...interface{}) string {
+		return dict.T(str, lang, params...)
+	}
+}
+
 // JSON write ouptut as json
 func (r *Response) JSON(data ...interface{}) {
-	var errText interface{}
+	r.Result.Error = limberr.AddPath(r.Result.Error, r.Context.Request.RequestURI)
 
-	switch r.Result.Error.(type) {
-	case nil:
-		errText = nil
+	// r.Result.Final2 = limberr.AddPath(r.Result.Final2, r.Context.Request.RequestURI)
 
-	case *core.FieldError:
-		errorCast := r.Result.Error.(*core.FieldError)
-		errorCast.Translate(r.Engine, core.GetLang(r.Context, r.Engine))
-		errText = r.Result.Error
-		r.status = http.StatusNotAcceptable
-
-	case *core.ErrorWithStatus:
-		errorCast := r.Result.Error.(*core.ErrorWithStatus)
-		errText = errorCast.Error()
-		if errorCast.Message == "" {
-			r.Result.Message = dict.T(errText.(string),
-				core.GetLang(r.Context, r.Engine))
-		} else {
-			r.Result.Message = dict.T(errorCast.Message,
-				core.GetLang(r.Context, r.Engine))
-		}
-		r.status = errorCast.Status
-
-	case *corerr.CustomError:
-		errorCast := r.Result.Error.(*corerr.CustomError)
-		r.Result.Message = errorCast.Message
-		r.Result.CustomError = *errorCast
-		r.status = errorCast.Status
-
-	case error:
-		if r.status == 0 {
-			r.status = http.StatusInternalServerError
-		}
-		errorCast := r.Result.Error.(error)
-		errText = errorCast.Error()
-		r.Result.Message, _ = dict.SafeTranslate(errText.(string),
-			core.GetLang(r.Context, r.Engine))
-		if strings.Contains(strings.ToUpper(errText.(string)), "DUPLICATE") {
-			r.status = http.StatusConflict
-			r.Result.Message = dict.T(term.Duplication_happened,
-				core.GetLang(r.Context, r.Engine))
-		}
-
-		if strings.Contains(strings.ToUpper(errText.(string)), "NOT FOUND") {
-			r.status = http.StatusNotFound
-		}
-
-		if r.status == http.StatusInternalServerError && r.Result.Message == "" {
-			r.Result.Message, _ = dict.SafeTranslate(term.Internal_Error,
-				core.GetLang(r.Context, r.Engine))
-		}
-
-	case string:
-		errorCast := r.Result.Error.(string)
-		errText = errorCast
-		r.Result.Message = dict.T(errText.(string), core.GetLang(r.Context, r.Engine))
-
-	default:
-		errText = "unknown ERROR!!!"
-	}
+	tra := translator(core.GetLang(r.Context, r.Engine))
+	parsedError := limberr.Parse(r.Result.Error, tra)
 
 	// if data is one element don't put it in array
 	var finalData interface{}
@@ -164,15 +118,15 @@ func (r *Response) JSON(data ...interface{}) {
 	if r.abort {
 		r.Context.AbortWithStatusJSON(r.status, &Result{
 			Message: r.Result.Message,
-			Error:   errText,
+			Error:   parsedError,
 			Data:    finalData,
 		})
 	} else {
 		r.Context.JSON(r.status, &Result{
-			Message:     r.Result.Message,
-			Error:       errText,
-			Data:        finalData,
-			CustomError: r.Result.CustomError,
+			Message: r.Result.Message,
+			Error:   parsedError,
+			Data:    finalData,
+			// CustomError: r.Result.Error,
 		})
 	}
 }

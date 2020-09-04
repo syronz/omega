@@ -43,10 +43,10 @@ plog.ServerLog.Panic(err.Error())
 ```
 
 #TODO
--[ ] if types.Resource not used in core it should moved to the base domain, in the future I decide about that
--[x] apilogger should be moved to other place
--[ ] implement refresh token
--[ ] common method for repo based on inheritence
+- [ ] if types.Resource not used in core it should moved to the base domain, in the future I decide about that
+- [x] apilogger should be moved to other place
+- [ ] implement refresh token
+- [ ] common method for repo based on inheritence
 
 # Requesed RMS part
 1. inventory import should lock the price for agent
@@ -70,32 +70,3 @@ plog.ServerLog.Panic(err.Error())
 10. enable static ip
 
 
-# Custom Error
-```JSON
-  {
-    "type": "http//link.com/to/order",
-    "title": "duplication",
-    "message": "user with this name already exist",
-    "code": "E321343",
-    "path": "users/32",
-    "invalid-params": [ 
-      {
-        "name": "age",
-        "reason": "must be a positive integer"
-      },
-      {
-        "name": "color",
-        "reason": "must be 'green', 'red' or 'blue'"
-      }
-    ]
-
-{
-  "type": "https://example.com/probs/out-of-credit",
-  "title": "You do not have enough credit.",
-  "detail": "Your current balance is 30, but that costs 50.",
-  "instance": "/account/12345/msgs/abc",
-  "balance": 30,
-  "accounts": ["/account/12345",
-                "/account/67890"]
-}
-```

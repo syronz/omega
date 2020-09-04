@@ -2,16 +2,13 @@ package service
 
 import (
 	"fmt"
-	"omega/domain/base"
 	"omega/domain/base/basmodel"
 	"omega/domain/base/basrepo"
 	"omega/internal/core"
 	"omega/internal/core/coract"
-	"omega/internal/core/corerr"
 	"omega/internal/param"
 	"omega/internal/term"
 	"omega/internal/types"
-	"omega/pkg/dict"
 	"omega/pkg/glog"
 	"strings"
 
@@ -34,14 +31,14 @@ func (p *BasRoleServ) FindByID(params param.Param, id types.RowID) (role basmode
 	role, err = p.Repo.FindByID(id)
 
 	if gorm.IsRecordNotFoundError(err) {
-		err = corerr.New("E1032412", params, base.Domain, err, id).
-			NotFound(basmodel.RolesPart, "id", id, "roles/"+id.ToString())
+		// err = corerr.New("E1032412", params, base.Domain, err, id).
+		// 	NotFound(basmodel.RolesPart, "id", id, "roles/"+id.ToString())
 		return
 	}
 
 	if err != nil {
-		err = corerr.New("E1032423", params, base.Domain, err, id).
-			InternalServer("roles/" + id.ToString())
+		// err = corerr.New("E1032423", params, base.Domain, err, id).
+		// 	InternalServer("roles/" + id.ToString())
 		return
 	}
 	// glog.CheckError(err, fmt.Sprintf("Role with id %v", id))
@@ -77,13 +74,13 @@ func (p *BasRoleServ) Create(role basmodel.Role, params param.Param) (createdRol
 
 	if createdRole, err = p.Repo.Create(role); err != nil {
 		if strings.Contains(strings.ToUpper(err.Error()), "DUPLICATE") {
-			err = corerr.New("E1074134", params, base.Domain, err, role).
-				FieldError("/roles", corerr.Duplication_happened).
-				Add("name", corerr.This_V_already_exist, dict.R("name"))
+			// err = corerr.New("E1074134", params, base.Domain, err, role).
+			// 	FieldError("/roles", corerr.Duplication_happened).
+			// 	Add("name", corerr.This_V_already_exist, dict.R("name"))
 			return
 		}
-		err = corerr.New("E10522393", params, base.Domain, err, role.Name, role.Resources, role.Description).
-			InternalServer("/roles")
+		// err = corerr.New("E10522393", params, base.Domain, err, role.Name, role.Resources, role.Description).
+		// 	InternalServer("/roles")
 		return
 	}
 

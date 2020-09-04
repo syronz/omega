@@ -12,8 +12,8 @@ import (
 	"omega/internal/param"
 	"omega/internal/term"
 	"omega/internal/types"
-	"omega/pkg/dict"
 	"omega/pkg/glog"
+	"omega/pkg/limberr"
 	"omega/pkg/password"
 	"strings"
 
@@ -35,13 +35,13 @@ func ProvideBasUserService(p basrepo.UserRepo) BasUserServ {
 func (p *BasUserServ) FindByID(id types.RowID, params param.Param) (user basmodel.User, err error) {
 	if user, err = p.Repo.FindByID(id); err != nil {
 		if gorm.IsRecordNotFoundError(err) {
-			err = corerr.New("E1039228", params, base.Domain, err, id).
-				NotFound(basmodel.UsersPart, "id", id, "users/"+id.ToString())
+			// err = corerr.New("E1039228", params, base.Domain, err, id).
+			// 	NotFound(basmodel.UsersPart, "id", id, "users/"+id.ToString())
 			return
 		}
 
-		err = corerr.New("E1072451", params, base.Domain, err, id).
-			InternalServer("users/" + id.ToString())
+		// err = corerr.New("E1072451", params, base.Domain, err, id).
+		// 	InternalServer("users/" + id.ToString())
 		return
 	}
 
@@ -101,20 +101,24 @@ func (p *BasUserServ) Create(user basmodel.User,
 			// err = corerr.New("E1055299", params, base.Domain, err, user).
 			// 	FieldError("/users", corerr.V_is_not_valid, dict.R("role")).
 			// 	Add("role_id", corerr.V_not_exist, dict.R("role"))
+			err = limberr.AddCode(err, "E1098312")
+			err = limberr.AddMessage(err, "database error")
+			err = limberr.AddType(err, "http://54323452", corerr.DuplicationHappened)
+			err = limberr.AddDomain(err, "base")
 			clonedEngine.DB.Rollback()
 			return
 		}
 
 		if strings.Contains(strings.ToUpper(err.Error()), "DUPLICATE") {
-			err = corerr.New("E1085215", params, base.Domain, err, user).
-				FieldError("/users", corerr.Duplication_happened).
-				Add("username", corerr.This_V_already_exist, dict.R("username"))
+			// err = corerr.New("E1085215", params, base.Domain, err, user).
+			// 	FieldError("/users", corerr.Duplication_happened).
+			// 	Add("username", corerr.This_V_already_exist, dict.R("username"))
 			clonedEngine.DB.Rollback()
 			return
 		}
 
-		err = corerr.New("E1087211", params, base.Domain, err, user).
-			InternalServer("/users")
+		// err = corerr.New("E1087211", params, base.Domain, err, user).
+		// 	InternalServer("/users")
 		clonedEngine.DB.Rollback()
 		return
 	}

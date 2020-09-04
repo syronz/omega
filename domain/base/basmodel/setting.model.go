@@ -1,9 +1,7 @@
 package basmodel
 
 import (
-	"omega/domain/base"
 	"omega/internal/core/coract"
-	"omega/internal/core/corerr"
 	"omega/internal/core/validator"
 	"omega/internal/param"
 	"omega/internal/types"
@@ -49,20 +47,22 @@ func (p Setting) Columns(variate string, params param.Param) (string, error) {
 
 // Validate check the type of fields
 func (p *Setting) Validate(act coract.Action, params param.Param) error {
-	fieldError := corerr.NewSilent("E1072908", params, base.Domain, nil)
+	// fieldError := corerr.NewSilent("E1072908", params, base.Domain, nil)
 
-	switch act {
-	case coract.Save:
-		if p.Property == "" {
-			fieldError.Add("property", corerr.V_is_required, "property")
-		}
-		fallthrough
-	case coract.Update:
-		if p.Value == "" {
-			fieldError.Add("value", corerr.V_is_required, "value")
-		}
-	}
+	// switch act {
+	// case coract.Save:
+	// 	if p.Property == "" {
+	// 		fieldError.Add("property", corerr.V_is_required, "property")
+	// 	}
+	// 	fallthrough
+	// case coract.Update:
+	// 	if p.Value == "" {
+	// 		fieldError.Add("value", corerr.V_is_required, "value")
+	// 	}
+	// }
 
-	return fieldError.Final()
+	// return fieldError.Final()
+
+	return nil
 
 }

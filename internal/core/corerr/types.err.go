@@ -1,63 +1,105 @@
 package corerr
 
-import (
-	"fmt"
-	"omega/internal/param"
-	"omega/pkg/dict"
-	"omega/pkg/glog"
-)
-
-type CustomError struct {
-	Code          string        `json:"code,omitempty"`
-	Type          string        `json:"type,omitempty"`
-	Title         string        `json:"title,omitempty"`
-	Domain        string        `json:"domain,omitempty"`
-	Message       string        `json:"message,omitempty"`
-	MessageParams []interface{} `json:"message_params,omitempty"`
-	Path          string        `json:"path,omitempty"`
-	InvalidParams []Field       `json:"invalid_params,omitempty"`
-	Lang          dict.Lang     `json:"-"`
-	Status        int           `json:"-"`
-	ErrPanel      string        `json:"-"`
-	OriginalError string        `json:"original_error,omitempty"`
-	Data          []interface{} `json:"data,omitempty"`
+/*
+// NotFound is used when findbyid returns nill
+func (p CustomError) NotFound(part, field string, value interface{}, path string) error {
+	field = dict.T(field, p.Lang)
+	part = dict.T(part, p.Lang)
+	return &CustomError{
+		Code:          p.Code,
+		Domain:        p.Domain,
+		Type:          p.ErrPanel + string(p.Lang) + ".html#NOT_FOUND",
+		Title:         dict.T(RecordNotFound, p.Lang),
+		Message:       dict.T(Record__NotFoundIn_, p.Lang, field, value, part),
+		MessageParams: []interface{}{field, fmt.Sprint(value), part},
+		Path:          path,
+		Status:        http.StatusNotFound,
+		OriginalError: p.OriginalError,
+	}
 }
 
-// Field is used as an array inside the FieldError
-type Field struct {
-	Field        string        `json:"field,omitempty"`
-	Reason       string        `json:"reason,omitempty"`
-	ReasonParams []interface{} `json:"reason_params,omitempty"`
+// NotBind is used when findbyid returns nill
+func (p CustomError) NotBind(field string, path string) error {
+	field = dict.T(field, p.Lang)
+	return &CustomError{
+		Code:          p.Code,
+		Domain:        p.Domain,
+		Type:          p.ErrPanel + string(p.Lang) + ".html#NOT_BIND",
+		Title:         dict.T(Bind_failed, p.Lang),
+		Message:       dict.T(V_is_not_valid, p.Lang, field),
+		MessageParams: []interface{}{field},
+		Path:          path,
+		Status:        http.StatusUnprocessableEntity,
+		OriginalError: p.OriginalError,
+	}
 }
 
-func (p CustomError) Error() string {
-	errStr := fmt.Sprintf("custom error with code:%v, msg:%v", p.Code, p.Message)
+
+// FieldError is used when findbyid returns nill
+func (p CustomError) FieldError(path string, msg string, msgParams ...interface{}) *CustomError {
+	return &CustomError{
+		Code:          p.Code,
+		Domain:        p.Domain,
+		Type:          p.ErrPanel + string(p.Lang) + ".html#VALIDATION_FAILED",
+		Title:         dict.T(Validation_failed, p.Lang),
+		Message:       dict.T(msg, p.Lang, msgParams...),
+		MessageParams: msgParams,
+		Path:          path,
+		Status:        http.StatusUnprocessableEntity,
+		OriginalError: p.OriginalError,
+		Lang:          p.Lang,
+	}
+}
+
+// SetMsg will update message and params
+func (p *CustomError) SetMsg(msg string, msgParams ...interface{}) *CustomError {
+	p.MessageParams = make([]interface{}, len(msgParams), len(msgParams))
+	copy(p.MessageParams, msgParams)
+	p.Message = dict.T(msg, p.Lang, msgParams...)
+	return p
+}
+
+// Path will update path
+func (p *CustomError) SetPath(path string) *CustomError {
+	p.Path = path
+	return p
+}
+
+// Add is used for add new element to the array of fields error
+func (p *CustomError) Add(fieldName string, msg string, reasonParams ...interface{}) *CustomError {
+	var field Field
+	field.ReasonParams = make([]interface{}, len(reasonParams), len(reasonParams))
+	copy(field.ReasonParams, reasonParams)
+	field.Field = fieldName
+	field.Reason = dict.T(msg, p.Lang, reasonParams...)
+	p.InvalidParams = append(p.InvalidParams, field)
+	return p
+}
+
+// Final helps to find out if param error exist or not
+func (p *CustomError) Final() error {
 	if len(p.InvalidParams) > 0 {
-		errStr += fmt.Sprintf(", invalid_params:%+v", p.InvalidParams)
+		return p
 	}
-	return errStr
+	return nil
 }
 
-// NewSilent is used for initiating an error
-func NewSilent(code string, params param.Param, domain string, err error, data ...interface{}) CustomError {
-	var errStr string
-	if err != nil {
-		errStr = err.Error()
-	}
 
-	return CustomError{
-		Code:          code,
-		Domain:        domain,
-		Lang:          params.Lang,
-		ErrPanel:      params.ErrPanel,
-		OriginalError: errStr,
-		Data:          data,
+
+
+
+
+// InternalServer is used when findbyid returns nill
+func (p CustomError) InternalServer(path string) error {
+	return &CustomError{
+		Code:          p.Code,
+		Domain:        p.Domain,
+		Type:          p.ErrPanel + string(p.Lang) + ".html#INTERNAL_SERVER_ERROR",
+		Title:         dict.T(InternalServerError, p.Lang),
+		Message:       dict.T(Internal_Server_Error_Happened___, p.Lang),
+		Path:          path,
+		Status:        http.StatusInternalServerError,
+		OriginalError: p.OriginalError,
 	}
 }
-
-// New is used for initiating an error
-func New(code string, params param.Param, domain string, err error, data ...interface{}) CustomError {
-	glog.Error(fmt.Sprintf("%v: %v, ", code, err), data)
-
-	return NewSilent(code, params, domain, err, data...)
-}
+*/
