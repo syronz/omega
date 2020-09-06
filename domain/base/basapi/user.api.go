@@ -7,9 +7,10 @@ import (
 	"omega/domain/base/basmodel"
 	"omega/domain/service"
 	"omega/internal/core"
+	"omega/internal/core/corerr"
+	"omega/internal/core/corterm"
 	"omega/internal/param"
 	"omega/internal/response"
-	"omega/internal/term"
 	"omega/internal/types"
 	"omega/pkg/excel"
 	"omega/pkg/glog"
@@ -38,12 +39,12 @@ func (p *UserAPI) FindByID(c *gin.Context) {
 	var user basmodel.User
 
 	if user.ID, err = types.StrToRowID(c.Param("userID")); err != nil {
-		resp.Error(term.Invalid_ID).JSON()
+		resp.Error(corerr.Invalid_ID).JSON()
 		return
 	}
 
 	if user, err = p.Service.FindByID(user.ID, params); err != nil {
-		resp.Status(http.StatusNotFound).Error(err).MessageT(term.Record_Not_Found).JSON()
+		resp.Status(http.StatusNotFound).Error(err).MessageT(corerr.Record_Not_Found).JSON()
 		return
 	}
 
@@ -51,7 +52,7 @@ func (p *UserAPI) FindByID(c *gin.Context) {
 
 	resp.Record(base.ViewUser)
 	resp.Status(http.StatusOK).
-		MessageT(term.V_info, thisUser).
+		MessageT(corterm.V_info, thisUser).
 		JSON(user)
 }
 
@@ -85,7 +86,7 @@ func (p *UserAPI) List(c *gin.Context) {
 
 	resp.Record(base.ListUser)
 	resp.Status(http.StatusOK).
-		MessageT(term.List_of_V, thisUsers).
+		MessageT(corterm.List_of_V, thisUsers).
 		JSON(data)
 }
 
@@ -112,7 +113,7 @@ func (p *UserAPI) Create(c *gin.Context) {
 	resp.Record(base.CreateUser, nil, user)
 
 	resp.Status(http.StatusOK).
-		Message(term.User_created_successfully).
+		Message(corterm.User_created_successfully).
 		JSON(createdUser)
 }
 
@@ -124,7 +125,7 @@ func (p *UserAPI) Update(c *gin.Context) {
 	var user, userBefore, userUpdated basmodel.User
 
 	if user.ID, err = types.StrToRowID(c.Param("userID")); err != nil {
-		resp.Error(term.Invalid_ID).JSON()
+		resp.Error(corerr.Invalid_ID).JSON()
 		return
 	}
 
@@ -134,7 +135,7 @@ func (p *UserAPI) Update(c *gin.Context) {
 	}
 
 	if userBefore, err = p.Service.FindByID(user.ID, params); err != nil {
-		// resp.Status(http.StatusNotFound).Error(term.Record_Not_Found).JSON()
+		// resp.Status(http.StatusNotFound).Error(corerr.Record_Not_Found).JSON()
 		resp.Error(err).JSON()
 		return
 	}
@@ -147,7 +148,7 @@ func (p *UserAPI) Update(c *gin.Context) {
 	resp.Record(base.UpdateUser, userBefore, userUpdated)
 
 	resp.Status(http.StatusOK).
-		MessageT(term.V_updated_successfully, thisUser).
+		MessageT(corterm.V_updated_successfully, thisUser).
 		JSON(userUpdated)
 
 }
@@ -159,7 +160,7 @@ func (p *UserAPI) Delete(c *gin.Context) {
 	var user basmodel.User
 
 	if user.ID, err = types.StrToRowID(c.Param("userID")); err != nil {
-		resp.Error(term.Invalid_ID).JSON()
+		resp.Error(corerr.Invalid_ID).JSON()
 		return
 	}
 
@@ -172,7 +173,7 @@ func (p *UserAPI) Delete(c *gin.Context) {
 
 	resp.Record(base.DeleteUser, user)
 	resp.Status(http.StatusOK).
-		MessageT(term.V_deleted_successfully, thisUser).
+		MessageT(corterm.V_deleted_successfully, thisUser).
 		JSON()
 }
 
@@ -184,7 +185,7 @@ func (p *UserAPI) Excel(c *gin.Context) {
 
 	users, err := p.Service.Excel(params)
 	if err != nil {
-		resp.Status(http.StatusNotFound).Error(term.Record_Not_Found).JSON()
+		resp.Status(http.StatusNotFound).Error(corerr.Record_Not_Found).JSON()
 		return
 	}
 

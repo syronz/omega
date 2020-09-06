@@ -6,9 +6,10 @@ import (
 	"omega/domain/base/basmodel"
 	"omega/domain/service"
 	"omega/internal/core"
+	"omega/internal/core/corerr"
+	"omega/internal/core/corterm"
 	"omega/internal/param"
 	"omega/internal/response"
-	"omega/internal/term"
 	"omega/internal/types"
 	"omega/pkg/excel"
 
@@ -36,7 +37,7 @@ func (p *SettingAPI) FindByID(c *gin.Context) {
 	var setting basmodel.Setting
 
 	if setting.ID, err = types.StrToRowID(c.Param("settingID")); err != nil {
-		resp.Status(http.StatusNotAcceptable).Error(err).MessageT(term.Invalid_ID).JSON()
+		resp.Status(http.StatusNotAcceptable).Error(err).MessageT(corerr.Invalid_ID).JSON()
 		return
 	}
 
@@ -47,7 +48,7 @@ func (p *SettingAPI) FindByID(c *gin.Context) {
 
 	resp.Record(base.ViewSetting)
 	resp.Status(http.StatusOK).
-		MessageT(term.V_info, thisSetting).
+		MessageT(corterm.V_info, thisSetting).
 		JSON(setting)
 }
 
@@ -79,7 +80,7 @@ func (p *SettingAPI) List(c *gin.Context) {
 
 	resp.Record(base.ListSetting)
 	resp.Status(http.StatusOK).
-		MessageT(term.List_of_V, thisSettings).
+		MessageT(corterm.List_of_V, thisSettings).
 		JSON(data)
 }
 
@@ -91,7 +92,7 @@ func (p *SettingAPI) Update(c *gin.Context) {
 	var setting, settingBefore, settingUpdated basmodel.Setting
 
 	if setting.ID, err = types.StrToRowID(c.Param("settingID")); err != nil {
-		resp.Error(term.Invalid_ID).JSON()
+		resp.Error(corerr.Invalid_ID).JSON()
 		return
 	}
 
@@ -101,7 +102,7 @@ func (p *SettingAPI) Update(c *gin.Context) {
 	}
 
 	if settingBefore, err = p.Service.FindByID(setting.ID); err != nil {
-		resp.Status(http.StatusNotFound).Error(term.Record_Not_Found).JSON()
+		resp.Status(http.StatusNotFound).Error(corerr.Record_Not_Found).JSON()
 		return
 	}
 
@@ -113,7 +114,7 @@ func (p *SettingAPI) Update(c *gin.Context) {
 	resp.Record(base.UpdateSetting, settingBefore, settingUpdated)
 
 	resp.Status(http.StatusOK).
-		MessageT(term.V_updated_successfully, thisSetting).
+		MessageT(corterm.V_updated_successfully, thisSetting).
 		JSON(settingUpdated)
 
 }
@@ -125,7 +126,7 @@ func (p *SettingAPI) Delete(c *gin.Context) {
 	var setting basmodel.Setting
 
 	if setting.ID, err = types.StrToRowID(c.Param("settingID")); err != nil {
-		resp.Error(term.Invalid_ID).JSON()
+		resp.Error(corerr.Invalid_ID).JSON()
 		return
 	}
 
@@ -136,7 +137,7 @@ func (p *SettingAPI) Delete(c *gin.Context) {
 
 	resp.Record(base.DeleteSetting, setting)
 	resp.Status(http.StatusOK).
-		MessageT(term.V_deleted_successfully, thisSetting).
+		MessageT(corterm.V_deleted_successfully, thisSetting).
 		JSON()
 }
 
@@ -147,7 +148,7 @@ func (p *SettingAPI) Excel(c *gin.Context) {
 	params := param.Get(c, p.Engine, thisSettings)
 	settings, err := p.Service.Excel(params)
 	if err != nil {
-		resp.Status(http.StatusNotFound).Error(term.Record_Not_Found).JSON()
+		resp.Status(http.StatusNotFound).Error(corerr.Record_Not_Found).JSON()
 		return
 	}
 

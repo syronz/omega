@@ -6,9 +6,9 @@ import (
 	"omega/domain/base/basmodel"
 	"omega/domain/service"
 	"omega/internal/core"
+	"omega/internal/core/corterm"
 	"omega/internal/param"
 	"omega/internal/response"
-	"omega/internal/term"
 
 	"github.com/gin-gonic/gin"
 )
@@ -62,6 +62,6 @@ func (p *ActivityAPI) List(c *gin.Context) {
 
 	resp.Record(base.AllActivity)
 	resp.Status(http.StatusOK).
-		MessageT(term.List_of_V, thisActivities).
+		MessageT(corterm.List_of_V, thisActivities).
 		JSON(data)
 }

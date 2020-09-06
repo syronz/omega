@@ -5,9 +5,9 @@ import (
 	"log"
 	"net/http"
 	"omega/internal/core"
+	"omega/internal/core/corerr"
 	"omega/internal/core/cormid"
 	"omega/internal/response"
-	"omega/internal/term"
 	"omega/pkg/glog"
 	"time"
 
@@ -68,6 +68,6 @@ func Start(engine *core.Engine) *gin.Engine {
 
 func notFoundRoute(r *gin.Engine, engine *core.Engine) {
 	r.NoRoute(func(c *gin.Context) {
-		response.New(engine, c).Status(http.StatusNotFound).Error(term.Route_not_found).JSON()
+		response.New(engine, c).Status(http.StatusNotFound).Error(corerr.Route_not_found).JSON()
 	})
 }

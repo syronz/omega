@@ -4,11 +4,11 @@ import (
 	"net/http"
 	"omega/domain/base"
 	"omega/internal/core"
+	"omega/internal/core/corerr"
 	"omega/pkg/glog"
 	"strings"
 
 	"omega/internal/response"
-	"omega/internal/term"
 	"omega/internal/types"
 
 	"github.com/dgrijalva/jwt-go"
@@ -27,7 +27,7 @@ func AuthGuard(engine *core.Engine) gin.HandlerFunc {
 			tokenArr, ok := c.Request.Header["Authorization"]
 			if !ok || len(tokenArr[0]) == 0 {
 				response.New(engine, c).Status(http.StatusUnauthorized).Abort().
-					Error(term.Token_is_required).JSON()
+					Error(corerr.Token_is_required).JSON()
 				return
 			}
 
@@ -67,7 +67,7 @@ func checkErr(c *gin.Context, err error, engine *core.Engine) {
 func checkToken(c *gin.Context, token *jwt.Token, engine *core.Engine) {
 	if !token.Valid {
 		response.New(engine, c).Status(http.StatusUnauthorized).Abort().
-			Error(term.Token_is_not_valid).JSON()
+			Error(corerr.Token_is_not_valid).JSON()
 		return
 	}
 }

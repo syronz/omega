@@ -3,6 +3,7 @@ package basmodel
 import (
 	"omega/internal/core/coract"
 	"omega/internal/core/corerr"
+	"omega/internal/core/corterm"
 	"omega/pkg/dict"
 	"omega/pkg/limberr"
 )
@@ -14,24 +15,20 @@ type Auth struct {
 }
 
 // Validate check the type of fields for auth
-func (p *Auth) Validate(act coract.Action) error {
-	var err error
-	// fieldError := corerr.NewSilent("E1014832", params, base.Domain, nil)
-	// err = limberr.AddCode(err, code)
+func (p *Auth) Validate(act coract.Action) (err error) {
 
 	switch act {
 	case coract.Login:
 		if p.Username == "" {
-			// fieldError.Add("username", corerr.V_is_required, "username")
-			err = limberr.AddInvalidParam(err, "username", corerr.V_is_required, dict.R("username"))
+			err = limberr.AddInvalidParam(err, "username",
+				corerr.V_is_required, dict.R(corterm.Username))
 		}
 
 		if p.Password == "" {
-			// fieldError.Add("password", corerr.V_is_required, "password")
-			err = limberr.AddInvalidParam(err, "username", corerr.V_is_required, "username")
+			err = limberr.AddInvalidParam(err, "password",
+				corerr.V_is_required, dict.R(corterm.Password))
 		}
 	}
 
-	// return fieldError.Final()
 	return err
 }

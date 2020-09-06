@@ -3,7 +3,6 @@ package aes
 import (
 	"fmt"
 	"omega/internal/consts"
-	"omega/internal/term"
 
 	goaes "github.com/syronz/goAES"
 )
@@ -29,7 +28,7 @@ func DecryptTwice(str string) (result string, err error) {
 	}
 
 	if len(preDecrypted) < 9 {
-		err = fmt.Errorf(term.String_is_not_valid)
+		err = fmt.Errorf("string is not valid")
 		return
 	}
 

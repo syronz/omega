@@ -10,7 +10,6 @@ import (
 	"omega/internal/core/coract"
 	"omega/internal/core/corerr"
 	"omega/internal/param"
-	"omega/internal/term"
 	"omega/internal/types"
 	"omega/pkg/limberr"
 	"omega/pkg/password"
@@ -32,7 +31,8 @@ func ProvideBasAuthService(engine *core.Engine) BasAuthServ {
 // Login User
 func (p *BasAuthServ) Login(auth basmodel.Auth, params param.Param) (user basmodel.User, err error) {
 	if err = auth.Validate(coract.Login); err != nil {
-		err = limberr.Take(err, "E1053212").Custom(corerr.ValidationFailedErr).Build()
+		err = limberr.Take(err, "E1053212").
+			Custom(corerr.ValidationFailedErr).Build()
 		return
 	}
 
@@ -40,9 +40,8 @@ func (p *BasAuthServ) Login(auth basmodel.Auth, params param.Param) (user basmod
 
 	userServ := ProvideBasUserService(basrepo.ProvideUserRepo(p.Engine))
 	if user, err = userServ.FindByUsername(auth.Username); err != nil {
-		err = limberr.AddInvalidParam(err, "username", "username is required")
 		err = limberr.Take(err, "E1050501").Custom(corerr.Unauthorized).
-			Message(term.Username_or_password_is_wrong).Build()
+			Message(corerr.Username_or_password_is_wrong).Build()
 		return
 	}
 
@@ -65,6 +64,9 @@ func (p *BasAuthServ) Login(auth basmodel.Auth, params param.Param) (user basmod
 			Token string `json:"token"`
 		}
 		if extra.Token, err = token.SignedString(jwtKey); err != nil {
+			err = errors.New(corerr.InternalServerError)
+			err = limberr.Take(err, "E1085120").Custom(corerr.Unauthorized).
+				Message(corerr.Username_or_password_is_wrong).Build()
 			return
 		}
 
@@ -73,7 +75,9 @@ func (p *BasAuthServ) Login(auth basmodel.Auth, params param.Param) (user basmod
 		BasAccessDeleteFromCache(user.ID)
 
 	} else {
-		err = errors.New(term.Username_or_password_is_wrong)
+		err = errors.New(corerr.Username_or_password_is_wrong)
+		err = limberr.Take(err, "E1043108").Custom(corerr.Unauthorized).
+			Message(corerr.Username_or_password_is_wrong).Build()
 	}
 
 	return

@@ -101,20 +101,19 @@ func translator(lang dict.Lang) limberr.Translator {
 
 // JSON write ouptut as json
 func (r *Response) JSON(data ...interface{}) {
-	r.Result.Error = limberr.AddPath(r.Result.Error, r.Context.Request.RequestURI)
-
-	// r.Result.Final2 = limberr.AddPath(r.Result.Final2, r.Context.Request.RequestURI)
-
-	customError := limberr.GetCustom(r.Result.Error)
-	lang := core.GetLang(r.Context, r.Engine)
-	errorDocPath := fmt.Sprintf("%v%v.html", r.Engine.Envs[core.ErrPanel], lang)
-	r.Result.Error = limberr.ApplyCustom(r.Result.Error,
-		corerr.UniqErrorMap[customError], errorDocPath)
-
-	tra := translator(lang)
 	var parsedError error
-	parsedError, r.status = limberr.Parse(r.Result.Error, tra)
-	// r.status = parsedError.Status
+	if r.Result.Error != nil {
+		r.Result.Error = limberr.AddPath(r.Result.Error, r.Context.Request.RequestURI)
+
+		customError := limberr.GetCustom(r.Result.Error)
+		lang := core.GetLang(r.Context, r.Engine)
+		errorDocPath := fmt.Sprintf("%v%v.html", r.Engine.Envs[core.ErrPanel], lang)
+		r.Result.Error = limberr.ApplyCustom(r.Result.Error,
+			corerr.UniqErrorMap[customError], errorDocPath)
+
+		tra := translator(lang)
+		parsedError, r.status = limberr.Parse(r.Result.Error, tra)
+	}
 
 	// if data is one element don't put it in array
 	var finalData interface{}

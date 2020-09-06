@@ -10,7 +10,6 @@ import (
 	"omega/internal/core/coract"
 	"omega/internal/core/corerr"
 	"omega/internal/param"
-	"omega/internal/term"
 	"omega/internal/types"
 	"omega/pkg/glog"
 	"omega/pkg/limberr"
@@ -51,7 +50,7 @@ func (p *BasUserServ) FindByID(id types.RowID, params param.Param) (user basmode
 // FindByUsername find user with username
 func (p *BasUserServ) FindByUsername(username string) (user basmodel.User, err error) {
 	user, err = p.Repo.FindByUsername(username)
-	glog.CheckError(err, fmt.Sprintf("User with username %v", username))
+	glog.CheckInfo(err, fmt.Sprintf("User with username %v", username))
 
 	return
 }
@@ -78,7 +77,7 @@ func (p *BasUserServ) Create(user basmodel.User,
 	params param.Param) (createdUser basmodel.User, err error) {
 
 	if err = user.Validate(coract.Create, params); err != nil {
-		glog.LogError(err, term.Validation_failed)
+		glog.LogError(err, corerr.Validation_failed)
 		return
 	}
 

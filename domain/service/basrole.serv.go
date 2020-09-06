@@ -6,8 +6,8 @@ import (
 	"omega/domain/base/basrepo"
 	"omega/internal/core"
 	"omega/internal/core/coract"
+	"omega/internal/core/corerr"
 	"omega/internal/param"
-	"omega/internal/term"
 	"omega/internal/types"
 	"omega/pkg/glog"
 	"strings"
@@ -68,7 +68,7 @@ func (p *BasRoleServ) List(params param.Param) (roles []basmodel.Role,
 func (p *BasRoleServ) Create(role basmodel.Role, params param.Param) (createdRole basmodel.Role, err error) {
 
 	if err = role.Validate(coract.Save, params); err != nil {
-		glog.CheckError(err, term.Validation_failed)
+		glog.CheckError(err, corerr.Validation_failed)
 		return
 	}
 

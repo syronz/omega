@@ -1,7 +1,10 @@
-package term
+package corterm
 
-// List of all messages in the app
+// List of constant for translation
 const (
+	Username = "username"
+	Password = "password"
+
 	User_loged_in_successfully   = "user loged in successfully"
 	User_created_successfully    = "user created successfully"
 	Company_created_successfully = "company created successfully"
@@ -16,4 +19,6 @@ const (
 	NodeCode                     = "node_code"
 	Property                     = "property"
 	Temporary_Token              = "temporary token"
+	V_info                       = "%v info"
+	V_deleted_successfully       = "%v deleted successfully"
 )
