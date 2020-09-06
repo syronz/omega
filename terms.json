@@ -118,7 +118,7 @@
 	"duplication happened": { "en": "duplication happened", "ku": "peshtr daxl krawa", "ar": "duplication happened" },
 	"this %v already exist": { "en": "this %v already exist", "ku": "aw %va peshtr daxl krawa", "ar": "this %v already exist" },
 	"username": { "en": "username", "ku": "nawibakarhenar", "ar": "username" },
-	"": { "en": "", "ku": "", "ar": "" },
+	"unauthorized": { "en": "unauthorized", "ku": "daxl naboo", "ar": "unauthorized" },
 	"": { "en": "", "ku": "", "ar": "" },
 	"": { "en": "", "ku": "", "ar": "" },
 	"": { "en": "", "ku": "", "ar": "" },
