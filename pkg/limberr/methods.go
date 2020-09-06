@@ -4,22 +4,6 @@ import (
 	"fmt"
 )
 
-// WithMessage keeps the message of the error, each error can have one message
-type WithMessage struct {
-	Err error
-	Msg string
-}
-
-func (p *WithMessage) Error() string { return fmt.Sprint(p.Err) }
-
-// AddMessage split error in two parts
-func AddMessage(err error, msg string) error {
-	return &WithMessage{
-		Err: err,
-		Msg: msg,
-	}
-}
-
 // WithCode is used for carrying the code of error
 type WithCode struct {
 	Err  error
@@ -28,7 +12,6 @@ type WithCode struct {
 
 func (p *WithCode) Error() string { return fmt.Sprint(p.Err) }
 
-//AddCode attach code to the error
 func AddCode(err error, code string) error {
 	return &WithCode{
 		Err: fmt.Errorf("#%v, %w", code, err),
@@ -37,6 +20,24 @@ func AddCode(err error, code string) error {
 	}
 }
 
+// WithMessage keeps the message of the error, each error can have one message
+type WithMessage struct {
+	Err    error
+	Msg    string
+	Params []interface{}
+}
+
+func (p *WithMessage) Error() string { return fmt.Sprint(p.Err) }
+
+func AddMessage(err error, msg string, params ...interface{}) error {
+	return &WithMessage{
+		Err:    err,
+		Msg:    msg,
+		Params: params,
+	}
+}
+
+// WithType is add type and title to the error
 type WithType struct {
 	Err   error
 	Type  string
@@ -95,5 +96,40 @@ func AddDomain(err error, domain string) error {
 	return &WithDomain{
 		Err:    err,
 		Domain: domain,
+	}
+}
+
+// WithInvalidParam holds invalid parameters
+type WithInvalidParam struct {
+	Err    error
+	Field  string
+	Reason string
+	Params []interface{}
+}
+
+func (p *WithInvalidParam) Error() string { return fmt.Sprint(p.Err) }
+
+func AddInvalidParam(err error, field, reason string, params ...interface{}) error {
+	return &WithInvalidParam{
+		Err:    err,
+		Field:  field,
+		Reason: reason,
+		Params: params,
+	}
+}
+
+// WithCustom is used for holding the uniqError for filling the type and title based on local
+// customization
+type WithCustom struct {
+	Err    error
+	Custom CustomError
+}
+
+func (p *WithCustom) Error() string { return fmt.Sprint(p.Err) }
+
+func SetCustom(err error, custom CustomError) error {
+	return &WithCustom{
+		Err:    err,
+		Custom: custom,
 	}
 }

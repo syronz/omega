@@ -2,7 +2,9 @@ package response
 
 import (
 	"errors"
+	"fmt"
 	"omega/internal/core"
+	"omega/internal/core/corerr"
 	"omega/internal/param"
 	"omega/pkg/dict"
 	"omega/pkg/limberr"
@@ -103,8 +105,16 @@ func (r *Response) JSON(data ...interface{}) {
 
 	// r.Result.Final2 = limberr.AddPath(r.Result.Final2, r.Context.Request.RequestURI)
 
-	tra := translator(core.GetLang(r.Context, r.Engine))
-	parsedError := limberr.Parse(r.Result.Error, tra)
+	customError := limberr.GetCustom(r.Result.Error)
+	lang := core.GetLang(r.Context, r.Engine)
+	errorDocPath := fmt.Sprintf("%v%v.html", r.Engine.Envs[core.ErrPanel], lang)
+	r.Result.Error = limberr.ApplyCustom(r.Result.Error,
+		corerr.UniqErrorMap[customError], errorDocPath)
+
+	tra := translator(lang)
+	var parsedError error
+	parsedError, r.status = limberr.Parse(r.Result.Error, tra)
+	// r.status = parsedError.Status
 
 	// if data is one element don't put it in array
 	var finalData interface{}

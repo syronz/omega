@@ -104,7 +104,7 @@ func (p *BasUserServ) Create(user basmodel.User,
 			err = limberr.AddCode(err, "E1098312")
 			err = limberr.AddMessage(err, "database error")
 			err = limberr.AddType(err, "http://54323452", corerr.DuplicationHappened)
-			err = limberr.AddDomain(err, "base")
+			err = limberr.AddDomain(err, base.Domain)
 			clonedEngine.DB.Rollback()
 			return
 		}

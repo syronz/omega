@@ -19,4 +19,5 @@ const (
 	V_not_exist                           = "%v not exist"
 	DuplicationHappened                   = "duplication happened"
 	This_V_already_exist                  = "this %v already exist"
+	Unauthorized                          = "unauthorized"
 )

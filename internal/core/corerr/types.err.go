@@ -1,5 +1,40 @@
 package corerr
 
+import (
+	"net/http"
+	"omega/domain/base"
+	"omega/pkg/limberr"
+)
+
+var UnauthorizedErr limberr.CustomError = "unauthorized"
+var NotFoundErr limberr.CustomError = "not found"
+var ValidationFailedErr limberr.CustomError = "validation failed"
+
+var UniqErrorMap limberr.CustomErrorMap
+
+func init() {
+	UniqErrorMap = make(map[limberr.CustomError]limberr.ErrorTheme)
+
+	UniqErrorMap[UnauthorizedErr] = limberr.ErrorTheme{
+		Type:   "#Unauthorized",
+		Title:  Unauthorized,
+		Domain: base.Domain,
+		Status: http.StatusUnauthorized,
+	}
+
+	UniqErrorMap[ValidationFailedErr] = limberr.ErrorTheme{
+		Type:   "#VALIDATION_FAILED",
+		Title:  Validation_failed,
+		Domain: base.Domain,
+		Status: http.StatusUnprocessableEntity,
+	}
+
+	UniqErrorMap[NotFoundErr] = limberr.ErrorTheme{
+		Type:  "#NOT_FOUND",
+		Title: RecordNotFound,
+	}
+}
+
 /*
 // NotFound is used when findbyid returns nill
 func (p CustomError) NotFound(part, field string, value interface{}, path string) error {

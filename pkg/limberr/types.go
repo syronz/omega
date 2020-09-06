@@ -15,6 +15,7 @@ type Final struct {
 	InvalidParams []Field       `json:"invalid_params,omitempty"`
 	Status        int           `json:"-"`
 	OriginalError string        `json:"original_error,omitempty"`
+	Limb          error         `json:"limb,omitempty"`
 }
 
 // Field is used as an array inside the FieldError
@@ -31,3 +32,18 @@ func (p *Final) Error() string {
 	// }
 	return errStr
 }
+
+// CustomError is used for defining errors related to this application, this is a bridge between the
+// limberr and local configuration of the error. It holds error theme
+type CustomError string
+
+//ErrorTheme hold the error's type and title
+type ErrorTheme struct {
+	Type   string
+	Title  string
+	Domain string
+	Status int
+}
+
+// CustomErrorMap is used for defining the error for each domain
+type CustomErrorMap map[CustomError]ErrorTheme

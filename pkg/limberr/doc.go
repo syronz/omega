@@ -1,3 +1,4 @@
+//Package limberr means limb + error, errors wich can be append to the limb of main error
 /*
 	Package limberr implements error handling based on chain and parent/child
 	relation, id consist two part. generating he error and parse it.
