@@ -1,11 +1,18 @@
 package basmodel
 
 import (
+	"omega/internal/consts"
 	"omega/internal/core/coract"
+	"omega/internal/core/corerr"
+	"omega/internal/core/corterm"
 	"omega/internal/core/validator"
 	"omega/internal/param"
 	"omega/internal/types"
 	"omega/pkg/dict"
+	"omega/pkg/helper"
+	"omega/pkg/limberr"
+	"regexp"
+	"strings"
 )
 
 const (
@@ -53,83 +60,88 @@ func (p User) Columns(variate string, params param.Param) (string, error) {
 }
 
 // Validate check the type of
-func (p *User) Validate(act coract.Action, params param.Param) error {
-	//fieldError := corerr.NewSilent("E1052981", params, base.Domain, nil).
-	//	FieldError("/users/[:userID]", corerr.Validation_failed_for_V, dict.R("user"))
+func (p *User) Validate(act coract.Action) (err error) {
 
-	//switch act {
-	//case coract.Create:
-	//	fieldError.SetPath("/users").
-	//		SetMsg(corerr.Validation_failed_for_V_V, dict.R("create"), dict.R("user"))
+	switch act {
+	case coract.Create:
 
-	//	validateUserUsername(fieldError, p.Username)
-	//	validateUserPassword(fieldError, p.Password)
-	//	validateUserRole(fieldError, p.RoleID)
-	//	validateUserLang(fieldError, p.Lang)
-	//	validateUserEmail(fieldError, p.Email)
+		err = validateUserUsername(err, p.Username)
+		err = validateUserPassword(err, p.Password)
+		err = validateUserRole(err, p.RoleID)
+		err = validateUserLang(err, p.Lang)
+		err = validateUserEmail(err, p.Email)
 
-	//case coract.Update:
-	//	fieldError.SetPath("/users/:userID").
-	//		SetMsg(corerr.Validation_failed_for_V_V, dict.R("update"), dict.R("user"))
+	case coract.Update:
 
-	//	validateUserUsername(fieldError, p.Username)
+		err = validateUserUsername(err, p.Username)
 
-	//	if p.Password != "" {
-	//		validateUserPassword(fieldError, p.Password)
-	//	}
+		if p.Password != "" {
+			err = validateUserPassword(err, p.Password)
+		}
 
-	//	validateUserRole(fieldError, p.RoleID)
-	//	validateUserLang(fieldError, p.Lang)
-	//	validateUserEmail(fieldError, p.Email)
+		err = validateUserRole(err, p.RoleID)
+		err = validateUserLang(err, p.Lang)
+		err = validateUserEmail(err, p.Email)
 
-	////for default we validate all fields
-	//default:
-	//	validateUserUsername(fieldError, p.Username)
-	//	validateUserPassword(fieldError, p.Password)
-	//	validateUserRole(fieldError, p.RoleID)
-	//	validateUserLang(fieldError, p.Lang)
-	//	validateUserEmail(fieldError, p.Email)
-	//}
+	//for default we validate all fields
+	default:
+		err = validateUserUsername(err, p.Username)
+		err = validateUserPassword(err, p.Password)
+		err = validateUserRole(err, p.RoleID)
+		err = validateUserLang(err, p.Lang)
+		err = validateUserEmail(err, p.Email)
+	}
 
-	//return fieldError.Final()
-	return nil
+	return err
 }
 
-// func validateUserPassword(fieldError *corerr.CustomError, password string) {
-// 	if len(password) < consts.MinimumPasswordChar {
-// 		fieldError.Add("password", corerr.Minimum_accepted_character_for_V_is_V,
-// 			dict.R("password"), consts.MinimumPasswordChar)
-// 	}
-// }
+func validateUserPassword(err error, password string) error {
+	if len(password) < consts.MinimumPasswordChar {
+		return limberr.AddInvalidParam(err, "password",
+			corerr.MinimumAcceptedCharacterForVisV,
+			dict.R(corterm.Password), consts.MinimumPasswordChar)
+	}
+	return err
+}
 
-// func validateUserUsername(fieldError *corerr.CustomError, username string) {
-// 	if username == "" {
-// 		fieldError.Add("username", corerr.V_is_required, dict.R("Username"))
-// 	}
-// }
+func validateUserUsername(err error, username string) error {
+	if username == "" {
+		return limberr.AddInvalidParam(err, "username",
+			corerr.V_is_required, dict.R(corterm.Username))
+	}
+	return err
+}
 
-// func validateUserRole(fieldError *corerr.CustomError, roleID types.RowID) {
-// 	if roleID == 0 {
-// 		fieldError.Add("role_id", corerr.V_is_required, dict.R("Role"))
-// 	}
-// }
+func validateUserRole(err error, roleID types.RowID) error {
+	if roleID == 0 {
+		return limberr.AddInvalidParam(err, "role_id",
+			corerr.V_is_required, dict.R(corterm.Role))
+	}
+	return err
+}
 
-// func validateUserLang(fieldError *corerr.CustomError, lang dict.Lang) {
-// 	if ok, _ := helper.Includes(dict.Langs, lang); !ok {
-// 		var str []string
-// 		for _, v := range dict.Langs {
-// 			str = append(str, string(v))
-// 		}
-// 		fieldError.Add("language", corerr.Accepted_value_for_V_are_V, dict.R("Resource"),
-// 			strings.Join(str, ", "))
-// 	}
-// }
+func validateUserLang(err error, lang dict.Lang) error {
+	if ok, _ := helper.Includes(dict.Langs, lang); !ok {
+		var str []string
+		for _, v := range dict.Langs {
+			str = append(str, string(v))
+		}
+		return limberr.AddInvalidParam(err, "language",
+			corerr.AcceptedValueForVareV, dict.R(corterm.Language),
+			strings.Join(str, ", "))
+		// fieldError.Add("language", corerr.Accepted_value_for_V_are_V, dict.R("Resource"),
+		// 	strings.Join(str, ", "))
+	}
+	return err
+}
 
-// func validateUserEmail(fieldError *corerr.CustomError, email string) {
-// 	if email != "" {
-// 		re := regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
-// 		if !re.MatchString(email) {
-// 			fieldError.Add("email", corerr.V_is_not_valid, dict.R("Email"))
-// 		}
-// 	}
-// }
+func validateUserEmail(err error, email string) error {
+	if email != "" {
+		re := regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
+		if !re.MatchString(email) {
+			return limberr.AddInvalidParam(err, "email",
+				corerr.VisNotValid, dict.R(corterm.Email))
+		}
+	}
+	return err
+}

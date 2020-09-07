@@ -2,9 +2,13 @@ package basmodel
 
 import (
 	"omega/internal/core/coract"
+	"omega/internal/core/corerr"
+	"omega/internal/core/corterm"
 	"omega/internal/core/validator"
 	"omega/internal/param"
 	"omega/internal/types"
+	"omega/pkg/dict"
+	"omega/pkg/limberr"
 )
 
 const (
@@ -46,23 +50,24 @@ func (p Setting) Columns(variate string, params param.Param) (string, error) {
 }
 
 // Validate check the type of fields
-func (p *Setting) Validate(act coract.Action, params param.Param) error {
-	// fieldError := corerr.NewSilent("E1072908", params, base.Domain, nil)
+func (p *Setting) Validate(act coract.Action) (err error) {
 
-	// switch act {
-	// case coract.Save:
-	// 	if p.Property == "" {
-	// 		fieldError.Add("property", corerr.V_is_required, "property")
-	// 	}
-	// 	fallthrough
-	// case coract.Update:
-	// 	if p.Value == "" {
-	// 		fieldError.Add("value", corerr.V_is_required, "value")
-	// 	}
-	// }
+	switch act {
+	case coract.Save:
+		if p.Property == "" {
+			// fieldError.Add("property", corerr.V_is_required, "property")
+			err = limberr.AddInvalidParam(err, "property",
+				corerr.V_is_required, dict.R(corterm.Property))
+		}
+		fallthrough
+	case coract.Update:
+		if p.Value == "" {
+			// fieldError.Add("value", corerr.V_is_required, "value")
+			err = limberr.AddInvalidParam(err, "value",
+				corerr.V_is_required, dict.R(corterm.Value))
+		}
+	}
 
-	// return fieldError.Final()
-
-	return nil
+	return err
 
 }

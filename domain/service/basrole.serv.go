@@ -67,7 +67,7 @@ func (p *BasRoleServ) List(params param.Param) (roles []basmodel.Role,
 // Create a role
 func (p *BasRoleServ) Create(role basmodel.Role, params param.Param) (createdRole basmodel.Role, err error) {
 
-	if err = role.Validate(coract.Save, params); err != nil {
+	if err = role.Validate(coract.Save); err != nil {
 		glog.CheckError(err, corerr.Validation_failed)
 		return
 	}
@@ -89,9 +89,8 @@ func (p *BasRoleServ) Create(role basmodel.Role, params param.Param) (createdRol
 
 // Save a role, if it is exist update it, if not create it
 func (p *BasRoleServ) Save(role basmodel.Role) (savedRole basmodel.Role, err error) {
-	var params param.Param
 
-	if err = role.Validate(coract.Save, params); err != nil {
+	if err = role.Validate(coract.Save); err != nil {
 		glog.CheckError(err, "validation failed")
 		return
 	}

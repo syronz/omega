@@ -8,7 +8,6 @@ import (
 	"omega/internal/param"
 	"omega/internal/search"
 	"omega/internal/types"
-	"strings"
 )
 
 // UserRepo for injecting engine
@@ -75,8 +74,6 @@ func (p *UserRepo) Update(user basmodel.User) (u basmodel.User, err error) {
 // Create UserRepo
 func (p *UserRepo) Create(user basmodel.User) (u basmodel.User, err error) {
 	err = p.Engine.DB.Table(basmodel.UserTable).Create(&user).Scan(&u).Error
-	if strings.Contains(strings.ToUpper(err.Error()), "FOREIGN") {
-	}
 	return
 }
 

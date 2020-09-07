@@ -62,7 +62,7 @@ func (p *BasSettingServ) List(params param.Param) (data map[string]interface{}, 
 
 // Save setting
 func (p *BasSettingServ) Save(setting basmodel.Setting, params param.Param) (savedSetting basmodel.Setting, err error) {
-	if err = setting.Validate(coract.Save, params); err != nil {
+	if err = setting.Validate(coract.Save); err != nil {
 		glog.CheckError(err, "Error in saving setting")
 		return
 	}
@@ -74,7 +74,8 @@ func (p *BasSettingServ) Save(setting basmodel.Setting, params param.Param) (sav
 
 // Update setting
 func (p *BasSettingServ) Update(setting basmodel.Setting, params param.Param) (savedSetting basmodel.Setting, err error) {
-	if err = setting.Validate(coract.Update, params); err != nil {
+	if err = setting.Validate(coract.Update); err != nil {
+		in this part I should add custom error with new part
 		glog.CheckError(err, "Error in saving setting")
 		return
 	}

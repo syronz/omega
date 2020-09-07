@@ -2,9 +2,13 @@ package basmodel
 
 import (
 	"omega/internal/core/coract"
+	"omega/internal/core/corerr"
+	"omega/internal/core/corterm"
 	"omega/internal/core/validator"
 	"omega/internal/param"
 	"omega/internal/types"
+	"omega/pkg/dict"
+	"omega/pkg/limberr"
 )
 
 const (
@@ -45,27 +49,22 @@ func (p Role) Columns(variate string, params param.Param) (string, error) {
 }
 
 // Validate check the type of fields
-func (p *Role) Validate(act coract.Action, params param.Param) error {
-	// fieldError := corerr.NewSilent("E1062183", params, base.Domain, nil).
-	// 	FieldError("roles/[:roleID]", corerr.Validation_failed_for_V, dict.R("role"))
+func (p *Role) Validate(act coract.Action) (err error) {
 
-	// switch act {
-	// case coract.Save:
-	// 	if p.Name == "" {
-	// 		fieldError.Add("name", corerr.V_is_required, dict.R("Name"))
-	// 	}
+	switch act {
+	case coract.Save:
 
-	// 	if len(p.Name) < 5 {
-	// 		fieldError.Add("name", corerr.Minimum_accepted_character_for_V_is_V,
-	// 			dict.R("Name"), 5)
-	// 	}
+		if len(p.Name) < 5 {
+			err = limberr.AddInvalidParam(err, "name",
+				corerr.MinimumAcceptedCharacterForVisV,
+				dict.R(corterm.Name), 5)
+		}
 
-	// 	if p.Resources == "" {
-	// 		fieldError.Add("resources", corerr.V_is_required, "Resources")
-	// 	}
+		if p.Resources == "" {
+			err = limberr.AddInvalidParam(err, "resources",
+				corerr.V_is_required, dict.R(corterm.Resources))
+		}
+	}
 
-	// }
-
-	// return fieldError.Final()
-	return nil
+	return err
 }

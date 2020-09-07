@@ -14,7 +14,6 @@ import (
 	"omega/pkg/glog"
 	"omega/pkg/limberr"
 	"omega/pkg/password"
-	"strings"
 
 	"github.com/jinzhu/gorm"
 )
@@ -76,8 +75,10 @@ func (p *BasUserServ) List(params param.Param) (data map[string]interface{}, err
 func (p *BasUserServ) Create(user basmodel.User,
 	params param.Param) (createdUser basmodel.User, err error) {
 
-	if err = user.Validate(coract.Create, params); err != nil {
-		glog.LogError(err, corerr.Validation_failed)
+	if err = user.Validate(coract.Create); err != nil {
+		err = limberr.Take(err, "E1043810").
+			Custom(corerr.ValidationFailedErr).Build()
+		glog.CheckInfo(err, corerr.Validation_failed)
 		return
 	}
 
@@ -94,30 +95,22 @@ func (p *BasUserServ) Create(user basmodel.User,
 	userRepo := basrepo.ProvideUserRepo(clonedEngine)
 
 	if createdUser, err = userRepo.Create(user); err != nil {
-		// err = chainerr.AddCode(err, "E1055299")
+		glog.Debug(err, createdUser)
 
-		if strings.Contains(strings.ToUpper(err.Error()), "FOREIGN") {
-			// err = corerr.New("E1055299", params, base.Domain, err, user).
-			// 	FieldError("/users", corerr.V_is_not_valid, dict.R("role")).
-			// 	Add("role_id", corerr.V_not_exist, dict.R("role"))
-			err = limberr.AddCode(err, "E1098312")
-			err = limberr.AddMessage(err, "database error")
-			err = limberr.AddType(err, "http://54323452", corerr.DuplicationHappened)
-			err = limberr.AddDomain(err, base.Domain)
-			clonedEngine.DB.Rollback()
-			return
-		}
+		// if strings.Contains(strings.ToUpper(err.Error()), "FOREIGN") {
+		// 	err = limberr.AddCode(err, "E1098312")
+		// 	err = limberr.AddMessage(err, "database error")
+		// 	err = limberr.AddType(err, "http://54323452", corerr.DuplicationHappened)
+		// 	err = limberr.AddDomain(err, base.Domain)
+		// 	clonedEngine.DB.Rollback()
+		// 	return
+		// }
 
-		if strings.Contains(strings.ToUpper(err.Error()), "DUPLICATE") {
-			// err = corerr.New("E1085215", params, base.Domain, err, user).
-			// 	FieldError("/users", corerr.Duplication_happened).
-			// 	Add("username", corerr.This_V_already_exist, dict.R("username"))
-			clonedEngine.DB.Rollback()
-			return
-		}
+		// if strings.Contains(strings.ToUpper(err.Error()), "DUPLICATE") {
+		// 	clonedEngine.DB.Rollback()
+		// 	return
+		// }
 
-		// err = corerr.New("E1087211", params, base.Domain, err, user).
-		// 	InternalServer("/users")
 		clonedEngine.DB.Rollback()
 		return
 	}
@@ -134,7 +127,10 @@ func (p *BasUserServ) Save(user basmodel.User, params param.Param) (createdUser 
 	oldUser, _ = p.FindByID(user.ID, params)
 
 	if user.ID > 0 {
-		if err = user.Validate(coract.Update, params); err != nil {
+		if err = user.Validate(coract.Update); err != nil {
+			err = limberr.Take(err, "E1098252").
+				Custom(corerr.ValidationFailedErr).Build()
+			glog.CheckInfo(err, corerr.Validation_failed)
 			return
 		}
 
@@ -146,7 +142,10 @@ func (p *BasUserServ) Save(user basmodel.User, params param.Param) (createdUser 
 		}
 
 	} else {
-		if err = user.Validate(coract.Create, params); err != nil {
+		if err = user.Validate(coract.Create); err != nil {
+			err = limberr.Take(err, "E1036447").
+				Custom(corerr.ValidationFailedErr).Build()
+			glog.CheckInfo(err, corerr.Validation_failed)
 			return
 		}
 		user.Password, err = password.Hash(user.Password, p.Engine.Envs[base.PasswordSalt])
