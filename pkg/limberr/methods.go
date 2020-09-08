@@ -1,6 +1,7 @@
 package limberr
 
 import (
+	"errors"
 	"fmt"
 )
 
@@ -110,8 +111,15 @@ type WithInvalidParam struct {
 func (p *WithInvalidParam) Error() string { return fmt.Sprint(p.Err) }
 
 func AddInvalidParam(err error, field, reason string, params ...interface{}) error {
+	var gErr error
+	if err == nil {
+		gErr = errors.New(fmt.Sprintf(reason, params...))
+	} else {
+		gErr = err
+	}
+
 	return &WithInvalidParam{
-		Err:    err,
+		Err:    gErr,
 		Field:  field,
 		Reason: reason,
 		Params: params,

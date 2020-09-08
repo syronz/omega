@@ -3,6 +3,6 @@
   "url":"_URL_/settings/5",
   "authorization":"Bearer _TOKEN_",
   "payload": {
-    "value": "new logo path"
+    "value2": "new logo path"
   }
 }

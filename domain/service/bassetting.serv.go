@@ -7,10 +7,12 @@ import (
 	"omega/domain/base/basrepo"
 	"omega/internal/core"
 	"omega/internal/core/coract"
+	"omega/internal/core/corerr"
 	"omega/internal/corstartoff"
 	"omega/internal/param"
 	"omega/internal/types"
 	"omega/pkg/glog"
+	"omega/pkg/limberr"
 )
 
 // BasSettingServ for injecting auth basrepo
@@ -63,7 +65,9 @@ func (p *BasSettingServ) List(params param.Param) (data map[string]interface{}, 
 // Save setting
 func (p *BasSettingServ) Save(setting basmodel.Setting, params param.Param) (savedSetting basmodel.Setting, err error) {
 	if err = setting.Validate(coract.Save); err != nil {
-		glog.CheckError(err, "Error in saving setting")
+		err = limberr.Take(err, "E1012874").
+			Custom(corerr.ValidationFailedErr).Build()
+		glog.CheckError(err, "validation failed for saving setting")
 		return
 	}
 
@@ -75,8 +79,9 @@ func (p *BasSettingServ) Save(setting basmodel.Setting, params param.Param) (sav
 // Update setting
 func (p *BasSettingServ) Update(setting basmodel.Setting, params param.Param) (savedSetting basmodel.Setting, err error) {
 	if err = setting.Validate(coract.Update); err != nil {
-		in this part I should add custom error with new part
-		glog.CheckError(err, "Error in saving setting")
+		err = limberr.Take(err, "E1053228").
+			Custom(corerr.ValidationFailedErr).Build()
+		glog.CheckInfo(err, "validation failed for update setting")
 		return
 	}
 

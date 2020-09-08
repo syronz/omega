@@ -1,6 +1,6 @@
 {
   "method":"delete",
-	"url":"_URL_/roles/1017102000000003",
+	"url":"_URL_/roles/1",
 	"authorization":"Bearer _TOKEN_",
 	"payload": {}
 }

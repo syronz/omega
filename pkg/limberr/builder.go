@@ -1,7 +1,23 @@
 package limberr
 
+import "errors"
+
 type LimbErr struct {
 	err error
+}
+
+func New(errStr string, code ...string) *LimbErr {
+	var limbErr LimbErr
+	err := errors.New(errStr)
+
+	if len(code) > 0 {
+		limbErr.err = AddCode(err, code[0])
+	} else {
+		limbErr.err = err
+	}
+
+	return &limbErr
+
 }
 
 // Take initiate the

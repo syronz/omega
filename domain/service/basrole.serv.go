@@ -7,9 +7,12 @@ import (
 	"omega/internal/core"
 	"omega/internal/core/coract"
 	"omega/internal/core/corerr"
+	"omega/internal/core/corterm"
 	"omega/internal/param"
 	"omega/internal/types"
+	"omega/pkg/dict"
 	"omega/pkg/glog"
+	"omega/pkg/limberr"
 	"strings"
 
 	"github.com/jinzhu/gorm"
@@ -31,8 +34,10 @@ func (p *BasRoleServ) FindByID(params param.Param, id types.RowID) (role basmode
 	role, err = p.Repo.FindByID(id)
 
 	if gorm.IsRecordNotFoundError(err) {
-		// err = corerr.New("E1032412", params, base.Domain, err, id).
-		// 	NotFound(basmodel.RolesPart, "id", id, "roles/"+id.ToString())
+		err = limberr.Take(err, "E1032412").
+			Message(corerr.RecordVVNotFoundInV, dict.R(corterm.Id), id, dict.R(corterm.Roles)).
+			Custom(corerr.NotFoundErr).Build()
+		glog.LogError(err, "role not found")
 		return
 	}
 
@@ -108,6 +113,10 @@ func (p *BasRoleServ) Save(role basmodel.Role) (savedRole basmodel.Role, err err
 func (p *BasRoleServ) Delete(roleID types.RowID, params param.Param) (role basmodel.Role, err error) {
 
 	if role, err = p.FindByID(params, roleID); err != nil {
+		err = limberr.Take(err, "E1032721").
+			Message(corerr.RecordVVNotFoundInV, dict.R(corterm.Id), roleID, dict.R(corterm.Roles)).
+			Custom(corerr.NotFoundErr).Build()
+		glog.LogError(err, "role not found")
 		return
 	}
 
