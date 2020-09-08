@@ -15,8 +15,7 @@ func (p *WithCode) Error() string { return fmt.Sprint(p.Err) }
 
 func AddCode(err error, code string) error {
 	return &WithCode{
-		Err: fmt.Errorf("#%v, %w", code, err),
-		// Err:  err,
+		Err:  fmt.Errorf("#%v, %w", code, err),
 		Code: code,
 	}
 }
