@@ -14,6 +14,8 @@ const (
 	Value     = "value"
 	ID        = "ID"
 	Id        = "id"
+	Users     = "users"
+	Deleted   = "deleted"
 
 	User_loged_in_successfully   = "user loged in successfully"
 	User_created_successfully    = "user created successfully"

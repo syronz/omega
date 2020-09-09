@@ -4,9 +4,13 @@ import (
 	"fmt"
 	"omega/domain/base/basmodel"
 	"omega/internal/core"
+	"omega/internal/core/corerr"
+	"omega/internal/core/corterm"
 	"omega/internal/param"
 	"omega/internal/search"
 	"omega/internal/types"
+	"omega/pkg/dict"
+	"omega/pkg/limberr"
 
 	"github.com/jinzhu/gorm"
 )
@@ -78,6 +82,17 @@ func (p *RoleRepo) LastRole(prefix types.RowID) (role basmodel.Role, err error) 
 
 // Delete role
 func (p *RoleRepo) Delete(role basmodel.Role) (err error) {
-	err = p.Engine.DB.Table(basmodel.RoleTable).Unscoped().Delete(&role).Error
+	if err = p.Engine.DB.Table(basmodel.RoleTable).Unscoped().Delete(&role).Error; err != nil {
+		switch corerr.ClearDbErr(err) {
+		case "foreign":
+			err = limberr.Take(err, "E1067392").
+				Message(corerr.SomeVRelatedToThisVSoItIsNotDeleted, dict.R(corterm.Users), dict.R(corterm.Role)).
+				Custom(corerr.ForeignErr).Build()
+		default:
+			err = limberr.Take(err, "E1067393").
+				Message(corerr.InternalServerError).
+				Custom(corerr.InternalServerErr).Build()
+		}
+	}
 	return
 }

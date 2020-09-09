@@ -113,24 +113,16 @@ func (p *BasRoleServ) Save(role basmodel.Role) (savedRole basmodel.Role, err err
 func (p *BasRoleServ) Delete(roleID types.RowID, params param.Param) (role basmodel.Role, err error) {
 
 	if role, err = p.FindByID(params, roleID); err != nil {
-		err = limberr.Take(err, "E1032721").
-			Message(corerr.RecordVVNotFoundInV, dict.R(corterm.Id), roleID, dict.R(corterm.Roles)).
-			Custom(corerr.NotFoundErr).Build()
-		glog.LogError(err, "role not found to be deleted")
+		err = corerr.Tick(err, "E1052861", "role not found to be deleted")
 		return
 	}
 
 	if err = p.Repo.Delete(role); err != nil {
-		BasAccessResetFullCache()
-		switch corerr.ClearDbErr(err) {
-		case "foreign":
-			err = limberr.Take(err, "E1032721").
-				Message(corerr.RecordVVNotFoundInV, dict.R(corterm.Id), roleID, dict.R(corterm.Roles)).
-				Custom(corerr.NotFoundErr).Build()
-		}
-		glog.LogError(err, "role not deleted")
+		err = corerr.Tick(err, "E1017987", "role not deleted")
 		return
 	}
+
+	BasAccessResetFullCache()
 	return
 }
 

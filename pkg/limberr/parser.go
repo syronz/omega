@@ -22,7 +22,9 @@ func Parse(err error, translator Translator) (error, int) {
 			final.Message = translator(e.Msg, e.Params...)
 			err = e.Err
 		case *WithCode:
-			final.Code = e.Code
+			if final.Code == "" {
+				final.Code = e.Code
+			}
 			err = e.Err
 		case *WithType:
 			final.Type = e.Type

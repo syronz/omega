@@ -9,6 +9,8 @@ import (
 var UnauthorizedErr limberr.CustomError = "unauthorized"
 var NotFoundErr limberr.CustomError = "not found"
 var ValidationFailedErr limberr.CustomError = "validation failed"
+var ForeignErr limberr.CustomError = "foreign error happened"
+var InternalServerErr limberr.CustomError = "internal server error"
 
 var UniqErrorMap limberr.CustomErrorMap
 
@@ -34,6 +36,20 @@ func init() {
 		Title:  RecordNotFound,
 		Domain: base.Domain,
 		Status: http.StatusNotFound,
+	}
+
+	UniqErrorMap[ForeignErr] = limberr.ErrorTheme{
+		Type:   "#FOREIGN_KEY",
+		Title:  ErrorBecauseOfForeignKey,
+		Domain: base.Domain,
+		Status: http.StatusConflict,
+	}
+
+	UniqErrorMap[InternalServerErr] = limberr.ErrorTheme{
+		Type:   "#INTERNAL_SERVER_ERROR",
+		Title:  InternalServerError,
+		Domain: base.Domain,
+		Status: http.StatusInternalServerError,
 	}
 }
 
