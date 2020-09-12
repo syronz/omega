@@ -67,6 +67,23 @@ func (p *RoleRepo) Update(role basmodel.Role) (u basmodel.Role, err error) {
 // Create RoleRepo
 func (p *RoleRepo) Create(role basmodel.Role) (u basmodel.Role, err error) {
 	err = p.Engine.DB.Table(basmodel.RoleTable).Create(&role).Scan(&u).Error
+	if err != nil {
+		switch corerr.ClearDbErr(err) {
+		case "foreign":
+			err = limberr.Take(err, "E1053287").
+				Message(corerr.SomeVRelatedToThisVSoItIsNotCreated, dict.R(corterm.Users), dict.R(corterm.Role)).
+				Custom(corerr.ForeignErr).Build()
+		case "duplicate":
+			err = limberr.Take(err, "E1053288").
+				Message(corerr.VWithValueVAlreadyExist, dict.R(corterm.Role), role.Name).
+				Custom(corerr.DuplicateErr).Build()
+			err = limberr.AddInvalidParam(err, "name", corerr.VisAlreadyExist, role.Name)
+		default:
+			err = limberr.Take(err, "E1053289").
+				Message(corerr.InternalServerError).
+				Custom(corerr.InternalServerErr).Build()
+		}
+	}
 	return
 }
 

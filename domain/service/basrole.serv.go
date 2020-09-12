@@ -73,7 +73,7 @@ func (p *BasRoleServ) List(params param.Param) (roles []basmodel.Role,
 func (p *BasRoleServ) Create(role basmodel.Role, params param.Param) (createdRole basmodel.Role, err error) {
 
 	if err = role.Validate(coract.Save); err != nil {
-		glog.CheckError(err, corerr.Validation_failed)
+		err = corerr.TickValidate(err, "E1098554", corerr.Validation_failed)
 		return
 	}
 

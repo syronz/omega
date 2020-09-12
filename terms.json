@@ -128,10 +128,16 @@
     "ku": "bashek la %v rabtian haya bam %va boya nasretawa",
     "ar": "some %v related to this %v so it is not deleted" 
   },
+  "some %v related to this %v so it is not created": { 
+    "en": "some %v related to this %v so it is not created",
+    "ku": "bashek la %v rabtian haya bam %va boya drwst nakre",
+    "ar": "some %v related to this %v so it is not created" 
+  },
   "deleted": { "en": "deleted", "ku": "bsretawa", "ar": "deleted" },
   "error because of foreign key": { "en": "error because of external data", "ku": "hala ba hoy datay darawa", "ar": "error because of external data" },
-  "": { "en": "", "ku": "", "ar": "" },
-  "": { "en": "", "ku": "", "ar": "" },
+  "duplicate happened": { "en": "duplicate happened", "ku": "peshtr daxl bo", "ar": "duplicate happened" },
+  "%v with value %v already exists": { "en": "%v with value %v already exists", "ku": "%[2]v peshtr daxl krawa wak %[1]v", "ar": "%v with value %v already exists" },
+  "%v is already exist": { "en": "%v is already exist", "ku": "%v peshtr daxl krawa", "ar": "%v is already exist" },
   "": { "en": "", "ku": "", "ar": "" },
   "": { "en": "", "ku": "", "ar": "" },
   "": { "en": "", "ku": "", "ar": "" },

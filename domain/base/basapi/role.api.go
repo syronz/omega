@@ -77,6 +77,7 @@ func (p *RoleAPI) Create(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&role); err != nil {
 		c.AbortWithStatusJSON(http.StatusNotAcceptable, err)
+		// resp.Status(http.StatusNotAcceptable).Error(err).Abort()
 		return
 	}
 

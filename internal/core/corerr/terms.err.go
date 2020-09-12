@@ -20,7 +20,11 @@ const (
 	Unauthorized                        = "unauthorized"
 	UsernameOrPasswordIsWrong           = "username or password is wrong"
 	SomeVRelatedToThisVSoItIsNotDeleted = "some %v related to this %v so it is not deleted"
+	SomeVRelatedToThisVSoItIsNotCreated = "some %v related to this %v so it is not created"
 	ErrorBecauseOfForeignKey            = "error because of foreign key"
+	DuplicateHappened                   = "duplicate happened"
+	VWithValueVAlreadyExist             = "%v with value %v already exists"
+	VisAlreadyExist                     = "%v is already exist"
 
 	Invalid_parameter_provided            = "invalid parameter provided"
 	Accepted_values_for_status_are_v      = "accepted values for status are: %v"

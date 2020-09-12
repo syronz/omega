@@ -10,6 +10,7 @@ var UnauthorizedErr limberr.CustomError = "unauthorized"
 var NotFoundErr limberr.CustomError = "not found"
 var ValidationFailedErr limberr.CustomError = "validation failed"
 var ForeignErr limberr.CustomError = "foreign error happened"
+var DuplicateErr limberr.CustomError = "duplicate happened"
 var InternalServerErr limberr.CustomError = "internal server error"
 
 var UniqErrorMap limberr.CustomErrorMap
@@ -50,6 +51,13 @@ func init() {
 		Title:  InternalServerError,
 		Domain: base.Domain,
 		Status: http.StatusInternalServerError,
+	}
+
+	UniqErrorMap[DuplicateErr] = limberr.ErrorTheme{
+		Type:   "#DUPLICATE_ERROR",
+		Title:  DuplicateHappened,
+		Domain: base.Domain,
+		Status: http.StatusConflict,
 	}
 }
 
