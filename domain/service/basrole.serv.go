@@ -7,15 +7,10 @@ import (
 	"omega/internal/core"
 	"omega/internal/core/coract"
 	"omega/internal/core/corerr"
-	"omega/internal/core/corterm"
 	"omega/internal/param"
 	"omega/internal/types"
-	"omega/pkg/dict"
 	"omega/pkg/glog"
-	"omega/pkg/limberr"
 	"strings"
-
-	"github.com/jinzhu/gorm"
 )
 
 // BasRoleServ for injecting auth basrepo
@@ -33,20 +28,10 @@ func ProvideBasRoleService(p basrepo.RoleRepo) BasRoleServ {
 func (p *BasRoleServ) FindByID(params param.Param, id types.RowID) (role basmodel.Role, err error) {
 	role, err = p.Repo.FindByID(id)
 
-	if gorm.IsRecordNotFoundError(err) {
-		err = limberr.Take(err, "E1032412").
-			Message(corerr.RecordVVNotFoundInV, dict.R(corterm.Id), id, dict.R(corterm.Roles)).
-			Custom(corerr.NotFoundErr).Build()
-		glog.LogError(err, "role not found")
-		return
-	}
-
 	if err != nil {
-		// err = corerr.New("E1032423", params, base.Domain, err, id).
-		// 	InternalServer("roles/" + id.ToString())
+		err = corerr.Tick(err, "E1043183", "can't fetch the role")
 		return
 	}
-	// glog.CheckError(err, fmt.Sprintf("Role with id %v", id))
 
 	return
 }

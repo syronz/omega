@@ -6,12 +6,17 @@ import (
 	"omega/pkg/limberr"
 )
 
-var UnauthorizedErr limberr.CustomError = "unauthorized"
-var NotFoundErr limberr.CustomError = "not found"
-var ValidationFailedErr limberr.CustomError = "validation failed"
-var ForeignErr limberr.CustomError = "foreign error happened"
-var DuplicateErr limberr.CustomError = "duplicate happened"
-var InternalServerErr limberr.CustomError = "internal server error"
+const (
+	UnkownErr limberr.CustomError = iota
+	UnauthorizedErr
+	NotFoundErr
+	RouteNotFoundErr
+	ValidationFailedErr
+	ForeignErr
+	DuplicateErr
+	InternalServerErr
+	BindingErr
+)
 
 var UniqErrorMap limberr.CustomErrorMap
 
@@ -39,6 +44,13 @@ func init() {
 		Status: http.StatusNotFound,
 	}
 
+	UniqErrorMap[RouteNotFoundErr] = limberr.ErrorTheme{
+		Type:   "#NOT_FOUND",
+		Title:  RouteNotFound,
+		Domain: base.Domain,
+		Status: http.StatusNotFound,
+	}
+
 	UniqErrorMap[ForeignErr] = limberr.ErrorTheme{
 		Type:   "#FOREIGN_KEY",
 		Title:  ErrorBecauseOfForeignKey,
@@ -58,6 +70,13 @@ func init() {
 		Title:  DuplicateHappened,
 		Domain: base.Domain,
 		Status: http.StatusConflict,
+	}
+
+	UniqErrorMap[BindingErr] = limberr.ErrorTheme{
+		Type:   "#NOT_BIND",
+		Title:  Bind_failed,
+		Domain: base.Domain,
+		Status: http.StatusUnprocessableEntity,
 	}
 }
 

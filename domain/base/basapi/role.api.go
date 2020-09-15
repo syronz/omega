@@ -37,7 +37,7 @@ func (p *RoleAPI) FindByID(c *gin.Context) {
 	var role basmodel.Role
 
 	if role.ID, err = types.StrToRowID(c.Param("roleID")); err != nil {
-		resp.NotBind("E1015984", base.Domain, err, "ID", "/roles/:roleID")
+		// resp.NotBind("E1015984", base.Domain, err, "ID", "/roles/:roleID")
 		return
 	}
 
@@ -72,19 +72,15 @@ func (p *RoleAPI) List(c *gin.Context) {
 
 // Create role
 func (p *RoleAPI) Create(c *gin.Context) {
-	var role basmodel.Role
-	resp := response.New(p.Engine, c)
+	var role, createdRole basmodel.Role
+	var err error
+	resp, params := response.NewParam(p.Engine, c, thisRoles)
 
-	if err := c.ShouldBindJSON(&role); err != nil {
-		c.AbortWithStatusJSON(http.StatusNotAcceptable, err)
-		// resp.Status(http.StatusNotAcceptable).Error(err).Abort()
+	if err = resp.Bind(&role, "E1088259", base.Domain, thisRole); err != nil {
 		return
 	}
 
-	params := param.Get(c, p.Engine, thisRoles)
-
-	createdRole, err := p.Service.Create(role, params)
-	if err != nil {
+	if createdRole, err = p.Service.Create(role, params); err != nil {
 		resp.Error(err).JSON()
 		return
 	}

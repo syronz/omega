@@ -1,17 +1,26 @@
 package corerr
 
-import "strings"
+import (
+	"omega/pkg/limberr"
+	"strings"
+
+	"github.com/jinzhu/gorm"
+)
 
 // ClearDbErr find out what type of errors happened: duplicate, foreing keys or internal error
-func ClearDbErr(err error) string {
+func ClearDbErr(err error) limberr.CustomError {
 
 	if strings.Contains(strings.ToUpper(err.Error()), "FOREIGN") {
-		return "foreign"
+		return ForeignErr
 	}
 	if strings.Contains(strings.ToUpper(err.Error()), "DUPLICATE") {
-		return "duplicate"
+		return DuplicateErr
 	}
 
-	return "internal"
+	if gorm.IsRecordNotFoundError(err) {
+		return NotFoundErr
+	}
+
+	return UnkownErr
 
 }

@@ -35,7 +35,7 @@ func (p *Final) Error() string {
 
 // CustomError is used for defining errors related to this application, this is a bridge between the
 // limberr and local configuration of the error. It holds error theme
-type CustomError string
+type CustomError int
 
 //ErrorTheme hold the error's type and title
 type ErrorTheme struct {

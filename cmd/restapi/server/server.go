@@ -9,6 +9,7 @@ import (
 	"omega/internal/core/cormid"
 	"omega/internal/response"
 	"omega/pkg/glog"
+	"omega/pkg/limberr"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -68,6 +69,8 @@ func Start(engine *core.Engine) *gin.Engine {
 
 func notFoundRoute(r *gin.Engine, engine *core.Engine) {
 	r.NoRoute(func(c *gin.Context) {
-		response.New(engine, c).Status(http.StatusNotFound).Error(corerr.Route_not_found).JSON()
+		err := limberr.New("route not found", "E1015777").Custom(corerr.RouteNotFoundErr).
+			Message(corerr.PleaseReportErrorToProgrammer).Build()
+		response.New(engine, c).Error(err).JSON()
 	})
 }

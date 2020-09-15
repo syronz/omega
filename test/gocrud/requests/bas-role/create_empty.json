@@ -3,8 +3,9 @@
 	"url":"_URL_/roles",
 	"authorization":"Bearer _TOKEN_",
 	"payload": {
-		"name": "RANDOM_NAME_ ",
-		"resources": "_RANDOM_NAME_",
-		"description": "_RANDOM_NUMBER_"
+		"created_at": "",
+		"name": "",
+		"resources": "",
+		"description": ""
 	}
 }

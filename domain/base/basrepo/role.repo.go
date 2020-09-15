@@ -28,6 +28,18 @@ func ProvideRoleRepo(engine *core.Engine) RoleRepo {
 // FindByID for role
 func (p *RoleRepo) FindByID(id types.RowID) (role basmodel.Role, err error) {
 	err = p.Engine.DB.Table(basmodel.RoleTable).First(&role, id.ToUint64()).Error
+
+	switch corerr.ClearDbErr(err) {
+	case corerr.NotFoundErr:
+		err = limberr.Take(err, "E1072991").
+			// Message(corerr.SomeVRelatedToThisVSoItIsNotDeleted, dict.R(corterm.Users), dict.R(corterm.Role)).
+			Message(corerr.RecordVVNotFoundInV, dict.R(corterm.Id), id, dict.R(corterm.Roles)).
+			Custom(corerr.NotFoundErr).Build()
+	default:
+		err = limberr.Take(err, "E1072992").
+			Message(corerr.InternalServerError).
+			Custom(corerr.InternalServerErr).Build()
+	}
 	return
 }
 
@@ -69,11 +81,11 @@ func (p *RoleRepo) Create(role basmodel.Role) (u basmodel.Role, err error) {
 	err = p.Engine.DB.Table(basmodel.RoleTable).Create(&role).Scan(&u).Error
 	if err != nil {
 		switch corerr.ClearDbErr(err) {
-		case "foreign":
+		case corerr.ForeignErr:
 			err = limberr.Take(err, "E1053287").
 				Message(corerr.SomeVRelatedToThisVSoItIsNotCreated, dict.R(corterm.Users), dict.R(corterm.Role)).
 				Custom(corerr.ForeignErr).Build()
-		case "duplicate":
+		case corerr.DuplicateErr:
 			err = limberr.Take(err, "E1053288").
 				Message(corerr.VWithValueVAlreadyExist, dict.R(corterm.Role), role.Name).
 				Custom(corerr.DuplicateErr).Build()
@@ -101,7 +113,7 @@ func (p *RoleRepo) LastRole(prefix types.RowID) (role basmodel.Role, err error) 
 func (p *RoleRepo) Delete(role basmodel.Role) (err error) {
 	if err = p.Engine.DB.Table(basmodel.RoleTable).Unscoped().Delete(&role).Error; err != nil {
 		switch corerr.ClearDbErr(err) {
-		case "foreign":
+		case corerr.ForeignErr:
 			err = limberr.Take(err, "E1067392").
 				Message(corerr.SomeVRelatedToThisVSoItIsNotDeleted, dict.R(corterm.Users), dict.R(corterm.Role)).
 				Custom(corerr.ForeignErr).Build()

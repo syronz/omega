@@ -25,6 +25,9 @@ const (
 	DuplicateHappened                   = "duplicate happened"
 	VWithValueVAlreadyExist             = "%v with value %v already exists"
 	VisAlreadyExist                     = "%v is already exist"
+	RouteNotFound                       = "route not found"
+	PleaseReportErrorToProgrammer       = "please report error to the programmer"
+	ErrorInBindingV                     = "error in binding %v"
 
 	Invalid_parameter_provided            = "invalid parameter provided"
 	Accepted_values_for_status_are_v      = "accepted values for status are: %v"
@@ -37,7 +40,6 @@ const (
 	Accepted_values_for_type_are_v        = "accepted values for type are: %v"
 	Invalid_ID                            = "invalid id"
 	Record_Not_Found                      = "record not found"
-	Route_not_found                       = "route not found"
 	Token_is_required                     = "token is required"
 	Token_is_not_valid                    = "token is not valid"
 	Error_in_nodes_url                    = "error in node's url"
