@@ -2,9 +2,9 @@ package service
 
 import (
 	"errors"
+	"omega/domain/base"
 	"omega/domain/base/basmodel"
 	"omega/domain/base/basrepo"
-	"omega/domain/base/basresource"
 	"omega/internal/core"
 	"omega/internal/param"
 	"omega/internal/types"
@@ -32,7 +32,7 @@ func TestCreateRole(t *testing.T) {
 		{
 			in: basmodel.Role{
 				Name:        "created 1",
-				Resources:   basresource.SupperAccess,
+				Resources:   string(base.SupperAccess),
 				Description: "created 1",
 			},
 			params: regularParam,
@@ -41,7 +41,7 @@ func TestCreateRole(t *testing.T) {
 		{
 			in: basmodel.Role{
 				Name:        "created 1",
-				Resources:   basresource.SupperAccess,
+				Resources:   string(base.SupperAccess),
 				Description: "created 1",
 			},
 			params: regularParam,
@@ -50,7 +50,7 @@ func TestCreateRole(t *testing.T) {
 		{
 			in: basmodel.Role{
 				Name:      "minimum fields",
-				Resources: basresource.SupperAccess,
+				Resources: string(base.SupperAccess),
 			},
 			params: regularParam,
 			err:    nil,
@@ -58,7 +58,7 @@ func TestCreateRole(t *testing.T) {
 		{
 			in: basmodel.Role{
 				Name:        "long name: big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name",
-				Resources:   basresource.SupperAccess,
+				Resources:   string(base.SupperAccess),
 				Description: "created 2",
 			},
 			params: regularParam,
@@ -66,7 +66,7 @@ func TestCreateRole(t *testing.T) {
 		},
 		{
 			in: basmodel.Role{
-				Resources:   basresource.SupperAccess,
+				Resources:   string(base.SupperAccess),
 				Description: "created 3",
 			},
 			params: regularParam,
@@ -96,7 +96,7 @@ func TestUpdateRole(t *testing.T) {
 					ID: 1001101000000005,
 				},
 				Name:        "num 1 update",
-				Resources:   basresource.SupperAccess,
+				Resources:   string(base.SupperAccess),
 				Description: "num 1 update",
 			},
 			err: nil,
@@ -171,14 +171,9 @@ func TestListRole(t *testing.T) {
 	}
 
 	for _, v := range samples {
-		data, err := roleServ.List(v.params)
-		var count uint64
-		var ok bool
-		if count, ok = data["count"].(uint64); !ok {
-			count = 0
-		}
+		_, count, err := roleServ.List(v.params)
 		if (v.err == nil && err != nil) || (v.err != nil && err == nil) || count != v.count {
-			t.Errorf("FOR ::::%+v::: \nRETURNS :::%+v:::, \nIT SHOULD BE :::%+v:::", v.params, data["count"], v.count)
+			t.Errorf("FOR ::::%+v::: \nRETURNS :::%+v:::, \nIT SHOULD BE :::%+v:::", v.params, count, v.count)
 		}
 	}
 }

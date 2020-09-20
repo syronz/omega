@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"omega/cmd/restapi/startoff"
 	"omega/cmd/testinsertion/insertdata"
 	"omega/internal/core"
@@ -28,7 +27,6 @@ func main() {
 	flag.Parse()
 
 	engine := kernel.LoadTestEnv()
-	fmt.Println("ok", engine.Envs[core.ServerLogFormat])
 
 	glog.Init(engine.Envs[core.ServerLogFormat],
 		engine.Envs[core.ServerLogOutput],
@@ -37,6 +35,7 @@ func main() {
 		true)
 
 	dict.Init(engine.Envs[core.TermsPath], engine.Envs.ToBool(core.TranslateInBackend))
+
 	corstartoff.ConnectDB(engine, logQuery)
 	corstartoff.ConnectActivityDB(engine)
 	startoff.Migrate(engine)
@@ -44,8 +43,10 @@ func main() {
 
 	if noReset {
 		glog.Debug("Data has been migrated successfully (no reset)")
+		// fmt.Println("Data has been migrated successfully (no reset)")
 	} else {
 		glog.Debug("Data has been reset successfully")
+		// fmt.Println("Data has been reset successfully")
 	}
 
 }

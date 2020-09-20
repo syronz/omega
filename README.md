@@ -12,14 +12,6 @@
 [![GoDoc](https://godoc.org/github.com/syronz/omega?status.png)](https://godoc.org/github.com/syronz/omega)
 [![MIT license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
 
-Simple app for analyzing golnag clean design.
-Inspired by
-
-[https://hellokoding.com/crud-restful-apis-with-go-modules-wire-gin-gorm-and-mysql](https://hellokoding.com/crud-restful-apis-with-go-modules-wire-gin-gorm-and-mysql)
-
-and 
-
-[https://github.com/qiangxue/go-restful-api](https://github.com/qiangxue/go-restful-api)
 
 ## Run
 in the main directory

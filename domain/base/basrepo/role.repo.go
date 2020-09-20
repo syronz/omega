@@ -1,7 +1,6 @@
 package basrepo
 
 import (
-	"fmt"
 	"omega/domain/base/basmodel"
 	"omega/internal/core"
 	"omega/internal/core/corerr"
@@ -11,8 +10,6 @@ import (
 	"omega/internal/types"
 	"omega/pkg/dict"
 	"omega/pkg/limberr"
-
-	"github.com/jinzhu/gorm"
 )
 
 // RoleRepo for injecting engine
@@ -118,16 +115,6 @@ func (p *RoleRepo) Create(role basmodel.Role) (u basmodel.Role, err error) {
 				Message(corerr.InternalServerError).
 				Custom(corerr.InternalServerErr).Build()
 		}
-	}
-	return
-}
-
-// LastRole of role table
-func (p *RoleRepo) LastRole(prefix types.RowID) (role basmodel.Role, err error) {
-	err = p.Engine.DB.Table(basmodel.RoleTable).Unscoped().Where("id LIKE ?", fmt.Sprintf("%v%%", prefix)).
-		Last(&role).Error
-	if gorm.IsRecordNotFoundError(err) {
-		err = nil
 	}
 	return
 }

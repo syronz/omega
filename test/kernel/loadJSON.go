@@ -45,7 +45,8 @@ type TestEnvs struct {
 
 // LoadTestEnv is used for testing environment
 func LoadTestEnv() *core.Engine {
-	engine := new(core.Engine)
+	var engine core.Engine
+	// engine := new(core.Engine)
 	var testEnvs TestEnvs
 
 	_, dir, _, _ := runtime.Caller(0)
@@ -97,5 +98,5 @@ func LoadTestEnv() *core.Engine {
 
 	engine.Envs = envs
 
-	return engine
+	return &engine
 }

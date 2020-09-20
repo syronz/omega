@@ -21,7 +21,6 @@ func Init(termsPath string, backendTranslation bool) {
 	}
 	defer file.Close()
 
-	glog.Debug(filepath.Ext(termsPath))
 	fileType := strings.ToUpper(filepath.Ext(termsPath))
 
 	switch fileType {
@@ -46,7 +45,6 @@ func Init(termsPath string, backendTranslation bool) {
 		}
 
 	case ".TOML":
-		// thisTerms = map[string]Term{}
 
 		if _, err := toml.DecodeFile(termsPath, &thisTerms); err != nil {
 			glog.Fatal("failed in decoding the toml file for terms", err)
