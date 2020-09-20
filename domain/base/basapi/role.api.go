@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"omega/domain/base"
 	"omega/domain/base/basmodel"
+	"omega/domain/base/message/basterm"
 	"omega/domain/service"
 	"omega/internal/core"
 	"omega/internal/core/corerr"
@@ -15,9 +16,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 )
-
-const thisRole = "role"
-const thisRoles = "bas_roles"
 
 // RoleAPI for injecting role service
 type RoleAPI struct {
@@ -32,12 +30,11 @@ func ProvideRoleAPI(c service.BasRoleServ) RoleAPI {
 
 // FindByID is used for fetch a role by it's id
 func (p *RoleAPI) FindByID(c *gin.Context) {
-	resp, params := response.NewParam(p.Engine, c, thisRoles)
+	resp, params := response.NewParam(p.Engine, c, basterm.Roles)
 	var err error
 	var role basmodel.Role
 
-	if role.ID, err = types.StrToRowID(c.Param("roleID")); err != nil {
-		// resp.NotBind("E1015984", base.Domain, err, "ID", "/roles/:roleID")
+	if role.ID, err = resp.GetRowID(c.Param("roleID"), "E1053982", base.Domain); err != nil {
 		return
 	}
 
@@ -48,13 +45,13 @@ func (p *RoleAPI) FindByID(c *gin.Context) {
 
 	resp.Record(base.ViewRole)
 	resp.Status(http.StatusOK).
-		MessageT(corterm.V_info, thisRole).
+		MessageT(corterm.VInfo, basterm.Role).
 		JSON(role)
 }
 
 // List of roles
 func (p *RoleAPI) List(c *gin.Context) {
-	resp, params := response.NewParam(p.Engine, c, thisRoles)
+	resp, params := response.NewParam(p.Engine, c, basterm.Roles)
 
 	data := make(map[string]interface{})
 	var err error
@@ -66,7 +63,7 @@ func (p *RoleAPI) List(c *gin.Context) {
 
 	resp.Record(base.ListRole)
 	resp.Status(http.StatusOK).
-		MessageT(corterm.List_of_V, thisRoles).
+		MessageT(corterm.ListOfV, basterm.Roles).
 		JSON(data)
 }
 
@@ -74,9 +71,9 @@ func (p *RoleAPI) List(c *gin.Context) {
 func (p *RoleAPI) Create(c *gin.Context) {
 	var role, createdRole basmodel.Role
 	var err error
-	resp, params := response.NewParam(p.Engine, c, thisRoles)
+	resp, params := response.NewParam(p.Engine, c, basterm.Roles)
 
-	if err = resp.Bind(&role, "E1088259", base.Domain, thisRole); err != nil {
+	if err = resp.Bind(&role, "E1088259", base.Domain, basterm.Role); err != nil {
 		return
 	}
 
@@ -85,35 +82,30 @@ func (p *RoleAPI) Create(c *gin.Context) {
 		return
 	}
 
-	resp.Record(base.CreateRole, nil, role)
+	resp.RecordCreate(base.CreateRole, role)
 
 	resp.Status(http.StatusOK).
-		MessageT(corterm.V_created_successfully, thisRole).
+		MessageT(corterm.VCreatedSuccessfully, basterm.Role).
 		JSON(createdRole)
 }
 
 // Update role
 func (p *RoleAPI) Update(c *gin.Context) {
-	resp := response.New(p.Engine, c)
+	resp, params := response.NewParam(p.Engine, c, basterm.Roles)
 	var err error
 
 	var role, roleBefore, roleUpdated basmodel.Role
 
-	role.ID, err = types.StrToRowID(c.Param("roleID"))
-	if err != nil {
-		resp.Error(corerr.Invalid_ID).JSON()
+	if role.ID, err = resp.GetRowID(c.Param("roleID"), "E1082097", base.Domain); err != nil {
 		return
 	}
 
-	if err = c.ShouldBindJSON(&role); err != nil {
-		c.AbortWithStatusJSON(http.StatusNotAcceptable, err)
+	if err = resp.Bind(&role, "E1076117", base.Domain, basterm.Role); err != nil {
 		return
 	}
-
-	params := param.Get(c, p.Engine, thisRoles)
 
 	if roleBefore, err = p.Service.FindByID(params, role.ID); err != nil {
-		resp.Status(http.StatusNotFound).Error(corerr.Record_Not_Found).JSON()
+		resp.Error(err).JSON()
 		return
 	}
 
@@ -125,7 +117,7 @@ func (p *RoleAPI) Update(c *gin.Context) {
 	resp.Record(base.UpdateRole, roleBefore, role)
 
 	resp.Status(http.StatusOK).
-		MessageT(corterm.V_updated_successfully, thisRole).
+		MessageT(corterm.VUpdatedSuccessfully, basterm.Role).
 		JSON(roleUpdated)
 }
 
@@ -136,11 +128,11 @@ func (p *RoleAPI) Delete(c *gin.Context) {
 	var role basmodel.Role
 
 	if role.ID, err = types.StrToRowID(c.Param("roleID")); err != nil {
-		resp.Error(corerr.Invalid_ID).JSON()
+		resp.Error(corerr.InvalidID).JSON()
 		return
 	}
 
-	params := param.Get(c, p.Engine, thisRoles)
+	params := param.Get(c, p.Engine, basterm.Roles)
 
 	if role, err = p.Service.Delete(role.ID, params); err != nil {
 		resp.Status(http.StatusInternalServerError).Error(err).JSON()
@@ -149,7 +141,7 @@ func (p *RoleAPI) Delete(c *gin.Context) {
 
 	resp.Record(base.DeleteRole, role)
 	resp.Status(http.StatusOK).
-		MessageT(corterm.V_deleted_successfully, thisRole).
+		MessageT(corterm.VDeletedSuccessfully, basterm.Role).
 		JSON()
 }
 
@@ -157,10 +149,10 @@ func (p *RoleAPI) Delete(c *gin.Context) {
 func (p *RoleAPI) Excel(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 
-	params := param.Get(c, p.Engine, thisRoles)
+	params := param.Get(c, p.Engine, basterm.Roles)
 	roles, err := p.Service.Excel(params)
 	if err != nil {
-		resp.Status(http.StatusNotFound).Error(corerr.Record_Not_Found).JSON()
+		resp.Status(http.StatusNotFound).Error(corerr.RecordNotFound).JSON()
 		return
 	}
 

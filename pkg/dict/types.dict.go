@@ -22,9 +22,9 @@ var Langs = []Lang{
 
 // Term is list of languages
 type Term struct {
-	En string
-	Ku string
-	Ar string
+	En string `toml:"en"`
+	Ku string `toml:"ku"`
+	Ar string `toml:"ar"`
 }
 
 // thisTerms used for holding language identifier as a string and Term Struct as value

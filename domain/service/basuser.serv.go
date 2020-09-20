@@ -78,7 +78,7 @@ func (p *BasUserServ) Create(user basmodel.User,
 	if err = user.Validate(coract.Create); err != nil {
 		err = limberr.Take(err, "E1043810").
 			Custom(corerr.ValidationFailedErr).Build()
-		glog.CheckInfo(err, corerr.Validation_failed)
+		glog.CheckInfo(err, corerr.ValidationFailed)
 		return
 	}
 
@@ -100,7 +100,7 @@ func (p *BasUserServ) Create(user basmodel.User,
 		// if strings.Contains(strings.ToUpper(err.Error()), "FOREIGN") {
 		// 	err = limberr.AddCode(err, "E1098312")
 		// 	err = limberr.AddMessage(err, "database error")
-		// 	err = limberr.AddType(err, "http://54323452", corerr.DuplicationHappened)
+		// 	err = limberr.AddType(err, "http://54323452", corerr.DuplicateHappened)
 		// 	err = limberr.AddDomain(err, base.Domain)
 		// 	clonedEngine.DB.Rollback()
 		// 	return
@@ -130,7 +130,7 @@ func (p *BasUserServ) Save(user basmodel.User, params param.Param) (createdUser 
 		if err = user.Validate(coract.Update); err != nil {
 			err = limberr.Take(err, "E1098252").
 				Custom(corerr.ValidationFailedErr).Build()
-			glog.CheckInfo(err, corerr.Validation_failed)
+			glog.CheckInfo(err, corerr.ValidationFailed)
 			return
 		}
 
@@ -145,7 +145,7 @@ func (p *BasUserServ) Save(user basmodel.User, params param.Param) (createdUser 
 		if err = user.Validate(coract.Create); err != nil {
 			err = limberr.Take(err, "E1036447").
 				Custom(corerr.ValidationFailedErr).Build()
-			glog.CheckInfo(err, corerr.Validation_failed)
+			glog.CheckInfo(err, corerr.ValidationFailed)
 			return
 		}
 		user.Password, err = password.Hash(user.Password, p.Engine.Envs[base.PasswordSalt])

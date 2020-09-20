@@ -2,6 +2,8 @@ package response
 
 import (
 	"omega/internal/core/corerr"
+	"omega/internal/core/corterm"
+	"omega/internal/types"
 	"omega/pkg/dict"
 	"omega/pkg/limberr"
 )
@@ -23,4 +25,18 @@ func (r *Response) Bind(st interface{}, code, domain, part string) (err error) {
 	}
 
 	return
+}
+
+// GetRowID convert string to the rowID and if not converted print a proper message
+func (r *Response) GetRowID(idIn, code, domain string) (id types.RowID, err error) {
+	if id, err = types.StrToRowID(idIn); err != nil {
+		err = limberr.Take(err, code).
+			Message(corerr.InvalidVForV, dict.R(corterm.ID), dict.R(corterm.Role)).
+			Custom(corerr.ValidationFailedErr).Build()
+		r.Error(err).JSON()
+		return
+	}
+
+	return
+
 }

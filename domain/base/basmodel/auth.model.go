@@ -21,12 +21,12 @@ func (p *Auth) Validate(act coract.Action) (err error) {
 	case coract.Login:
 		if p.Username == "" {
 			err = limberr.AddInvalidParam(err, "username",
-				corerr.V_is_required, dict.R(corterm.Username))
+				corerr.VisRequired, dict.R(corterm.Username))
 		}
 
 		if p.Password == "" {
 			err = limberr.AddInvalidParam(err, "password",
-				corerr.V_is_required, dict.R(corterm.Password))
+				corerr.VisRequired, dict.R(corterm.Password))
 		}
 	}
 

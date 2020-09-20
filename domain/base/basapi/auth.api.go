@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"omega/domain/base"
 	"omega/domain/base/basmodel"
+	"omega/domain/base/message/baserr"
+	"omega/domain/base/message/basterm"
 	"omega/domain/service"
 	"omega/internal/core"
 	"omega/internal/core/corerr"
@@ -38,7 +40,7 @@ func (p *AuthAPI) Login(c *gin.Context) {
 	user, err := p.Service.Login(auth, params)
 	if err != nil {
 		resp.Error(err).JSON()
-		resp.Record(corerr.Auth_login_failed, auth.Username, len(auth.Password))
+		resp.Record(baserr.AuthLoginFailed, auth.Username, len(auth.Password))
 		return
 	}
 
@@ -47,7 +49,7 @@ func (p *AuthAPI) Login(c *gin.Context) {
 
 	resp.Record(base.BasLogin, nil, userTmp)
 	resp.Status(http.StatusOK).
-		Message(corterm.User_loged_in_successfully).
+		Message(basterm.UserLogedInSuccessfully).
 		JSON(user)
 }
 
@@ -71,12 +73,12 @@ func (p *AuthAPI) TemporaryToken(c *gin.Context) {
 
 	tmpKey, err := p.Service.TemporaryToken(params)
 	if err != nil {
-		resp.Status(http.StatusInternalServerError).Error(corerr.You_dont_have_permission).JSON()
+		resp.Status(http.StatusInternalServerError).Error(corerr.YouDontHavePermission).JSON()
 		return
 	}
 
 	resp.Status(http.StatusOK).
-		Message(corterm.Temporary_Token).
+		Message(corterm.TemporaryToken).
 		JSON(tmpKey)
 
 }

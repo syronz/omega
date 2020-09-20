@@ -107,7 +107,7 @@ func validateUserPassword(err error, password string) error {
 func validateUserUsername(err error, username string) error {
 	if username == "" {
 		return limberr.AddInvalidParam(err, "username",
-			corerr.V_is_required, dict.R(corterm.Username))
+			corerr.VisRequired, dict.R(corterm.Username))
 	}
 	return err
 }
@@ -115,7 +115,7 @@ func validateUserUsername(err error, username string) error {
 func validateUserRole(err error, roleID types.RowID) error {
 	if roleID == 0 {
 		return limberr.AddInvalidParam(err, "role_id",
-			corerr.V_is_required, dict.R(corterm.Role))
+			corerr.VisRequired, dict.R(corterm.Role))
 	}
 	return err
 }

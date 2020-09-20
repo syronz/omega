@@ -62,7 +62,7 @@ func (p *Role) Validate(act coract.Action) (err error) {
 
 		if p.Resources == "" {
 			err = limberr.AddInvalidParam(err, "resources",
-				corerr.V_is_required, dict.R(corterm.Resources))
+				corerr.VisRequired, dict.R(corterm.Resources))
 		}
 	}
 

@@ -62,6 +62,11 @@ func (p *LimbErr) Status(status int) *LimbErr {
 	return p
 }
 
+func (p *LimbErr) InvalidParam(field, reason string, params ...interface{}) *LimbErr {
+	p.err = AddInvalidParam(p.err, field, reason, params...)
+	return p
+}
+
 func (p *LimbErr) Build() error {
 	return p.err
 }

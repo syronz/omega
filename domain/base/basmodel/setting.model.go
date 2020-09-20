@@ -55,16 +55,16 @@ func (p *Setting) Validate(act coract.Action) (err error) {
 	switch act {
 	case coract.Save:
 		if p.Property == "" {
-			// fieldError.Add("property", corerr.V_is_required, "property")
+			// fieldError.Add("property", corerr.VisRequired, "property")
 			err = limberr.AddInvalidParam(err, "property",
-				corerr.V_is_required, dict.R(corterm.Property))
+				corerr.VisRequired, dict.R(corterm.Property))
 		}
 		fallthrough
 	case coract.Update:
 		if p.Value == "" {
-			// fieldError.Add("value", corerr.V_is_required, "value")
+			// fieldError.Add("value", corerr.VisRequired, "value")
 			err = limberr.AddInvalidParam(err, "value",
-				corerr.V_is_required, dict.R(corterm.Value))
+				corerr.VisRequired, dict.R(corterm.Value))
 		}
 	}
 

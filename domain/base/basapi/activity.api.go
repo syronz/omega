@@ -62,6 +62,6 @@ func (p *ActivityAPI) List(c *gin.Context) {
 
 	resp.Record(base.AllActivity)
 	resp.Status(http.StatusOK).
-		MessageT(corterm.List_of_V, thisActivities).
+		MessageT(corterm.ListOfV, thisActivities).
 		JSON(data)
 }

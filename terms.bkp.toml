@@ -1,0 +1,592 @@
+["invalid parameter provided"]
+en = "invalid parameter provided"
+ku = "پارامەتەری هەڵە ناردراوە"
+ar = "invalid parameter provided"
+
+["accepted values for status are: %v"]
+en = 'Accepted values for status are: %v'
+ku = 'داتای ڕێگە پێدراو بۆ حالەتی ئەژمار ئەوانەن: %v'
+ar = 'Accepted values for status are: %v'
+
+["accepted values for type are: %v"]
+en = 'Accepted values for type are: %v'
+ku = 'داتای ڕێگە پێدراو بۆ حالەتی ئەژمار ئەوانەن: %v'
+ar = 'Accepted values for type are: %v'
+
+["accepted values for defer are: %v"]
+en = 'Accepted values for defer are: %v'
+ku = 'داتای ڕێگە پێدراو بۆ حالەتی ئەژمار ئەوانەن: %v'
+ar = 'Accepted values for defer are: %v'
+
+["duplication happened for %v"]
+en = 'duplication happened for %v'
+ku = 'peshtr daxl krawa %v'
+ar = 'duplication happened for %v'
+
+["eRror in creating %v"]
+en = 'error in creating %v'
+ku = 'hala la drwst krdni %v'
+ar = 'error in creating %v'
+
+["error in binding %v"]
+en = 'error in binding %v'
+ku = 'hala la wargrtni data bo %v'
+ar = 'error in binding %v'
+
+["you don't have permission"]
+en = '''you don't have permission'''
+ku = 'regapedraw nie'
+ar = '''you don't have permission'''
+
+["number of companies exceded, prepare new server"]
+en = 'number of companies exceded, prepare new server'
+ku = 'programaka pr bo, chi tr natwani compania ziad kay'
+ar = 'number of companies exceded, prepare new server'
+
+["company has been created"]
+en = 'company has been created'
+ku = 'compania drwst kra'
+ar = 'company has been created'
+
+["invalid ID"]
+en = 'invalid ID'
+ku = 'ideka halaya'
+ar = 'invalid ID'
+
+["%v not exist"]
+en = '%v not exist'
+ku = '%v bwni nie'
+ar = '%v not exist'
+
+["failed to fetch %v"]
+en = 'failed to fetch %v'
+ku = 'natwanre %v wargire'
+ar = 'failed to fetch %v'
+
+["company has been deleted"]
+en = 'company has been deleted'
+ku = 'kompania delete boo'
+ar = 'company has been deleted'
+
+["can not delete %"]
+en = 'can not delete %'
+ku = 'aw %v delete nabe'
+ar = 'can not delete %'
+
+["%v is required"]
+en = '%v is required'
+ku = '%v pewista'
+ar = '%v is required'
+
+["name at least be 5 character"]
+en = 'name at least be 5 character'
+ku = 'naw abe lani kam 5 harf be'
+ar = 'name at least be 5 character'
+
+["%v should be more than %v character"]
+en = '%v should be more than %v character'
+ku = '%v dabe zyatr be la %v'
+ar = '%v should be more than %v character'
+
+["user loged in successfully"]
+en = 'user loged in successfully'
+ku = 'user ba sarkawtooyi daxl boo'
+ar = 'user loged in successfully'
+
+["username or password is wrong"]
+en = 'username or password is wrong'
+ku = 'username yan passwordakat halaya'
+ar = 'username or password is wrong'
+
+["user created successfully"]
+en = 'user created successfully'
+ku = 'user ba sarkawtooyi drust boo'
+ar = 'user created successfully'
+
+["%v created successfully"]
+en = '%v created successfully'
+ku = '%v ba sarkawtooyi drwst kra'
+ar = '%v alcreated naam'
+
+["duplication happened"]
+en = 'duplication happened'
+ku = 'peshtr daxl krawa'
+ar = 'duplication happened'
+
+["%v is not valid"]
+en = '%v is not valid'
+ku = '%v halaya'
+ar = '%v is not valid'
+
+["invalid id"]
+en = 'invalid id'
+ku = 'ideka halaya'
+ar = 'invalid id'
+
+["%v deleted successfully"]
+en = '%v deleted successfully'
+ku = '%v ba sarkawtuyi delete boo'
+ar = '%v deleted successfully'
+
+["list of %v"]
+en = 'list of %v'
+ku = 'listi %v'
+ar = 'list of %v'
+
+["route not found"]
+en = 'route not found'
+ku = 'route booni nie'
+ar = 'al route la moujood'
+
+["token is required"]
+en = 'token is required'
+ku = 'token pewista'
+ar = 'al token zaroor'
+
+["%v info"]
+en = '%v info'
+ku = 'maloomati %v'
+ar = '%v info'
+
+["token is not valid"]
+en = 'token is not valid'
+ku = 'tokenaka halaya'
+ar = 'token is not valid'
+
+["error in node's url"]
+en = '''error in node's url'''
+ku = 'hala la urli dawakraw haya'
+ar = '''error in node's url'''
+
+["error in node's form"]
+en = '''error in node's form'''
+ku = 'hala la form dawakraw haya'
+ar = '''error in node's form'''
+
+["error in version's form"]
+en = '''error in version's form'''
+ku = 'hala la form dawakraw haya'
+ar = '''error in version's form'''
+
+["error in company's form"]
+en = '''error in company's form'''
+ku = 'hala la form dawakraw haya'
+ar = '''error in company's form'''
+
+["error in user's form"]
+en = '''error in user's form'''
+ku = 'hala la form dawakraw haya'
+ar = '''error in user's form'''
+
+["error in login form"]
+en = 'error in login form'
+ku = 'hala la form dawakraw haya'
+ar = 'error in login form'
+
+["error in role form"]
+en = 'error in role form'
+ku = 'hala la form dawakraw haya'
+ar = 'error in role form'
+
+["error in url"]
+en = 'role form'
+ku = 'hala la url da haya'
+ar = 'role form'
+
+["error in casting"]
+en = 'error in casting'
+ku = 'hala la cast krdn'
+ar = 'error in casting'
+
+["error in saving company"]
+en = 'error in saving company'
+ku = 'hala la save krdni compania'
+ar = 'error in saving company'
+
+["error in saving node"]
+en = 'error in saving node'
+ku = 'hala la save krdni liq'
+ar = 'error in saving node'
+
+["error in account's url"]
+en = '''error in account's url'''
+ku = 'hala la urli account daya'
+ar = '''error in account's url'''
+
+["error in account's form"]
+en = '''error in account's form'''
+ku = 'hala la formi account daya'
+ar = '''error in account's form'''
+
+["accepted values are: %v"]
+en = 'accepted values are: %v'
+ku = 'data qabul kraw awanan %v'
+ar = 'accepted values are: %v'
+
+["error in deleting user"]
+en = 'error in deleting user'
+ku = 'hala la delete krdni user'
+ar = 'error in deleting user'
+
+["error in deleting account"]
+en = 'error in deleting account'
+ku = 'hala la delete krdni account'
+ar = 'error in deleting account'
+
+["error in getting user"]
+en = 'error in getting user'
+ku = 'hala la wargrtni user'
+ar = 'error in getting user'
+
+["email is not valid"]
+en = 'email is not valid'
+ku = 'emailaka halaya'
+ar = 'email is not valid'
+
+["error in phone's url"]
+en = '''error in phone's url'''
+ku = 'hala la urli phonakaya'
+ar = '''error in phone's url'''
+
+["error in phone's form"]
+en = '''error in phone's form'''
+ku = 'hala la formi phonakaya'
+ar = '''error in phone's form'''
+
+["error in saving user"]
+en = 'error in saving user'
+ku = 'hala la save krdni user'
+ar = 'error in saving user'
+
+["error in saving role"]
+en = 'error in saving role'
+ku = 'hala la save krdni role'
+ar = 'error in saving role'
+
+["error in saving bond"]
+en = 'error in saving bond'
+ku = 'hala la save krdni bond'
+ar = 'error in saving bond'
+
+["company_id not exist in the context"]
+en = 'company_id not exist in the context'
+ku = 'company_id booni nie la naww context'
+ar = 'company_id not exist in the context'
+
+["node_code not exist in the context"]
+en = 'node_code not exist in the context'
+ku = 'node_code booni nie la naww context'
+ar = 'node_code not exist in the context'
+
+["invalid number"]
+en = 'invalid number'
+ku = 'zhmaraka halaya'
+ar = 'invalid number'
+
+["range is %v to %v"]
+en = 'range is %v to %v'
+ku = 'la %v ta %v ghabool dakre'
+ar = 'range is %v to %v'
+
+["string is not valid"]
+en = 'string is not valid'
+ku = 'rastaka halaya'
+ar = 'string is not valid'
+
+["license is not valid"]
+en = 'license is not valid'
+ku = 'license halaya'
+ar = 'license is not valid'
+
+["company's license has been expired"]
+en = '''company's license has been expired'''
+ku = 'lisensi compani basar cho'
+ar = 'al expired'
+
+["company key is not valid"]
+en = 'company key is not valid'
+ku = 'company key halaya'
+ar = 'company key is not valid'
+
+["you don't have permission, out of scope!"]
+en = '''you don't have permission, out of scope!'''
+ku = 'bot nie, la daraway scopa'
+ar = '''you don't have permission, out of scope!'''
+
+[company_id]
+en = 'company_id'
+ku = 'company_id'
+ar = 'company_id'
+
+["internal error"]
+en = 'internal error'
+ku = 'halay server'
+ar = 'internal error'
+
+["machine ID"]
+en = 'machine ID'
+ku = 'kody taybat ba computer'
+ar = 'machine ID'
+
+["company not exist in bond"]
+en = 'company not exist in bond'
+ku = 'companeka tarif nakrawa la bond'
+ar = 'company not exist in bond'
+
+["error in form"]
+en = 'error in form'
+ku = 'hala la form'
+ar = 'error in form'
+
+# new part
+["%v updated successfully"]
+en = '%v updated successfully'
+ku = '%v ba sarkawtuyi update boo'
+ar = '%v updated successfully'
+
+[name]
+en = 'name'
+ku = 'naw'
+ar = 'al esm'
+
+[Phone]
+en = 'Phone'
+ku = 'talafoon'
+ar = 'Phone'
+
+[ID]
+en = 'ID'
+ku = 'ID'
+ar = 'ID'
+
+[code]
+en = 'code'
+ku = 'code'
+ar = 'code'
+
+[type]
+en = 'type'
+ku = 'type'
+ar = 'type'
+
+[node_code]
+en = 'node_code'
+ku = 'node_code'
+ar = 'node_code'
+
+[property]
+en = 'property'
+ku = 'jor'
+ar = 'property'
+
+["temporary token"]
+en = 'temporary token'
+ku = 'temporary token'
+ar = 'temporary token'
+
+[id]
+en = 'id'
+ku = 'aydi'
+ar = 'al-id'
+
+[roles]
+en = 'roles'
+ku = 'rolakan'
+ar = 'roles'
+
+# base
+
+["record not found"]
+en = 'record not found'
+ku = 'recordaka booni nie'
+ar = 'record not found'
+
+["record %v:%v not found in %v"]
+en = 'record %v:%v not found in %v'
+ku = 'recordi %v:%v booni nie la %v'
+ar = 'la moujood %v:%v not found in %v'
+
+["internal server error"]
+en = 'internal server error'
+ku = 'halay server'
+ar = 'internal server error'
+
+["internal server error happened, please aware administration and gave him error code"]
+en = 'internal server error happened, please aware administration and gave him error code'
+ku = 'halay server rooy dawa, tkaya admin agadar kanawa w codi halakay pe bdan'
+ar = 'internal server error happened, please aware administration and gave him error code'
+
+["bind failed"]
+en = 'bind failed'
+ku = 'data qabul nakre'
+ar = 'bind failed'
+
+["validation failed"]
+en = 'validation failed'
+ku = 'validation shkasti hena'
+ar = 'validation failed'
+
+["validation failed for %v"]
+en = 'validation failed for %v'
+ku = 'validation shkasti hena bo %v'
+ar = 'validation failed for %v'
+
+["minimum accepted character for %v is %v"]
+en = 'minimum accepted character for %v is %v'
+ku = '%v abe ba lani kam %v pit be'
+ar = 'minimum accepted character for %v is %v'
+
+[Name]
+en = 'Name'
+ku = 'naw'
+ar = 'Name'
+
+[Username]
+en = 'Username'
+ku = 'nawi bakarhenar'
+ar = 'Username'
+
+[Role]
+en = 'Role'
+ku = 'ark'
+ar = 'Role'
+
+["accepted value for %v are: [%v]"]
+en = 'accepted value for %v are: [%v]'
+ku = 'datay qabul kraw bo %v awanan: [%v]'
+ar = 'accepted value for %v are: [%v]'
+
+[Resource]
+en = 'Resource'
+ku = 'bashakan'
+ar = 'Resource'
+
+[email]
+en = 'email'
+ku = 'email'
+ar = 'email'
+
+[password]
+en = 'password'
+ku = 'password'
+ar = 'password'
+
+[role]
+en = 'role'
+ku = 'ark'
+ar = 'role'
+
+["validation failed for %v %v"]
+en = 'validation failed for %v %v'
+ku = 'datakan halan bo %v %v'
+ar = 'validation failed for %v %v'
+
+[create]
+en = 'create'
+ku = 'drust krdni'
+ar = 'create'
+
+[user]
+en = 'user'
+ku = 'bakar-henar'
+ar = 'user'
+
+[users]
+en = 'users'
+ku = 'bakar-henarakan'
+ar = 'users'
+
+[update]
+en = 'update'
+ku = 'opdate'
+ar = 'update'
+
+["this %v already exist"]
+en = 'this %v already exist'
+ku = 'aw %va peshtr daxl krawa'
+ar = 'this %v already exist'
+
+[username]
+en = 'username'
+ku = 'nawibakarhenar'
+ar = 'username'
+
+[unauthorized]
+en = 'unauthorized'
+ku = 'daxl naboo'
+ar = 'unauthorized'
+
+[resources]
+en = 'resourcess'
+ku = 'sarchawa'
+ar = 'resourcess'
+
+[language]
+en = 'language'
+ku = 'zman'
+ar = 'language'
+
+[value]
+en = 'value'
+ku = 'value'
+ar = 'value'
+
+["some %v related to this %v so it is not deleted"]
+en = 'some %v related to this %v so it is not deleted'
+ku = 'bashek la %v rabtian haya bam %va boya nasretawa'
+ar = 'some %v related to this %v so it is not deleted'
+
+["some %v related to this %v so it is not created"]
+en = 'some %v related to this %v so it is not created'
+ku = 'bashek la %v rabtian haya bam %va boya drwst nakre'
+ar = 'some %v related to this %v so it is not created'
+
+[deleted]
+en = 'deleted'
+ku = 'bsretawa'
+ar = 'deleted'
+
+["error because of foreign key"]
+en = 'error because of external data'
+ku = 'hala ba hoy datay darawa'
+ar = 'error because of external data'
+
+["duplicate happened"]
+en = 'duplicate happened'
+ku = 'peshtr daxl bo'
+ar = 'duplicate happened'
+
+["%v with value %v already exists"]
+en = '%v with value %v already exists'
+ku = '%[2]v peshtr daxl krawa wak %[1]v'
+ar = '%v with value %v already exists'
+
+["%v is already exist"]
+en = '%v is already exist'
+ku = '%v peshtr daxl krawa'
+ar = '%v is already exist'
+
+["please report error to the programmer"]
+en = 'please report error to the programmer'
+ku = 'tkaya programmeraka agadar kanawa'
+ar = 'please report error to the programmer'
+
+[string]
+en = 'string'
+ku = 'nwsraw'
+ar = 'string'
+
+[number]
+en = 'number'
+ku = 'jmara'
+ar = 'number'
+
+["invalid %v for %v"]
+en = 'invalid %v for %v'
+ku = 'am %vya bo %v qabul nakre'
+ar = 'invalid %v for %v'
+
+[Lang]
+en = 'Lang'
+ku = 'زمان'
+ar = 'Lang'

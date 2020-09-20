@@ -30,15 +30,12 @@ func (p *RoleRepo) FindByID(id types.RowID) (role basmodel.Role, err error) {
 	err = p.Engine.DB.Table(basmodel.RoleTable).First(&role, id.ToUint64()).Error
 
 	switch corerr.ClearDbErr(err) {
+	case corerr.Nil:
+		break
 	case corerr.NotFoundErr:
-		err = limberr.Take(err, "E1072991").
-			// Message(corerr.SomeVRelatedToThisVSoItIsNotDeleted, dict.R(corterm.Users), dict.R(corterm.Role)).
-			Message(corerr.RecordVVNotFoundInV, dict.R(corterm.Id), id, dict.R(corterm.Roles)).
-			Custom(corerr.NotFoundErr).Build()
+		err = corerr.RecordNotFoundHelper(err, "E1072991", corterm.ID, id, corterm.Roles)
 	default:
-		err = limberr.Take(err, "E1072992").
-			Message(corerr.InternalServerError).
-			Custom(corerr.InternalServerErr).Build()
+		err = corerr.InternalServerErrorHelper(err, "E1072992")
 	}
 	return
 }
@@ -72,6 +69,23 @@ func (p *RoleRepo) Count(params param.Param) (count uint64, err error) {
 // Update RoleRepo
 func (p *RoleRepo) Update(role basmodel.Role) (u basmodel.Role, err error) {
 	err = p.Engine.DB.Table(basmodel.RoleTable).Save(&role).Error
+	if err != nil {
+		switch corerr.ClearDbErr(err) {
+		case corerr.ForeignErr:
+			err = limberr.Take(err, "E1054817").
+				Message(corerr.SomeVRelatedToThisVSoItIsNotCreated, dict.R(corterm.Users), dict.R(corterm.Role)).
+				Custom(corerr.ForeignErr).Build()
+		case corerr.DuplicateErr:
+			err = limberr.Take(err, "E1054818").
+				Message(corerr.VWithValueVAlreadyExist, dict.R(corterm.Role), role.Name).
+				Custom(corerr.DuplicateErr).Build()
+			err = limberr.AddInvalidParam(err, "name", corerr.VisAlreadyExist, role.Name)
+		default:
+			err = limberr.Take(err, "E1054819").
+				Message(corerr.InternalServerError).
+				Custom(corerr.InternalServerErr).Build()
+		}
+	}
 	p.Engine.DB.Table(basmodel.RoleTable).Where("id = ?", role.ID).Find(&u)
 	return
 }

@@ -5,6 +5,7 @@ import (
 	"omega/domain/base"
 	"omega/domain/base/basmodel"
 	"omega/domain/base/basrepo"
+	"omega/domain/base/message/baserr"
 	"omega/internal/consts"
 	"omega/internal/core"
 	"omega/internal/core/coract"
@@ -41,7 +42,7 @@ func (p *BasAuthServ) Login(auth basmodel.Auth, params param.Param) (user basmod
 	userServ := ProvideBasUserService(basrepo.ProvideUserRepo(p.Engine))
 	if user, err = userServ.FindByUsername(auth.Username); err != nil {
 		err = limberr.Take(err, "E1050501").Custom(corerr.UnauthorizedErr).
-			Message(corerr.Username_or_password_is_wrong).Build()
+			Message(baserr.UsernameOrPasswordIsWrong).Build()
 		return
 	}
 
@@ -66,7 +67,7 @@ func (p *BasAuthServ) Login(auth basmodel.Auth, params param.Param) (user basmod
 		if extra.Token, err = token.SignedString(jwtKey); err != nil {
 			err = errors.New(corerr.InternalServerError)
 			err = limberr.Take(err, "E1085120").Custom(corerr.UnauthorizedErr).
-				Message(corerr.Username_or_password_is_wrong).Build()
+				Message(baserr.UsernameOrPasswordIsWrong).Build()
 			return
 		}
 
@@ -75,9 +76,9 @@ func (p *BasAuthServ) Login(auth basmodel.Auth, params param.Param) (user basmod
 		BasAccessDeleteFromCache(user.ID)
 
 	} else {
-		err = errors.New(corerr.Username_or_password_is_wrong)
+		err = errors.New(baserr.UsernameOrPasswordIsWrong)
 		err = limberr.Take(err, "E1043108").Custom(corerr.UnauthorizedErr).
-			Message(corerr.Username_or_password_is_wrong).Build()
+			Message(baserr.UsernameOrPasswordIsWrong).Build()
 	}
 
 	return

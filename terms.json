@@ -143,7 +143,9 @@
     "ku": "tkaya programmeraka agadar kanawa", 
     "ar": "please report error to the programmer" 
   },
-  "": { "en": "", "ku": "", "ar": "" },
+  "string": { "en": "string", "ku": "nwsraw", "ar": "string" },
+  "number": { "en": "number", "ku": "jmara", "ar": "number" },
+  "invalid %v for %v": { "en": "invalid %v for %v", "ku": "am %vya bo %v qabul nakre", "ar": "invalid %v for %v" },
   "": { "en": "", "ku": "", "ar": "" },
   "": { "en": "", "ku": "", "ar": "" },
   "": { "en": "", "ku": "", "ar": "" },

@@ -5,6 +5,8 @@ import (
 
 	"omega/domain/base/basmodel"
 	"omega/internal/core"
+	"omega/internal/core/corerr"
+	"omega/internal/core/corterm"
 	"omega/internal/param"
 	"omega/internal/search"
 	"omega/internal/types"
@@ -23,6 +25,16 @@ func ProvideUserRepo(engine *core.Engine) UserRepo {
 // FindByID for user
 func (p *UserRepo) FindByID(id types.RowID) (user basmodel.User, err error) {
 	err = p.Engine.DB.Table(basmodel.UserTable).First(&user, id.ToUint64()).Error
+
+	switch corerr.ClearDbErr(err) {
+	case corerr.Nil:
+		break
+	case corerr.NotFoundErr:
+		err = corerr.RecordNotFoundHelper(err, "E1063251", corterm.ID, id, corterm.Roles)
+	default:
+		err = corerr.InternalServerErrorHelper(err, "E1063252")
+	}
+
 	return
 }
 

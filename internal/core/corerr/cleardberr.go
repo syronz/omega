@@ -9,6 +9,9 @@ import (
 
 // ClearDbErr find out what type of errors happened: duplicate, foreing keys or internal error
 func ClearDbErr(err error) limberr.CustomError {
+	if err == nil {
+		return Nil
+	}
 
 	if strings.Contains(strings.ToUpper(err.Error()), "FOREIGN") {
 		return ForeignErr

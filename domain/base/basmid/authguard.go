@@ -22,12 +22,12 @@ func AuthGuard(engine *core.Engine) gin.HandlerFunc {
 
 	return func(c *gin.Context) {
 
-		token := strings.TrimSpace(c.Query("temporary_token"))
+		token := strings.TrimSpace(c.Query("TemporaryToken"))
 		if token == "" {
 			tokenArr, ok := c.Request.Header["Authorization"]
 			if !ok || len(tokenArr[0]) == 0 {
 				response.New(engine, c).Status(http.StatusUnauthorized).Abort().
-					Error(corerr.Token_is_required).JSON()
+					Error(corerr.TokenIsRequired).JSON()
 				return
 			}
 
@@ -67,7 +67,7 @@ func checkErr(c *gin.Context, err error, engine *core.Engine) {
 func checkToken(c *gin.Context, token *jwt.Token, engine *core.Engine) {
 	if !token.Valid {
 		response.New(engine, c).Status(http.StatusUnauthorized).Abort().
-			Error(corerr.Token_is_not_valid).JSON()
+			Error(corerr.TokenIsNotValid).JSON()
 		return
 	}
 }

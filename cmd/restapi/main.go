@@ -24,8 +24,7 @@ func main() {
 		engine.Envs.ToBool(core.ServerLogJSONIndent),
 		true)
 
-	dict.Init(engine.Envs[core.TermsPath],
-		engine.Envs.ToBool(core.TranslateInBackend))
+	dict.Init(engine.Envs[core.TermsPath], engine.Envs.ToBool(core.TranslateInBackend))
 
 	corstartoff.ConnectDB(engine, false)
 	corstartoff.ConnectActivityDB(engine)

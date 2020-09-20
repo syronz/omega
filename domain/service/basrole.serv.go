@@ -10,7 +10,6 @@ import (
 	"omega/internal/param"
 	"omega/internal/types"
 	"omega/pkg/glog"
-	"strings"
 )
 
 // BasRoleServ for injecting auth basrepo
@@ -26,9 +25,7 @@ func ProvideBasRoleService(p basrepo.RoleRepo) BasRoleServ {
 
 // FindByID for getting role by it's id
 func (p *BasRoleServ) FindByID(params param.Param, id types.RowID) (role basmodel.Role, err error) {
-	role, err = p.Repo.FindByID(id)
-
-	if err != nil {
+	if role, err = p.Repo.FindByID(id); err != nil {
 		err = corerr.Tick(err, "E1043183", "can't fetch the role")
 		return
 	}
@@ -40,15 +37,13 @@ func (p *BasRoleServ) FindByID(params param.Param, id types.RowID) (role basmode
 func (p *BasRoleServ) List(params param.Param) (roles []basmodel.Role,
 	count uint64, err error) {
 
-	// data = make(map[string]interface{})
-
 	if roles, err = p.Repo.List(params); err != nil {
-		glog.CheckError(err, "roles list")
+		glog.CheckError(err, "error in roles list")
 		return
 	}
 
 	if count, err = p.Repo.Count(params); err != nil {
-		glog.CheckError(err, "roles count")
+		glog.CheckError(err, "error in roles count")
 	}
 
 	return
@@ -58,19 +53,12 @@ func (p *BasRoleServ) List(params param.Param) (roles []basmodel.Role,
 func (p *BasRoleServ) Create(role basmodel.Role, params param.Param) (createdRole basmodel.Role, err error) {
 
 	if err = role.Validate(coract.Save); err != nil {
-		err = corerr.TickValidate(err, "E1098554", corerr.Validation_failed)
+		err = corerr.TickValidate(err, "E1098554", corerr.ValidationFailed)
 		return
 	}
 
 	if createdRole, err = p.Repo.Create(role); err != nil {
-		if strings.Contains(strings.ToUpper(err.Error()), "DUPLICATE") {
-			// err = corerr.New("E1074134", params, base.Domain, err, role).
-			// 	FieldError("/roles", corerr.Duplication_happened).
-			// 	Add("name", corerr.This_V_already_exist, dict.R("name"))
-			return
-		}
-		// err = corerr.New("E10522393", params, base.Domain, err, role.Name, role.Resources, role.Description).
-		// 	InternalServer("/roles")
+		err = corerr.Tick(err, "E1042894", "role not created")
 		return
 	}
 
