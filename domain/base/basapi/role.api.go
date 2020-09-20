@@ -51,7 +51,7 @@ func (p *RoleAPI) FindByID(c *gin.Context) {
 
 // List of roles
 func (p *RoleAPI) List(c *gin.Context) {
-	resp, params := response.NewParam(p.Engine, c, basterm.Roles)
+	resp, params := response.NewParam(p.Engine, c, basmodel.RoleTable)
 
 	data := make(map[string]interface{})
 	var err error

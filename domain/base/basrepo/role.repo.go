@@ -54,6 +54,15 @@ func (p *RoleRepo) List(params param.Param) (roles []basmodel.Role, err error) {
 		Offset(params.Offset).
 		Find(&roles).Error
 
+	switch corerr.ClearDbErr(err) {
+	case corerr.Nil:
+		break
+	case corerr.ValidationFailedErr:
+		err = corerr.ValidationFailedHelper(err, "E1032861")
+	default:
+		err = corerr.InternalServerErrorHelper(err, "E1022879")
+	}
+
 	return
 }
 

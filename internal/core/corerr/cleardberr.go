@@ -19,6 +19,9 @@ func ClearDbErr(err error) limberr.CustomError {
 	if strings.Contains(strings.ToUpper(err.Error()), "DUPLICATE") {
 		return DuplicateErr
 	}
+	if strings.Contains(strings.ToUpper(err.Error()), "UNKNOWN COLUMN") {
+		return ValidationFailedErr
+	}
 
 	if gorm.IsRecordNotFoundError(err) {
 		return NotFoundErr

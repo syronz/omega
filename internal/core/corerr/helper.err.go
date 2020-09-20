@@ -18,3 +18,10 @@ func InternalServerErrorHelper(err error, code string) error {
 		Message(InternalServerError).
 		Custom(InternalServerErr).Build()
 }
+
+// ValidationFailedHelper help generate proper error in case of validation faced error
+func ValidationFailedHelper(err error, code string) error {
+	return limberr.Take(err, code).
+		Message(ValidationFailed).
+		Custom(ValidationFailedErr).Build()
+}
