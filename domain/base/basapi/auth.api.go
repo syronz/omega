@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"omega/domain/base"
 	"omega/domain/base/basmodel"
-	"omega/domain/base/message/baserr"
 	"omega/domain/base/message/basterm"
 	"omega/domain/service"
 	"omega/internal/core"
@@ -40,7 +39,7 @@ func (p *AuthAPI) Login(c *gin.Context) {
 	user, err := p.Service.Login(auth, params)
 	if err != nil {
 		resp.Error(err).JSON()
-		resp.Record(baserr.AuthLoginFailed, auth.Username, len(auth.Password))
+		resp.Record(base.LoginFailed, auth.Username, len(auth.Password))
 		return
 	}
 

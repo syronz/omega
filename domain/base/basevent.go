@@ -27,6 +27,7 @@ const (
 
 	AllActivity types.Event = "activity-all"
 
-	BasLogin  types.Event = "login"
-	BasLogout types.Event = "logout"
+	BasLogin    types.Event = "login"
+	BasLogout   types.Event = "logout"
+	LoginFailed types.Event = "login-failed"
 )

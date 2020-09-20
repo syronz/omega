@@ -63,7 +63,7 @@ func (p *BasSettingServ) List(params param.Param) (data map[string]interface{}, 
 }
 
 // Save setting
-func (p *BasSettingServ) Save(setting basmodel.Setting, params param.Param) (savedSetting basmodel.Setting, err error) {
+func (p *BasSettingServ) Save(setting basmodel.Setting) (savedSetting basmodel.Setting, err error) {
 	if err = setting.Validate(coract.Save); err != nil {
 		err = limberr.Take(err, "E1012874").
 			Custom(corerr.ValidationFailedErr).Build()
@@ -77,7 +77,7 @@ func (p *BasSettingServ) Save(setting basmodel.Setting, params param.Param) (sav
 }
 
 // Update setting
-func (p *BasSettingServ) Update(setting basmodel.Setting, params param.Param) (savedSetting basmodel.Setting, err error) {
+func (p *BasSettingServ) Update(setting basmodel.Setting) (savedSetting basmodel.Setting, err error) {
 	if err = setting.Validate(coract.Update); err != nil {
 		err = limberr.Take(err, "E1053228").
 			Custom(corerr.ValidationFailedErr).Build()

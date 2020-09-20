@@ -7,7 +7,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// ClearDbErr find out what type of errors happened: duplicate, foreing keys or internal error
+// ClearDbErr find out what type of errors happened: duplicate, foreign keys or internal error
 func ClearDbErr(err error) limberr.CustomError {
 	if err == nil {
 		return Nil

@@ -86,7 +86,7 @@ func (p *SettingAPI) List(c *gin.Context) {
 
 // Update setting
 func (p *SettingAPI) Update(c *gin.Context) {
-	resp, params := response.NewParam(p.Engine, c, thisSetting)
+	resp := response.New(p.Engine, c)
 	var err error
 
 	var setting, settingBefore, settingUpdated basmodel.Setting
@@ -106,7 +106,7 @@ func (p *SettingAPI) Update(c *gin.Context) {
 		return
 	}
 
-	if settingUpdated, err = p.Service.Update(setting, params); err != nil {
+	if settingUpdated, err = p.Service.Update(setting); err != nil {
 		resp.Error(err).JSON()
 		return
 	}

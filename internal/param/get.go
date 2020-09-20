@@ -16,8 +16,8 @@ func Get(c *gin.Context, engine *core.Engine, part string) (param Param) {
 
 	generateOrder(c, &param, part)
 	generateSelectedColumns(c, &param)
-	generateLimit(c, &param, engine)
-	generateOffset(c, &param, engine)
+	generateLimit(c, &param)
+	generateOffset(c, &param)
 
 	param.Search = strings.TrimSpace(c.Query("search"))
 
@@ -27,10 +27,6 @@ func Get(c *gin.Context, engine *core.Engine, part string) (param Param) {
 		param.UserID = userID.(types.RowID)
 	}
 
-	// language, ok := c.Get("LANGUAGE")
-	// if ok {
-	// 	param.Lang = language.(string)
-	// }
 	param.Lang = core.GetLang(c, engine)
 
 	param.ErrPanel = engine.Envs[core.ErrPanel]
@@ -60,7 +56,7 @@ func generateSelectedColumns(c *gin.Context, param *Param) {
 	}
 }
 
-func generateLimit(c *gin.Context, param *Param, engine *core.Engine) {
+func generateLimit(c *gin.Context, param *Param) {
 	var err error
 	param.Limit = 10
 	if c.Query("page_size") != "" {
@@ -73,7 +69,7 @@ func generateLimit(c *gin.Context, param *Param, engine *core.Engine) {
 	}
 }
 
-func generateOffset(c *gin.Context, param *Param, engine *core.Engine) {
+func generateOffset(c *gin.Context, param *Param) {
 	var page uint64
 	page = 0
 	var err error

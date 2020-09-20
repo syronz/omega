@@ -67,8 +67,6 @@ func LoadTestEnv() *core.Engine {
 		log.Fatalln(err, "error in unmarshal JSON")
 	}
 
-	// fmt.Printf(">>>>>>>>>>>>>>> %+v \n", testEnvs)
-
 	var envs types.Envs
 	envs = make(types.Envs, 28)
 	envs[core.Port] = testEnvs.Core.Port

@@ -11,11 +11,9 @@ import (
 	"omega/pkg/limberr"
 )
 
+// RoleTable is a global instance for working with role
 const (
-	// RoleTable is used inside the repo layer
 	RoleTable = "bas_roles"
-	RolePart  = "role"
-	RolesPart = "roles"
 )
 
 // Role model

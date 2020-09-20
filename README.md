@@ -12,7 +12,6 @@
 [![GoDoc](https://godoc.org/github.com/syronz/omega?status.png)](https://godoc.org/github.com/syronz/omega)
 [![MIT license](https://img.shields.io/badge/license-MIT-brightgreen.svg)](https://opensource.org/licenses/MIT)
 
-good day Mr. analysing excuze
 Simple app for analyzing golnag clean design.
 Inspired by
 
@@ -46,7 +45,7 @@ plog.ServerLog.Panic(err.Error())
 - [ ] if types.Resource not used in core it should moved to the base domain, in the future I decide about that
 - [x] apilogger should be moved to other place
 - [ ] implement refresh token
-- [ ] common method for repo based on inheritence
+- [ ] common method for repo based on inheritance
 
 # Requesed RMS part
 1. inventory import should lock the price for agent

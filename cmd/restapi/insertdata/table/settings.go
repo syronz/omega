@@ -6,7 +6,6 @@ import (
 	"omega/domain/base/basrepo"
 	"omega/domain/service"
 	"omega/internal/core"
-	"omega/internal/param"
 	"omega/internal/types"
 	"omega/pkg/glog"
 )
@@ -16,7 +15,6 @@ func InsertSettings(engine *core.Engine) {
 	// engine.DB.Exec(fmt.Sprintf("TRUNCATE TABLE %v", basmodel.SettingTable))
 	settingRepo := basrepo.ProvideSettingRepo(engine)
 	settingService := service.ProvideBasSettingService(settingRepo)
-	params := param.Param{}
 	settings := []basmodel.Setting{
 		{
 			FixedCol: types.FixedCol{
@@ -66,10 +64,9 @@ func InsertSettings(engine *core.Engine) {
 	}
 
 	for _, v := range settings {
-		if _, err := settingService.Save(v, params); err != nil {
+		if _, err := settingService.Save(v); err != nil {
 			glog.Fatal(err)
 		}
-
 	}
 
 }
