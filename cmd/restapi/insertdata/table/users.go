@@ -1,7 +1,6 @@
 package table
 
 import (
-	"fmt"
 	"omega/domain/base"
 	"omega/domain/base/basmodel"
 	"omega/domain/base/basrepo"
