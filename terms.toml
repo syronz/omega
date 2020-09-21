@@ -54,6 +54,11 @@ en = 'minimum accepted character for %v is %v'
 ku = '%v abe ba lani kam %v pit be'
 ar = 'minimum accepted character for %v is %v'
 
+["maximum accepted character for %v is %v"]
+en = 'maximum accepted character for %v is %v'
+ku = '%v ziater la %v pit warnagre'
+ar = 'maximum accepted character for %v is %v'
+
 ["accepted value for %v are: [%v]"]
 en = 'accepted value for %v are: [%v]'
 ku = 'datay qabul kraw bo %v awanan: [%v]'
@@ -130,10 +135,10 @@ en = 'password'
 ku = 'password'
 ar = 'password'
 
-[resource]
-en = 'resource'
+[resources]
+en = 'resources'
 ku = 'bashakan'
-ar = 'resource'
+ar = 'resources'
 
 [name]
 en = 'name'
@@ -175,6 +180,11 @@ en = 'users'
 ku = 'bakar-henarakan'
 ar = 'users'
 
+[description]
+en = 'description'
+ku = 'tebini'
+ar = 'description'
+
 ["%v created successfully"]
 en = '%v created successfully'
 ku = '%v ba sarkawtooyi drwst kra'
@@ -212,13 +222,12 @@ en = 'username or password is wrong'
 ku = 'username yan passwordakat halaya'
 ar = 'username or password is wrong'
 
-# base/message/baserr/terms.err.go ----------------------------------------------------------------------
+# base/message/basterm/terms.msg.go ----------------------------------------------------------------------
 [user]
 en = 'user'
 ku = 'bakar-henar'
 ar = 'user'
 
-# base/message/baserr/terms.err.go ----------------------------------------------------------------------
 ["user loged in successfully"]
 en = 'user loged in successfully'
 ku = 'user ba sarkawtooyi daxl boo'

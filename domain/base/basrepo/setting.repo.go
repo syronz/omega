@@ -6,6 +6,7 @@ import (
 	"omega/internal/param"
 	"omega/internal/search"
 	"omega/internal/types"
+	"omega/pkg/glog"
 )
 
 // SettingRepo for injecting engine
@@ -36,6 +37,7 @@ func (p *SettingRepo) List(params param.Param) (settings []basmodel.Setting, err
 	if err != nil {
 		return
 	}
+	glog.Debug(columns)
 
 	err = p.Engine.DB.Table(basmodel.SettingTable).Select(columns).
 		Where(search.Parse(params, basmodel.Setting{}.Pattern())).

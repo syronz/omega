@@ -58,9 +58,21 @@ func (p *Role) Validate(act coract.Action) (err error) {
 				dict.R(corterm.Name), 5)
 		}
 
+		if len(p.Name) > 255 {
+			err = limberr.AddInvalidParam(err, "name",
+				corerr.MaximumAcceptedCharacterForVisV,
+				dict.R(corterm.Name), 255)
+		}
+
 		if p.Resources == "" {
 			err = limberr.AddInvalidParam(err, "resources",
 				corerr.VisRequired, dict.R(corterm.Resources))
+		}
+
+		if len(p.Description) > 255 {
+			err = limberr.AddInvalidParam(err, "description",
+				corerr.MaximumAcceptedCharacterForVisV,
+				dict.R(corterm.Description), 255)
 		}
 	}
 

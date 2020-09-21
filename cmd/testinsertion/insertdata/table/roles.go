@@ -16,7 +16,7 @@ func InsertRoles(engine *core.Engine) {
 	roleService := service.ProvideBasRoleService(roleRepo)
 
 	// reset the roles table
-	roleRepo.Engine.DB.Table(basmodel.SettingTable).Unscoped().Delete(basmodel.Role{})
+	roleRepo.Engine.DB.Table(basmodel.RoleTable).Unscoped().Delete(basmodel.Role{})
 
 	roles := []basmodel.Role{
 		{

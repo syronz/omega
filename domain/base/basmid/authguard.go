@@ -1,11 +1,10 @@
 package basmid
 
 import (
-	"net/http"
 	"omega/domain/base"
 	"omega/internal/core"
 	"omega/internal/core/corerr"
-	"omega/pkg/glog"
+	"omega/pkg/limberr"
 	"strings"
 
 	"omega/internal/response"
@@ -26,8 +25,10 @@ func AuthGuard(engine *core.Engine) gin.HandlerFunc {
 		if token == "" {
 			tokenArr, ok := c.Request.Header["Authorization"]
 			if !ok || len(tokenArr[0]) == 0 {
-				response.New(engine, c).Status(http.StatusUnauthorized).Abort().
-					Error(corerr.TokenIsRequired).JSON()
+				err := limberr.New("token is required", "E1088822").
+					Custom(corerr.UnauthorizedErr).
+					Message(corerr.TokenIsRequired).Build()
+				response.New(engine, c).Error(err).Abort().JSON()
 				return
 			}
 
@@ -37,7 +38,6 @@ func AuthGuard(engine *core.Engine) gin.HandlerFunc {
 		claims := &types.JWTClaims{}
 
 		if tkn, err := jwt.ParseWithClaims(token, claims, fJWT); err != nil {
-			glog.Debug(err)
 			checkErr(c, err, engine)
 			return
 		} else if !tkn.Valid {
@@ -54,20 +54,26 @@ func AuthGuard(engine *core.Engine) gin.HandlerFunc {
 
 func checkErr(c *gin.Context, err error, engine *core.Engine) {
 	if err != nil {
+
 		if err == jwt.ErrSignatureInvalid {
-			response.New(engine, c).Status(http.StatusUnauthorized).Abort().
-				Error(err).JSON()
+			err = limberr.Take(err).Custom(corerr.UnauthorizedErr).
+				Message(corerr.TokenIsNotValid).Build()
+			response.New(engine, c).Error(err).Abort().JSON()
 			return
 		}
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+
+		err = limberr.Take(err).Custom(corerr.UnauthorizedErr).
+			Message(corerr.TokenIsExpired).Build()
+		response.New(engine, c).Error(err).Abort().JSON()
 		return
 	}
 }
 
 func checkToken(c *gin.Context, token *jwt.Token, engine *core.Engine) {
 	if !token.Valid {
-		response.New(engine, c).Status(http.StatusUnauthorized).Abort().
-			Error(corerr.TokenIsNotValid).JSON()
+		err := limberr.New(corerr.TokenIsNotValid, "E1054321").Custom(corerr.UnauthorizedErr).
+			Message(corerr.TokenIsNotValid).Build()
+		response.New(engine, c).Error(err).Abort().JSON()
 		return
 	}
 }

@@ -10,6 +10,7 @@ import (
 	"omega/internal/types"
 	"omega/test/kernel"
 	"testing"
+	"time"
 )
 
 func initRoleTest() (engine *core.Engine, roleServ BasRoleServ) {
@@ -22,12 +23,10 @@ func initRoleTest() (engine *core.Engine, roleServ BasRoleServ) {
 
 func TestCreateRole(t *testing.T) {
 	_, roleServ := initRoleTest()
-	regularParam := getRegularParam("bas_roles.id asc")
 
 	samples := []struct {
-		in     basmodel.Role
-		params param.Param
-		err    error
+		in  basmodel.Role
+		err error
 	}{
 		{
 			in: basmodel.Role{
@@ -35,8 +34,7 @@ func TestCreateRole(t *testing.T) {
 				Resources:   string(base.SupperAccess),
 				Description: "created 1",
 			},
-			params: regularParam,
-			err:    nil,
+			err: nil,
 		},
 		{
 			in: basmodel.Role{
@@ -44,16 +42,14 @@ func TestCreateRole(t *testing.T) {
 				Resources:   string(base.SupperAccess),
 				Description: "created 1",
 			},
-			params: regularParam,
-			err:    errors.New("duplicate"),
+			err: errors.New("duplicate"),
 		},
 		{
 			in: basmodel.Role{
 				Name:      "minimum fields",
 				Resources: string(base.SupperAccess),
 			},
-			params: regularParam,
-			err:    nil,
+			err: nil,
 		},
 		{
 			in: basmodel.Role{
@@ -61,21 +57,19 @@ func TestCreateRole(t *testing.T) {
 				Resources:   string(base.SupperAccess),
 				Description: "created 2",
 			},
-			params: regularParam,
-			err:    errors.New("data too long for name"),
+			err: errors.New("data too long for name"),
 		},
 		{
 			in: basmodel.Role{
 				Resources:   string(base.SupperAccess),
 				Description: "created 3",
 			},
-			params: regularParam,
-			err:    errors.New("name is required"),
+			err: errors.New("name is required"),
 		},
 	}
 
 	for _, v := range samples {
-		_, err := roleServ.Create(v.in, v.params)
+		_, err := roleServ.Create(v.in)
 		if (v.err == nil && err != nil) || (v.err != nil && err == nil) {
 			t.Errorf("\nERROR FOR :::%+v::: \nRETURNS :::%+v:::, \nIT SHOULD BE :::%+v:::", v.in, err, v.err)
 		}
@@ -124,7 +118,6 @@ func TestUpdateRole(t *testing.T) {
 
 func TestDeleteRole(t *testing.T) {
 	_, roleServ := initRoleTest()
-	regularParam := getRegularParam("bas_roles.id asc")
 
 	samples := []struct {
 		id  types.RowID
@@ -141,7 +134,7 @@ func TestDeleteRole(t *testing.T) {
 	}
 
 	for _, v := range samples {
-		_, err := roleServ.Delete(v.id, regularParam)
+		_, err := roleServ.Delete(v.id)
 		if (v.err == nil && err != nil) || (v.err != nil && err == nil) {
 			t.Errorf("ERROR FOR ::::%+v::: \nRETURNS :::%+v:::, \nIT SHOULD BE :::%+v:::", v.id, err, v.err)
 		}
@@ -172,9 +165,11 @@ func TestListRole(t *testing.T) {
 
 	for _, v := range samples {
 		_, count, err := roleServ.List(v.params)
+
 		if (v.err == nil && err != nil) || (v.err != nil && err == nil) || count != v.count {
-			t.Errorf("FOR ::::%+v::: \nRETURNS :::%+v:::, \nIT SHOULD BE :::%+v:::", v.params, count, v.count)
+			t.Errorf("FOR :::%+v::: \nRETURNS :::%+v:::, \nIT SHOULD BE :::%+v:::", v.params, count, v.count)
 		}
+		time.Sleep(1 * time.Second)
 	}
 }
 

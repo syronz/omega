@@ -24,7 +24,7 @@ func ProvideBasRoleService(p basrepo.RoleRepo) BasRoleServ {
 }
 
 // FindByID for getting role by it's id
-func (p *BasRoleServ) FindByID(params param.Param, id types.RowID) (role basmodel.Role, err error) {
+func (p *BasRoleServ) FindByID(id types.RowID) (role basmodel.Role, err error) {
 	if role, err = p.Repo.FindByID(id); err != nil {
 		err = corerr.Tick(err, "E1043183", "can't fetch the role")
 		return
@@ -50,7 +50,7 @@ func (p *BasRoleServ) List(params param.Param) (roles []basmodel.Role,
 }
 
 // Create a role
-func (p *BasRoleServ) Create(role basmodel.Role, params param.Param) (createdRole basmodel.Role, err error) {
+func (p *BasRoleServ) Create(role basmodel.Role) (createdRole basmodel.Role, err error) {
 
 	if err = role.Validate(coract.Save); err != nil {
 		err = corerr.TickValidate(err, "E1098554", corerr.ValidationFailed)
@@ -83,9 +83,9 @@ func (p *BasRoleServ) Save(role basmodel.Role) (savedRole basmodel.Role, err err
 }
 
 // Delete role, it is soft delete
-func (p *BasRoleServ) Delete(roleID types.RowID, params param.Param) (role basmodel.Role, err error) {
+func (p *BasRoleServ) Delete(roleID types.RowID) (role basmodel.Role, err error) {
 
-	if role, err = p.FindByID(params, roleID); err != nil {
+	if role, err = p.FindByID(roleID); err != nil {
 		err = corerr.Tick(err, "E1052861", "role not found to be deleted")
 		return
 	}
@@ -105,8 +105,10 @@ func (p *BasRoleServ) Excel(params param.Param) (roles []basmodel.Role, err erro
 	params.Offset = 0
 	params.Order = "bas_roles.id ASC"
 
-	roles, err = p.Repo.List(params)
-	glog.CheckError(err, "roles excel")
+	if roles, err = p.Repo.List(params); err != nil {
+		err = corerr.Tick(err, "E1067385", "can't generate the excel list")
+		return
+	}
 
 	return
 }

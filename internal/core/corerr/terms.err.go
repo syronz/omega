@@ -13,6 +13,7 @@ const (
 	ValidationFailed                    = "validation failed"
 	VisRequired                         = "%v is required"
 	MinimumAcceptedCharacterForVisV     = "minimum accepted character for %v is %v"
+	MaximumAcceptedCharacterForVisV     = "maximum accepted character for %v is %v"
 	AcceptedValueForVareV               = "accepted value for %v are: [%v]"
 	DuplicateHappened                   = "duplicate happened"
 	SomeVRelatedToThisVSoItIsNotDeleted = "some %v related to this %v so it is not deleted"
@@ -26,4 +27,5 @@ const (
 	YouDontHavePermission               = "you don't have permission"
 	TokenIsRequired                     = "token is required"
 	TokenIsNotValid                     = "token is not valid"
+	TokenIsExpired                      = "token is expired"
 )

@@ -9,7 +9,6 @@ import (
 	"omega/internal/core"
 	"omega/internal/core/corerr"
 	"omega/internal/core/corterm"
-	"omega/internal/param"
 	"omega/internal/response"
 	"omega/internal/types"
 	"omega/pkg/excel"
@@ -30,7 +29,7 @@ func ProvideRoleAPI(c service.BasRoleServ) RoleAPI {
 
 // FindByID is used for fetch a role by it's id
 func (p *RoleAPI) FindByID(c *gin.Context) {
-	resp, params := response.NewParam(p.Engine, c, basterm.Roles)
+	resp := response.New(p.Engine, c)
 	var err error
 	var role basmodel.Role
 
@@ -38,7 +37,7 @@ func (p *RoleAPI) FindByID(c *gin.Context) {
 		return
 	}
 
-	if role, err = p.Service.FindByID(params, role.ID); err != nil {
+	if role, err = p.Service.FindByID(role.ID); err != nil {
 		resp.Error(err).JSON()
 		return
 	}
@@ -71,13 +70,13 @@ func (p *RoleAPI) List(c *gin.Context) {
 func (p *RoleAPI) Create(c *gin.Context) {
 	var role, createdRole basmodel.Role
 	var err error
-	resp, params := response.NewParam(p.Engine, c, basterm.Roles)
+	resp := response.New(p.Engine, c)
 
 	if err = resp.Bind(&role, "E1088259", base.Domain, basterm.Role); err != nil {
 		return
 	}
 
-	if createdRole, err = p.Service.Create(role, params); err != nil {
+	if createdRole, err = p.Service.Create(role); err != nil {
 		resp.Error(err).JSON()
 		return
 	}
@@ -91,7 +90,7 @@ func (p *RoleAPI) Create(c *gin.Context) {
 
 // Update role
 func (p *RoleAPI) Update(c *gin.Context) {
-	resp, params := response.NewParam(p.Engine, c, basterm.Roles)
+	resp := response.New(p.Engine, c)
 	var err error
 
 	var role, roleBefore, roleUpdated basmodel.Role
@@ -104,7 +103,7 @@ func (p *RoleAPI) Update(c *gin.Context) {
 		return
 	}
 
-	if roleBefore, err = p.Service.FindByID(params, role.ID); err != nil {
+	if roleBefore, err = p.Service.FindByID(role.ID); err != nil {
 		resp.Error(err).JSON()
 		return
 	}
@@ -132,9 +131,7 @@ func (p *RoleAPI) Delete(c *gin.Context) {
 		return
 	}
 
-	params := param.Get(c, p.Engine, basterm.Roles)
-
-	if role, err = p.Service.Delete(role.ID, params); err != nil {
+	if role, err = p.Service.Delete(role.ID); err != nil {
 		resp.Status(http.StatusInternalServerError).Error(err).JSON()
 		return
 	}
@@ -147,12 +144,11 @@ func (p *RoleAPI) Delete(c *gin.Context) {
 
 // Excel generate excel files based on search
 func (p *RoleAPI) Excel(c *gin.Context) {
-	resp := response.New(p.Engine, c)
+	resp, params := response.NewParam(p.Engine, c, basterm.Roles)
 
-	params := param.Get(c, p.Engine, basterm.Roles)
 	roles, err := p.Service.Excel(params)
 	if err != nil {
-		resp.Status(http.StatusNotFound).Error(corerr.RecordNotFound).JSON()
+		resp.Error(err).JSON()
 		return
 	}
 

@@ -10,5 +10,6 @@ const (
 	MinPin = 10000000000000
 	MaxPin = 99999999999999
 
-	TemporaryTokenDuration = 100 * 100000 //in seconds
+	// TemporaryTokenDuration = 100 * 100000 //in seconds
+	TemporaryTokenDuration = 10
 )

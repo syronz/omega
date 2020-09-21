@@ -9,6 +9,7 @@ import (
 	"omega/internal/search"
 	"omega/internal/types"
 	"omega/pkg/dict"
+	"omega/pkg/glog"
 	"omega/pkg/limberr"
 )
 
@@ -41,6 +42,7 @@ func (p *RoleRepo) FindByID(id types.RowID) (role basmodel.Role, err error) {
 func (p *RoleRepo) List(params param.Param) (roles []basmodel.Role, err error) {
 	columns, err := basmodel.Role{}.Columns(params.Select, params)
 	if err != nil {
+		glog.Debug(err)
 		return
 	}
 
