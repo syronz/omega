@@ -1,6 +1,6 @@
 {
   "method":"get",
-	"url":"_URL_/roles?order_by=roles.name&direction=asc&page=0&page_size=10000&select=roles.id,roles.name",
+	"url":"_URL_/roles?order_by=bas_roles.name&direction=asc&page=0&page_size=10000&select=bas_roles.id,bas_roles.name",
 	"authorization":"Bearer _TOKEN_",
 	"payload": {}
 }

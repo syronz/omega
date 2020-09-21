@@ -43,8 +43,7 @@ func InsertUsers(engine *core.Engine) {
 
 	for _, v := range users {
 		if _, err := userService.Save(v, params); err != nil {
-			fmt.Printf(">>>>>>>>>>>>>>>>> $$$ %+v \n", err)
-			glog.Fatal(err)
+			glog.Fatal("error in saving users", err)
 		}
 	}
 

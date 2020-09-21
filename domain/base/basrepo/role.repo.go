@@ -5,12 +5,16 @@ import (
 	"omega/internal/core"
 	"omega/internal/core/corerr"
 	"omega/internal/core/corterm"
+	"omega/internal/core/validator"
 	"omega/internal/param"
 	"omega/internal/search"
 	"omega/internal/types"
 	"omega/pkg/dict"
 	"omega/pkg/glog"
+	"omega/pkg/helper"
 	"omega/pkg/limberr"
+	"reflect"
+	"strings"
 )
 
 // RoleRepo for injecting engine
@@ -21,6 +25,27 @@ type RoleRepo struct {
 // ProvideRoleRepo is used in wire
 func ProvideRoleRepo(engine *core.Engine) RoleRepo {
 	return RoleRepo{Engine: engine}
+}
+
+// columns return list of total columns according to request, useful for inner joins
+func (p *RoleRepo) columns(variate string) (string, error) {
+	t := reflect.TypeOf(basmodel.Role{})
+	full := helper.TagExtracter(t, basmodel.RoleTable)
+
+	return validator.CheckColumns(full, variate)
+}
+
+// searchPattern returns the search pattern to be used inside the gorm's where
+func (p *RoleRepo) searchPattern() string {
+
+	cols := []string{
+		basmodel.RoleTable + ".name LIKE '%[1]v%%'",
+		basmodel.RoleTable + ".id = '%[1]v'",
+		basmodel.RoleTable + ".description LIKE '%%%[1]v%%'",
+		basmodel.RoleTable + ".resources LIKE '%%%[1]v%%'",
+	}
+
+	return strings.Join(cols, " OR ")
 }
 
 // FindByID for role
@@ -40,14 +65,14 @@ func (p *RoleRepo) FindByID(id types.RowID) (role basmodel.Role, err error) {
 
 // List of roles
 func (p *RoleRepo) List(params param.Param) (roles []basmodel.Role, err error) {
-	columns, err := basmodel.Role{}.Columns(params.Select, params)
+	columns, err := p.columns(params.Select)
 	if err != nil {
 		glog.Debug(err)
 		return
 	}
 
 	err = p.Engine.DB.Table(basmodel.RoleTable).Select(columns).
-		Where(search.Parse(params, basmodel.Role{}.Pattern())).
+		Where(search.Parse(params, p.searchPattern())).
 		Order(params.Order).
 		Limit(params.Limit).
 		Offset(params.Offset).
@@ -69,7 +94,7 @@ func (p *RoleRepo) List(params param.Param) (roles []basmodel.Role, err error) {
 func (p *RoleRepo) Count(params param.Param) (count uint64, err error) {
 	err = p.Engine.DB.Table(basmodel.RoleTable).
 		Select(params.Select).
-		Where(search.Parse(params, basmodel.Role{}.Pattern())).
+		Where(search.Parse(params, p.searchPattern())).
 		Count(&count).Error
 	return
 }

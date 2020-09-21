@@ -6,7 +6,6 @@ import (
 	"omega/internal/core/corerr"
 	"omega/internal/core/corterm"
 	"omega/internal/core/validator"
-	"omega/internal/param"
 	"omega/internal/types"
 	"omega/pkg/dict"
 	"omega/pkg/helper"
@@ -46,7 +45,7 @@ func (p User) Pattern() string {
 }
 
 // Columns return list of total columns according to request, useful for inner joins
-func (p User) Columns(variate string, params param.Param) (string, error) {
+func (p User) Columns(variate string) (string, error) {
 	full := []string{
 		"bas_users.id",
 		"bas_users.role_id",
@@ -56,7 +55,7 @@ func (p User) Columns(variate string, params param.Param) (string, error) {
 		"bas_roles.name as role",
 	}
 
-	return validator.CheckColumns(full, variate, params)
+	return validator.CheckColumns(full, variate)
 }
 
 // Validate check the type of

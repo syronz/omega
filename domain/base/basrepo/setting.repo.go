@@ -33,7 +33,7 @@ func (p *SettingRepo) FindByProperty(property string) (setting basmodel.Setting,
 
 // List of settings
 func (p *SettingRepo) List(params param.Param) (settings []basmodel.Setting, err error) {
-	columns, err := basmodel.Setting{}.Columns(params.Select, params)
+	columns, err := basmodel.Setting{}.Columns(params.Select)
 	if err != nil {
 		return
 	}

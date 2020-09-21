@@ -2,7 +2,6 @@ package basmodel
 
 import (
 	"omega/internal/core/validator"
-	"omega/internal/param"
 	"omega/internal/types"
 )
 
@@ -38,7 +37,7 @@ func (p Activity) Pattern() string {
 }
 
 // Columns return list of total columns according to request, useful for inner joins
-func (p Activity) Columns(variate string, params param.Param) (string, error) {
+func (p Activity) Columns(variate string) (string, error) {
 	full := []string{
 		"bas_activities.id",
 		"bas_activities.event",
@@ -51,5 +50,5 @@ func (p Activity) Columns(variate string, params param.Param) (string, error) {
 		"bas_activities.created_at",
 	}
 
-	return validator.CheckColumns(full, variate, params)
+	return validator.CheckColumns(full, variate)
 }

@@ -57,7 +57,7 @@ func InsertRoles(engine *core.Engine) {
 
 	for _, v := range roles {
 		if _, err := roleService.Save(v); err != nil {
-			glog.Fatal("error in inserting roles", err)
+			glog.Fatal("error in saving roles", err)
 		}
 
 	}

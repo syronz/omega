@@ -69,16 +69,16 @@ func (p *BasRoleServ) Create(role basmodel.Role) (createdRole basmodel.Role, err
 func (p *BasRoleServ) Save(role basmodel.Role) (savedRole basmodel.Role, err error) {
 
 	if err = role.Validate(coract.Save); err != nil {
-		glog.CheckError(err, "validation failed")
+		err = corerr.TickValidate(err, "E1037119", corerr.ValidationFailed)
 		return
 	}
 
-	savedRole, err = p.Repo.Update(role)
-	glog.CheckInfo(err, fmt.Sprintf("Failed in updating role for %+v", role))
-	if err == nil {
-		BasAccessResetFullCache()
+	if savedRole, err = p.Repo.Update(role); err != nil {
+		err = corerr.Tick(err, "E1078742", "role not saved")
+		return
 	}
 
+	BasAccessResetFullCache()
 	return
 }
 
@@ -103,7 +103,7 @@ func (p *BasRoleServ) Delete(roleID types.RowID) (role basmodel.Role, err error)
 func (p *BasRoleServ) Excel(params param.Param) (roles []basmodel.Role, err error) {
 	params.Limit = p.Engine.Envs.ToUint64(core.ExcelMaxRows)
 	params.Offset = 0
-	params.Order = "bas_roles.id ASC"
+	params.Order = fmt.Sprintf("%v.id ASC", basmodel.RoleTable)
 
 	if roles, err = p.Repo.List(params); err != nil {
 		err = corerr.Tick(err, "E1067385", "can't generate the excel list")

@@ -2,14 +2,13 @@ package validator
 
 import (
 	"omega/internal/core/corerr"
-	"omega/internal/param"
 	"omega/pkg/helper"
 	"omega/pkg/limberr"
 	"strings"
 )
 
 // CheckColumns will check columns for security
-func CheckColumns(cols []string, variate string, params param.Param) (string, error) {
+func CheckColumns(cols []string, variate string) (string, error) {
 	// fieldError := core.NewFieldError(term.Error_in_url)
 	// fieldError := corerr.NewSilent("E1059215", params, base.Domain, nil)
 	var err error

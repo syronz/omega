@@ -50,7 +50,6 @@ func (r *RowID) Scan(value interface{}) error {
 */
 
 // func (r *RowID) Scan(value interface{}) error {
-// 	fmt.Println("**************************", value)
 // 	result, _ := value.(RowID)
 // 	*r = RowID(result)
 // 	return nil

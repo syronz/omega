@@ -5,7 +5,6 @@ import (
 	"omega/internal/core/corerr"
 	"omega/internal/core/corterm"
 	"omega/internal/core/validator"
-	"omega/internal/param"
 	"omega/internal/types"
 	"omega/pkg/dict"
 	"omega/pkg/limberr"
@@ -37,7 +36,7 @@ func (p Setting) Pattern() string {
 }
 
 // Columns return list of total columns according to request, useful for inner joins
-func (p Setting) Columns(variate string, params param.Param) (string, error) {
+func (p Setting) Columns(variate string) (string, error) {
 	full := []string{
 		"bas_settings.id",
 		"bas_settings.property",
@@ -46,7 +45,7 @@ func (p Setting) Columns(variate string, params param.Param) (string, error) {
 		"bas_settings.description",
 	}
 
-	return validator.CheckColumns(full, variate, params)
+	return validator.CheckColumns(full, variate)
 }
 
 // Validate check the type of fields

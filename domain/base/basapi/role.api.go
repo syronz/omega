@@ -7,10 +7,8 @@ import (
 	"omega/domain/base/message/basterm"
 	"omega/domain/service"
 	"omega/internal/core"
-	"omega/internal/core/corerr"
 	"omega/internal/core/corterm"
 	"omega/internal/response"
-	"omega/internal/types"
 	"omega/pkg/excel"
 
 	"github.com/gin-gonic/gin"
@@ -82,7 +80,6 @@ func (p *RoleAPI) Create(c *gin.Context) {
 	}
 
 	resp.RecordCreate(base.CreateRole, role)
-
 	resp.Status(http.StatusOK).
 		MessageT(corterm.VCreatedSuccessfully, basterm.Role).
 		JSON(createdRole)
@@ -114,7 +111,6 @@ func (p *RoleAPI) Update(c *gin.Context) {
 	}
 
 	resp.Record(base.UpdateRole, roleBefore, role)
-
 	resp.Status(http.StatusOK).
 		MessageT(corterm.VUpdatedSuccessfully, basterm.Role).
 		JSON(roleUpdated)
@@ -126,13 +122,12 @@ func (p *RoleAPI) Delete(c *gin.Context) {
 	var err error
 	var role basmodel.Role
 
-	if role.ID, err = types.StrToRowID(c.Param("roleID")); err != nil {
-		resp.Error(corerr.InvalidID).JSON()
+	if role.ID, err = resp.GetRowID(c.Param("roleID"), "E1074329", base.Domain); err != nil {
 		return
 	}
 
 	if role, err = p.Service.Delete(role.ID); err != nil {
-		resp.Status(http.StatusInternalServerError).Error(err).JSON()
+		resp.Error(err).JSON()
 		return
 	}
 
