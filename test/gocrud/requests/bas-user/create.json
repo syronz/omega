@@ -4,9 +4,9 @@
   "authorization":"Bearer _TOKEN_",
   "payload": {
     "role_id":10000,
-    "username2": "_RANDOM_NAME_",
-    "password2": "1234567890",
-    "language2":"ku",
-    "email":"sa bina.diako@gmail.com"
+    "username": "_RANDOM_NAME_",
+    "password": "1234567890",
+    "language":"ku",
+    "email":"sabina.diako@gmail.com"
   }
 }
