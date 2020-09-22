@@ -29,10 +29,9 @@ func ProvideAuthAPI(p service.BasAuthServ) AuthAPI {
 // Login auth
 func (p *AuthAPI) Login(c *gin.Context) {
 	var auth basmodel.Auth
-	resp, params := response.NewParam(p.Engine, c, thisUsers)
+	resp, params := response.NewParam(p.Engine, c, basterm.Users)
 
-	if err := c.BindJSON(&auth); err != nil {
-		c.AbortWithStatusJSON(http.StatusNotAcceptable, err)
+	if err := resp.Bind(&auth, "E1053877", base.Domain, basterm.UsernameAndPassword); err != nil {
 		return
 	}
 
@@ -43,10 +42,10 @@ func (p *AuthAPI) Login(c *gin.Context) {
 		return
 	}
 
-	userTmp := user
-	userTmp.Extra = nil
+	tmpUser := user
+	tmpUser.Extra = nil
 
-	resp.Record(base.BasLogin, nil, userTmp)
+	resp.Record(base.BasLogin, tmpUser)
 	resp.Status(http.StatusOK).
 		Message(basterm.UserLogedInSuccessfully).
 		JSON(user)
@@ -55,7 +54,7 @@ func (p *AuthAPI) Login(c *gin.Context) {
 // Logout will erase the resources from access.Cache
 func (p *AuthAPI) Logout(c *gin.Context) {
 	resp := response.New(p.Engine, c)
-	params := param.Get(c, p.Engine, thisUsers)
+	params := param.Get(c, p.Engine, basterm.Users)
 	p.Service.Logout(params)
 	resp.Record(base.BasLogout)
 	resp.Status(http.StatusOK).

@@ -112,7 +112,7 @@ func (r *Response) JSON(data ...interface{}) {
 			corerr.UniqErrorMap[customError], errorDocPath)
 
 		tra := translator(lang)
-		parsedError, r.status = limberr.Parse(r.Result.Error, tra)
+		r.status, parsedError = limberr.Parse(r.Result.Error, tra)
 	}
 
 	// if data is one element don't put it in array

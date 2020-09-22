@@ -84,6 +84,7 @@ func (p *BasAuthServ) Login(auth basmodel.Auth, params param.Param) (user basmod
 	return
 }
 
+// Logout erase resources from the cache
 func (p *BasAuthServ) Logout(params param.Param) {
 	BasAccessResetCache(params.UserID)
 }
@@ -103,6 +104,7 @@ func (p *BasAuthServ) TemporaryToken(params param.Param) (tmpKey string, err err
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	if tmpKey, err = token.SignedString(jwtKey); err != nil {
+		err = corerr.Tick(err, "E1044682", "temporary token not generated")
 		return
 	}
 

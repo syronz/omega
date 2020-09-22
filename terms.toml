@@ -237,3 +237,8 @@ ar = 'user'
 en = 'user loged in successfully'
 ku = 'user ba sarkawtooyi daxl boo'
 ar = 'user loged in successfully'
+
+["username and password"]
+en = 'username and password'
+ku = 'username w password'
+ar = 'username and password'

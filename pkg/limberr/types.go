@@ -4,6 +4,7 @@ import (
 	"fmt"
 )
 
+// Final is hold different parts of the error based on rfc 7807
 type Final struct {
 	Code          string        `json:"code,omitempty"`
 	Type          string        `json:"type,omitempty"`
@@ -27,9 +28,6 @@ type Field struct {
 
 func (p *Final) Error() string {
 	errStr := fmt.Sprintf("#%v, err:%v", p.Code, p.OriginalError)
-	// if len(p.InvalidParams) > 0 {
-	// 	errStr += fmt.Sprintf(", invalid_params:%+v", p.InvalidParams)
-	// }
 	return errStr
 }
 

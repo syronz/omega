@@ -20,9 +20,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const thisUser = "user"
-const thisUsers = "users"
-
 // UserAPI for injecting user service
 type UserAPI struct {
 	Service service.BasUserServ
@@ -36,17 +33,16 @@ func ProvideUserAPI(c service.BasUserServ) UserAPI {
 
 // FindByID is used for fetch a user by it's id
 func (p *UserAPI) FindByID(c *gin.Context) {
-	resp, params := response.NewParam(p.Engine, c, thisUsers)
+	resp := response.New(p.Engine, c)
 	var err error
 	var user basmodel.User
 
-	if user.ID, err = types.StrToRowID(c.Param("userID")); err != nil {
-		resp.Error(corerr.InvalidID).JSON()
+	if user.ID, err = resp.GetRowID(c.Param("userID"), "E1090173", base.Domain); err != nil {
 		return
 	}
 
-	if user, err = p.Service.FindByID(user.ID, params); err != nil {
-		resp.Status(http.StatusNotFound).Error(err).MessageT(corerr.RecordNotFound).JSON()
+	if user, err = p.Service.FindByID(user.ID); err != nil {
+		resp.Error(err).JSON()
 		return
 	}
 
@@ -54,7 +50,7 @@ func (p *UserAPI) FindByID(c *gin.Context) {
 
 	resp.Record(base.ViewUser)
 	resp.Status(http.StatusOK).
-		MessageT(corterm.VInfo, thisUser).
+		MessageT(corterm.VInfo, basterm.User).
 		JSON(user)
 }
 
@@ -78,7 +74,7 @@ func (p *UserAPI) FindByUsername(c *gin.Context) {
 func (p *UserAPI) List(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 
-	params := param.Get(c, p.Engine, thisUsers)
+	params := param.Get(c, p.Engine, basterm.Users)
 
 	data, err := p.Service.List(params)
 	if err != nil {
@@ -88,7 +84,7 @@ func (p *UserAPI) List(c *gin.Context) {
 
 	resp.Record(base.ListUser)
 	resp.Status(http.StatusOK).
-		MessageT(corterm.ListOfV, thisUsers).
+		MessageT(corterm.ListOfV, basterm.Users).
 		JSON(data)
 }
 
@@ -103,7 +99,7 @@ func (p *UserAPI) Create(c *gin.Context) {
 		return
 	}
 
-	params := param.Get(c, p.Engine, thisUsers)
+	params := param.Get(c, p.Engine, basterm.Users)
 
 	createdUser, err := p.Service.Create(user, params)
 	if err != nil {
@@ -121,7 +117,7 @@ func (p *UserAPI) Create(c *gin.Context) {
 
 // Update user
 func (p *UserAPI) Update(c *gin.Context) {
-	resp, params := response.NewParam(p.Engine, c, thisUser)
+	resp, params := response.NewParam(p.Engine, c, basterm.User)
 	var err error
 
 	var user, userBefore, userUpdated basmodel.User
@@ -136,7 +132,7 @@ func (p *UserAPI) Update(c *gin.Context) {
 		return
 	}
 
-	if userBefore, err = p.Service.FindByID(user.ID, params); err != nil {
+	if userBefore, err = p.Service.FindByID(user.ID); err != nil {
 		// resp.Status(http.StatusNotFound).Error(corerr.RecordNotFound).JSON()
 		resp.Error(err).JSON()
 		return
@@ -150,7 +146,7 @@ func (p *UserAPI) Update(c *gin.Context) {
 	resp.Record(base.UpdateUser, userBefore, userUpdated)
 
 	resp.Status(http.StatusOK).
-		MessageT(corterm.VUpdatedSuccessfully, thisUser).
+		MessageT(corterm.VUpdatedSuccessfully, basterm.User).
 		JSON(userUpdated)
 
 }
@@ -166,16 +162,14 @@ func (p *UserAPI) Delete(c *gin.Context) {
 		return
 	}
 
-	params := param.Get(c, p.Engine, thisUser)
-
-	if user, err = p.Service.Delete(user.ID, params); err != nil {
+	if user, err = p.Service.Delete(user.ID); err != nil {
 		resp.Status(http.StatusInternalServerError).Error(err).JSON()
 		return
 	}
 
 	resp.Record(base.DeleteUser, user)
 	resp.Status(http.StatusOK).
-		MessageT(corterm.VDeletedSuccessfully, thisUser).
+		MessageT(corterm.VDeletedSuccessfully, basterm.User).
 		JSON()
 }
 
@@ -183,7 +177,7 @@ func (p *UserAPI) Delete(c *gin.Context) {
 func (p *UserAPI) Excel(c *gin.Context) {
 	resp := response.New(p.Engine, c)
 
-	params := param.Get(c, p.Engine, thisUsers)
+	params := param.Get(c, p.Engine, basterm.Users)
 
 	users, err := p.Service.Excel(params)
 	if err != nil {

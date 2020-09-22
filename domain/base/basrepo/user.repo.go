@@ -41,10 +41,20 @@ func (p *UserRepo) FindByID(id types.RowID) (user basmodel.User, err error) {
 // FindByUsername for user
 func (p *UserRepo) FindByUsername(username string) (user basmodel.User, err error) {
 	err = p.Engine.DB.Table(basmodel.UserTable).Table("bas_users").
-		Select("bas_users.*, bas_roles.resources").
+		Select("bas_users.*, bas_roles.resources, bas_roles.name as role").
 		Where("bas_users.username = ?", username).
 		Joins("INNER JOIN bas_roles on bas_roles.id = bas_users.role_id").
 		Scan(&user).Error
+
+	switch corerr.ClearDbErr(err) {
+	case corerr.Nil:
+		break
+	case corerr.NotFoundErr:
+		err = corerr.RecordNotFoundHelper(err, "E1021865", corterm.Username, username, corterm.Roles)
+	default:
+		err = corerr.InternalServerErrorHelper(err, "E1021866")
+	}
+
 	return
 }
 

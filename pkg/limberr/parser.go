@@ -10,7 +10,7 @@ import (
 type Translator func(string, ...interface{}) string
 
 // Parse convert chained error to the Final format for send in JSON format
-func Parse(err error, translator Translator) (error, int) {
+func Parse(err error, translator Translator) (int, error) {
 	var final Final
 	var status int
 
@@ -55,10 +55,10 @@ func Parse(err error, translator Translator) (error, int) {
 			err = errors.Unwrap(err)
 		default:
 			log.Println("There shouldn't be a default error", err)
-			return &final, http.StatusInternalServerError
+			return http.StatusInternalServerError, &final
 		}
 	}
-	return &final, status
+	return status, &final
 }
 
 func GetCustom(err error) (customError CustomError) {

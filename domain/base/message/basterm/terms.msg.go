@@ -7,4 +7,5 @@ const (
 	Users = "users"
 
 	UserLogedInSuccessfully = "user loged in successfully"
+	UsernameAndPassword     = "username and password"
 )

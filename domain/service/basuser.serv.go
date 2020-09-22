@@ -14,8 +14,6 @@ import (
 	"omega/pkg/glog"
 	"omega/pkg/limberr"
 	"omega/pkg/password"
-
-	"github.com/jinzhu/gorm"
 )
 
 // BasUserServ for injecting auth basrepo
@@ -30,16 +28,9 @@ func ProvideBasUserService(p basrepo.UserRepo) BasUserServ {
 }
 
 // FindByID for getting user by it's id
-func (p *BasUserServ) FindByID(id types.RowID, params param.Param) (user basmodel.User, err error) {
+func (p *BasUserServ) FindByID(id types.RowID) (user basmodel.User, err error) {
 	if user, err = p.Repo.FindByID(id); err != nil {
-		if gorm.IsRecordNotFoundError(err) {
-			// err = corerr.New("E1039228", params, base.Domain, err, id).
-			// 	NotFound(basmodel.UsersPart, "id", id, "users/"+id.ToString())
-			return
-		}
-
-		// err = corerr.New("E1072451", params, base.Domain, err, id).
-		// 	InternalServer("users/" + id.ToString())
+		err = corerr.Tick(err, "E1066324", "can't fetch the user")
 		return
 	}
 
@@ -124,7 +115,7 @@ func (p *BasUserServ) Create(user basmodel.User,
 func (p *BasUserServ) Save(user basmodel.User, params param.Param) (createdUser basmodel.User, err error) {
 
 	var oldUser basmodel.User
-	oldUser, _ = p.FindByID(user.ID, params)
+	oldUser, _ = p.FindByID(user.ID)
 
 	if user.ID > 0 {
 		if err = user.Validate(coract.Update); err != nil {
@@ -176,8 +167,8 @@ func (p *BasUserServ) Excel(params param.Param) (users []basmodel.User, err erro
 }
 
 // Delete user, it is hard delete, by deleting account related to the user
-func (p *BasUserServ) Delete(userID types.RowID, params param.Param) (user basmodel.User, err error) {
-	if user, err = p.FindByID(userID, params); err != nil {
+func (p *BasUserServ) Delete(userID types.RowID) (user basmodel.User, err error) {
+	if user, err = p.FindByID(userID); err != nil {
 		return user, core.NewErrorWithStatus(err.Error(), http.StatusNotFound)
 	}
 
