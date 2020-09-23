@@ -4,7 +4,6 @@ import (
 	"omega/domain/base/basmodel"
 	"omega/internal/core"
 	"omega/internal/param"
-	"omega/internal/search"
 	"omega/internal/types"
 	"omega/pkg/glog"
 )
@@ -40,7 +39,7 @@ func (p *SettingRepo) List(params param.Param) (settings []basmodel.Setting, err
 	glog.Debug(columns)
 
 	err = p.Engine.DB.Table(basmodel.SettingTable).Select(columns).
-		Where(search.Parse(params, basmodel.Setting{}.Pattern())).
+		// Where(search.Parse(params, basmodel.Setting{}.Pattern())).
 		Order(params.Order).
 		Limit(params.Limit).
 		Offset(params.Offset).
@@ -53,7 +52,7 @@ func (p *SettingRepo) List(params param.Param) (settings []basmodel.Setting, err
 func (p *SettingRepo) Count(params param.Param) (count uint64, err error) {
 	err = p.Engine.DB.Table(basmodel.SettingTable).Table("bas_settings").
 		Select(params.Select).
-		Where(search.Parse(params, basmodel.Setting{}.Pattern())).
+		// Where(search.Parse(params, basmodel.Setting{}.Pattern())).
 		Count(&count).Error
 	return
 }

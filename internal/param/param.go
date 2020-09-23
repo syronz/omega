@@ -9,6 +9,7 @@ import (
 type Param struct {
 	Pagination
 	Search       string
+	Filter       string
 	PreCondition string
 	UserID       types.RowID
 	Lang         dict.Lang

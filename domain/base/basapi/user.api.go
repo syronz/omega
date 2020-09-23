@@ -72,9 +72,11 @@ func (p *UserAPI) FindByUsername(c *gin.Context) {
 
 // List of users
 func (p *UserAPI) List(c *gin.Context) {
-	resp := response.New(p.Engine, c)
+	resp, params := response.NewParam(p.Engine, c, basmodel.UserTable)
 
-	params := param.Get(c, p.Engine, basterm.Users)
+	cols, _ := basmodel.User{}.Columns("*")
+
+	glog.Debug(cols, params.Filter)
 
 	data, err := p.Service.List(params)
 	if err != nil {

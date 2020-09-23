@@ -37,11 +37,25 @@ func (p *extractor) getTag(t reflect.Type) {
 		column := field.Tag.Get("json")
 		column = p.re.FindString(column)
 		externalTable := field.Tag.Get("table")
-		if externalTable != "" {
-			column = fmt.Sprintf("%v.%v", externalTable, column)
-		} else {
+
+		switch {
+		case externalTable == "-":
+			continue
+		case externalTable != "":
+			column = externalTable
+		default:
 			column = fmt.Sprintf("%v.%v", p.table, column)
 		}
+
+		// if externalTable != "" {
+		// 	if externalTable == "-" {
+		// 		continue
+		// 	}
+		// 	// column = fmt.Sprintf("%v.%v", externalTable, column)
+		// 	column = externalTable
+		// } else {
+		// 	column = fmt.Sprintf("%v.%v", p.table, column)
+		// }
 		p.arr = append(p.arr, column)
 	}
 

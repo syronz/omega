@@ -10,6 +10,7 @@ import (
 	"omega/pkg/dict"
 	"omega/pkg/helper"
 	"omega/pkg/limberr"
+	"reflect"
 	"regexp"
 	"strings"
 )
@@ -17,8 +18,6 @@ import (
 const (
 	// UserTable is used inside the repo layer
 	UserTable = "bas_users"
-	UserPart  = "user"
-	UsersPart = "users"
 )
 
 // User model
@@ -27,33 +26,17 @@ type User struct {
 	RoleID    types.RowID `gorm:"index:role_id_idx" json:"role_id"`
 	Username  string      `gorm:"not null;unique" json:"username,omitempty"`
 	Password  string      `gorm:"not null" json:"password,omitempty"`
-	Lang      dict.Lang   `gorm:"type:varchar(2);default:'en'" json:"language,omitempty"`
+	Lang      dict.Lang   `gorm:"type:varchar(2);default:'en'" json:"lang,omitempty"`
 	Email     string      `json:"email,omitempty"`
-	Extra     interface{} `sql:"-" json:"user_extra,omitempty"`
-	Resources string      `sql:"-" json:"resources,omitempty"`
-	Role      string      `sql:"-" json:"role,omitempty"`
-}
-
-// Pattern returns the search pattern to be used inside the gorm's where
-func (p User) Pattern() string {
-	return `(
-		bas_users.username LIKE '%[1]v%%' OR
-		bas_users.id = '%[1]v' OR
-		bas_users.email LIKE '%[1]v%%' OR
-		bas_roles.name LIKE '%[1]v' 
-	)`
+	Extra     interface{} `sql:"-" json:"user_extra,omitempty" table:"-"`
+	Resources string      `sql:"-" json:"resources,omitempty" table:"bas_roles.resources"`
+	Role      string      `sql:"-" json:"role,omitempty" table:"bas_roles.name as role"`
 }
 
 // Columns return list of total columns according to request, useful for inner joins
 func (p User) Columns(variate string) (string, error) {
-	full := []string{
-		"bas_users.id",
-		"bas_users.role_id",
-		"bas_users.username",
-		"bas_users.language",
-		"bas_users.email",
-		"bas_roles.name as role",
-	}
+	t := reflect.TypeOf(User{})
+	full := helper.TagExtracter(t, UserTable)
 
 	return validator.CheckColumns(full, variate)
 }

@@ -49,6 +49,7 @@ func (p *BasUserServ) FindByUsername(username string) (user basmodel.User, err e
 func (p *BasUserServ) List(params param.Param) (data map[string]interface{}, err error) {
 
 	data = make(map[string]interface{})
+	// params.PreCondition = filter.Parser(
 
 	data["list"], err = p.Repo.List(params)
 	glog.CheckError(err, "users list")
@@ -78,7 +79,7 @@ func (p *BasUserServ) Create(user basmodel.User,
 
 	defer func() {
 		if r := recover(); r != nil {
-			glog.LogError(fmt.Errorf("panic happened in transaction mode for %v", basmodel.UserPart), "rollback recover")
+			glog.LogError(fmt.Errorf("panic happened in transaction mode for %v", "users table"), "rollback recover")
 			clonedEngine.DB.Rollback()
 		}
 	}()

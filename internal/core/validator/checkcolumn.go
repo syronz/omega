@@ -21,8 +21,7 @@ func CheckColumns(cols []string, variate string) (string, error) {
 	for _, v := range variates {
 		if ok, _ := helper.Includes(cols, v); !ok {
 			// fieldError.Add(corerr.V_is_not_valid, v, strings.Join(cols, ", "))
-			err = limberr.AddInvalidParam(err, v,
-				corerr.VisNotValid, v)
+			err = limberr.AddInvalidParam(err, v, corerr.VisNotValid, v)
 			err = limberr.SetCustom(err, corerr.ValidationFailedErr)
 		}
 	}

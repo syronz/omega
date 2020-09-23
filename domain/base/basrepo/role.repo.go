@@ -7,7 +7,6 @@ import (
 	"omega/internal/core/corterm"
 	"omega/internal/core/validator"
 	"omega/internal/param"
-	"omega/internal/search"
 	"omega/internal/types"
 	"omega/pkg/dict"
 	"omega/pkg/glog"
@@ -72,7 +71,7 @@ func (p *RoleRepo) List(params param.Param) (roles []basmodel.Role, err error) {
 	}
 
 	err = p.Engine.DB.Table(basmodel.RoleTable).Select(columns).
-		Where(search.Parse(params, p.searchPattern())).
+		// Where(search.Parse(params, p.searchPattern())).
 		Order(params.Order).
 		Limit(params.Limit).
 		Offset(params.Offset).
@@ -94,7 +93,7 @@ func (p *RoleRepo) List(params param.Param) (roles []basmodel.Role, err error) {
 func (p *RoleRepo) Count(params param.Param) (count uint64, err error) {
 	err = p.Engine.DB.Table(basmodel.RoleTable).
 		Select(params.Select).
-		Where(search.Parse(params, p.searchPattern())).
+		// Where(search.Parse(params, p.searchPattern())).
 		Count(&count).Error
 	return
 }

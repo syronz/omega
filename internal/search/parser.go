@@ -7,13 +7,17 @@ import (
 )
 
 // Parse is used for handling the variety of search
-func Parse(params param.Param, pattern string) (whereStr string) {
+func ParseDeprecated(params param.Param, pattern string) (whereStr string) {
 	// TODO: error should be returned in case the pattern was wrong
 	var whereArr []string
 
 	if params.PreCondition != "" {
 		whereArr = append(whereArr, params.PreCondition)
 	}
+
+	// if params.Filter != "" {
+	// 	whereArr = append(whereArr, params.Filter)
+	// }
 
 	if params.Search != "" {
 		whereArr = cleanSearch(params.Search, whereArr, pattern)
