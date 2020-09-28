@@ -28,11 +28,16 @@ func CheckError(err error, message string, data ...interface{}) {
 }
 
 func LogError(err error, message string, data ...interface{}) {
-	logger.WithFields(logrus.Fields{
-		"err": err.Error(),
-	}).Error(message)
-	if data != nil {
-		logger.Debug(data...)
+	if data == nil {
+		logger.WithFields(logrus.Fields{
+			"err": err.Error(),
+		}).Error(message)
+	} else {
+		logger.WithFields(logrus.Fields{
+			"err":  err.Error(),
+			"data": fmt.Sprintf("%+v", data),
+		}).Error(message)
+
 	}
 }
 

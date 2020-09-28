@@ -6,27 +6,24 @@ import (
 )
 
 // Tick is combining AddCode and LogError in services to reduce the code
-func Tick(err error, code string, message string, params ...interface{}) error {
+func Tick(err error, code string, message string, data ...interface{}) error {
 	if code != "" {
 		err = limberr.AddCode(err, code)
 	}
-	glog.LogError(err, message, params...)
+	glog.LogError(err, message, data...)
 	return err
 }
 
 // TickCustom is combining AddCode and LogError in services to reduce the code and specify the
 // error type
 func TickCustom(err error, custom limberr.CustomError, code string, message string,
-	params ...interface{}) error {
-	if code != "" {
-		err = limberr.AddCode(err, code)
-	}
+	data ...interface{}) error {
 	err = limberr.SetCustom(err, custom)
-	glog.LogError(err, message, params...)
-	return err
+	return Tick(err, code, message, data...)
 }
 
 // TickValidate is automatically add validation error custom to the error
-func TickValidate(err error, code string, message string, params ...interface{}) error {
-	return TickCustom(err, ValidationFailedErr, code, message, params...)
+func TickValidate(err error, code string, message string,
+	data ...interface{}) error {
+	return TickCustom(err, ValidationFailedErr, code, message, data...)
 }

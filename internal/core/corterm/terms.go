@@ -15,6 +15,9 @@ const (
 	ID          = "ID"
 	Users       = "users"
 	Description = "description"
+	Created     = "created"
+	Updated     = "updated"
+	Deleted     = "deleted"
 
 	VCreatedSuccessfully = "%v created successfully"
 	VUpdatedSuccessfully = "%v updated successfully"

@@ -69,15 +69,10 @@ en = 'duplicate happened'
 ku = 'peshtr daxl krawa'
 ar = 'duplication happened'
 
-["some %v related to this %v so it is not deleted"]
-en = 'some %v related to this %v so it is not deleted'
-ku = 'bashek la %v rabtian haya bam %va boya nasretawa'
-ar = 'some %v related to this %v so it is not deleted'
-
-["some %v related to this %v so it is not created"]
-en = 'some %v related to this %v so it is not created'
-ku = 'bashek la %v rabtian haya bam %va boya drwst nakre'
-ar = 'some %v related to this %v so it is not created'
+["some %v related to this %v so it is not %v"]
+en = 'some %v related to this %v so it is not %v'
+ku = 'bashek la %v rabtian haya bam %va boya %v nakre'
+ar = 'some %v related to this %v so it is not %v'
 
 ["error because of foreign key"]
 en = 'error because of external data'
@@ -190,6 +185,21 @@ en = 'description'
 ku = 'tebini'
 ar = 'description'
 
+[created]
+en = 'created'
+ku = 'drwst'
+ar = 'created'
+
+[updated]
+en = 'updated'
+ku = 'opdate'
+ar = 'updated'
+
+[deleted]
+en = 'deleted'
+ku = 'delete'
+ar = 'deleted'
+
 ["%v created successfully"]
 en = '%v created successfully'
 ku = '%v ba sarkawtooyi drwst kra'
@@ -221,13 +231,13 @@ ku = 'maloomati %v'
 ar = '%v info'
 
 
-# base/message/baserr/terms.err.go ----------------------------------------------------------------------
+# base/message/baserr/terms.err.go ------------------------------------------------------
 ["username or password is wrong"]
 en = 'username or password is wrong'
 ku = 'username yan passwordakat halaya'
 ar = 'username or password is wrong'
 
-# base/message/basterm/terms.msg.go ----------------------------------------------------------------------
+# base/message/basterm/terms.msg.go -----------------------------------------------------
 [user]
 en = 'user'
 ku = 'bakar-henar'
@@ -242,3 +252,14 @@ ar = 'user loged in successfully'
 en = 'username and password'
 ku = 'username w password'
 ar = 'username and password'
+
+# pkg/filter/parser.go ------------------------------------------------------------------
+["column %v not not exist"]
+en = 'column %v not not exist'
+ku = 'stuni %v booni nie'
+ar = 'column %v not not exist'
+
+["filter is not valid"]
+en = 'filter is not valid'
+ku = 'filter halaya'
+ar = 'filter is not valid'

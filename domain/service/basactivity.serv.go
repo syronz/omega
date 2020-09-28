@@ -37,7 +37,7 @@ func ProvideBasActivityService(p basrepo.ActivityRepo) BasActivityServ {
 
 // Save activity
 func (p *BasActivityServ) Save(activity basmodel.Activity) (createdActivity basmodel.Activity, err error) {
-	createdActivity, err = p.Repo.Save(activity)
+	createdActivity, err = p.Repo.Create(activity)
 
 	// p.Engine.CheckInfo(err, fmt.Sprintf("Failed in saving activity for %+v", activity))
 
@@ -80,7 +80,7 @@ func (p *BasActivityServ) Record(c *gin.Context, ev types.Event, data ...interfa
 		After:    string(after),
 	}
 
-	_, err := p.Repo.Save(activity)
+	_, err := p.Repo.Create(activity)
 	glog.CheckError(err, fmt.Sprintf("Failed in saving activity for %+v", activity))
 }
 

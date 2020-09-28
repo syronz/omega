@@ -29,19 +29,21 @@ type Response struct {
 	Context *gin.Context
 	abort   bool
 	params  param.Param
+	Domain  string
 }
 
 // New initiate the Response object
-func New(engine *core.Engine, context *gin.Context) *Response {
+func New(engine *core.Engine, context *gin.Context, domain string) *Response {
 	return &Response{
 		Engine:  engine,
 		Context: context,
+		Domain:  domain,
 	}
 }
 
 // NewParam initiate the Response object and params
 func NewParam(engine *core.Engine, context *gin.Context,
-	part string) (*Response, param.Param) {
+	part string, domain string) (*Response, param.Param) {
 	params := param.Get(context, engine, part)
 	return &Response{
 		Engine:  engine,

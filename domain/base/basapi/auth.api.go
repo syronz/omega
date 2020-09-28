@@ -29,7 +29,7 @@ func ProvideAuthAPI(p service.BasAuthServ) AuthAPI {
 // Login auth
 func (p *AuthAPI) Login(c *gin.Context) {
 	var auth basmodel.Auth
-	resp, params := response.NewParam(p.Engine, c, basterm.Users)
+	resp, params := response.NewParam(p.Engine, c, basterm.Users, base.Domain)
 
 	if err := resp.Bind(&auth, "E1053877", base.Domain, basterm.UsernameAndPassword); err != nil {
 		return
@@ -53,7 +53,7 @@ func (p *AuthAPI) Login(c *gin.Context) {
 
 // Logout will erase the resources from access.Cache
 func (p *AuthAPI) Logout(c *gin.Context) {
-	resp := response.New(p.Engine, c)
+	resp := response.New(p.Engine, c, base.Domain)
 	params := param.Get(c, p.Engine, basterm.Users)
 	p.Service.Logout(params)
 	resp.Record(base.BasLogout)
@@ -65,7 +65,7 @@ func (p *AuthAPI) Logout(c *gin.Context) {
 // TemporaryToken is used for creating temporary access token for download excel and etc
 func (p *AuthAPI) TemporaryToken(c *gin.Context) {
 	// var auth basmodel.Auth
-	resp := response.New(p.Engine, c)
+	resp := response.New(p.Engine, c, base.Domain)
 
 	params := param.Get(c, p.Engine, "users")
 

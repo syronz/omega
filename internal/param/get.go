@@ -19,7 +19,7 @@ func Get(c *gin.Context, engine *core.Engine, part string) (param Param) {
 	generateLimit(c, &param)
 	generateOffset(c, &param)
 
-	param.Search = strings.TrimSpace(c.Query("search"))
+	// param.Search = strings.TrimSpace(c.Query("search"))
 	param.Filter = strings.TrimSpace(c.Query("filter"))
 
 	userID, ok := c.Get("USER_ID")

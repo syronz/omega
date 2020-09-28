@@ -47,15 +47,6 @@ func (p *extractor) getTag(t reflect.Type) {
 			column = fmt.Sprintf("%v.%v", p.table, column)
 		}
 
-		// if externalTable != "" {
-		// 	if externalTable == "-" {
-		// 		continue
-		// 	}
-		// 	// column = fmt.Sprintf("%v.%v", externalTable, column)
-		// 	column = externalTable
-		// } else {
-		// 	column = fmt.Sprintf("%v.%v", p.table, column)
-		// }
 		p.arr = append(p.arr, column)
 	}
 

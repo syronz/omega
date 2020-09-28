@@ -30,7 +30,7 @@ func ProvideActivityAPI(c service.BasActivityServ) ActivityAPI {
 // Create activity
 func (p *ActivityAPI) Create(c *gin.Context) {
 	var activity basmodel.Activity
-	resp := response.New(p.Engine, c)
+	resp := response.New(p.Engine, c, base.Domain)
 
 	if err := c.ShouldBindJSON(&activity); err != nil {
 		c.AbortWithStatusJSON(http.StatusNotAcceptable, err)
@@ -50,7 +50,7 @@ func (p *ActivityAPI) Create(c *gin.Context) {
 
 // List of activities
 func (p *ActivityAPI) List(c *gin.Context) {
-	resp := response.New(p.Engine, c)
+	resp := response.New(p.Engine, c, base.Domain)
 
 	params := param.Get(c, p.Engine, thisActivities)
 

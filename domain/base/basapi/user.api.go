@@ -33,11 +33,11 @@ func ProvideUserAPI(c service.BasUserServ) UserAPI {
 
 // FindByID is used for fetch a user by it's id
 func (p *UserAPI) FindByID(c *gin.Context) {
-	resp := response.New(p.Engine, c)
+	resp := response.New(p.Engine, c, base.Domain)
 	var err error
 	var user basmodel.User
 
-	if user.ID, err = resp.GetRowID(c.Param("userID"), "E1090173", base.Domain); err != nil {
+	if user.ID, err = resp.GetRowID(c.Param("userID"), "E1090173"); err != nil {
 		return
 	}
 
@@ -56,7 +56,7 @@ func (p *UserAPI) FindByID(c *gin.Context) {
 
 // FindByUsername is used when we try to find a user with username
 func (p *UserAPI) FindByUsername(c *gin.Context) {
-	resp := response.New(p.Engine, c)
+	resp := response.New(p.Engine, c, base.Domain)
 	username := c.Param("username")
 
 	user, err := p.Service.FindByUsername(username)
@@ -72,11 +72,11 @@ func (p *UserAPI) FindByUsername(c *gin.Context) {
 
 // List of users
 func (p *UserAPI) List(c *gin.Context) {
-	resp, params := response.NewParam(p.Engine, c, basmodel.UserTable)
+	resp, params := response.NewParam(p.Engine, c, basmodel.UserTable, base.Domain)
 
-	cols, _ := basmodel.User{}.Columns("*")
-
-	glog.Debug(cols, params.Filter)
+	if username := c.Query("username"); username != "" {
+		params.Filter = fmt.Sprintf("username[eq]'%v'", username)
+	}
 
 	data, err := p.Service.List(params)
 	if err != nil {
@@ -94,7 +94,7 @@ func (p *UserAPI) List(c *gin.Context) {
 func (p *UserAPI) Create(c *gin.Context) {
 
 	var user basmodel.User
-	resp := response.New(p.Engine, c)
+	resp := response.New(p.Engine, c, base.Domain)
 
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.AbortWithStatusJSON(http.StatusNotAcceptable, err)
@@ -119,7 +119,7 @@ func (p *UserAPI) Create(c *gin.Context) {
 
 // Update user
 func (p *UserAPI) Update(c *gin.Context) {
-	resp, params := response.NewParam(p.Engine, c, basterm.User)
+	resp, params := response.NewParam(p.Engine, c, basterm.User, base.Domain)
 	var err error
 
 	var user, userBefore, userUpdated basmodel.User
@@ -155,7 +155,7 @@ func (p *UserAPI) Update(c *gin.Context) {
 
 // Delete user
 func (p *UserAPI) Delete(c *gin.Context) {
-	resp := response.New(p.Engine, c)
+	resp := response.New(p.Engine, c, base.Domain)
 	var err error
 	var user basmodel.User
 
@@ -177,7 +177,7 @@ func (p *UserAPI) Delete(c *gin.Context) {
 
 // Excel generate excel files based on search
 func (p *UserAPI) Excel(c *gin.Context) {
-	resp := response.New(p.Engine, c)
+	resp := response.New(p.Engine, c, base.Domain)
 
 	params := param.Get(c, p.Engine, basterm.Users)
 
@@ -203,11 +203,12 @@ func (p *UserAPI) Excel(c *gin.Context) {
 		WriteHeader("ID", "Username", "Role", "Lang", "Email")
 
 	for i, v := range users {
-		extra := v.Extra.(map[string]interface{})
+		// extra := v.Extra.(map[string]interface{})
 		column := &[]interface{}{
 			v.ID,
 			v.Username,
-			extra["role"],
+			v.Role,
+			// extra["role"],
 			v.Lang,
 			v.Email,
 		}
@@ -221,6 +222,7 @@ func (p *UserAPI) Excel(c *gin.Context) {
 
 	buffer, downloadName, err := ex.Generate()
 	if err != nil {
+		// resp.Error(err).JSON()
 		c.JSON(http.StatusInternalServerError, &response.Result{
 			Message: "Error in generating Excel file",
 		})

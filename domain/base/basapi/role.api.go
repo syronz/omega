@@ -27,11 +27,11 @@ func ProvideRoleAPI(c service.BasRoleServ) RoleAPI {
 
 // FindByID is used for fetch a role by it's id
 func (p *RoleAPI) FindByID(c *gin.Context) {
-	resp := response.New(p.Engine, c)
+	resp := response.New(p.Engine, c, base.Domain)
 	var err error
 	var role basmodel.Role
 
-	if role.ID, err = resp.GetRowID(c.Param("roleID"), "E1053982", base.Domain); err != nil {
+	if role.ID, err = resp.GetRowID(c.Param("roleID"), "E1053982"); err != nil {
 		return
 	}
 
@@ -48,7 +48,7 @@ func (p *RoleAPI) FindByID(c *gin.Context) {
 
 // List of roles
 func (p *RoleAPI) List(c *gin.Context) {
-	resp, params := response.NewParam(p.Engine, c, basmodel.RoleTable)
+	resp, params := response.NewParam(p.Engine, c, basmodel.RoleTable, base.Domain)
 
 	data := make(map[string]interface{})
 	var err error
@@ -66,9 +66,9 @@ func (p *RoleAPI) List(c *gin.Context) {
 
 // Create role
 func (p *RoleAPI) Create(c *gin.Context) {
+	resp := response.New(p.Engine, c, base.Domain)
 	var role, createdRole basmodel.Role
 	var err error
-	resp := response.New(p.Engine, c)
 
 	if err = resp.Bind(&role, "E1088259", base.Domain, basterm.Role); err != nil {
 		return
@@ -87,12 +87,12 @@ func (p *RoleAPI) Create(c *gin.Context) {
 
 // Update role
 func (p *RoleAPI) Update(c *gin.Context) {
-	resp := response.New(p.Engine, c)
+	resp := response.New(p.Engine, c, base.Domain)
 	var err error
 
 	var role, roleBefore, roleUpdated basmodel.Role
 
-	if role.ID, err = resp.GetRowID(c.Param("roleID"), "E1082097", base.Domain); err != nil {
+	if role.ID, err = resp.GetRowID(c.Param("roleID"), "E1082097"); err != nil {
 		return
 	}
 
@@ -118,11 +118,11 @@ func (p *RoleAPI) Update(c *gin.Context) {
 
 // Delete role
 func (p *RoleAPI) Delete(c *gin.Context) {
-	resp := response.New(p.Engine, c)
+	resp := response.New(p.Engine, c, base.Domain)
 	var err error
 	var role basmodel.Role
 
-	if role.ID, err = resp.GetRowID(c.Param("roleID"), "E1074329", base.Domain); err != nil {
+	if role.ID, err = resp.GetRowID(c.Param("roleID"), "E1074329"); err != nil {
 		return
 	}
 
@@ -139,7 +139,7 @@ func (p *RoleAPI) Delete(c *gin.Context) {
 
 // Excel generate excel files based on search
 func (p *RoleAPI) Excel(c *gin.Context) {
-	resp, params := response.NewParam(p.Engine, c, basterm.Roles)
+	resp, params := response.NewParam(p.Engine, c, basterm.Roles, base.Domain)
 
 	roles, err := p.Service.Excel(params)
 	if err != nil {
@@ -167,9 +167,7 @@ func (p *RoleAPI) Excel(c *gin.Context) {
 
 	buffer, downloadName, err := ex.Generate()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, &response.Result{
-			Message: "Error in generating Excel file",
-		})
+		resp.Error(err).JSON()
 		return
 	}
 

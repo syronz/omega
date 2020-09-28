@@ -9,16 +9,23 @@ import (
 	"omega/internal/core/corterm"
 	"omega/internal/param"
 	"omega/internal/types"
+	"omega/pkg/helper"
+	"omega/pkg/limberr"
+	"reflect"
 )
 
 // UserRepo for injecting engine
 type UserRepo struct {
 	Engine *core.Engine
+	Cols   []string
 }
 
 // ProvideUserRepo is used in wire
 func ProvideUserRepo(engine *core.Engine) UserRepo {
-	return UserRepo{Engine: engine}
+	return UserRepo{
+		Engine: engine,
+		Cols:   helper.TagExtracter(reflect.TypeOf(basmodel.User{}), basmodel.UserTable),
+	}
 }
 
 // FindByID for user
@@ -64,13 +71,23 @@ func (p *UserRepo) List(params param.Param) (users []basmodel.User, err error) {
 		return
 	}
 
+	var whereStr string
+	if whereStr, err = params.ParseWhere(p.Cols); err != nil {
+		err = limberr.Take(err, "E1043328").Custom(corerr.ValidationFailedErr).Build()
+		return
+	}
+
 	err = p.Engine.DB.Table(basmodel.UserTable).Select(columns).
 		Joins("INNER JOIN bas_roles on bas_roles.id = bas_users.role_id").
-		// Where(search.Parse(params, basmodel.User{}.Pattern())).
+		Where(whereStr).
 		Order(params.Order).
 		Limit(params.Limit).
 		Offset(params.Offset).
 		Find(&users).Error
+
+	for i := range users {
+		users[i].Password = ""
+	}
 
 	return
 }

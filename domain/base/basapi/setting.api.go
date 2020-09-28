@@ -32,7 +32,7 @@ func ProvideSettingAPI(c service.BasSettingServ) SettingAPI {
 
 // FindByID is used for fetch a setting by it's id
 func (p *SettingAPI) FindByID(c *gin.Context) {
-	resp := response.New(p.Engine, c)
+	resp := response.New(p.Engine, c, base.Domain)
 	var err error
 	var setting basmodel.Setting
 
@@ -54,7 +54,7 @@ func (p *SettingAPI) FindByID(c *gin.Context) {
 
 // FindByProperty is used when we try to find a setting with property
 func (p *SettingAPI) FindByProperty(c *gin.Context) {
-	resp := response.New(p.Engine, c)
+	resp := response.New(p.Engine, c, base.Domain)
 	property := c.Param("property")
 
 	setting, err := p.Service.FindByProperty(property)
@@ -68,7 +68,7 @@ func (p *SettingAPI) FindByProperty(c *gin.Context) {
 
 // List of settings
 func (p *SettingAPI) List(c *gin.Context) {
-	resp := response.New(p.Engine, c)
+	resp := response.New(p.Engine, c, base.Domain)
 
 	params := param.Get(c, p.Engine, thisSettings)
 
@@ -86,7 +86,7 @@ func (p *SettingAPI) List(c *gin.Context) {
 
 // Update setting
 func (p *SettingAPI) Update(c *gin.Context) {
-	resp := response.New(p.Engine, c)
+	resp := response.New(p.Engine, c, base.Domain)
 	var err error
 
 	var setting, settingBefore, settingUpdated basmodel.Setting
@@ -121,7 +121,7 @@ func (p *SettingAPI) Update(c *gin.Context) {
 
 // Delete setting
 func (p *SettingAPI) Delete(c *gin.Context) {
-	resp := response.New(p.Engine, c)
+	resp := response.New(p.Engine, c, base.Domain)
 	var err error
 	var setting basmodel.Setting
 
@@ -143,7 +143,7 @@ func (p *SettingAPI) Delete(c *gin.Context) {
 
 // Excel generate excel files based on search
 func (p *SettingAPI) Excel(c *gin.Context) {
-	resp := response.New(p.Engine, c)
+	resp := response.New(p.Engine, c, base.Domain)
 
 	params := param.Get(c, p.Engine, thisSettings)
 	settings, err := p.Service.Excel(params)
@@ -175,9 +175,7 @@ func (p *SettingAPI) Excel(c *gin.Context) {
 
 	buffer, downloadName, err := ex.Generate()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, &response.Result{
-			Message: "Error in generating Excel file",
-		})
+		resp.Error(err).JSON()
 		return
 	}
 

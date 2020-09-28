@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"omega/domain/base"
 	"omega/internal/core"
 	"omega/internal/core/corerr"
 	"omega/internal/core/cormid"
@@ -71,6 +72,6 @@ func notFoundRoute(r *gin.Engine, engine *core.Engine) {
 	r.NoRoute(func(c *gin.Context) {
 		err := limberr.New("route not found", "E1015777").Custom(corerr.RouteNotFoundErr).
 			Message(corerr.PleaseReportErrorToProgrammer).Build()
-		response.New(engine, c).Error(err).JSON()
+		response.New(engine, c, base.Domain).Error(err).JSON()
 	})
 }
