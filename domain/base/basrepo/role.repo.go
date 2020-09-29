@@ -2,6 +2,7 @@ package basrepo
 
 import (
 	"omega/domain/base/basmodel"
+	"omega/domain/base/message/basterm"
 	"omega/internal/core"
 	"omega/internal/core/corerr"
 	"omega/internal/core/corterm"
@@ -9,7 +10,6 @@ import (
 	"omega/internal/param"
 	"omega/internal/types"
 	"omega/pkg/dict"
-	"omega/pkg/glog"
 	"omega/pkg/helper"
 	"omega/pkg/limberr"
 	"reflect"
@@ -21,7 +21,7 @@ type RoleRepo struct {
 	Cols   []string
 }
 
-// ProvideRoleRepo is used in wire
+// ProvideRoleRepo is used in wire and initiate the Cols
 func ProvideRoleRepo(engine *core.Engine) RoleRepo {
 	return RoleRepo{
 		Engine: engine,
@@ -29,26 +29,21 @@ func ProvideRoleRepo(engine *core.Engine) RoleRepo {
 	}
 }
 
-// FindByID for role
+// FindByID finds the role via its id
 func (p *RoleRepo) FindByID(id types.RowID) (role basmodel.Role, err error) {
 	err = p.Engine.DB.Table(basmodel.RoleTable).First(&role, id.ToUint64()).Error
 
-	switch corerr.ClearDbErr(err) {
-	case corerr.Nil:
-		break
-	case corerr.NotFoundErr:
-		err = corerr.RecordNotFoundHelper(err, "E1072991", corterm.ID, id, corterm.Roles)
-	default:
-		err = corerr.InternalServerErrorHelper(err, "E1072992")
-	}
+	role.ID = id
+	err = p.dbError(err, "E1072991", role, corterm.List)
+
 	return
 }
 
-// List of roles
+// List returns an array of roles
 func (p *RoleRepo) List(params param.Param) (roles []basmodel.Role, err error) {
-	cols, err := validator.CheckColumns(p.Cols, params.Select)
-	if err != nil {
-		glog.Debug(err)
+	var colsStr string
+	if colsStr, err = validator.CheckColumns(p.Cols, params.Select); err != nil {
+		err = limberr.Take(err, "E1084438").Build()
 		return
 	}
 
@@ -58,30 +53,20 @@ func (p *RoleRepo) List(params param.Param) (roles []basmodel.Role, err error) {
 		return
 	}
 
-	err = p.Engine.DB.Table(basmodel.RoleTable).Select(cols).
+	err = p.Engine.DB.Table(basmodel.RoleTable).Select(colsStr).
 		Where(whereStr).
 		Order(params.Order).
 		Limit(params.Limit).
 		Offset(params.Offset).
 		Find(&roles).Error
 
-	// switch corerr.ClearDbErr(err) {
-	// case corerr.Nil:
-	// 	break
-	// case corerr.ValidationFailedErr:
-	// 	err = corerr.ValidationFailedHelper(err, "E1032861")
-	// default:
-	// 	err = corerr.InternalServerErrorHelper(err, "E1022879")
-	// }
-
-	err = p.dbError(err, "E1032861", 
+	err = p.dbError(err, "E1032861", basmodel.Role{}, corterm.List)
 
 	return
 }
 
-// Count of roles
+// Count of roles, mainly calls with List
 func (p *RoleRepo) Count(params param.Param) (count uint64, err error) {
-
 	var whereStr string
 	if whereStr, err = params.ParseWhere(p.Cols); err != nil {
 		err = limberr.Take(err, "E1032288").Custom(corerr.ValidationFailedErr).Build()
@@ -91,14 +76,14 @@ func (p *RoleRepo) Count(params param.Param) (count uint64, err error) {
 	err = p.Engine.DB.Table(basmodel.RoleTable).
 		Where(whereStr).
 		Count(&count).Error
+
+	err = p.dbError(err, "E1039820", basmodel.Role{}, corterm.List)
 	return
 }
 
-// Update RoleRepo
+// Update the role, in case it is not exist create it
 func (p *RoleRepo) Update(role basmodel.Role) (u basmodel.Role, err error) {
-	err = p.Engine.DB.Table(basmodel.RoleTable).Save(&role).Error
-
-	if err != nil {
+	if err = p.Engine.DB.Table(basmodel.RoleTable).Save(&role).Error; err != nil {
 		err = p.dbError(err, "E1054817", role, corterm.Updated)
 	}
 
@@ -106,7 +91,7 @@ func (p *RoleRepo) Update(role basmodel.Role) (u basmodel.Role, err error) {
 	return
 }
 
-// Create RoleRepo
+// Create a role
 func (p *RoleRepo) Create(role basmodel.Role) (u basmodel.Role, err error) {
 	err = p.Engine.DB.Table(basmodel.RoleTable).Create(&role).Scan(&u).Error
 	if err != nil {
@@ -115,7 +100,7 @@ func (p *RoleRepo) Create(role basmodel.Role) (u basmodel.Role, err error) {
 	return
 }
 
-// Delete role
+// Delete the role
 func (p *RoleRepo) Delete(role basmodel.Role) (err error) {
 	if err = p.Engine.DB.Table(basmodel.RoleTable).Unscoped().Delete(&role).Error; err != nil {
 		err = p.dbError(err, "E1067392", role, corterm.Deleted)
@@ -123,24 +108,30 @@ func (p *RoleRepo) Delete(role basmodel.Role) (err error) {
 	return
 }
 
-// dbError is an internal method for create proper database error
+// dbError is an internal method for generate proper database error
 func (p *RoleRepo) dbError(err error, code string, role basmodel.Role, action string) error {
 	switch corerr.ClearDbErr(err) {
 	case corerr.Nil:
 		err = nil
-		break
+
+	case corerr.NotFoundErr:
+		err = corerr.RecordNotFoundHelper(err, code, corterm.ID, role.ID, basterm.Roles)
+
 	case corerr.ForeignErr:
 		err = limberr.Take(err, code).
-			Message(corerr.SomeVRelatedToThisVSoItIsNotV, dict.R(corterm.Users),
-				dict.R(corterm.Role), dict.R(action)).
+			Message(corerr.SomeVRelatedToThisVSoItIsNotV, dict.R(basterm.Users),
+				dict.R(basterm.Role), dict.R(action)).
 			Custom(corerr.ForeignErr).Build()
+
 	case corerr.DuplicateErr:
 		err = limberr.Take(err, code).
-			Message(corerr.VWithValueVAlreadyExist, dict.R(corterm.Role), role.Name).
+			Message(corerr.VWithValueVAlreadyExist, dict.R(basterm.Role), role.Name).
 			Custom(corerr.DuplicateErr).Build()
 		err = limberr.AddInvalidParam(err, "name", corerr.VisAlreadyExist, role.Name)
+
 	case corerr.ValidationFailedErr:
 		err = corerr.ValidationFailedHelper(err, code)
+
 	default:
 		err = limberr.Take(err, code).
 			Message(corerr.InternalServerError).

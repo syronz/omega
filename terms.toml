@@ -175,11 +175,6 @@ en = 'ID'
 ku = 'ID'
 ar = 'ID'
 
-[users]
-en = 'users'
-ku = 'bakar-henarakan'
-ar = 'users'
-
 [description]
 en = 'description'
 ku = 'tebini'
@@ -199,6 +194,16 @@ ar = 'updated'
 en = 'deleted'
 ku = 'delete'
 ar = 'deleted'
+
+[list]
+en = 'list'
+ku = 'list'
+ar = 'list'
+
+[fields]
+en = 'fields'
+ku = 'fieldakan'
+ar = 'fields'
 
 ["%v created successfully"]
 en = '%v created successfully'
@@ -242,6 +247,11 @@ ar = 'username or password is wrong'
 en = 'user'
 ku = 'bakar-henar'
 ar = 'user'
+
+[users]
+en = 'users'
+ku = 'bakar-henarakan'
+ar = 'users'
 
 ["user loged in successfully"]
 en = 'user loged in successfully'

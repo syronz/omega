@@ -37,7 +37,7 @@ func (p *UserAPI) FindByID(c *gin.Context) {
 	var err error
 	var user basmodel.User
 
-	if user.ID, err = resp.GetRowID(c.Param("userID"), "E1090173"); err != nil {
+	if user.ID, err = resp.GetRowID(c.Param("userID"), "E1090173", basterm.User); err != nil {
 		return
 	}
 

@@ -28,10 +28,10 @@ func (r *Response) Bind(st interface{}, code, domain, part string) (err error) {
 }
 
 // GetRowID convert string to the rowID and if not converted print a proper message
-func (r *Response) GetRowID(idIn, code string) (id types.RowID, err error) {
+func (r *Response) GetRowID(idIn, code, part string) (id types.RowID, err error) {
 	if id, err = types.StrToRowID(idIn); err != nil {
 		err = limberr.Take(err, code).
-			Message(corerr.InvalidVForV, dict.R(corterm.ID), dict.R(corterm.Role)).
+			Message(corerr.InvalidVForV, dict.R(corterm.ID), dict.R(part)).
 			Custom(corerr.ValidationFailedErr).Build()
 		r.Error(err).JSON()
 		return

@@ -31,7 +31,7 @@ func (p *RoleAPI) FindByID(c *gin.Context) {
 	var err error
 	var role basmodel.Role
 
-	if role.ID, err = resp.GetRowID(c.Param("roleID"), "E1053982"); err != nil {
+	if role.ID, err = resp.GetRowID(c.Param("roleID"), "E1053982", basterm.Role); err != nil {
 		return
 	}
 
@@ -92,7 +92,7 @@ func (p *RoleAPI) Update(c *gin.Context) {
 
 	var role, roleBefore, roleUpdated basmodel.Role
 
-	if role.ID, err = resp.GetRowID(c.Param("roleID"), "E1082097"); err != nil {
+	if role.ID, err = resp.GetRowID(c.Param("roleID"), "E1082097", basterm.Role); err != nil {
 		return
 	}
 
@@ -122,7 +122,7 @@ func (p *RoleAPI) Delete(c *gin.Context) {
 	var err error
 	var role basmodel.Role
 
-	if role.ID, err = resp.GetRowID(c.Param("roleID"), "E1074329"); err != nil {
+	if role.ID, err = resp.GetRowID(c.Param("roleID"), "E1074329", basterm.Role); err != nil {
 		return
 	}
 

@@ -1,6 +1,7 @@
 package basmodel
 
 import (
+	"omega/domain/base/message/basterm"
 	"omega/internal/consts"
 	"omega/internal/core/coract"
 	"omega/internal/core/corerr"
@@ -97,7 +98,7 @@ func validateUserUsername(err error, username string) error {
 func validateUserRole(err error, roleID types.RowID) error {
 	if roleID == 0 {
 		return limberr.AddInvalidParam(err, "role_id",
-			corerr.VisRequired, dict.R(corterm.Role))
+			corerr.VisRequired, dict.R(basterm.Role))
 	}
 	return err
 }
