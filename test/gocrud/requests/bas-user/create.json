@@ -3,10 +3,10 @@
   "url":"_URL_/users",
   "authorization":"Bearer _TOKEN_",
   "payload": {
-    "role_id":10000,
+    "role_id":1,
     "username": "_RANDOM_NAME_",
     "password": "1234567890",
-    "language":"ku",
+    "lang":"ku",
     "email":"sabina.diako@gmail.com"
   }
 }

@@ -1,7 +1,6 @@
 package service
 
 import (
-	"errors"
 	"omega/domain/base"
 	"omega/domain/base/basmodel"
 	"omega/domain/base/basrepo"
@@ -41,7 +40,7 @@ func (p *BasAuthServ) Login(auth basmodel.Auth, params param.Param) (user basmod
 
 	userServ := ProvideBasUserService(basrepo.ProvideUserRepo(p.Engine))
 	if user, err = userServ.FindByUsername(auth.Username); err != nil {
-		err = limberr.Take(err, "E1050501").Custom(corerr.UnauthorizedErr).
+		err = limberr.Take(err).Custom(corerr.UnauthorizedErr).
 			Message(baserr.UsernameOrPasswordIsWrong).Build()
 		return
 	}
@@ -65,9 +64,9 @@ func (p *BasAuthServ) Login(auth basmodel.Auth, params param.Param) (user basmod
 			Token string `json:"token"`
 		}
 		if extra.Token, err = token.SignedString(jwtKey); err != nil {
-			err = errors.New(corerr.InternalServerError)
-			err = limberr.Take(err, "E1085120").Custom(corerr.UnauthorizedErr).
-				Message(baserr.UsernameOrPasswordIsWrong).Build()
+			err = limberr.Take(err).Message(corerr.InternalServerError).Build()
+			err = corerr.TickCustom(err, corerr.InternalServerErr, "E1042238",
+				"error in generating token")
 			return
 		}
 
@@ -76,9 +75,8 @@ func (p *BasAuthServ) Login(auth basmodel.Auth, params param.Param) (user basmod
 		BasAccessDeleteFromCache(user.ID)
 
 	} else {
-		err = errors.New(baserr.UsernameOrPasswordIsWrong)
-		err = limberr.Take(err, "E1043108").Custom(corerr.UnauthorizedErr).
-			Message(baserr.UsernameOrPasswordIsWrong).Build()
+		err = limberr.New("wrong password").Message(baserr.UsernameOrPasswordIsWrong).Build()
+		err = corerr.TickCustom(err, corerr.UnauthorizedErr, "E1043108", "wrong password")
 	}
 
 	return

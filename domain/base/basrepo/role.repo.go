@@ -81,8 +81,8 @@ func (p *RoleRepo) Count(params param.Param) (count uint64, err error) {
 	return
 }
 
-// Update the role, in case it is not exist create it
-func (p *RoleRepo) Update(role basmodel.Role) (u basmodel.Role, err error) {
+// Save the role, in case it is not exist create it
+func (p *RoleRepo) Save(role basmodel.Role) (u basmodel.Role, err error) {
 	if err = p.Engine.DB.Table(basmodel.RoleTable).Save(&role).Error; err != nil {
 		err = p.dbError(err, "E1054817", role, corterm.Updated)
 	}
@@ -93,8 +93,7 @@ func (p *RoleRepo) Update(role basmodel.Role) (u basmodel.Role, err error) {
 
 // Create a role
 func (p *RoleRepo) Create(role basmodel.Role) (u basmodel.Role, err error) {
-	err = p.Engine.DB.Table(basmodel.RoleTable).Create(&role).Scan(&u).Error
-	if err != nil {
+	if err = p.Engine.DB.Table(basmodel.RoleTable).Create(&role).Scan(&u).Error; err != nil {
 		err = p.dbError(err, "E1053287", role, corterm.Created)
 	}
 	return

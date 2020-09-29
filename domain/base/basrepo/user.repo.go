@@ -50,7 +50,7 @@ func (p *UserRepo) FindByUsername(username string) (user basmodel.User, err erro
 		Scan(&user).Error
 
 	user.Username = username
-	err = p.dbError(err, "E1021865", user, corterm.List)
+	err = p.dbError(err, "E1043108", user, corterm.List)
 
 	return
 }
@@ -59,6 +59,7 @@ func (p *UserRepo) FindByUsername(username string) (user basmodel.User, err erro
 func (p *UserRepo) List(params param.Param) (users []basmodel.User, err error) {
 	var colsStr string
 	if colsStr, err = validator.CheckColumns(p.Cols, params.Select); err != nil {
+		err = limberr.Take(err, "E1084438").Build()
 		return
 	}
 
@@ -102,8 +103,8 @@ func (p *UserRepo) Count(params param.Param) (count uint64, err error) {
 	return
 }
 
-// Update the user, in case it is not exist create it
-func (p *UserRepo) Update(user basmodel.User) (u basmodel.User, err error) {
+// Save the user, in case it is not exist create it
+func (p *UserRepo) Save(user basmodel.User) (u basmodel.User, err error) {
 	if err = p.Engine.DB.Table(basmodel.UserTable).Save(&user).Error; err != nil {
 		err = p.dbError(err, "E1056429", user, corterm.Updated)
 	}
@@ -114,13 +115,17 @@ func (p *UserRepo) Update(user basmodel.User) (u basmodel.User, err error) {
 
 // Create a user
 func (p *UserRepo) Create(user basmodel.User) (u basmodel.User, err error) {
-	err = p.Engine.DB.Table(basmodel.UserTable).Create(&user).Scan(&u).Error
+	if err = p.Engine.DB.Table(basmodel.UserTable).Create(&user).Scan(&u).Error; err != nil {
+		err = p.dbError(err, "E1095328", user, corterm.Created)
+	}
 	return
 }
 
 // Delete the user
 func (p *UserRepo) Delete(user basmodel.User) (err error) {
-	err = p.Engine.DB.Table(basmodel.UserTable).Unscoped().Delete(&user).Error
+	if err = p.Engine.DB.Table(basmodel.UserTable).Unscoped().Delete(&user).Error; err != nil {
+		err = p.dbError(err, "E1044329", user, corterm.Deleted)
+	}
 	return
 }
 
@@ -134,10 +139,16 @@ func (p *UserRepo) dbError(err error, code string, user basmodel.User, action st
 		err = corerr.RecordNotFoundHelper(err, code, corterm.ID, user.ID, basterm.Users)
 
 	case corerr.ForeignErr:
-		err = limberr.Take(err, code).
-			Message(corerr.SomeVRelatedToThisVSoItIsNotV, dict.R(corterm.Fields),
-				dict.R(basterm.User), dict.R(action)).
-			Custom(corerr.ForeignErr).Build()
+		if action == corterm.Created {
+			err = limberr.Take(err, code).
+				Message(corerr.VNotExist, dict.R(basterm.Role)).
+				Custom(corerr.ForeignErr).Build()
+		} else {
+			err = limberr.Take(err, code).
+				Message(corerr.SomeVRelatedToThisVSoItIsNotV, dict.R(corterm.Fields),
+					dict.R(basterm.User), dict.R(action)).
+				Custom(corerr.ForeignErr).Build()
+		}
 
 	case corerr.DuplicateErr:
 		err = limberr.Take(err, code).

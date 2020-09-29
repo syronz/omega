@@ -27,4 +27,5 @@ const (
 	TokenIsRequired                 = "token is required"
 	TokenIsNotValid                 = "token is not valid"
 	TokenIsExpired                  = "token is expired"
+	VNotExist                       = "%v not exist"
 )

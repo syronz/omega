@@ -19,7 +19,9 @@ func Parse(err error, translator Translator) (int, error) {
 		case interface{ Unwrap() error }:
 			err = errors.Unwrap(err)
 		case *WithMessage:
-			final.Message = translator(e.Msg, e.Params...)
+			if final.Message == "" {
+				final.Message = translator(e.Msg, e.Params...)
+			}
 			err = e.Err
 		case *WithCode:
 			if final.Code == "" {

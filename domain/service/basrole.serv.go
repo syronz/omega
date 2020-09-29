@@ -20,7 +20,10 @@ type BasRoleServ struct {
 
 // ProvideBasRoleService for role is used in wire
 func ProvideBasRoleService(p basrepo.RoleRepo) BasRoleServ {
-	return BasRoleServ{Repo: p, Engine: p.Engine}
+	return BasRoleServ{
+		Repo:   p,
+		Engine: p.Engine,
+	}
 }
 
 // FindByID for getting role by it's id
@@ -67,13 +70,12 @@ func (p *BasRoleServ) Create(role basmodel.Role) (createdRole basmodel.Role, err
 
 // Save a role, if it is exist update it, if not create it
 func (p *BasRoleServ) Save(role basmodel.Role) (savedRole basmodel.Role, err error) {
-
 	if err = role.Validate(coract.Save); err != nil {
 		err = corerr.TickValidate(err, "E1037119", corerr.ValidationFailed, role)
 		return
 	}
 
-	if savedRole, err = p.Repo.Update(role); err != nil {
+	if savedRole, err = p.Repo.Save(role); err != nil {
 		err = corerr.Tick(err, "E1078742", "role not saved")
 		return
 	}
@@ -86,7 +88,7 @@ func (p *BasRoleServ) Save(role basmodel.Role) (savedRole basmodel.Role, err err
 func (p *BasRoleServ) Delete(roleID types.RowID) (role basmodel.Role, err error) {
 
 	if role, err = p.FindByID(roleID); err != nil {
-		err = corerr.Tick(err, "E1052861", "role not found to be deleted")
+		err = corerr.Tick(err, "E1052861", "role not found for deleting")
 		return
 	}
 

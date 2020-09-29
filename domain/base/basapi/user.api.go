@@ -78,8 +78,10 @@ func (p *UserAPI) List(c *gin.Context) {
 		params.Filter = fmt.Sprintf("username[eq]'%v'", username)
 	}
 
-	data, err := p.Service.List(params)
-	if err != nil {
+	data := make(map[string]interface{})
+	var err error
+
+	if data["list"], data["count"], err = p.Service.List(params); err != nil {
 		resp.Error(err).JSON()
 		return
 	}
@@ -92,19 +94,15 @@ func (p *UserAPI) List(c *gin.Context) {
 
 // Create user
 func (p *UserAPI) Create(c *gin.Context) {
-
-	var user basmodel.User
 	resp := response.New(p.Engine, c, base.Domain)
+	var user, createdUser basmodel.User
+	var err error
 
-	if err := c.ShouldBindJSON(&user); err != nil {
-		c.AbortWithStatusJSON(http.StatusNotAcceptable, err)
+	if err = resp.Bind(&user, "E1082301", base.Domain, basterm.User); err != nil {
 		return
 	}
 
-	params := param.Get(c, p.Engine, basterm.Users)
-
-	createdUser, err := p.Service.Create(user, params)
-	if err != nil {
+	if createdUser, err = p.Service.Create(user); err != nil {
 		resp.Error(err).JSON()
 		return
 	}
@@ -119,7 +117,7 @@ func (p *UserAPI) Create(c *gin.Context) {
 
 // Update user
 func (p *UserAPI) Update(c *gin.Context) {
-	resp, params := response.NewParam(p.Engine, c, basterm.User, base.Domain)
+	resp := response.New(p.Engine, c, base.Domain)
 	var err error
 
 	var user, userBefore, userUpdated basmodel.User
@@ -140,7 +138,7 @@ func (p *UserAPI) Update(c *gin.Context) {
 		return
 	}
 
-	if userUpdated, err = p.Service.Save(user, params); err != nil {
+	if userUpdated, err = p.Service.Save(user); err != nil {
 		resp.Error(err).JSON()
 		return
 	}
@@ -183,7 +181,7 @@ func (p *UserAPI) Excel(c *gin.Context) {
 
 	users, err := p.Service.Excel(params)
 	if err != nil {
-		resp.Status(http.StatusNotFound).Error(corerr.RecordNotFound).JSON()
+		resp.Error(err).JSON()
 		return
 	}
 

@@ -124,6 +124,11 @@ en = 'token is expired'
 ku = 'tokenaka basarcho'
 ar = 'token is expired'
 
+["%v not exist"]
+en = '%v not exist'
+ku = '%v booni nie'
+ar = '%v not exist'
+
 # corterm/terms.go ----------------------------------------------------------------------
 [username]
 en = 'username'

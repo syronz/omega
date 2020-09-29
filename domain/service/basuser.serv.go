@@ -12,7 +12,6 @@ import (
 	"omega/internal/param"
 	"omega/internal/types"
 	"omega/pkg/glog"
-	"omega/pkg/limberr"
 	"omega/pkg/password"
 )
 
@@ -24,53 +23,51 @@ type BasUserServ struct {
 
 // ProvideBasUserService for user is used in wire
 func ProvideBasUserService(p basrepo.UserRepo) BasUserServ {
-	return BasUserServ{Repo: p, Engine: p.Engine}
+	return BasUserServ{
+		Repo:   p,
+		Engine: p.Engine,
+	}
 }
 
 // FindByID for getting user by it's id
 func (p *BasUserServ) FindByID(id types.RowID) (user basmodel.User, err error) {
 	if user, err = p.Repo.FindByID(id); err != nil {
-		err = corerr.Tick(err, "E1066324", "can't fetch the user")
+		err = corerr.Tick(err, "E1066324", "can't fetch the user", id)
 		return
 	}
 
 	return
 }
 
-// FindByUsername find user with username
+// FindByUsername find user with username, used for auth
 func (p *BasUserServ) FindByUsername(username string) (user basmodel.User, err error) {
 	user, err = p.Repo.FindByUsername(username)
-	glog.CheckInfo(err, fmt.Sprintf("User with username %v", username))
+	glog.CheckInfo(err, fmt.Sprintf("error in fetching user with username '%s'", username))
 
 	return
 }
 
 // List of users, it support pagination and search and return back count
-func (p *BasUserServ) List(params param.Param) (data map[string]interface{}, err error) {
+func (p *BasUserServ) List(params param.Param) (users []basmodel.User,
+	count uint64, err error) {
 
-	data = make(map[string]interface{})
-	// params.PreCondition = filter.Parser(
-
-	data["list"], err = p.Repo.List(params)
-	glog.CheckError(err, "users list")
-	if err != nil {
+	if users, err = p.Repo.List(params); err != nil {
+		glog.CheckError(err, "error in users list")
 		return
 	}
 
-	data["count"], err = p.Repo.Count(params)
-	glog.CheckError(err, "users count")
+	if count, err = p.Repo.Count(params); err != nil {
+		glog.CheckError(err, "error in users count")
+	}
 
 	return
 }
 
-// Create a new user
-func (p *BasUserServ) Create(user basmodel.User,
-	params param.Param) (createdUser basmodel.User, err error) {
+// Create a user
+func (p *BasUserServ) Create(user basmodel.User) (createdUser basmodel.User, err error) {
 
 	if err = user.Validate(coract.Create); err != nil {
-		err = limberr.Take(err, "E1043810").
-			Custom(corerr.ValidationFailedErr).Build()
-		glog.CheckInfo(err, corerr.ValidationFailed)
+		err = corerr.TickValidate(err, "E1043810", corerr.ValidationFailed, user)
 		return
 	}
 
@@ -79,73 +76,50 @@ func (p *BasUserServ) Create(user basmodel.User,
 
 	defer func() {
 		if r := recover(); r != nil {
-			glog.LogError(fmt.Errorf("panic happened in transaction mode for %v", "users table"), "rollback recover")
+			glog.LogError(fmt.Errorf("panic happened in transaction mode for %v",
+				"users table"), "rollback recover")
 			clonedEngine.DB.Rollback()
 		}
 	}()
 
 	userRepo := basrepo.ProvideUserRepo(clonedEngine)
 
+	user.Password, err = password.Hash(user.Password, p.Engine.Envs[base.PasswordSalt])
+	glog.CheckError(err, fmt.Sprintf("Hashing password failed for %+v", user))
+
 	if createdUser, err = userRepo.Create(user); err != nil {
-		glog.Debug(err, createdUser)
-
-		// if strings.Contains(strings.ToUpper(err.Error()), "FOREIGN") {
-		// 	err = limberr.AddCode(err, "E1098312")
-		// 	err = limberr.AddMessage(err, "database error")
-		// 	err = limberr.AddType(err, "http://54323452", corerr.DuplicateHappened)
-		// 	err = limberr.AddDomain(err, base.Domain)
-		// 	clonedEngine.DB.Rollback()
-		// 	return
-		// }
-
-		// if strings.Contains(strings.ToUpper(err.Error()), "DUPLICATE") {
-		// 	clonedEngine.DB.Rollback()
-		// 	return
-		// }
+		err = corerr.Tick(err, "E1036118", "error in creating user", user)
 
 		clonedEngine.DB.Rollback()
 		return
 	}
 
 	clonedEngine.DB.Commit()
+	createdUser.Password = ""
 
 	return
 }
 
 // Save user
-func (p *BasUserServ) Save(user basmodel.User, params param.Param) (createdUser basmodel.User, err error) {
-
+func (p *BasUserServ) Save(user basmodel.User) (createdUser basmodel.User, err error) {
 	var oldUser basmodel.User
 	oldUser, _ = p.FindByID(user.ID)
 
-	if user.ID > 0 {
-		if err = user.Validate(coract.Update); err != nil {
-			err = limberr.Take(err, "E1098252").
-				Custom(corerr.ValidationFailedErr).Build()
-			glog.CheckInfo(err, corerr.ValidationFailed)
-			return
-		}
-
-		if user.Password != "" {
-			user.Password, err = password.Hash(user.Password, p.Engine.Envs[base.PasswordSalt])
-			glog.CheckError(err, fmt.Sprintf("Hashing password failed for %+v", user))
-		} else {
-			user.Password = oldUser.Password
-		}
-
-	} else {
-		if err = user.Validate(coract.Create); err != nil {
-			err = limberr.Take(err, "E1036447").
-				Custom(corerr.ValidationFailedErr).Build()
-			glog.CheckInfo(err, corerr.ValidationFailed)
-			return
-		}
-		user.Password, err = password.Hash(user.Password, p.Engine.Envs[base.PasswordSalt])
-		glog.CheckError(err, fmt.Sprintf("Hashing password failed for %+v", user))
+	if err = user.Validate(coract.Update); err != nil {
+		err = corerr.TickValidate(err, "E1098252", corerr.ValidationFailed, user)
+		return
 	}
 
-	if createdUser, err = p.Repo.Update(user); err != nil {
-		glog.CheckInfo(err, fmt.Sprintf("Failed in saving user for %+v", user))
+	if user.Password != "" {
+		if user.Password, err = password.Hash(user.Password, p.Engine.Envs[base.PasswordSalt]); err != nil {
+			err = corerr.Tick(err, "E1057832", "error in saving user", user)
+		}
+	} else {
+		user.Password = oldUser.Password
+	}
+
+	if createdUser, err = p.Repo.Save(user); err != nil {
+		err = corerr.Tick(err, "E1062983", "error in saving user", user)
 	}
 
 	BasAccessDeleteFromCache(user.ID)
@@ -155,26 +129,29 @@ func (p *BasUserServ) Save(user basmodel.User, params param.Param) (createdUser 
 	return
 }
 
-// Excel is used for export excel file
-func (p *BasUserServ) Excel(params param.Param) (users []basmodel.User, err error) {
-	params.Limit = p.Engine.Envs.ToUint64(core.ExcelMaxRows)
-	params.Offset = 0
-	params.Order = "bas_users.id ASC"
+// Delete user, it is hard delete, by deleting account related to the user
+func (p *BasUserServ) Delete(userID types.RowID) (user basmodel.User, err error) {
+	if user, err = p.FindByID(userID); err != nil {
+		err = corerr.Tick(err, "E1031839", "user not found for deleting")
+		return
+	}
 
-	users, err = p.Repo.List(params)
-	glog.CheckError(err, "users excel")
+	if err = p.Repo.Delete(user); err != nil {
+		err = corerr.Tick(err, "E1088344", "user not deleted")
+		return
+	}
 
 	return
 }
 
-// Delete user, it is hard delete, by deleting account related to the user
-func (p *BasUserServ) Delete(userID types.RowID) (user basmodel.User, err error) {
-	if user, err = p.FindByID(userID); err != nil {
-		return user, core.NewErrorWithStatus(err.Error(), http.StatusNotFound)
-	}
+// Excel is used for export excel file
+func (p *BasUserServ) Excel(params param.Param) (users []basmodel.User, err error) {
+	params.Limit = p.Engine.Envs.ToUint64(core.ExcelMaxRows)
+	params.Offset = 0
+	params.Order = fmt.Sprintf("%v.id ASC", basmodel.UserTable)
 
-	if err = p.Repo.Delete(user); err != nil {
-		glog.CheckError(err, fmt.Sprintf("error in deleting user %+v", user))
+	if users, err = p.Repo.List(params); err != nil {
+		err = corerr.Tick(err, "E1064328", "cant generate the excel list")
 	}
 
 	return

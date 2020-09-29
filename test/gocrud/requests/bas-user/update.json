@@ -5,8 +5,8 @@
   "payload": {
     "role_id":1,
     "username2": "_RANDOM_NAME_",
-    "username": "white-forest",
+    "username": "super",
     "password": "1234567890",
-    "language":"ku"
+    "lang":"ku"
   }
 }

@@ -1,7 +1,8 @@
 {
   "method":"get",
-	"url":"_URL_/excel/users?select=bas_users.id",
 	"url":"_URL_/excel/users",
+	"url":"_URL_/users?select=bas_users.id2",
+	"url":"_URL_/excel/users?select=bas_users.id2",
 	"authorization":"Bearer _TOKEN_",
 	"payload": {}
 }
