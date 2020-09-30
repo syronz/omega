@@ -17,7 +17,7 @@ func InsertSettings(engine *core.Engine) {
 	settingService := service.ProvideBasSettingService(settingRepo)
 	settings := []basmodel.Setting{
 		{
-			FixedCol: types.FixedCol{
+			GormCol: types.GormCol{
 				ID: 1,
 			},
 			Property:    settingfields.CompanyName,
@@ -26,7 +26,7 @@ func InsertSettings(engine *core.Engine) {
 			Description: "company's name in the header of invoices",
 		},
 		{
-			FixedCol: types.FixedCol{
+			GormCol: types.GormCol{
 				ID: 2,
 			},
 			Property:    settingfields.DefaultLang,
@@ -35,7 +35,7 @@ func InsertSettings(engine *core.Engine) {
 			Description: "in case of user JWT not specified this value has been used",
 		},
 		{
-			FixedCol: types.FixedCol{
+			GormCol: types.GormCol{
 				ID: 3,
 			},
 			Property:    settingfields.CompanyLogo,
@@ -44,7 +44,7 @@ func InsertSettings(engine *core.Engine) {
 			Description: "logo for showed on the application and not invoices",
 		},
 		{
-			FixedCol: types.FixedCol{
+			GormCol: types.GormCol{
 				ID: 4,
 			},
 			Property:    settingfields.InvoiceLogo,
@@ -53,7 +53,7 @@ func InsertSettings(engine *core.Engine) {
 			Description: "path of logo, if branch logo won’t defined use this logo for invoices",
 		},
 		{
-			FixedCol: types.FixedCol{
+			GormCol: types.GormCol{
 				ID: 5,
 			},
 			Property:    settingfields.InvoiceNumberPattern,

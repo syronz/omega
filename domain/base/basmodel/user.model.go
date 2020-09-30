@@ -6,18 +6,16 @@ import (
 	"omega/internal/core/coract"
 	"omega/internal/core/corerr"
 	"omega/internal/core/corterm"
-	"omega/internal/core/validator"
 	"omega/internal/types"
 	"omega/pkg/dict"
 	"omega/pkg/helper"
 	"omega/pkg/limberr"
-	"reflect"
 	"regexp"
 	"strings"
 )
 
+// UserTable is used inside the repo layer
 const (
-	// UserTable is used inside the repo layer
 	UserTable = "bas_users"
 )
 
@@ -32,14 +30,6 @@ type User struct {
 	Extra     interface{} `sql:"-" json:"user_extra,omitempty" table:"-"`
 	Resources string      `sql:"-" json:"resources,omitempty" table:"bas_roles.resources"`
 	Role      string      `sql:"-" json:"role,omitempty" table:"bas_roles.name as role"`
-}
-
-// Columns return list of total columns according to request, useful for inner joins
-func (p User) Columns(variate string) (string, error) {
-	t := reflect.TypeOf(User{})
-	full := helper.TagExtracter(t, UserTable)
-
-	return validator.CheckColumns(full, variate)
 }
 
 // Validate check the type of
@@ -112,8 +102,6 @@ func validateUserLang(err error, lang dict.Lang) error {
 		return limberr.AddInvalidParam(err, "language",
 			corerr.AcceptedValueForVareV, dict.R(corterm.Language),
 			strings.Join(str, ", "))
-		// fieldError.Add("language", corerr.Accepted_value_for_V_are_V, dict.R("Resource"),
-		// 	strings.Join(str, ", "))
 	}
 	return err
 }

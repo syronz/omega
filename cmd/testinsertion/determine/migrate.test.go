@@ -30,9 +30,9 @@ func Migrate(engine *core.Engine, noReset bool) {
 func dropTable(engine *core.Engine) {
 	var err error
 	if err = engine.DB.DropTable(basmodel.UserTable).Error; err != nil {
-		glog.Error("error in dropping bas_users table", err)
+		glog.Error(fmt.Sprintf("error in dropping %v table", basmodel.UserTable), err)
 	}
 	if err = engine.DB.DropTable(basmodel.RoleTable).Error; err != nil {
-		glog.Error("error in dropping bas_roles table", err)
+		glog.Error(fmt.Sprintf("error in dropping %v table", basmodel.RoleTable), err)
 	}
 }

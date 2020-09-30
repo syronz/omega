@@ -56,7 +56,7 @@ func (p *BasRoleServ) List(params param.Param) (roles []basmodel.Role,
 func (p *BasRoleServ) Create(role basmodel.Role) (createdRole basmodel.Role, err error) {
 
 	if err = role.Validate(coract.Save); err != nil {
-		err = corerr.TickValidate(err, "E1098554", corerr.ValidationFailed, role)
+		err = corerr.TickValidate(err, "E1098554", "validation failed in creating the role", role)
 		return
 	}
 
@@ -86,7 +86,6 @@ func (p *BasRoleServ) Save(role basmodel.Role) (savedRole basmodel.Role, err err
 
 // Delete role, it is soft delete
 func (p *BasRoleServ) Delete(roleID types.RowID) (role basmodel.Role, err error) {
-
 	if role, err = p.FindByID(roleID); err != nil {
 		err = corerr.Tick(err, "E1052861", "role not found for deleting")
 		return
@@ -108,7 +107,7 @@ func (p *BasRoleServ) Excel(params param.Param) (roles []basmodel.Role, err erro
 	params.Order = fmt.Sprintf("%v.id ASC", basmodel.RoleTable)
 
 	if roles, err = p.Repo.List(params); err != nil {
-		err = corerr.Tick(err, "E1067385", "cant generate the excel list")
+		err = corerr.Tick(err, "E1067385", "cant generate the excel list for roles")
 		return
 	}
 

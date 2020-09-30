@@ -36,13 +36,14 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 	rg.GET("/settings", access.Check(base.SettingRead), basSettingAPI.List)
 	rg.GET("/settings/:settingID", access.Check(base.SettingRead), basSettingAPI.FindByID)
 	rg.PUT("/settings/:settingID", access.Check(base.SettingWrite), basSettingAPI.Update)
+	rg.GET("/excel/settings", access.Check(base.SettingExcel), basSettingAPI.Excel)
 
 	rg.GET("/roles", access.Check(base.RoleRead), basRoleAPI.List)
 	rg.GET("/roles/:roleID", access.Check(base.RoleRead), basRoleAPI.FindByID)
 	rg.POST("/roles", access.Check(base.RoleWrite), basRoleAPI.Create)
 	rg.PUT("/roles/:roleID", access.Check(base.RoleWrite), basRoleAPI.Update)
 	rg.DELETE("/roles/:roleID", access.Check(base.RoleWrite), basRoleAPI.Delete)
-	rg.GET("excel/roles", access.Check(base.RoleExcel), basRoleAPI.Excel)
+	rg.GET("/excel/roles", access.Check(base.RoleExcel), basRoleAPI.Excel)
 
 	rg.GET("/username/:username", access.Check(base.UserRead), basUserAPI.FindByUsername)
 	rg.GET("/users", access.Check(base.UserRead), basUserAPI.List)
@@ -50,7 +51,7 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 	rg.POST("/users", access.Check(base.UserWrite), basUserAPI.Create)
 	rg.PUT("/users/:userID", access.Check(base.UserWrite), basUserAPI.Update)
 	rg.DELETE("/users/:userID", access.Check(base.UserWrite), basUserAPI.Delete)
-	rg.GET("excel/users", access.Check(base.UserExcel), basUserAPI.Excel)
+	rg.GET("/excel/users", access.Check(base.UserExcel), basUserAPI.Excel)
 
 	rg.GET("/activities", access.Check(base.ActivityAll), basActivityAPI.List)
 

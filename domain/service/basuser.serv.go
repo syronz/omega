@@ -2,7 +2,6 @@ package service
 
 import (
 	"fmt"
-	"net/http"
 	"omega/domain/base"
 	"omega/domain/base/basmodel"
 	"omega/domain/base/basrepo"
@@ -41,8 +40,10 @@ func (p *BasUserServ) FindByID(id types.RowID) (user basmodel.User, err error) {
 
 // FindByUsername find user with username, used for auth
 func (p *BasUserServ) FindByUsername(username string) (user basmodel.User, err error) {
-	user, err = p.Repo.FindByUsername(username)
-	glog.CheckInfo(err, fmt.Sprintf("error in fetching user with username '%s'", username))
+	if user, err = p.Repo.FindByUsername(username); err != nil {
+		err = corerr.Tick(err, "E1088844", "can't fetch the user by username", username)
+		return
+	}
 
 	return
 }
@@ -67,7 +68,7 @@ func (p *BasUserServ) List(params param.Param) (users []basmodel.User,
 func (p *BasUserServ) Create(user basmodel.User) (createdUser basmodel.User, err error) {
 
 	if err = user.Validate(coract.Create); err != nil {
-		err = corerr.TickValidate(err, "E1043810", corerr.ValidationFailed, user)
+		err = corerr.TickValidate(err, "E1043810", "validatation failed in creating user", user)
 		return
 	}
 

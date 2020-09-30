@@ -258,6 +258,16 @@ en = 'users'
 ku = 'bakar-henarakan'
 ar = 'users'
 
+[setting]
+en = 'setting'
+ku = 'rekxstn'
+ar = 'setting'
+
+[settings]
+en = 'settings'
+ku = 'rekxstnakan'
+ar = 'settings'
+
 ["user loged in successfully"]
 en = 'user loged in successfully'
 ku = 'user ba sarkawtooyi daxl boo'
