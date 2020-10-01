@@ -20,7 +20,7 @@ func InsertSettings(engine *core.Engine) {
 
 	settings := []basmodel.Setting{
 		{
-			FixedCol: types.FixedCol{
+			GormCol: types.GormCol{
 				ID: 1,
 			},
 			Property:    settingfields.CompanyName,
@@ -29,7 +29,7 @@ func InsertSettings(engine *core.Engine) {
 			Description: "company's name in the header of invoices",
 		},
 		{
-			FixedCol: types.FixedCol{
+			GormCol: types.GormCol{
 				ID: 2,
 			},
 			Property:    settingfields.DefaultLang,
@@ -38,31 +38,31 @@ func InsertSettings(engine *core.Engine) {
 			Description: "in case of user JWT not specified this value has been used",
 		},
 		{
-			FixedCol: types.FixedCol{
+			GormCol: types.GormCol{
 				ID: 3,
 			},
 			Property:    settingfields.CompanyLogo,
 			Value:       "invoice",
 			Type:        "string",
-			Description: "logo for showed on the application and not invoices",
+			Description: "searchTerm1, logo for showed on the application and not invoices",
 		},
 		{
-			FixedCol: types.FixedCol{
+			GormCol: types.GormCol{
 				ID: 4,
 			},
 			Property:    settingfields.InvoiceLogo,
 			Value:       "public/logo.png",
 			Type:        "string",
-			Description: "path of logo, if branch logo won’t defined use this logo for invoices",
+			Description: "path of logo, if branch logo won’t defined use this logo for invoices, searchTerm1",
 		},
 		{
-			FixedCol: types.FixedCol{
+			GormCol: types.GormCol{
 				ID: 5,
 			},
 			Property:    settingfields.InvoiceNumberPattern,
 			Value:       "location_year_series",
 			Type:        "string",
-			Description: "location_year_series, location_series, series, year_series, fullyear_series, location_fullyear_series",
+			Description: "location_year_series, location_series, series, year_series, fullyear_series, location_fullyear_series, searchTerm1",
 		},
 	}
 
