@@ -144,7 +144,7 @@ func TestDeleteRole(t *testing.T) {
 func TestListRole(t *testing.T) {
 	_, roleServ := initRoleTest()
 	regularParam := getRegularParam("bas_roles.id asc")
-	regularParam.Search = "searchTerm1"
+	regularParam.Filter = "description[like]'searchTerm1'"
 
 	samples := []struct {
 		params param.Param

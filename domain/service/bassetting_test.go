@@ -28,7 +28,7 @@ func TestUpdateSetting(t *testing.T) {
 	}{
 		{
 			in: basmodel.Setting{
-				FixedCol: types.FixedCol{
+				GormCol: types.GormCol{
 					ID: 20,
 				},
 				Property:    "num 1 updated",
@@ -40,7 +40,7 @@ func TestUpdateSetting(t *testing.T) {
 		},
 		{
 			in: basmodel.Setting{
-				FixedCol: types.FixedCol{
+				GormCol: types.GormCol{
 					ID: 21,
 				},
 				Value:       "num 2 updated",
@@ -62,8 +62,9 @@ func TestUpdateSetting(t *testing.T) {
 
 func TestListSetting(t *testing.T) {
 	_, settingServ := initSettingTest()
-	regularParam := getRegularParam("settings.id asc")
+	regularParam := getRegularParam("bas_settings.id asc")
 	// regularParam.Search = "searchTerm1"
+	regularParam.Filter = "description[like]'%searchTerm1%'"
 
 	samples := []struct {
 		params param.Param
@@ -78,19 +79,14 @@ func TestListSetting(t *testing.T) {
 		{
 			params: regularParam,
 			err:    nil,
-			count:  6,
+			count:  3,
 		},
 	}
 
 	for _, v := range samples {
-		data, err := settingServ.List(v.params)
-		var count uint64
-		var ok bool
-		if count, ok = data["count"].(uint64); !ok {
-			count = 0
-		}
+		_, count, err := settingServ.List(v.params)
 		if (v.err == nil && err != nil) || (v.err != nil && err == nil) || count != v.count {
-			t.Errorf("FOR ::::%+v::: \nRETURNS :::%+v:::, \nIT SHOULD BE :::%+v:::", v.params, data["count"], v.count)
+			t.Errorf("FOR ::::%+v::: \nRETURNS :::%+v:::, \nIT SHOULD BE :::%+v:::", v.params, count, v.count)
 		}
 	}
 }
