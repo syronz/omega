@@ -1,0 +1,7 @@
+{
+  "method":"get",
+	"url":"_URL_/accounts/1",
+	"url":"_URL_/accounts/10000",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {}
+}

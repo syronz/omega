@@ -1,5 +1,6 @@
 package basterm
 
+// List of messages and errors for base domain
 const (
 	Role     = "role"
 	Roles    = "roles"
@@ -7,7 +8,10 @@ const (
 	Users    = "users"
 	Setting  = "setting"
 	Settings = "settings"
+	Account  = "account"
+	Accounts = "accounts"
 
-	UserLogedInSuccessfully = "user loged in successfully"
-	UsernameAndPassword     = "username and password"
+	UserLogedInSuccessfully    = "user loged in successfully"
+	UsernameAndPassword        = "username and password"
+	UserRegisteredSuccessfully = "user registered successfully"
 )

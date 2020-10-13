@@ -1,5 +1,7 @@
 package consts
 
+import "math"
+
 // constants which used inside the app
 const (
 	SecretKeyAES = "83nd81lodhg2kd9243jlqa12345jcDsk32021"
@@ -12,4 +14,15 @@ const (
 
 	// TemporaryTokenDuration = 100 * 100000 //in seconds
 	TemporaryTokenDuration = 10
+
+	HashTimeLayout = "060102150405.000000"
+
+	// Registered Accounts
+	AccFeeID    = 1
+	ACCTraderID = 2
+
+	MaxRowsCount = 1 << 62
+
+	// MinFloat64 = k
+	MinFloat64 = -1 * math.MaxFloat64
 )

@@ -28,4 +28,7 @@ const (
 	TokenIsNotValid                 = "token is not valid"
 	TokenIsExpired                  = "token is expired"
 	VNotExist                       = "%v not exist"
+	ForbiddenToVV                   = "forbidden to %v %v"
+	Forbidden                       = "forbidden"
+	VisInactive                     = "%v is inactive"
 )

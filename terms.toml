@@ -129,6 +129,21 @@ en = '%v not exist'
 ku = '%v booni nie'
 ar = '%v not exist'
 
+["forbidden to %v %v"]
+en = 'forbidden to %v %v'
+ku = 'regapedraw nie bo %v la %v'
+ar = 'forbidden to %v %v'
+
+["forbidden"]
+en = 'forbidden'
+ku = 'regapedraw nie'
+ar = 'forbidden'
+
+["%v is inactive"]
+en = '%v is inactive'
+ku = '%v wastenrawa'
+ar = '%v is inactive'
+
 # corterm/terms.go ----------------------------------------------------------------------
 [username]
 en = 'username'
@@ -210,6 +225,16 @@ en = 'fields'
 ku = 'fieldakan'
 ar = 'fields'
 
+[type]
+en = 'type'
+ku = 'jor'
+ar = 'type'
+
+[code]
+en = 'code'
+ku = 'code'
+ar = 'code'
+
 ["%v created successfully"]
 en = '%v created successfully'
 ku = '%v ba sarkawtooyi drwst kra'
@@ -247,6 +272,11 @@ en = 'username or password is wrong'
 ku = 'username yan passwordakat halaya'
 ar = 'username or password is wrong'
 
+["default role_id is not valid, update settings"]
+en = 'default role_id is not valid, update settings'
+ku = 'role_id xazn kraw la setting halaya, abe raqam be'
+ar = 'default role_id is not valid, update settings'
+
 # base/message/basterm/terms.msg.go -----------------------------------------------------
 [user]
 en = 'user'
@@ -268,6 +298,16 @@ en = 'settings'
 ku = 'rekxstnakan'
 ar = 'settings'
 
+[account]
+en = 'account'
+ku = 'hazhmar'
+ar = 'account'
+
+[accounts]
+en = 'accounts'
+ku = 'hazhmarakan'
+ar = 'accounts'
+
 ["user loged in successfully"]
 en = 'user loged in successfully'
 ku = 'user ba sarkawtooyi daxl boo'
@@ -277,6 +317,11 @@ ar = 'user loged in successfully'
 en = 'username and password'
 ku = 'username w password'
 ar = 'username and password'
+
+["user registered successfully"]
+en = 'user registered successfully'
+ku = 'user ba sarkawtooyi register boo'
+ar = 'user registered successfully'
 
 # pkg/filter/parser.go ------------------------------------------------------------------
 ["column %v not not exist"]

@@ -80,3 +80,27 @@ func (p *AuthAPI) TemporaryToken(c *gin.Context) {
 		JSON(tmpKey)
 
 }
+
+// Register a user
+func (p *AuthAPI) Register(c *gin.Context) {
+	resp := response.New(p.Engine, c, base.Domain)
+	var user, createdUser basmodel.User
+	var err error
+
+	if err = resp.Bind(&user, "E1032126", base.Domain, basterm.User); err != nil {
+
+		return
+	}
+
+	if createdUser, err = p.Service.Register(user); err != nil {
+		resp.Error(err).JSON()
+		return
+	}
+
+	createdUser.Password = ""
+
+	resp.RecordCreate(base.Register, createdUser)
+	resp.Status(http.StatusOK).
+		MessageT(basterm.UserRegisteredSuccessfully).
+		JSON(user)
+}

@@ -1,0 +1,12 @@
+{
+  "method":"get",
+	"url":"_URL_/accounts?search=1001101000000011",
+	"url":"_URL_/accounts?order_by=bas_users.id&direction=desc&page_size=2",
+	"url":"_URL_/accounts?order_by=bas_users.id&direction=asc&page_size=5",
+	"url":"_URL_/accounts?filter=username[eq]'super'",
+	"url":"_URL_/accounts?username=reader",
+	"url":"_URL_/accounts?filter=bas_users.username[eq]'super'",
+	"url":"_URL_/accounts",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {}
+}

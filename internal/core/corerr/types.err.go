@@ -17,6 +17,7 @@ const (
 	DuplicateErr
 	InternalServerErr
 	BindingErr
+	ForbiddenErr
 )
 
 // UniqErrorMap is used for categorized errors and connect error with error page also primary fill
@@ -80,5 +81,12 @@ func init() {
 		Title:  BindFailed,
 		Domain: base.Domain,
 		Status: http.StatusUnprocessableEntity,
+	}
+
+	UniqErrorMap[ForbiddenErr] = limberr.ErrorTheme{
+		Type:   "#FORBIDDEN",
+		Title:  Forbidden,
+		Domain: base.Domain,
+		Status: http.StatusForbidden,
 	}
 }

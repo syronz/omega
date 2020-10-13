@@ -40,6 +40,8 @@ type TestEnvs struct {
 		PasswordSalt  string `json:"password_salt"`
 		JWTSecretKey  string `json:"jwt_secret_key"`
 		JWTExpiration string `json:"jwt_expiration"`
+		AdminUsername string `json:"admin_username"`
+		AdminPassword string `json:"admin_password"`
 	} `json:"base"`
 }
 
@@ -95,6 +97,8 @@ func LoadTestEnv() *core.Engine {
 	envs[base.PasswordSalt] = testEnvs.Base.PasswordSalt
 	envs[base.JWTSecretKey] = testEnvs.Base.JWTSecretKey
 	envs[base.JWTExpiration] = testEnvs.Base.JWTExpiration
+	envs[base.AdminUsername] = testEnvs.Base.AdminUsername
+	envs[base.AdminPassword] = testEnvs.Base.AdminPassword
 
 	engine.Envs = envs
 

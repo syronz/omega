@@ -1,0 +1,10 @@
+{
+  "method":"put",
+  "url":"_URL_/accounts/2",
+  "authorization":"Bearer _TOKEN_",
+  "payload": {
+    "name": "1234567890",
+    "type":"ku",
+    "status":"sabina.diako@gmail.com"
+  }
+}

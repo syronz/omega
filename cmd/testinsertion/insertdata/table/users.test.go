@@ -14,6 +14,10 @@ import (
 func InsertUsers(engine *core.Engine) {
 	userRepo := basrepo.ProvideUserRepo(engine)
 	userService := service.ProvideBasUserService(userRepo)
+
+	// reset the users table
+	userRepo.Engine.DB.Table(basmodel.UserTable).Unscoped().Delete(basmodel.User{})
+
 	users := []basmodel.User{
 		{
 			ID:       11,
@@ -43,7 +47,7 @@ func InsertUsers(engine *core.Engine) {
 
 	for _, v := range users {
 		if _, err := userService.Save(v); err != nil {
-			glog.Fatal("error in saving users", err)
+			glog.Fatal(err)
 		}
 	}
 

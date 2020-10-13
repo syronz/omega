@@ -21,10 +21,10 @@ func ProvideBasAccessService(p basrepo.AccessRepo) BasAccessServ {
 	return BasAccessServ{Repo: p, Engine: p.Engine}
 }
 
-var thisCache map[types.RowID]string
+var cacheResource map[types.RowID]string
 
 func init() {
-	thisCache = make(map[types.RowID]string)
+	cacheResource = make(map[types.RowID]string)
 }
 
 // CheckAccess is used inside each method to findout if user has permission or not
@@ -40,7 +40,7 @@ func (p *BasAccessServ) CheckAccess(c *gin.Context, resource types.Resource) boo
 	var resources string
 	var ok bool
 
-	if resources, ok = thisCache[userID]; !ok {
+	if resources, ok = cacheResource[userID]; !ok {
 		var err error
 		resources, err = p.Repo.GetUserResources(userID)
 		glog.CheckError(err, "error in finding the resources for user", userID)
@@ -51,19 +51,19 @@ func (p *BasAccessServ) CheckAccess(c *gin.Context, resource types.Resource) boo
 
 }
 
-// BasAccessAddToCache add the resources to the thisCache
+// BasAccessAddToCache add the resources to the cacheResource
 func BasAccessAddToCache(userID types.RowID, resources string) {
-	thisCache[userID] = resources
+	cacheResource[userID] = resources
 }
 
 func BasAccessDeleteFromCache(userID types.RowID) {
-	delete(thisCache, userID)
+	delete(cacheResource, userID)
 }
 
 func BasAccessResetCache(userID types.RowID) {
-	thisCache[userID] = ""
+	cacheResource[userID] = ""
 }
 
 func BasAccessResetFullCache() {
-	thisCache = make(map[types.RowID]string)
+	cacheResource = make(map[types.RowID]string)
 }

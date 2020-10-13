@@ -18,6 +18,13 @@ const (
 	ViewRole   types.Event = "role-view"
 	ExcelRole  types.Event = "role-excel"
 
+	CreateAccount types.Event = "account-create"
+	UpdateAccount types.Event = "account-update"
+	DeleteAccount types.Event = "account-delete"
+	ListAccount   types.Event = "account-list"
+	ViewAccount   types.Event = "account-view"
+	ExcelAccount  types.Event = "account-excel"
+
 	CreateSetting types.Event = "setting-create"
 	UpdateSetting types.Event = "setting-update"
 	DeleteSetting types.Event = "setting-delete"
@@ -30,4 +37,5 @@ const (
 	BasLogin    types.Event = "login"
 	BasLogout   types.Event = "logout"
 	LoginFailed types.Event = "login-failed"
+	Register    types.Event = "register"
 )

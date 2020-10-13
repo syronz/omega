@@ -26,7 +26,7 @@ func InsertRoles(engine *core.Engine) {
 				base.UserWrite, base.UserRead, base.UserExcel,
 				base.ActivitySelf, base.ActivityAll,
 				base.RoleRead, base.RoleWrite, base.RoleExcel,
-				// base.Ping,
+				base.AccountRead, base.AccountWrite, base.AccountExcel,
 			}),
 			Description: "admin has all privileges - do not edit",
 		},
@@ -37,6 +37,7 @@ func InsertRoles(engine *core.Engine) {
 			Name: "Cashier",
 			Resources: types.ResourceJoin([]types.Resource{
 				base.ActivitySelf,
+				base.AccountRead, base.AccountWrite, base.AccountExcel,
 			}),
 			Description: "cashier has privileges for adding transactions - after migration reset",
 		},

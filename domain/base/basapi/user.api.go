@@ -108,8 +108,8 @@ func (p *UserAPI) Create(c *gin.Context) {
 	}
 
 	user.Password = ""
-	resp.Record(base.CreateUser, nil, user)
 
+	resp.RecordCreate(base.CreateUser, user)
 	resp.Status(http.StatusOK).
 		MessageT(corterm.VCreatedSuccessfully, dict.R(basterm.User)).
 		JSON(createdUser)

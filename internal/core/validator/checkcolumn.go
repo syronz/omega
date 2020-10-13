@@ -11,7 +11,7 @@ import (
 func CheckColumns(cols []string, requestedCols string) (string, error) {
 	var err error
 
-	if requestedCols == "*" {
+	if requestedCols == "*" || requestedCols == "" {
 		return strings.Join(cols, ","), nil
 	}
 

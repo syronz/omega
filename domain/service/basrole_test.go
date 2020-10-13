@@ -153,8 +153,8 @@ func TestListRole(t *testing.T) {
 	}{
 		{
 			params: param.Param{},
-			err:    errors.New("error in url"),
-			count:  0,
+			err:    nil,
+			count:  13,
 		},
 		{
 			params: regularParam,

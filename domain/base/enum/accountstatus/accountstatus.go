@@ -1,14 +1,15 @@
 package accountstatus
 
-import "omega/internal/types"
+import (
+	"omega/internal/types"
+	"strings"
+)
 
-// Account's status
 const (
 	Active   types.Enum = "active"
 	Inactive types.Enum = "inactive"
 )
 
-// List used for validation
 var List = []types.Enum{
 	Active,
 	Inactive,
@@ -16,5 +17,11 @@ var List = []types.Enum{
 
 // Join make a string for showing in the api
 func Join() string {
-	return types.JoinEnum(List)
+	var strArr []string
+
+	for _, v := range List {
+		strArr = append(strArr, string(v))
+	}
+
+	return strings.Join(strArr, ", ")
 }

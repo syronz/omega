@@ -16,6 +16,8 @@ func InsertRoles(engine *core.Engine) {
 	roleService := service.ProvideBasRoleService(roleRepo)
 
 	// reset the roles table
+	roleRepo.Engine.DB.Table(basmodel.UserTable).Unscoped().Delete(basmodel.User{})
+	roleRepo.Engine.DB.Table(basmodel.AccountTable).Unscoped().Delete(basmodel.Account{})
 	roleRepo.Engine.DB.Table(basmodel.RoleTable).Unscoped().Delete(basmodel.Role{})
 
 	roles := []basmodel.Role{
@@ -123,7 +125,6 @@ func InsertRoles(engine *core.Engine) {
 		if _, err := roleService.Save(v); err != nil {
 			glog.Fatal(err)
 		}
-
 	}
 
 }

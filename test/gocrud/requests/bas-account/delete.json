@@ -1,0 +1,6 @@
+{
+  "method":"delete",
+  "url":"_URL_/accounts/10",
+  "authorization":"Bearer _TOKEN_",
+  "payload": {}
+}

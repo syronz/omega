@@ -17,6 +17,7 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 	basRoleAPI := initRoleAPI(engine)
 	basSettingAPI := initSettingAPI(engine)
 	basActivityAPI := initActivityAPI(engine)
+	basAccountAPI := initAccountAPI(engine)
 
 	// Html Domain
 	htmErrDescAPI := initErrDescAPI(engine)
@@ -24,6 +25,7 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 	rg.StaticFS("/public", http.Dir("public"))
 
 	rg.POST("/login", basAuthAPI.Login)
+	rg.POST("/register", basAuthAPI.Register)
 
 	rg.Use(basmid.AuthGuard(engine))
 	access := basmid.NewAccessMid(engine)
@@ -44,6 +46,13 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 	rg.PUT("/roles/:roleID", access.Check(base.RoleWrite), basRoleAPI.Update)
 	rg.DELETE("/roles/:roleID", access.Check(base.RoleWrite), basRoleAPI.Delete)
 	rg.GET("/excel/roles", access.Check(base.RoleExcel), basRoleAPI.Excel)
+
+	rg.GET("/accounts", access.Check(base.AccountRead), basAccountAPI.List)
+	rg.GET("/accounts/:accountID", access.Check(base.AccountRead), basAccountAPI.FindByID)
+	rg.POST("/accounts", access.Check(base.AccountWrite), basAccountAPI.Create)
+	rg.PUT("/accounts/:accountID", access.Check(base.AccountWrite), basAccountAPI.Update)
+	rg.DELETE("/accounts/:accountID", access.Check(base.AccountWrite), basAccountAPI.Delete)
+	rg.GET("/excel/accounts", access.Check(base.AccountExcel), basAccountAPI.Excel)
 
 	rg.GET("/username/:username", access.Check(base.UserRead), basUserAPI.FindByUsername)
 	rg.GET("/users", access.Check(base.UserRead), basUserAPI.List)

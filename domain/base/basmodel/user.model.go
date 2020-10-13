@@ -27,6 +27,8 @@ type User struct {
 	Password  string      `gorm:"not null" json:"password,omitempty"`
 	Lang      dict.Lang   `gorm:"type:varchar(2);default:'en'" json:"lang,omitempty"`
 	Email     string      `json:"email,omitempty"`
+	Phone     string      `json:"phone,omitempty"`
+	Name      string      `sql:"-" json:"name,omitempty" table:"bas_accounts.name"`
 	Extra     interface{} `sql:"-" json:"user_extra,omitempty" table:"-"`
 	Resources string      `sql:"-" json:"resources,omitempty" table:"bas_roles.resources"`
 	Role      string      `sql:"-" json:"role,omitempty" table:"bas_roles.name as role"`

@@ -25,6 +25,8 @@
   "base": {
     "password_salt":  "",
     "jwt_secret_key":  "kz84HcnwKSn0k2vk2Ddw04kdck8k7SKedWFdGkwe20",
-    "jwt_expiration": "10000"
+    "jwt_expiration": "10000",
+    "admin_username": "admin",
+    "admin_password": "this is password"
   }
 }

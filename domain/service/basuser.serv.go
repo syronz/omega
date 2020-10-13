@@ -5,6 +5,8 @@ import (
 	"omega/domain/base"
 	"omega/domain/base/basmodel"
 	"omega/domain/base/basrepo"
+	"omega/domain/base/enum/accounttype"
+	"omega/domain/sync/accountstatus"
 	"omega/internal/core"
 	"omega/internal/core/coract"
 	"omega/internal/core/corerr"
@@ -78,13 +80,29 @@ func (p *BasUserServ) Create(user basmodel.User) (createdUser basmodel.User, err
 	defer func() {
 		if r := recover(); r != nil {
 			glog.LogError(fmt.Errorf("panic happened in transaction mode for %v",
-				"users table"), "rollback recover")
+				"users table"), "rollback recover create user")
 			clonedEngine.DB.Rollback()
 		}
 	}()
 
 	userRepo := basrepo.ProvideUserRepo(clonedEngine)
+	accountServ := ProvideBasAccountService(basrepo.ProvideAccountRepo(clonedEngine))
 
+	account := basmodel.Account{
+		Name:   user.Name,
+		Type:   accounttype.Trader,
+		Status: accountstatus.Inactive,
+	}
+
+	var createdAccount basmodel.Account
+	if createdAccount, err = accountServ.Create(account); err != nil {
+		err = corerr.Tick(err, "E1067890", "error in creating account for user", user)
+
+		clonedEngine.DB.Rollback()
+		return
+	}
+
+	user.ID = createdAccount.ID
 	user.Password, err = password.Hash(user.Password, p.Engine.Envs[base.PasswordSalt])
 	glog.CheckError(err, fmt.Sprintf("Hashing password failed for %+v", user))
 
@@ -111,6 +129,17 @@ func (p *BasUserServ) Save(user basmodel.User) (createdUser basmodel.User, err e
 		return
 	}
 
+	clonedEngine := p.Engine.Clone()
+	clonedEngine.DB = clonedEngine.DB.Begin()
+
+	defer func() {
+		if r := recover(); r != nil {
+			glog.LogError(fmt.Errorf("panic happened in transaction mode for %v",
+				"users table"), "rollback recover save user")
+			clonedEngine.DB.Rollback()
+		}
+	}()
+
 	if user.Password != "" {
 		if user.Password, err = password.Hash(user.Password, p.Engine.Envs[base.PasswordSalt]); err != nil {
 			err = corerr.Tick(err, "E1057832", "error in saving user", user)
@@ -119,12 +148,33 @@ func (p *BasUserServ) Save(user basmodel.User) (createdUser basmodel.User, err e
 		user.Password = oldUser.Password
 	}
 
-	if createdUser, err = p.Repo.Save(user); err != nil {
+	userRepo := basrepo.ProvideUserRepo(clonedEngine)
+	accountServ := ProvideBasAccountService(basrepo.ProvideAccountRepo(clonedEngine))
+
+	account := basmodel.Account{
+		Name:   user.Name,
+		Type:   accounttype.Trader,
+		Status: accountstatus.Inactive,
+	}
+	account.ID = user.ID
+
+	if _, err = accountServ.Save(account); err != nil {
+		err = corerr.Tick(err, "E1098648", "error in saving account inside the user", user)
+
+		clonedEngine.DB.Rollback()
+		return
+	}
+
+	if createdUser, err = userRepo.Save(user); err != nil {
 		err = corerr.Tick(err, "E1062983", "error in saving user", user)
+
+		clonedEngine.DB.Rollback()
+		return
 	}
 
 	BasAccessDeleteFromCache(user.ID)
 
+	clonedEngine.DB.Commit()
 	createdUser.Password = ""
 
 	return

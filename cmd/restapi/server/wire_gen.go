@@ -49,6 +49,14 @@ func initActivityAPI(engine *core.Engine) basapi.ActivityAPI {
 	return activityAPI
 }
 
+func initAccountAPI(e *core.Engine) basapi.AccountAPI {
+	accountRepo := basrepo.ProvideAccountRepo(e)
+	basAccountServ := service.ProvideBasAccountService(accountRepo)
+	accountAPI := basapi.ProvideAccountAPI(basAccountServ)
+	return accountAPI
+}
+
+// Html Domain
 func initErrDescAPI(e *core.Engine) htmapi.ErrDescAPI {
 	errDescAPI := htmapi.GenErrDescAPI(e)
 	return errDescAPI

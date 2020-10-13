@@ -73,8 +73,8 @@ func TestListSetting(t *testing.T) {
 	}{
 		{
 			params: param.Param{},
-			err:    errors.New("error in url"),
-			count:  0,
+			err:    nil,
+			count:  6,
 		},
 		{
 			params: regularParam,

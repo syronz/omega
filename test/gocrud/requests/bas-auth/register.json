@@ -1,9 +1,8 @@
 {
   "method":"post",
-  "url":"_URL_/users",
+  "url":"_URL_/register",
   "authorization":"Bearer _TOKEN_",
   "payload": {
-    "role_id":1,
     "name": "_RANDOM_NAME_",
     "username": "_RANDOM_NAME_",
     "password": "1234567890",
