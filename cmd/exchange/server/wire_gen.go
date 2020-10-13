@@ -8,7 +8,6 @@ package server
 import (
 	"omega/domain/base/basapi"
 	"omega/domain/base/basrepo"
-	"omega/domain/html/htmapi"
 	"omega/domain/service"
 	"omega/internal/core"
 )
@@ -54,10 +53,4 @@ func initAccountAPI(e *core.Engine) basapi.AccountAPI {
 	basAccountServ := service.ProvideBasAccountService(accountRepo)
 	accountAPI := basapi.ProvideAccountAPI(basAccountServ)
 	return accountAPI
-}
-
-// Html Domain
-func initErrDescAPI(e *core.Engine) htmapi.ErrDescAPI {
-	errDescAPI := htmapi.GenErrDescAPI(e)
-	return errDescAPI
 }

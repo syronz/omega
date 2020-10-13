@@ -1,10 +1,11 @@
 package table
 
 import (
-	"omega/cmd/restapi/enum/settingfields"
+	"omega/cmd/exchange/enum/settingfields"
 	"omega/domain/base/basmodel"
 	"omega/domain/base/basrepo"
 	"omega/domain/service"
+	"omega/domain/sync"
 	"omega/internal/core"
 	"omega/internal/types"
 	"omega/pkg/glog"
@@ -17,8 +18,10 @@ func InsertSettings(engine *core.Engine) {
 	settingService := service.ProvideBasSettingService(settingRepo)
 	settings := []basmodel.Setting{
 		{
-			GormCol: types.GormCol{
-				ID: 1,
+			FixedCol: types.FixedCol{
+				ID:        1,
+				CompanyID: engine.Envs.ToUint64(sync.CompanyID),
+				NodeID:    engine.Envs.ToUint64(sync.NodeID),
 			},
 			Property:    settingfields.CompanyName,
 			Value:       "item",
@@ -26,8 +29,10 @@ func InsertSettings(engine *core.Engine) {
 			Description: "company's name in the header of invoices",
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 2,
+			FixedCol: types.FixedCol{
+				ID:        2,
+				CompanyID: engine.Envs.ToUint64(sync.CompanyID),
+				NodeID:    engine.Envs.ToUint64(sync.NodeID),
 			},
 			Property:    settingfields.DefaultLang,
 			Value:       "ku",
@@ -35,8 +40,10 @@ func InsertSettings(engine *core.Engine) {
 			Description: "in case of user JWT not specified this value has been used",
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 3,
+			FixedCol: types.FixedCol{
+				ID:        3,
+				CompanyID: engine.Envs.ToUint64(sync.CompanyID),
+				NodeID:    engine.Envs.ToUint64(sync.NodeID),
 			},
 			Property:    settingfields.CompanyLogo,
 			Value:       "invoice",
@@ -44,8 +51,10 @@ func InsertSettings(engine *core.Engine) {
 			Description: "logo for showed on the application and not invoices",
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 4,
+			FixedCol: types.FixedCol{
+				ID:        4,
+				CompanyID: engine.Envs.ToUint64(sync.CompanyID),
+				NodeID:    engine.Envs.ToUint64(sync.NodeID),
 			},
 			Property:    settingfields.InvoiceLogo,
 			Value:       "public/logo.png",
@@ -53,8 +62,10 @@ func InsertSettings(engine *core.Engine) {
 			Description: "path of logo, if branch logo won’t defined use this logo for invoices",
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 5,
+			FixedCol: types.FixedCol{
+				ID:        5,
+				CompanyID: engine.Envs.ToUint64(sync.CompanyID),
+				NodeID:    engine.Envs.ToUint64(sync.NodeID),
 			},
 			Property:    settingfields.InvoiceNumberPattern,
 			Value:       "location_year_series",

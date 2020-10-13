@@ -2,6 +2,7 @@ package startoff
 
 import (
 	"omega/domain/base"
+	"omega/domain/sync"
 	"omega/internal/core"
 	"omega/internal/types"
 	"os"
@@ -45,6 +46,9 @@ func LoadEnvs() *core.Engine {
 	envs[base.RecordWrite] = os.Getenv("OMEGA_BASE_RECORD_WRITE")
 	envs[base.AdminUsername] = os.Getenv("OMEGA_BASE_ADMIN_USERNAME")
 	envs[base.AdminPassword] = os.Getenv("OMEGA_BASE_ADMIN_PASSWORD")
+
+	envs[sync.CompanyID] = os.Getenv("OMEGA_SYNC_COMPANY_ID")
+	envs[sync.NodeID] = os.Getenv("OMEGA_SYNC_NODE_ID")
 
 	engine.Envs = envs
 

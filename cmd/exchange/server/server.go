@@ -44,7 +44,7 @@ func Start(engine *core.Engine) *gin.Engine {
 	// No Route "Not Found"
 	notFoundRoute(r, engine)
 
-	rg := r.Group("/api/restapi/v1")
+	rg := r.Group("/api/exchange/v1")
 	{
 		Route(*rg, engine)
 	}

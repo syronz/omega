@@ -5,8 +5,8 @@ import (
 	"omega/domain/base"
 	"omega/domain/base/basmodel"
 	"omega/domain/base/basrepo"
+	"omega/domain/base/enum/accountstatus"
 	"omega/domain/base/enum/accounttype"
-	"omega/domain/sync/accountstatus"
 	"omega/internal/core"
 	"omega/internal/core/coract"
 	"omega/internal/core/corerr"
@@ -90,9 +90,11 @@ func (p *BasUserServ) Create(user basmodel.User) (createdUser basmodel.User, err
 
 	account := basmodel.Account{
 		Name:   user.Name,
-		Type:   accounttype.Trader,
+		Type:   accounttype.User,
 		Status: accountstatus.Inactive,
 	}
+	account.CompanyID = user.CompanyID
+	account.NodeID = user.NodeID
 
 	var createdAccount basmodel.Account
 	if createdAccount, err = accountServ.Create(account); err != nil {
@@ -153,10 +155,12 @@ func (p *BasUserServ) Save(user basmodel.User) (createdUser basmodel.User, err e
 
 	account := basmodel.Account{
 		Name:   user.Name,
-		Type:   accounttype.Trader,
+		Type:   accounttype.User,
 		Status: accountstatus.Inactive,
 	}
 	account.ID = user.ID
+	account.CompanyID = user.CompanyID
+	account.NodeID = user.NodeID
 
 	if _, err = accountServ.Save(account); err != nil {
 		err = corerr.Tick(err, "E1098648", "error in saving account inside the user", user)

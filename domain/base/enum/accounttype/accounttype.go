@@ -5,31 +5,32 @@ import (
 )
 
 const (
-	Eternal  types.Enum = "eternal"
-	Asset    types.Enum = "asset"
-	Expense  types.Enum = "expense"
-	Trader   types.Enum = "trader"
-	Provider types.Enum = "provider"
-	Cashier  types.Enum = "cashier"
-	Fee      types.Enum = "fee"
-	Fixer    types.Enum = "fixer"
+	Asset     types.Enum = "asset"
+	Capital   types.Enum = "capital"
+	Cash      types.Enum = "cash"
+	Equity    types.Enum = "Equity"
+	Expense   types.Enum = "expense"
+	Income    types.Enum = "income"
+	Liability types.Enum = "liability"
+	Partner   types.Enum = "partner"
+	User      types.Enum = "user"
 )
 
 var List = []types.Enum{
-	Eternal,
 	Asset,
+	Capital,
+	Cash,
+	Equity,
 	Expense,
-	Trader,
-	Provider,
-	Cashier,
-	Fee,
-	Fixer,
+	Income,
+	Income,
+	Liability,
+	Partner,
+	User,
 }
 
 var ForbiddenNegative = []types.Enum{
-	Trader,
-	Provider,
-	Cashier,
+	Cash,
 }
 
 // Join make a string for showing in the api

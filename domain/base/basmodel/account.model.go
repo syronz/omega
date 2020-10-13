@@ -18,10 +18,12 @@ const (
 
 // Account model
 type Account struct {
-	types.GormCol
-	Name   string     `gorm:"not null;unique" json:"name,omitempty"`
-	Type   types.Enum `json:"type,omitempty"`
-	Status types.Enum `json:"status,omitempty"`
+	types.FixedCol
+	ParentID *types.RowID `json:"parent_id"`
+	Code     *string      `gorm:"unique" json:"code"`
+	Name     string       `gorm:"not null;unique" json:"name,omitempty"`
+	Type     types.Enum   `json:"type,omitempty"`
+	Status   types.Enum   `json:"status,omitempty"`
 }
 
 // Validate check the type of fields

@@ -20,8 +20,6 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 	basAccountAPI := initAccountAPI(engine)
 
 	// Html Domain
-	htmErrDescAPI := initErrDescAPI(engine)
-	rg.GET("/error-list", htmErrDescAPI.List)
 	rg.StaticFS("/public", http.Dir("public"))
 
 	rg.POST("/login", basAuthAPI.Login)

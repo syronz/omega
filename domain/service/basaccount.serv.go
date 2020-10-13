@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"omega/domain/base/basmodel"
 	"omega/domain/base/basrepo"
-	"omega/domain/sync/accountstatus"
+	"omega/domain/base/enum/accountstatus"
 	"omega/internal/core"
 	"omega/internal/core/coract"
 	"omega/internal/core/corerr"

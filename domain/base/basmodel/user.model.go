@@ -21,7 +21,7 @@ const (
 
 // User model
 type User struct {
-	ID        types.RowID `gorm:"not null;unique" json:"id"`
+	types.FixedCol
 	RoleID    types.RowID `gorm:"index:role_id_idx" json:"role_id"`
 	Username  string      `gorm:"not null;unique" json:"username,omitempty"`
 	Password  string      `gorm:"not null" json:"password,omitempty"`

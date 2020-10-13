@@ -5,6 +5,7 @@ import (
 	"omega/domain/base/basmodel"
 	"omega/domain/base/basrepo"
 	"omega/domain/service"
+	"omega/domain/sync"
 	"omega/internal/core"
 	"omega/internal/types"
 	"omega/pkg/glog"
@@ -17,8 +18,10 @@ func InsertRoles(engine *core.Engine) {
 	roleService := service.ProvideBasRoleService(roleRepo)
 	roles := []basmodel.Role{
 		{
-			GormCol: types.GormCol{
-				ID: 1,
+			FixedCol: types.FixedCol{
+				ID:        1,
+				CompanyID: engine.Envs.ToUint64(sync.CompanyID),
+				NodeID:    engine.Envs.ToUint64(sync.NodeID),
 			},
 			Name: "Admin",
 			Resources: types.ResourceJoin([]types.Resource{
@@ -31,8 +34,10 @@ func InsertRoles(engine *core.Engine) {
 			Description: "admin has all privileges - do not edit",
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 2,
+			FixedCol: types.FixedCol{
+				ID:        2,
+				CompanyID: engine.Envs.ToUint64(sync.CompanyID),
+				NodeID:    engine.Envs.ToUint64(sync.NodeID),
 			},
 			Name: "Cashier",
 			Resources: types.ResourceJoin([]types.Resource{
@@ -42,8 +47,10 @@ func InsertRoles(engine *core.Engine) {
 			Description: "cashier has privileges for adding transactions - after migration reset",
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 3,
+			FixedCol: types.FixedCol{
+				ID:        3,
+				CompanyID: engine.Envs.ToUint64(sync.CompanyID),
+				NodeID:    engine.Envs.ToUint64(sync.NodeID),
 			},
 			Name: "Reader",
 			Resources: types.ResourceJoin([]types.Resource{
