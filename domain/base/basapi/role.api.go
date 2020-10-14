@@ -9,6 +9,7 @@ import (
 	"omega/internal/core"
 	"omega/internal/core/corterm"
 	"omega/internal/response"
+	"omega/internal/types"
 	"omega/pkg/excel"
 
 	"github.com/gin-gonic/gin"
@@ -30,12 +31,18 @@ func (p *RoleAPI) FindByID(c *gin.Context) {
 	resp := response.New(p.Engine, c, base.Domain)
 	var err error
 	var role basmodel.Role
+	var fix types.FixedCol
 
-	if role.ID, err = resp.GetRowID(c.Param("roleID"), "E1053982", basterm.Role); err != nil {
+	if fix.CompanyID, fix.NodeID, err = resp.GetCompanyNode("E1059818", base.Domain); err != nil {
+		resp.Error(err).JSON()
 		return
 	}
 
-	if role, err = p.Service.FindByID(role.ID); err != nil {
+	if fix.ID, err = resp.GetRowID(c.Param("roleID"), "E1053982", basterm.Role); err != nil {
+		return
+	}
+
+	if role, err = p.Service.FindByID(fix); err != nil {
 		resp.Error(err).JSON()
 		return
 	}
@@ -70,6 +77,11 @@ func (p *RoleAPI) Create(c *gin.Context) {
 	var role, createdRole basmodel.Role
 	var err error
 
+	if role.CompanyID, role.NodeID, err = resp.GetCompanyNode("E1039319", base.Domain); err != nil {
+		resp.Error(err).JSON()
+		return
+	}
+
 	if err = resp.Bind(&role, "E1088259", base.Domain, basterm.Role); err != nil {
 		return
 	}
@@ -91,8 +103,14 @@ func (p *RoleAPI) Update(c *gin.Context) {
 	var err error
 
 	var role, roleBefore, roleUpdated basmodel.Role
+	var fix types.FixedCol
 
-	if role.ID, err = resp.GetRowID(c.Param("roleID"), "E1082097", basterm.Role); err != nil {
+	if fix.CompanyID, fix.NodeID, err = resp.GetCompanyNode("E1075783", base.Domain); err != nil {
+		resp.Error(err).JSON()
+		return
+	}
+
+	if fix.ID, err = resp.GetRowID(c.Param("roleID"), "E1082097", basterm.Role); err != nil {
 		return
 	}
 
@@ -100,10 +118,12 @@ func (p *RoleAPI) Update(c *gin.Context) {
 		return
 	}
 
-	if roleBefore, err = p.Service.FindByID(role.ID); err != nil {
+	if roleBefore, err = p.Service.FindByID(fix); err != nil {
 		resp.Error(err).JSON()
 		return
 	}
+
+	role.ID = fix.ID
 
 	if roleUpdated, err = p.Service.Save(role); err != nil {
 		resp.Error(err).JSON()
@@ -121,12 +141,18 @@ func (p *RoleAPI) Delete(c *gin.Context) {
 	resp := response.New(p.Engine, c, base.Domain)
 	var err error
 	var role basmodel.Role
+	var fix types.FixedCol
 
-	if role.ID, err = resp.GetRowID(c.Param("roleID"), "E1074329", basterm.Role); err != nil {
+	if fix.CompanyID, fix.NodeID, err = resp.GetCompanyNode("E1063270", base.Domain); err != nil {
+		resp.Error(err).JSON()
 		return
 	}
 
-	if role, err = p.Service.Delete(role.ID); err != nil {
+	if fix.ID, err = resp.GetRowID(c.Param("roleID"), "E1074329", basterm.Role); err != nil {
+		return
+	}
+
+	if role, err = p.Service.Delete(fix); err != nil {
 		resp.Error(err).JSON()
 		return
 	}

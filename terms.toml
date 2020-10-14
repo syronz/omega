@@ -333,3 +333,9 @@ ar = 'column %v not not exist'
 en = 'filter is not valid'
 ku = 'filter halaya'
 ar = 'filter is not valid'
+
+# domain/eaccounting/easterm/terms.go ---------------------------------------------------
+["symbol"]
+en = 'symbol'
+ku = 'symbol'
+ar = 'symbol'

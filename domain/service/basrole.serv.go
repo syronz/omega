@@ -27,9 +27,9 @@ func ProvideBasRoleService(p basrepo.RoleRepo) BasRoleServ {
 }
 
 // FindByID for getting role by it's id
-func (p *BasRoleServ) FindByID(id types.RowID) (role basmodel.Role, err error) {
-	if role, err = p.Repo.FindByID(id); err != nil {
-		err = corerr.Tick(err, "E1043183", "can't fetch the role", id)
+func (p *BasRoleServ) FindByID(fix types.FixedCol) (role basmodel.Role, err error) {
+	if role, err = p.Repo.FindByID(fix); err != nil {
+		err = corerr.Tick(err, "E1043183", "can't fetch the role", fix.ID, fix.CompanyID, fix.NodeID)
 		return
 	}
 
@@ -85,8 +85,8 @@ func (p *BasRoleServ) Save(role basmodel.Role) (savedRole basmodel.Role, err err
 }
 
 // Delete role, it is soft delete
-func (p *BasRoleServ) Delete(roleID types.RowID) (role basmodel.Role, err error) {
-	if role, err = p.FindByID(roleID); err != nil {
+func (p *BasRoleServ) Delete(fix types.FixedCol) (role basmodel.Role, err error) {
+	if role, err = p.FindByID(fix); err != nil {
 		err = corerr.Tick(err, "E1052861", "role not found for deleting")
 		return
 	}

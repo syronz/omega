@@ -3,6 +3,7 @@ package startoff
 import (
 	"fmt"
 	"omega/domain/base/basmodel"
+	"omega/domain/eaccounting/eacmodel"
 	"omega/internal/core"
 )
 
@@ -17,5 +18,8 @@ func Migrate(engine *core.Engine) {
 		AddForeignKey("role_id", fmt.Sprintf("%v(id)", basmodel.RoleTable), "RESTRICT", "RESTRICT").
 		AddForeignKey("id", "bas_accounts(id)", "RESTRICT", "RESTRICT")
 	engine.ActivityDB.Table(basmodel.ActivityTable).AutoMigrate(&basmodel.Activity{})
+
+	// EAccounting Domain
+	engine.DB.Table(eacmodel.CurrencyTable).AutoMigrate(&eacmodel.Currency{})
 
 }

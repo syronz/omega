@@ -30,10 +30,12 @@ func ProvideRoleRepo(engine *core.Engine) RoleRepo {
 }
 
 // FindByID finds the role via its id
-func (p *RoleRepo) FindByID(id types.RowID) (role basmodel.Role, err error) {
-	err = p.Engine.DB.Table(basmodel.RoleTable).First(&role, id.ToUint64()).Error
+func (p *RoleRepo) FindByID(fix types.FixedCol) (role basmodel.Role, err error) {
+	err = p.Engine.DB.Table(basmodel.RoleTable).
+		Where("id = ? AND company_id = ? AND node_id = ?", fix.ID.ToUint64(), fix.CompanyID, fix.NodeID).
+		First(&role).Error
 
-	role.ID = id
+	role.ID = fix.ID
 	err = p.dbError(err, "E1072991", role, corterm.List)
 
 	return
@@ -101,7 +103,7 @@ func (p *RoleRepo) Create(role basmodel.Role) (u basmodel.Role, err error) {
 
 // Delete the role
 func (p *RoleRepo) Delete(role basmodel.Role) (err error) {
-	if err = p.Engine.DB.Table(basmodel.RoleTable).Unscoped().Delete(&role).Error; err != nil {
+	if err = p.Engine.DB.Table(basmodel.RoleTable).Delete(&role).Error; err != nil {
 		err = p.dbError(err, "E1067392", role, corterm.Deleted)
 	}
 	return

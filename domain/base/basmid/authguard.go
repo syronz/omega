@@ -48,6 +48,8 @@ func AuthGuard(engine *core.Engine) gin.HandlerFunc {
 		c.Set("USERNAME", claims.Username)
 		c.Set("USER_ID", claims.ID)
 		c.Set("LANGUAGE", claims.Lang)
+		c.Set("COMPANY_ID", claims.CompanyID)
+		c.Set("NODE_ID", claims.NodeID)
 		c.Next()
 	}
 }

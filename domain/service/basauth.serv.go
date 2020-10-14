@@ -5,6 +5,7 @@ import (
 	"omega/domain/base/basmodel"
 	"omega/domain/base/basrepo"
 	"omega/domain/base/message/baserr"
+	"omega/domain/sync"
 	"omega/internal/consts"
 	"omega/internal/core"
 	"omega/internal/core/coract"
@@ -54,9 +55,11 @@ func (p *BasAuthServ) Login(auth basmodel.Auth, params param.Param) (user basmod
 		expirationTime := time.Now().
 			Add(p.Engine.Envs.ToDuration(base.JWTExpiration) * time.Second)
 		claims := &types.JWTClaims{
-			Username: auth.Username,
-			ID:       user.ID,
-			Lang:     user.Lang,
+			Username:  auth.Username,
+			ID:        user.ID,
+			Lang:      user.Lang,
+			CompanyID: p.Engine.Envs.ToUint64(sync.CompanyID),
+			NodeID:    p.Engine.Envs.ToUint64(sync.NodeID),
 			StandardClaims: jwt.StandardClaims{
 				ExpiresAt: expirationTime.Unix(),
 			},

@@ -59,7 +59,7 @@ func InsertRoles(engine *core.Engine) {
 				base.UserRead, base.UserExcel,
 				base.RoleRead, base.RoleExcel,
 			}),
-			Description: "Reade can see all part without changes",
+			Description: "Reader can see all part without changes",
 		},
 	}
 
