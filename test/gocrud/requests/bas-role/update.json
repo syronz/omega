@@ -1,9 +1,9 @@
 {
   "method":"put",
-	"url":"_URL_/roles/4",
+	"url":"_URL_/companies/1001/nodes/101/roles/3",
 	"authorization":"Bearer _TOKEN_",
 	"payload": {
-		"name": "_RANDOM_NAME_ _RANDOM_NUMBER_",
+		"name": "updated",
 		"resources": "_RANDOM_NAME_",
 		"description": "this is edidted"
 	}

@@ -3,8 +3,8 @@
   "url":"_URL_/accounts",
   "authorization":"Bearer _TOKEN_",
   "payload": {
-    "name": "1234567890",
-    "type":"ku",
-    "status":"sabina.diako@gmail.com"
+    "name": "wahab",
+    "type":"partner",
+    "status":"active"
   }
 }

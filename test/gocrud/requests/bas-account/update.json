@@ -1,10 +1,10 @@
 {
   "method":"put",
-  "url":"_URL_/accounts/2",
+  "url":"_URL_/companies/1001/nodes/101/accounts/16",
   "authorization":"Bearer _TOKEN_",
   "payload": {
-    "name": "1234567890",
-    "type":"ku",
-    "status":"sabina.diako@gmail.com"
+    "name": "wahab2",
+    "type":"asset",
+    "status":"active"
   }
 }

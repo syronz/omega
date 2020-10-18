@@ -28,9 +28,9 @@ func ProvideBasAccountService(p basrepo.AccountRepo) BasAccountServ {
 }
 
 // FindByID for getting account by it's id
-func (p *BasAccountServ) FindByID(id types.RowID) (account basmodel.Account, err error) {
-	if account, err = p.Repo.FindByID(id); err != nil {
-		err = corerr.Tick(err, "E1049049", "can't fetch the account", id)
+func (p *BasAccountServ) FindByID(fix types.FixedNode) (account basmodel.Account, err error) {
+	if account, err = p.Repo.FindByID(fix); err != nil {
+		err = corerr.Tick(err, "E1049049", "can't fetch the account", fix.ID, fix.CompanyID, fix.NodeID)
 		return
 	}
 
@@ -81,13 +81,12 @@ func (p *BasAccountServ) Save(account basmodel.Account) (savedAccount basmodel.A
 		return
 	}
 
-	BasAccessResetFullCache()
 	return
 }
 
 // Delete account, it is soft delete
-func (p *BasAccountServ) Delete(accountID types.RowID) (account basmodel.Account, err error) {
-	if account, err = p.FindByID(accountID); err != nil {
+func (p *BasAccountServ) Delete(fix types.FixedNode) (account basmodel.Account, err error) {
+	if account, err = p.FindByID(fix); err != nil {
 		err = corerr.Tick(err, "E1038835", "account not found for deleting")
 		return
 	}
@@ -97,7 +96,6 @@ func (p *BasAccountServ) Delete(accountID types.RowID) (account basmodel.Account
 		return
 	}
 
-	BasAccessResetFullCache()
 	return
 }
 
@@ -116,11 +114,11 @@ func (p *BasAccountServ) Excel(params param.Param) (accounts []basmodel.Account,
 }
 
 // IsActive check the status of an account
-func (p *BasAccountServ) IsActive(accountID types.RowID) (bool, basmodel.Account, error) {
+func (p *BasAccountServ) IsActive(fix types.FixedNode) (bool, basmodel.Account, error) {
 	var account basmodel.Account
 	var err error
-	if account, err = p.FindByID(accountID); err != nil {
-		return false, account, corerr.Tick(err, "E1059307", "account not exist", accountID)
+	if account, err = p.FindByID(fix); err != nil {
+		return false, account, corerr.Tick(err, "E1059307", "account not exist", fix.ID, fix.CompanyID, fix.NodeID)
 	}
 
 	return account.Status == accountstatus.Active, account, nil

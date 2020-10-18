@@ -30,10 +30,12 @@ func ProvideAccountRepo(engine *core.Engine) AccountRepo {
 }
 
 // FindByID finds the account via its id
-func (p *AccountRepo) FindByID(id types.RowID) (account basmodel.Account, err error) {
-	err = p.Engine.DB.Table(basmodel.AccountTable).First(&account, id.ToUint64()).Error
+func (p *AccountRepo) FindByID(fix types.FixedNode) (account basmodel.Account, err error) {
+	err = p.Engine.DB.Table(basmodel.AccountTable).
+		Where("id = ? AND company_id = ? AND node_id = ?", fix.ID.ToUint64(), fix.CompanyID, fix.NodeID).
+		First(&account).Error
 
-	account.ID = id
+	account.ID = fix.ID
 	err = p.dbError(err, "E1045869", account, corterm.List)
 
 	return
@@ -101,7 +103,7 @@ func (p *AccountRepo) Create(account basmodel.Account) (u basmodel.Account, err 
 
 // Delete the account
 func (p *AccountRepo) Delete(account basmodel.Account) (err error) {
-	if err = p.Engine.DB.Table(basmodel.AccountTable).Unscoped().Delete(&account).Error; err != nil {
+	if err = p.Engine.DB.Table(basmodel.AccountTable).Delete(&account).Error; err != nil {
 		err = p.dbError(err, "E1095299", account, corterm.Deleted)
 	}
 	return

@@ -1,9 +1,9 @@
 package main
 
 import (
-	"omega/cmd/exchange/insertdata"
-	"omega/cmd/exchange/server"
-	"omega/cmd/exchange/startoff"
+	"omega/cmd/restapi/insertdata"
+	"omega/cmd/restapi/server"
+	"omega/cmd/restapi/startoff"
 	"omega/internal/core"
 	"omega/internal/corstartoff"
 	"omega/pkg/dict"

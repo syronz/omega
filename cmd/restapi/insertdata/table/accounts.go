@@ -19,7 +19,7 @@ func InsertAccounts(engine *core.Engine) {
 	accountService := service.ProvideBasAccountService(accountRepo)
 	accounts := []basmodel.Account{
 		{
-			FixedCol: types.FixedCol{
+			FixedNode: types.FixedNode{
 				ID:        1,
 				CompanyID: engine.Envs.ToUint64(sync.CompanyID),
 				NodeID:    engine.Envs.ToUint64(sync.NodeID),
@@ -29,7 +29,7 @@ func InsertAccounts(engine *core.Engine) {
 			Status: accountstatus.Active,
 		},
 		{
-			FixedCol: types.FixedCol{
+			FixedNode: types.FixedNode{
 				ID:        2,
 				CompanyID: engine.Envs.ToUint64(sync.CompanyID),
 				NodeID:    engine.Envs.ToUint64(sync.NodeID),
@@ -39,7 +39,7 @@ func InsertAccounts(engine *core.Engine) {
 			Status: accountstatus.Active,
 		},
 		{
-			FixedCol: types.FixedCol{
+			FixedNode: types.FixedNode{
 				ID:        3,
 				CompanyID: engine.Envs.ToUint64(sync.CompanyID),
 				NodeID:    engine.Envs.ToUint64(sync.NodeID),
@@ -49,7 +49,7 @@ func InsertAccounts(engine *core.Engine) {
 			Status: accountstatus.Active,
 		},
 		{
-			FixedCol: types.FixedCol{
+			FixedNode: types.FixedNode{
 				ID:        4,
 				CompanyID: engine.Envs.ToUint64(sync.CompanyID),
 				NodeID:    engine.Envs.ToUint64(sync.NodeID),

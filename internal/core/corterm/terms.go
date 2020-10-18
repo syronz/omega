@@ -19,6 +19,7 @@ const (
 	Fields      = "fields"
 	Type        = "type"
 	Code        = "code"
+	Scope       = "scope"
 
 	VCreatedSuccessfully = "%v created successfully"
 	VUpdatedSuccessfully = "%v updated successfully"

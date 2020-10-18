@@ -33,12 +33,7 @@ func (p *RoleAPI) FindByID(c *gin.Context) {
 	var role basmodel.Role
 	var fix types.FixedCol
 
-	if fix.CompanyID, fix.NodeID, err = resp.GetCompanyNode("E1059818", base.Domain); err != nil {
-		resp.Error(err).JSON()
-		return
-	}
-
-	if fix.ID, err = resp.GetRowID(c.Param("roleID"), "E1053982", basterm.Role); err != nil {
+	if fix, err = resp.GetFixedCol(c.Param("roleID"), "E1053982", basterm.Role); err != nil {
 		return
 	}
 
@@ -59,6 +54,16 @@ func (p *RoleAPI) List(c *gin.Context) {
 
 	data := make(map[string]interface{})
 	var err error
+
+	if params.CompanyID, err = resp.GetCompanyID("E1097829"); err != nil {
+		return
+	}
+
+	if !resp.CheckRange(params.CompanyID, 0) {
+		// err = errors.New("you don't have permission to this scope")
+		// resp.Error(err).JSON()
+		return
+	}
 
 	if data["list"], data["count"], err = p.Service.List(params); err != nil {
 		resp.Error(err).JSON()
@@ -105,12 +110,8 @@ func (p *RoleAPI) Update(c *gin.Context) {
 	var role, roleBefore, roleUpdated basmodel.Role
 	var fix types.FixedCol
 
-	if fix.CompanyID, fix.NodeID, err = resp.GetCompanyNode("E1075783", base.Domain); err != nil {
-		resp.Error(err).JSON()
-		return
-	}
-
-	if fix.ID, err = resp.GetRowID(c.Param("roleID"), "E1082097", basterm.Role); err != nil {
+	if fix.CompanyID, fix.NodeID, fix.ID, err =
+		resp.GetFixIDs(c.Param("roleID"), "E1082097", basterm.Role); err != nil {
 		return
 	}
 
@@ -124,7 +125,8 @@ func (p *RoleAPI) Update(c *gin.Context) {
 	}
 
 	role.ID = fix.ID
-
+	role.CompanyID = fix.CompanyID
+	role.NodeID = fix.NodeID
 	if roleUpdated, err = p.Service.Save(role); err != nil {
 		resp.Error(err).JSON()
 		return

@@ -9,6 +9,7 @@ import (
 	"omega/internal/core"
 	"omega/internal/core/corterm"
 	"omega/internal/response"
+	"omega/internal/types"
 	"omega/pkg/excel"
 
 	"github.com/gin-gonic/gin"
@@ -30,12 +31,18 @@ func (p *AccountAPI) FindByID(c *gin.Context) {
 	resp := response.New(p.Engine, c, base.Domain)
 	var err error
 	var account basmodel.Account
+	var fix types.FixedNode
 
-	if account.ID, err = resp.GetRowID(c.Param("accountID"), "E1066086", basterm.Account); err != nil {
+	if fix.CompanyID, fix.NodeID, err = resp.GetCompanyNode("E1013081", base.Domain); err != nil {
+		resp.Error(err).JSON()
 		return
 	}
 
-	if account, err = p.Service.FindByID(account.ID); err != nil {
+	if fix.ID, err = resp.GetRowID(c.Param("accountID"), "E1066086", basterm.Account); err != nil {
+		return
+	}
+
+	if account, err = p.Service.FindByID(fix); err != nil {
 		resp.Error(err).JSON()
 		return
 	}
@@ -70,6 +77,11 @@ func (p *AccountAPI) Create(c *gin.Context) {
 	var account, createdAccount basmodel.Account
 	var err error
 
+	if account.CompanyID, account.NodeID, err = resp.GetCompanyNode("E1086580", base.Domain); err != nil {
+		resp.Error(err).JSON()
+		return
+	}
+
 	if err = resp.Bind(&account, "E1057541", base.Domain, basterm.Account); err != nil {
 		return
 	}
@@ -91,8 +103,10 @@ func (p *AccountAPI) Update(c *gin.Context) {
 	var err error
 
 	var account, accountBefore, accountUpdated basmodel.Account
+	var fix types.FixedNode
 
-	if account.ID, err = resp.GetRowID(c.Param("accountID"), "E1076703", basterm.Account); err != nil {
+	if fix.CompanyID, fix.NodeID, fix.ID, err = resp.GetFixIDs(c.Param("accountID"),
+		"E1076703", basterm.Account); err != nil {
 		return
 	}
 
@@ -100,11 +114,14 @@ func (p *AccountAPI) Update(c *gin.Context) {
 		return
 	}
 
-	if accountBefore, err = p.Service.FindByID(account.ID); err != nil {
+	if accountBefore, err = p.Service.FindByID(fix); err != nil {
 		resp.Error(err).JSON()
 		return
 	}
 
+	account.ID = fix.ID
+	account.CompanyID = fix.CompanyID
+	account.NodeID = fix.NodeID
 	if accountUpdated, err = p.Service.Save(account); err != nil {
 		resp.Error(err).JSON()
 		return
@@ -121,12 +138,18 @@ func (p *AccountAPI) Delete(c *gin.Context) {
 	resp := response.New(p.Engine, c, base.Domain)
 	var err error
 	var account basmodel.Account
+	var fix types.FixedNode
 
-	if account.ID, err = resp.GetRowID(c.Param("accountID"), "E1074247", basterm.Account); err != nil {
+	if fix.CompanyID, fix.NodeID, err = resp.GetCompanyNode("E1092196", base.Domain); err != nil {
+		resp.Error(err).JSON()
 		return
 	}
 
-	if account, err = p.Service.Delete(account.ID); err != nil {
+	if fix.ID, err = resp.GetRowID(c.Param("accountID"), "E1074247", basterm.Account); err != nil {
+		return
+	}
+
+	if account, err = p.Service.Delete(fix); err != nil {
 		resp.Error(err).JSON()
 		return
 	}

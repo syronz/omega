@@ -51,6 +51,17 @@ func (p *BasAccessServ) CheckAccess(c *gin.Context, resource types.Resource) boo
 
 }
 
+// CheckRange is used for checking if user has access to special range of data
+func (p *BasAccessServ) CheckRange(companyID, nodeID uint64) bool {
+	if companyID > 0 {
+		if companyID != 1001 {
+			return false
+		}
+	}
+
+	return true
+}
+
 // BasAccessAddToCache add the resources to the cacheResource
 func BasAccessAddToCache(userID types.RowID, resources string) {
 	cacheResource[userID] = resources

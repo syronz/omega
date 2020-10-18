@@ -18,7 +18,7 @@ const (
 
 // Account model
 type Account struct {
-	types.FixedCol
+	types.FixedNode
 	ParentID *types.RowID `json:"parent_id"`
 	Code     *string      `gorm:"unique" json:"code"`
 	Name     string       `gorm:"not null;unique" json:"name,omitempty"`

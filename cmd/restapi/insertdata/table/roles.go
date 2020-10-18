@@ -61,6 +61,21 @@ func InsertRoles(engine *core.Engine) {
 			}),
 			Description: "Reader can see all part without changes",
 		},
+		{
+			FixedCol: types.FixedCol{
+				ID:        4,
+				CompanyID: 1002,
+				NodeID:    engine.Envs.ToUint64(sync.NodeID),
+			},
+			Name: "should_be_deleted",
+			Resources: types.ResourceJoin([]types.Resource{
+				base.SupperAccess,
+				base.SettingRead, base.SettingExcel,
+				base.UserRead, base.UserExcel,
+				base.RoleRead, base.RoleExcel,
+			}),
+			Description: "Reader can see all part without changes",
+		},
 	}
 
 	for _, v := range roles {

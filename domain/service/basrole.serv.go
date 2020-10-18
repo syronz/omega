@@ -40,6 +40,10 @@ func (p *BasRoleServ) FindByID(fix types.FixedCol) (role basmodel.Role, err erro
 func (p *BasRoleServ) List(params param.Param) (roles []basmodel.Role,
 	count uint64, err error) {
 
+	if params.CompanyID != 0 {
+		params.PreCondition = fmt.Sprintf(" bas_roles.company_id = '%v' ", params.CompanyID)
+	}
+
 	if roles, err = p.Repo.List(params); err != nil {
 		glog.CheckError(err, "error in roles list")
 		return

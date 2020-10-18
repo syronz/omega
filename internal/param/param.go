@@ -12,6 +12,8 @@ type Param struct {
 	Filter       string
 	PreCondition string
 	UserID       types.RowID
+	CompanyID    uint64
+	NodeID       uint64
 	Lang         dict.Lang
 	ErrPanel     string
 }

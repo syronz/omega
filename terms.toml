@@ -235,6 +235,11 @@ en = 'code'
 ku = 'code'
 ar = 'code'
 
+[scope]
+en = 'scope'
+ku = 'scope'
+ar = 'scope'
+
 ["%v created successfully"]
 en = '%v created successfully'
 ku = '%v ba sarkawtooyi drwst kra'

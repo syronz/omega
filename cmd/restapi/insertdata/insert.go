@@ -1,7 +1,7 @@
 package insertdata
 
 import (
-	"omega/cmd/exchange/insertdata/table"
+	"omega/cmd/restapi/insertdata/table"
 	"omega/internal/core"
 )
 
