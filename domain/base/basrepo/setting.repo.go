@@ -29,22 +29,13 @@ func ProvideSettingRepo(engine *core.Engine) SettingRepo {
 }
 
 // FindByID finds the setting via its id
-func (p *SettingRepo) FindByID(id types.RowID) (setting basmodel.Setting, err error) {
-	err = p.Engine.DB.Table(basmodel.SettingTable).First(&setting, id.ToUint64()).Error
-
-	setting.ID = id
-	err = p.dbError(err, "E1063890", setting, corterm.List)
-
-	return
-}
-
-// FindByProperty for setting
-func (p *SettingRepo) FindByProperty(property string) (setting basmodel.Setting, err error) {
-	err = p.Engine.DB.Table(basmodel.SettingTable).Where("property = ?", property).
+func (p *SettingRepo) FindByID(fix types.FixedCol) (setting basmodel.Setting, err error) {
+	err = p.Engine.DB.Table(basmodel.SettingTable).
+		Where("company_id = ? AND node_id = ? AND id = ?", fix.CompanyID, fix.NodeID, fix.ID.ToUint64()).
 		First(&setting).Error
 
-	setting.Property = types.Setting(property)
-	err = p.dbError(err, "E1054552", setting, corterm.List)
+	setting.ID = fix.ID
+	err = p.dbError(err, "E1063890", setting, corterm.List)
 
 	return
 }

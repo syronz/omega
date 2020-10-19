@@ -7,11 +7,11 @@ import (
 	"omega/domain/base/message/basterm"
 	"omega/domain/service"
 	"omega/internal/core"
-	"omega/internal/core/corerr"
 	"omega/internal/core/corterm"
 	"omega/internal/response"
 	"omega/internal/types"
 	"omega/pkg/excel"
+	"omega/pkg/glog"
 
 	"github.com/gin-gonic/gin"
 )
@@ -32,13 +32,17 @@ func (p *SettingAPI) FindByID(c *gin.Context) {
 	resp := response.New(p.Engine, c, base.Domain)
 	var err error
 	var setting basmodel.Setting
+	var fix types.FixedCol
 
-	if setting.ID, err = types.StrToRowID(c.Param("settingID")); err != nil {
-		resp.Status(http.StatusNotAcceptable).Error(err).MessageT(corerr.InvalidID).JSON()
+	if fix, err = resp.GetFixedCol(c.Param("settingID"), "E1013513", basterm.Setting); err != nil {
 		return
 	}
 
-	if setting, err = p.Service.FindByID(setting.ID); err != nil {
+	if !resp.CheckRange(fix.CompanyID, fix.NodeID) {
+		return
+	}
+
+	if setting, err = p.Service.FindByID(fix); err != nil {
 		resp.Error(err).JSON()
 		return
 	}
@@ -49,26 +53,22 @@ func (p *SettingAPI) FindByID(c *gin.Context) {
 		JSON(setting)
 }
 
-// FindByProperty is used when we try to find a setting with property
-func (p *SettingAPI) FindByProperty(c *gin.Context) {
-	resp := response.New(p.Engine, c, base.Domain)
-	property := c.Param("property")
-
-	setting, err := p.Service.FindByProperty(property)
-	if err != nil {
-		resp.Status(http.StatusNotFound).Error(err).JSON()
-		return
-	}
-
-	resp.Status(http.StatusOK).JSON(setting)
-}
-
 // List of settings
 func (p *SettingAPI) List(c *gin.Context) {
-	resp, params := response.NewParam(p.Engine, c, basmodel.RoleTable, base.Domain)
+	resp, params := response.NewParam(p.Engine, c, basmodel.SettingTable, base.Domain)
+
+	glog.Debug(params)
 
 	data := make(map[string]interface{})
 	var err error
+
+	if params.CompanyID, err = resp.GetCompanyID("E1078032"); err != nil {
+		return
+	}
+
+	if !resp.CheckRange(params.CompanyID, 0) {
+		return
+	}
 
 	if data["list"], data["count"], err = p.Service.List(params); err != nil {
 		resp.Error(err).JSON()
@@ -87,9 +87,13 @@ func (p *SettingAPI) Update(c *gin.Context) {
 	var err error
 
 	var setting, settingBefore, settingUpdated basmodel.Setting
+	var fix types.FixedCol
 
-	if setting.ID, err = resp.GetRowID(c.Param("settingID"), "E1074247",
-		basterm.Setting); err != nil {
+	if fix, err = resp.GetFixedCol(c.Param("settingID"), "E1074247", basterm.Setting); err != nil {
+		return
+	}
+
+	if !resp.CheckRange(fix.CompanyID, fix.NodeID) {
 		return
 	}
 
@@ -97,11 +101,14 @@ func (p *SettingAPI) Update(c *gin.Context) {
 		return
 	}
 
-	if settingBefore, err = p.Service.FindByID(setting.ID); err != nil {
+	if settingBefore, err = p.Service.FindByID(fix); err != nil {
 		resp.Error(err).JSON()
 		return
 	}
 
+	setting.ID = fix.ID
+	setting.CompanyID = fix.CompanyID
+	setting.NodeID = fix.NodeID
 	if settingUpdated, err = p.Service.Update(setting); err != nil {
 		resp.Error(err).JSON()
 		return
@@ -113,31 +120,9 @@ func (p *SettingAPI) Update(c *gin.Context) {
 		JSON(settingUpdated)
 }
 
-// Delete setting
-func (p *SettingAPI) Delete(c *gin.Context) {
-	resp := response.New(p.Engine, c, base.Domain)
-	var err error
-	var setting basmodel.Setting
-
-	if setting.ID, err = resp.GetRowID(c.Param("settingID"), "E1076780",
-		basterm.Setting); err != nil {
-		return
-	}
-
-	if setting, err = p.Service.Delete(setting.ID); err != nil {
-		resp.Error(err).JSON()
-		return
-	}
-
-	resp.Record(base.DeleteSetting, setting)
-	resp.Status(http.StatusOK).
-		MessageT(corterm.VDeletedSuccessfully, basterm.Setting).
-		JSON()
-}
-
 // Excel generate excel files based on search
 func (p *SettingAPI) Excel(c *gin.Context) {
-	resp, params := response.NewParam(p.Engine, c, basterm.Roles, base.Domain)
+	resp, params := response.NewParam(p.Engine, c, basterm.Setting, base.Domain)
 
 	settings, err := p.Service.Excel(params)
 	if err != nil {
@@ -152,14 +137,15 @@ func (p *SettingAPI) Excel(c *gin.Context) {
 		SetPageLayout("landscape", "A4").
 		SetPageMargins(0.2).
 		SetHeaderFooter().
-		SetColWidth("A", "A", 20).
-		SetColWidth("B", "C", 15.3).
-		SetColWidth("F", "F", 20).
-		SetColWidth("L", "M", 20).
+		SetColWidth("A", "C", 12).
+		SetColWidth("D", "E", 15.3).
+		SetColWidth("G", "G", 75).
+		SetColWidth("H", "I", 30).
+		SetColWidth("N", "O", 20).
 		Active("Summary").
 		Active("Settings").
-		WriteHeader("ID", "Property", "Value", "Type", "Description", "Created At", "Updated At").
-		SetSheetFields("ID", "Property", "Value", "Type", "Description", "CreatedAt", "UpdatedAt").
+		WriteHeader("ID", "Company ID", "Node ID", "Property", "Value", "Type", "Description", "Created At", "Updated At").
+		SetSheetFields("ID", "CompanyID", "NodeID", "Property", "Value", "Type", "Description", "CreatedAt", "UpdatedAt").
 		WriteData(settings).
 		AddTable()
 

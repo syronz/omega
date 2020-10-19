@@ -34,13 +34,13 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 	// Base Domain
 	rg.GET("/temporary/token", basAuthAPI.TemporaryToken)
 
-	rg.GET("/settings",
+	rg.GET("/companies/:companyID/settings",
 		access.Check(base.SettingRead), basSettingAPI.List)
-	rg.GET("/settings/:settingID",
+	rg.GET("/companies/:companyID/nodes/:nodeID/settings/:settingID",
 		access.Check(base.SettingRead), basSettingAPI.FindByID)
-	rg.PUT("/settings/:settingID",
+	rg.PUT("/companies/:companyID/nodes/:nodeID/settings/:settingID",
 		access.Check(base.SettingWrite), basSettingAPI.Update)
-	rg.GET("/excel/settings",
+	rg.GET("/excel/companies/:companyID/settings",
 		access.Check(base.SettingExcel), basSettingAPI.Excel)
 
 	rg.GET("/companies/:companyID/roles",

@@ -28,19 +28,9 @@ func ProvideBasSettingService(p basrepo.SettingRepo) BasSettingServ {
 }
 
 // FindByID for getting setting by it's id
-func (p *BasSettingServ) FindByID(id types.RowID) (setting basmodel.Setting, err error) {
-	if setting, err = p.Repo.FindByID(id); err != nil {
-		err = corerr.Tick(err, "E1064390", "can't fetch the setting", id)
-		return
-	}
-
-	return
-}
-
-// FindByProperty find setting with property
-func (p *BasSettingServ) FindByProperty(property string) (setting basmodel.Setting, err error) {
-	if setting, err = p.Repo.FindByProperty(property); err != nil {
-		err = corerr.Tick(err, "E1026379", "can't fetch the setting by property", property)
+func (p *BasSettingServ) FindByID(fix types.FixedCol) (setting basmodel.Setting, err error) {
+	if setting, err = p.Repo.FindByID(fix); err != nil {
+		err = corerr.Tick(err, "E1064390", "can't fetch the setting", fix.CompanyID, fix.NodeID, fix.ID)
 		return
 	}
 
@@ -91,16 +81,6 @@ func (p *BasSettingServ) Update(setting basmodel.Setting) (savedSetting basmodel
 	}
 
 	corstartoff.LoadSetting(p.Engine)
-
-	return
-}
-
-// Delete setting, it is soft delete
-func (p *BasSettingServ) Delete(settingID types.RowID) (setting basmodel.Setting, err error) {
-	if setting, err = p.FindByID(settingID); err != nil {
-		err = corerr.Tick(err, "E1076703", "setting not found for deleting, by the way delete setting is forbidden")
-		return
-	}
 
 	return
 }

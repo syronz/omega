@@ -1,8 +1,8 @@
 {
   "method":"put",
-  "url":"_URL_/settings/5",
+  "url":"_URL_/companies/1001/nodes/101/settings/5",
   "authorization":"Bearer _TOKEN_",
   "payload": {
-    "value2": "new logo path"
+    "value": "new logo path"
   }
 }

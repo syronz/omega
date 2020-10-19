@@ -165,21 +165,6 @@ func (p *UserAPI) Update(c *gin.Context) {
 		return
 	}
 
-	// if user.ID, err = types.StrToRowID(c.Param("userID")); err != nil {
-	// 	resp.Error(corerr.InvalidID).JSON()
-	// 	return
-	// }
-
-	// if err = c.ShouldBindJSON(&user); err != nil {
-	// 	c.AbortWithStatusJSON(http.StatusNotAcceptable, err)
-	// 	return
-	// }
-
-	// if userBefore, err = p.Service.FindByID(user.ID); err != nil {
-	// 	resp.Error(err).JSON()
-	// 	return
-	// }
-
 	user.ID = fix.ID
 	user.CompanyID = fix.CompanyID
 	user.NodeID = fix.NodeID
@@ -202,11 +187,6 @@ func (p *UserAPI) Delete(c *gin.Context) {
 	var err error
 	var user basmodel.User
 	var fix types.FixedCol
-
-	// if user.ID, err = types.StrToRowID(c.Param("userID")); err != nil {
-	// 	resp.Error(corerr.InvalidID).JSON()
-	// 	return
-	// }
 
 	if fix, err = resp.GetFixedCol(c.Param("userID"), "E1046157", basterm.User); err != nil {
 		return
@@ -270,10 +250,7 @@ func (p *UserAPI) Excel(c *gin.Context) {
 
 	buffer, downloadName, err := ex.Generate()
 	if err != nil {
-		// resp.Error(err).JSON()
-		c.JSON(http.StatusInternalServerError, &response.Result{
-			Message: "Error in generating Excel file",
-		})
+		resp.Error(err).JSON()
 		return
 	}
 
