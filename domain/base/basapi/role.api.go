@@ -120,8 +120,7 @@ func (p *RoleAPI) Update(c *gin.Context) {
 	var role, roleBefore, roleUpdated basmodel.Role
 	var fix types.FixedCol
 
-	if fix.CompanyID, fix.NodeID, fix.ID, err =
-		resp.GetFixIDs(c.Param("roleID"), "E1082097", basterm.Role); err != nil {
+	if fix, err = resp.GetFixedCol(c.Param("roleID"), "E1082097", basterm.Role); err != nil {
 		return
 	}
 

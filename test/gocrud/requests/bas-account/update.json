@@ -1,9 +1,9 @@
 {
   "method":"put",
-  "url":"_URL_/companies/1001/nodes/101/accounts/16",
+  "url":"_URL_/companies/1001/nodes/101/accounts/14",
   "authorization":"Bearer _TOKEN_",
   "payload": {
-    "name": "wahab2",
+    "name": "updated",
     "type":"asset",
     "status":"active"
   }

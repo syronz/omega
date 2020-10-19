@@ -6,7 +6,7 @@
 	"url":"_URL_/accounts?filter=username[eq]'super'",
 	"url":"_URL_/accounts?username=reader",
 	"url":"_URL_/accounts?filter=bas_users.username[eq]'super'",
-	"url":"_URL_/accounts",
+	"url":"_URL_/companies/1001/accounts",
 	"authorization":"Bearer _TOKEN_",
 	"payload": {}
 }

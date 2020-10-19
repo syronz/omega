@@ -56,17 +56,17 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 	rg.GET("/excel/companies/:companyID/roles",
 		access.Check(base.RoleExcel), basRoleAPI.Excel)
 
-	rg.GET("/accounts",
+	rg.GET("/companies/:companyID/accounts",
 		access.Check(base.AccountRead), basAccountAPI.List)
-	rg.GET("/accounts/:accountID",
+	rg.GET("/companies/:companyID/nodes/:nodeID/accounts/:accountID",
 		access.Check(base.AccountRead), basAccountAPI.FindByID)
-	rg.POST("/accounts",
+	rg.POST("/companies/:companyID/accounts",
 		access.Check(base.AccountWrite), basAccountAPI.Create)
 	rg.PUT("/companies/:companyID/nodes/:nodeID/accounts/:accountID",
 		access.Check(base.AccountWrite), basAccountAPI.Update)
-	rg.DELETE("/accounts/:accountID",
+	rg.DELETE("/companies/:companyID/nodes/:nodeID/accounts/:accountID",
 		access.Check(base.AccountWrite), basAccountAPI.Delete)
-	rg.GET("/excel/accounts",
+	rg.GET("/excel/companies/:companyID/accounts",
 		access.Check(base.AccountExcel), basAccountAPI.Excel)
 
 	rg.GET("/username/:username",

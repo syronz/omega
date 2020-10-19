@@ -1,9 +1,9 @@
 {
   "method":"post",
-  "url":"_URL_/accounts",
+  "url":"_URL_/companies/1001/accounts",
   "authorization":"Bearer _TOKEN_",
   "payload": {
-    "name": "wahab",
+    "name": "_RANDOM_NAME_",
     "type":"partner",
     "status":"active"
   }

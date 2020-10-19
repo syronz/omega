@@ -33,12 +33,11 @@ func (p *AccountAPI) FindByID(c *gin.Context) {
 	var account basmodel.Account
 	var fix types.FixedNode
 
-	if fix.CompanyID, fix.NodeID, err = resp.GetCompanyNode("E1013081", base.Domain); err != nil {
-		resp.Error(err).JSON()
+	if fix, err = resp.GetFixedNode(c.Param("accountID"), "E1070061", basterm.Account); err != nil {
 		return
 	}
 
-	if fix.ID, err = resp.GetRowID(c.Param("accountID"), "E1066086", basterm.Account); err != nil {
+	if !resp.CheckRange(fix.CompanyID, fix.NodeID) {
 		return
 	}
 
@@ -60,6 +59,14 @@ func (p *AccountAPI) List(c *gin.Context) {
 	data := make(map[string]interface{})
 	var err error
 
+	if params.CompanyID, err = resp.GetCompanyID("E1056290"); err != nil {
+		return
+	}
+
+	if !resp.CheckRange(params.CompanyID, 0) {
+		return
+	}
+
 	if data["list"], data["count"], err = p.Service.List(params); err != nil {
 		resp.Error(err).JSON()
 		return
@@ -77,8 +84,16 @@ func (p *AccountAPI) Create(c *gin.Context) {
 	var account, createdAccount basmodel.Account
 	var err error
 
-	if account.CompanyID, account.NodeID, err = resp.GetCompanyNode("E1086580", base.Domain); err != nil {
+	if account.CompanyID, account.NodeID, err = resp.GetCompanyNode("E1057239", base.Domain); err != nil {
 		resp.Error(err).JSON()
+		return
+	}
+
+	if account.CompanyID, err = resp.GetCompanyID("E1085677"); err != nil {
+		return
+	}
+
+	if !resp.CheckRange(account.CompanyID, account.NodeID) {
 		return
 	}
 
@@ -105,8 +120,11 @@ func (p *AccountAPI) Update(c *gin.Context) {
 	var account, accountBefore, accountUpdated basmodel.Account
 	var fix types.FixedNode
 
-	if fix.CompanyID, fix.NodeID, fix.ID, err = resp.GetFixIDs(c.Param("accountID"),
-		"E1076703", basterm.Account); err != nil {
+	if fix, err = resp.GetFixedNode(c.Param("accountID"), "E1076703", basterm.Account); err != nil {
+		return
+	}
+
+	if !resp.CheckRange(fix.CompanyID, fix.NodeID) {
 		return
 	}
 
@@ -140,12 +158,7 @@ func (p *AccountAPI) Delete(c *gin.Context) {
 	var account basmodel.Account
 	var fix types.FixedNode
 
-	if fix.CompanyID, fix.NodeID, err = resp.GetCompanyNode("E1092196", base.Domain); err != nil {
-		resp.Error(err).JSON()
-		return
-	}
-
-	if fix.ID, err = resp.GetRowID(c.Param("accountID"), "E1074247", basterm.Account); err != nil {
+	if fix, err = resp.GetFixedNode(c.Param("accountID"), "E1092196", basterm.Account); err != nil {
 		return
 	}
 
@@ -163,6 +176,15 @@ func (p *AccountAPI) Delete(c *gin.Context) {
 // Excel generate excel files based on search
 func (p *AccountAPI) Excel(c *gin.Context) {
 	resp, params := response.NewParam(p.Engine, c, basterm.Accounts, base.Domain)
+	var err error
+
+	if params.CompanyID, err = resp.GetCompanyID("E1066535"); err != nil {
+		return
+	}
+
+	if !resp.CheckRange(params.CompanyID, 0) {
+		return
+	}
 
 	accounts, err := p.Service.Excel(params)
 	if err != nil {
@@ -177,14 +199,13 @@ func (p *AccountAPI) Excel(c *gin.Context) {
 		SetPageLayout("landscape", "A4").
 		SetPageMargins(0.2).
 		SetHeaderFooter().
-		SetColWidth("B", "B", 15.3).
-		SetColWidth("C", "C", 80).
-		SetColWidth("D", "E", 40).
+		SetColWidth("B", "G", 15.3).
+		SetColWidth("H", "H", 40).
 		Active("Summary").
 		SetColWidth("A", "D", 20).
 		Active("Accounts").
-		WriteHeader("ID", "Name", "Resources", "Description", "Updated At").
-		SetSheetFields("ID", "Name", "Resources", "Description", "UpdatedAt").
+		WriteHeader("ID", "Company ID", "Node ID", "Name", "Code", "Type", "Status", "Updated At").
+		SetSheetFields("ID", "CompanyID", "NodeID", "Name", "Code", "Type", "Status", "UpdatedAt").
 		WriteData(accounts).
 		AddTable()
 

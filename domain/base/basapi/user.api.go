@@ -148,8 +148,7 @@ func (p *UserAPI) Update(c *gin.Context) {
 	var user, userBefore, userUpdated basmodel.User
 	var fix types.FixedCol
 
-	if fix.CompanyID, fix.NodeID, fix.ID, err =
-		resp.GetFixIDs(c.Param("userID"), "E1097541", basterm.User); err != nil {
+	if fix, err = resp.GetFixedCol(c.Param("userID"), "E1097541", basterm.User); err != nil {
 		return
 	}
 
