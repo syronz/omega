@@ -37,6 +37,10 @@ func (p *RoleAPI) FindByID(c *gin.Context) {
 		return
 	}
 
+	if !resp.CheckRange(fix.CompanyID, fix.NodeID) {
+		return
+	}
+
 	if role, err = p.Service.FindByID(fix); err != nil {
 		resp.Error(err).JSON()
 		return
@@ -60,8 +64,6 @@ func (p *RoleAPI) List(c *gin.Context) {
 	}
 
 	if !resp.CheckRange(params.CompanyID, 0) {
-		// err = errors.New("you don't have permission to this scope")
-		// resp.Error(err).JSON()
 		return
 	}
 
@@ -84,6 +86,14 @@ func (p *RoleAPI) Create(c *gin.Context) {
 
 	if role.CompanyID, role.NodeID, err = resp.GetCompanyNode("E1039319", base.Domain); err != nil {
 		resp.Error(err).JSON()
+		return
+	}
+
+	if role.CompanyID, err = resp.GetCompanyID("E1088398"); err != nil {
+		return
+	}
+
+	if !resp.CheckRange(role.CompanyID, role.NodeID) {
 		return
 	}
 
@@ -145,12 +155,7 @@ func (p *RoleAPI) Delete(c *gin.Context) {
 	var role basmodel.Role
 	var fix types.FixedCol
 
-	if fix.CompanyID, fix.NodeID, err = resp.GetCompanyNode("E1063270", base.Domain); err != nil {
-		resp.Error(err).JSON()
-		return
-	}
-
-	if fix.ID, err = resp.GetRowID(c.Param("roleID"), "E1074329", basterm.Role); err != nil {
+	if fix, err = resp.GetFixedCol(c.Param("roleID"), "E1088446", basterm.Role); err != nil {
 		return
 	}
 
@@ -168,6 +173,15 @@ func (p *RoleAPI) Delete(c *gin.Context) {
 // Excel generate excel files based on search
 func (p *RoleAPI) Excel(c *gin.Context) {
 	resp, params := response.NewParam(p.Engine, c, basterm.Roles, base.Domain)
+	var err error
+
+	if params.CompanyID, err = resp.GetCompanyID("E1013408"); err != nil {
+		return
+	}
+
+	if !resp.CheckRange(params.CompanyID, 0) {
+		return
+	}
 
 	roles, err := p.Service.Excel(params)
 	if err != nil {
@@ -182,14 +196,14 @@ func (p *RoleAPI) Excel(c *gin.Context) {
 		SetPageLayout("landscape", "A4").
 		SetPageMargins(0.2).
 		SetHeaderFooter().
-		SetColWidth("B", "B", 15.3).
-		SetColWidth("C", "C", 80).
-		SetColWidth("D", "E", 40).
+		SetColWidth("B", "D", 15.3).
+		SetColWidth("E", "E", 80).
+		SetColWidth("F", "G", 40).
 		Active("Summary").
 		SetColWidth("A", "D", 20).
 		Active("Roles").
-		WriteHeader("ID", "Name", "Resources", "Description", "Updated At").
-		SetSheetFields("ID", "Name", "Resources", "Description", "UpdatedAt").
+		WriteHeader("ID", "Company ID", "Node ID", "Name", "Resources", "Description", "Updated At").
+		SetSheetFields("ID", "CompanyID", "NodeID", "Name", "Resources", "Description", "UpdatedAt").
 		WriteData(roles).
 		AddTable()
 

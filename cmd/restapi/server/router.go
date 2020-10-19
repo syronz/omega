@@ -47,13 +47,13 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 		access.Check(base.RoleRead), basRoleAPI.List)
 	rg.GET("/companies/:companyID/nodes/:nodeID/roles/:roleID",
 		access.Check(base.RoleRead), basRoleAPI.FindByID)
-	rg.POST("/roles",
+	rg.POST("/companies/:companyID/roles",
 		access.Check(base.RoleWrite), basRoleAPI.Create)
 	rg.PUT("/companies/:companyID/nodes/:nodeID/roles/:roleID",
 		access.Check(base.RoleWrite), basRoleAPI.Update)
-	rg.DELETE("/roles/:roleID",
+	rg.DELETE("companies/:companyID/nodes/:nodeID/roles/:roleID",
 		access.Check(base.RoleWrite), basRoleAPI.Delete)
-	rg.GET("/excel/roles",
+	rg.GET("/excel/companies/:companyID/roles",
 		access.Check(base.RoleExcel), basRoleAPI.Excel)
 
 	rg.GET("/accounts",

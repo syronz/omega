@@ -17,7 +17,7 @@ type Activity struct {
 	UserID   types.RowID `json:"user_id"`
 	Username string      `gorm:"index:username_idx" json:"username"`
 	IP       string      `json:"ip"`
-	URI      string      `json:"uri"`
+	URI      string      `gorm:"type:text" json:"uri"`
 	Before   string      `gorm:"type:text" json:"before"`
 	After    string      `gorm:"type:text" json:"after"`
 }
