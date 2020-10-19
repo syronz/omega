@@ -1,11 +1,10 @@
 {
   "method":"put",
-  "url":"_URL_/users/2",
+  "url":"_URL_/companies/1001/nodes/101/users/11",
   "authorization":"Bearer _TOKEN_",
   "payload": {
     "role_id":1,
-    "username2": "_RANDOM_NAME_",
-    "username": "super",
+    "username": "_RANDOM_NAME_",
     "password": "1234567890",
     "lang":"ku"
   }

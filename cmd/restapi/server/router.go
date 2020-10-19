@@ -71,17 +71,17 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 
 	rg.GET("/username/:username",
 		access.Check(base.UserRead), basUserAPI.FindByUsername)
-	rg.GET("/users",
+	rg.GET("/companies/:companyID/users",
 		access.Check(base.UserRead), basUserAPI.List)
-	rg.GET("/users/:userID",
+	rg.GET("/companies/:companyID/nodes/:nodeID/users/:userID",
 		access.Check(base.UserRead), basUserAPI.FindByID)
-	rg.POST("/users",
+	rg.POST("/companies/:companyID/users",
 		access.Check(base.UserWrite), basUserAPI.Create)
-	rg.PUT("/users/:userID",
+	rg.PUT("/companies/:companyID/nodes/:nodeID/users/:userID",
 		access.Check(base.UserWrite), basUserAPI.Update)
-	rg.DELETE("/users/:userID",
+	rg.DELETE("/companies/:companyID/nodes/:nodeID/users/:userID",
 		access.Check(base.UserWrite), basUserAPI.Delete)
-	rg.GET("/excel/users",
+	rg.GET("/excel/companies/:companyID/users",
 		access.Check(base.UserExcel), basUserAPI.Excel)
 
 	rg.GET("/activities",

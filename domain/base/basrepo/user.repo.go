@@ -32,10 +32,12 @@ func ProvideUserRepo(engine *core.Engine) UserRepo {
 }
 
 // FindByID finds the user via its id
-func (p *UserRepo) FindByID(id types.RowID) (user basmodel.User, err error) {
-	err = p.Engine.DB.Table(basmodel.UserTable).First(&user, id.ToUint64()).Error
+func (p *UserRepo) FindByID(fix types.FixedCol) (user basmodel.User, err error) {
+	err = p.Engine.DB.Table(basmodel.UserTable).
+		Where("company_id = ? AND node_id = ? AND id = ?", fix.CompanyID, fix.NodeID, fix.ID.ToUint64()).
+		First(&user).Error
 
-	user.ID = id
+	user.ID = fix.ID
 	err = p.dbError(err, "E1063251", user, corterm.List)
 
 	return
@@ -71,6 +73,7 @@ func (p *UserRepo) List(params param.Param) (users []basmodel.User, err error) {
 
 	err = p.Engine.DB.Table(basmodel.UserTable).Select(colsStr).
 		Joins("INNER JOIN bas_roles ON bas_roles.id = bas_users.role_id").
+		Joins("INNER JOIN bas_accounts ON bas_accounts.id = bas_users.id").
 		Where(whereStr).
 		Order(params.Order).
 		Limit(params.Limit).
@@ -123,7 +126,7 @@ func (p *UserRepo) Create(user basmodel.User) (u basmodel.User, err error) {
 
 // Delete the user
 func (p *UserRepo) Delete(user basmodel.User) (err error) {
-	if err = p.Engine.DB.Table(basmodel.UserTable).Unscoped().Delete(&user).Error; err != nil {
+	if err = p.Engine.DB.Table(basmodel.UserTable).Delete(&user).Error; err != nil {
 		err = p.dbError(err, "E1044329", user, corterm.Deleted)
 	}
 	return

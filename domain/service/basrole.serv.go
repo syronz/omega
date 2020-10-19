@@ -29,7 +29,7 @@ func ProvideBasRoleService(p basrepo.RoleRepo) BasRoleServ {
 // FindByID for getting role by it's id
 func (p *BasRoleServ) FindByID(fix types.FixedCol) (role basmodel.Role, err error) {
 	if role, err = p.Repo.FindByID(fix); err != nil {
-		err = corerr.Tick(err, "E1043183", "can't fetch the role", fix.ID, fix.CompanyID, fix.NodeID)
+		err = corerr.Tick(err, "E1043183", "can't fetch the role", fix.CompanyID, fix.NodeID, fix.ID)
 		return
 	}
 

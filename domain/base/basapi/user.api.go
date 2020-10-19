@@ -8,7 +8,6 @@ import (
 	"omega/domain/base/message/basterm"
 	"omega/domain/service"
 	"omega/internal/core"
-	"omega/internal/core/corerr"
 	"omega/internal/core/corterm"
 	"omega/internal/param"
 	"omega/internal/response"
@@ -36,12 +35,17 @@ func (p *UserAPI) FindByID(c *gin.Context) {
 	resp := response.New(p.Engine, c, base.Domain)
 	var err error
 	var user basmodel.User
+	var fix types.FixedCol
 
-	if user.ID, err = resp.GetRowID(c.Param("userID"), "E1090173", basterm.User); err != nil {
+	if fix, err = resp.GetFixedCol(c.Param("userID"), "E1090173", basterm.User); err != nil {
 		return
 	}
 
-	if user, err = p.Service.FindByID(user.ID); err != nil {
+	if !resp.CheckRange(fix.CompanyID, fix.NodeID) {
+		return
+	}
+
+	if user, err = p.Service.FindByID(fix); err != nil {
 		resp.Error(err).JSON()
 		return
 	}
@@ -81,6 +85,14 @@ func (p *UserAPI) List(c *gin.Context) {
 	data := make(map[string]interface{})
 	var err error
 
+	if params.CompanyID, err = resp.GetCompanyID("E1019954"); err != nil {
+		return
+	}
+
+	if !resp.CheckRange(params.CompanyID, 0) {
+		return
+	}
+
 	if data["list"], data["count"], err = p.Service.List(params); err != nil {
 		resp.Error(err).JSON()
 		return
@@ -97,6 +109,19 @@ func (p *UserAPI) Create(c *gin.Context) {
 	resp := response.New(p.Engine, c, base.Domain)
 	var user, createdUser basmodel.User
 	var err error
+
+	if user.CompanyID, user.NodeID, err = resp.GetCompanyNode("E1061527", base.Domain); err != nil {
+		resp.Error(err).JSON()
+		return
+	}
+
+	if user.CompanyID, err = resp.GetCompanyID("E1031989"); err != nil {
+		return
+	}
+
+	if !resp.CheckRange(user.CompanyID, user.NodeID) {
+		return
+	}
 
 	if err = resp.Bind(&user, "E1082301", base.Domain, basterm.User); err != nil {
 		return
@@ -121,23 +146,44 @@ func (p *UserAPI) Update(c *gin.Context) {
 	var err error
 
 	var user, userBefore, userUpdated basmodel.User
+	var fix types.FixedCol
 
-	if user.ID, err = types.StrToRowID(c.Param("userID")); err != nil {
-		resp.Error(corerr.InvalidID).JSON()
+	if fix.CompanyID, fix.NodeID, fix.ID, err =
+		resp.GetFixIDs(c.Param("userID"), "E1097541", basterm.User); err != nil {
 		return
 	}
 
-	if err = c.ShouldBindJSON(&user); err != nil {
-		c.AbortWithStatusJSON(http.StatusNotAcceptable, err)
+	if !resp.CheckRange(fix.CompanyID, fix.NodeID) {
 		return
 	}
 
-	if userBefore, err = p.Service.FindByID(user.ID); err != nil {
-		// resp.Status(http.StatusNotFound).Error(corerr.RecordNotFound).JSON()
+	if err = resp.Bind(&user, "E1065844", base.Domain, basterm.User); err != nil {
+		return
+	}
+
+	if userBefore, err = p.Service.FindByID(fix); err != nil {
 		resp.Error(err).JSON()
 		return
 	}
 
+	// if user.ID, err = types.StrToRowID(c.Param("userID")); err != nil {
+	// 	resp.Error(corerr.InvalidID).JSON()
+	// 	return
+	// }
+
+	// if err = c.ShouldBindJSON(&user); err != nil {
+	// 	c.AbortWithStatusJSON(http.StatusNotAcceptable, err)
+	// 	return
+	// }
+
+	// if userBefore, err = p.Service.FindByID(user.ID); err != nil {
+	// 	resp.Error(err).JSON()
+	// 	return
+	// }
+
+	user.ID = fix.ID
+	user.CompanyID = fix.CompanyID
+	user.NodeID = fix.NodeID
 	if userUpdated, err = p.Service.Save(user); err != nil {
 		resp.Error(err).JSON()
 		return
@@ -156,14 +202,19 @@ func (p *UserAPI) Delete(c *gin.Context) {
 	resp := response.New(p.Engine, c, base.Domain)
 	var err error
 	var user basmodel.User
+	var fix types.FixedCol
 
-	if user.ID, err = types.StrToRowID(c.Param("userID")); err != nil {
-		resp.Error(corerr.InvalidID).JSON()
+	// if user.ID, err = types.StrToRowID(c.Param("userID")); err != nil {
+	// 	resp.Error(corerr.InvalidID).JSON()
+	// 	return
+	// }
+
+	if fix, err = resp.GetFixedCol(c.Param("userID"), "E1046157", basterm.User); err != nil {
 		return
 	}
 
-	if user, err = p.Service.Delete(user.ID); err != nil {
-		resp.Status(http.StatusInternalServerError).Error(err).JSON()
+	if user, err = p.Service.Delete(fix); err != nil {
+		resp.Error(err).JSON()
 		return
 	}
 
@@ -192,21 +243,21 @@ func (p *UserAPI) Excel(c *gin.Context) {
 		SetPageLayout("landscape", "A4").
 		SetPageMargins(0.2).
 		SetHeaderFooter().
-		SetColWidth("A", "A", 20).
-		SetColWidth("B", "C", 15.3).
-		SetColWidth("F", "F", 20).
-		SetColWidth("L", "M", 20).
+		SetColWidth("A", "C", 17).
+		SetColWidth("D", "F", 15.3).
+		SetColWidth("H", "H", 20).
+		SetColWidth("N", "O", 20).
 		Active("Summary").
 		Active("Nodes").
-		WriteHeader("ID", "Username", "Role", "Lang", "Email")
+		WriteHeader("ID", "Company ID", "Node ID", "Username", "Role", "Lang", "Email")
 
 	for i, v := range users {
-		// extra := v.Extra.(map[string]interface{})
 		column := &[]interface{}{
 			v.ID,
+			v.CompanyID,
+			v.NodeID,
 			v.Username,
 			v.Role,
-			// extra["role"],
 			v.Lang,
 			v.Email,
 		}

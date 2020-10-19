@@ -31,9 +31,9 @@ func ProvideBasUserService(p basrepo.UserRepo) BasUserServ {
 }
 
 // FindByID for getting user by it's id
-func (p *BasUserServ) FindByID(id types.RowID) (user basmodel.User, err error) {
-	if user, err = p.Repo.FindByID(id); err != nil {
-		err = corerr.Tick(err, "E1066324", "can't fetch the user", id)
+func (p *BasUserServ) FindByID(fix types.FixedCol) (user basmodel.User, err error) {
+	if user, err = p.Repo.FindByID(fix); err != nil {
+		err = corerr.Tick(err, "E1066324", "can't fetch the user", fix.CompanyID, fix.NodeID, fix.ID)
 		return
 	}
 
@@ -124,7 +124,12 @@ func (p *BasUserServ) Create(user basmodel.User) (createdUser basmodel.User, err
 // Save user
 func (p *BasUserServ) Save(user basmodel.User) (createdUser basmodel.User, err error) {
 	var oldUser basmodel.User
-	oldUser, _ = p.FindByID(user.ID)
+	fix := types.FixedCol{
+		CompanyID: user.CompanyID,
+		NodeID:    user.NodeID,
+		ID:        user.ID,
+	}
+	oldUser, _ = p.FindByID(fix)
 
 	if err = user.Validate(coract.Update); err != nil {
 		err = corerr.TickValidate(err, "E1098252", corerr.ValidationFailed, user)
@@ -185,8 +190,8 @@ func (p *BasUserServ) Save(user basmodel.User) (createdUser basmodel.User, err e
 }
 
 // Delete user, it is hard delete, by deleting account related to the user
-func (p *BasUserServ) Delete(userID types.RowID) (user basmodel.User, err error) {
-	if user, err = p.FindByID(userID); err != nil {
+func (p *BasUserServ) Delete(fix types.FixedCol) (user basmodel.User, err error) {
+	if user, err = p.FindByID(fix); err != nil {
 		err = corerr.Tick(err, "E1031839", "user not found for deleting")
 		return
 	}

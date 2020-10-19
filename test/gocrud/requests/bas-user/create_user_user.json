@@ -1,6 +1,6 @@
 {
   "method":"post",
-	"url":"_URL_/users",
+	"url":"_URL_/companies/1001/users",
 	"authorization":"Bearer _TOKEN_",
 	"payload": {
     "role_id":1,

@@ -125,6 +125,10 @@ func (p *RoleAPI) Update(c *gin.Context) {
 		return
 	}
 
+	if !resp.CheckRange(fix.CompanyID, fix.NodeID) {
+		return
+	}
+
 	if err = resp.Bind(&role, "E1076117", base.Domain, basterm.Role); err != nil {
 		return
 	}
