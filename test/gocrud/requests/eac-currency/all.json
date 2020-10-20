@@ -1,0 +1,6 @@
+{
+  "method":"get",
+	"url":"_URL_/companies/1001/currencies?order_by=eac_currencies.name&direction=asc&page=0&page_size=10000&select=eac_currencies.id,eac_currencies.name",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {}
+}

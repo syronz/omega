@@ -8,6 +8,8 @@ package server
 import (
 	"omega/domain/base/basapi"
 	"omega/domain/base/basrepo"
+	"omega/domain/eaccounting/eacapi"
+	"omega/domain/eaccounting/eacrepo"
 	"omega/domain/service"
 	"omega/internal/core"
 )
@@ -53,4 +55,11 @@ func initAccountAPI(e *core.Engine) basapi.AccountAPI {
 	basAccountServ := service.ProvideBasAccountService(accountRepo)
 	accountAPI := basapi.ProvideAccountAPI(basAccountServ)
 	return accountAPI
+}
+
+func initCurrencyAPI(e *core.Engine) eacapi.CurrencyAPI {
+	currencyRepo := eacrepo.ProvideCurrencyRepo(e)
+	eacCurrencyServ := service.ProvideEacCurrencyService(currencyRepo)
+	currencyAPI := eacapi.ProvideCurrencyAPI(eacCurrencyServ)
+	return currencyAPI
 }

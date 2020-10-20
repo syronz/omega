@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"omega/domain/base"
 	"omega/domain/base/basmid"
+	"omega/domain/eaccounting"
 	"omega/internal/core"
 
 	"github.com/gin-gonic/gin"
@@ -18,6 +19,9 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 	basSettingAPI := initSettingAPI(engine)
 	basActivityAPI := initActivityAPI(engine)
 	basAccountAPI := initAccountAPI(engine)
+
+	// EAccountig Domain
+	eacCurrencyAPI := initCurrencyAPI(engine)
 
 	// Html Domain
 	rg.StaticFS("/public", http.Dir("public"))
@@ -86,5 +90,19 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 
 	rg.GET("/activities",
 		access.Check(base.ActivityAll), basActivityAPI.List)
+
+	// EAccountig Domain
+	rg.GET("/companies/:companyID/currencies",
+		access.Check(eaccounting.CurrencyRead), eacCurrencyAPI.List)
+	rg.GET("/companies/:companyID/nodes/:nodeID/currencies/:currencyID",
+		access.Check(eaccounting.CurrencyRead), eacCurrencyAPI.FindByID)
+	rg.POST("/companies/:companyID/currencies",
+		access.Check(eaccounting.CurrencyWrite), eacCurrencyAPI.Create)
+	rg.PUT("/companies/:companyID/nodes/:nodeID/currencies/:currencyID",
+		access.Check(eaccounting.CurrencyWrite), eacCurrencyAPI.Update)
+	rg.DELETE("/companies/:companyID/nodes/:nodeID/currencies/:currencyID",
+		access.Check(eaccounting.CurrencyWrite), eacCurrencyAPI.Delete)
+	rg.GET("/excel/companies/:companyID/currencies",
+		access.Check(eaccounting.CurrencyExcel), eacCurrencyAPI.Excel)
 
 }

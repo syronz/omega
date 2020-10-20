@@ -21,5 +21,8 @@ func Migrate(engine *core.Engine) {
 
 	// EAccounting Domain
 	engine.DB.Table(eacmodel.CurrencyTable).AutoMigrate(&eacmodel.Currency{})
+	engine.DB.Table(eacmodel.TransactionTable).AutoMigrate(&eacmodel.Transaction{}).
+		AddForeignKey("currency_id", "eac_currencies(id)", "RESTRICT", "RESTRICT").
+		AddForeignKey("created_by", "bas_users(id)", "RESTRICT", "RESTRICT")
 
 }

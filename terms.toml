@@ -344,3 +344,23 @@ ar = 'filter is not valid'
 en = 'symbol'
 ku = 'symbol'
 ar = 'symbol'
+
+["currency"]
+en = 'currency'
+ku = 'currency'
+ar = 'currency'
+
+["currencies"]
+en = 'currencies'
+ku = 'currencies'
+ar = 'currencies'
+
+["transaction"]
+en = 'transaction'
+ku = 'transaction'
+ar = 'transaction'
+
+["transactions"]
+en = 'transactions'
+ku = 'transactions'
+ar = 'transactions'

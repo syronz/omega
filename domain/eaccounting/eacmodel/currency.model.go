@@ -1,7 +1,7 @@
 package eacmodel
 
 import (
-	"omega/domain/eaccounting/easterm"
+	"omega/domain/eaccounting/eacterm"
 	"omega/internal/core/coract"
 	"omega/internal/core/corerr"
 	"omega/internal/core/corterm"
@@ -43,7 +43,7 @@ func (p *Currency) Validate(act coract.Action) (err error) {
 
 		if p.Symbol == "" {
 			err = limberr.AddInvalidParam(err, "symbol",
-				corerr.VisRequired, dict.R(easterm.Symbol))
+				corerr.VisRequired, dict.R(eacterm.Symbol))
 		}
 
 		if p.Code == "" {

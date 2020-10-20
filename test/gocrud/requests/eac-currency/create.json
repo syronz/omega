@@ -1,0 +1,10 @@
+{
+  "method":"post",
+	"url":"_URL_/companies/1001/currencies",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {
+		"name": "_RANDOM_NAME_",
+		"symbol": "_RANDOM_NAME_",
+		"code": "_RANDOM_NUMBER_"
+	}
+}
