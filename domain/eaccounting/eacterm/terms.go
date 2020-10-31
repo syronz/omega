@@ -6,4 +6,6 @@ const (
 	Currencies   = "currencies"
 	Transaction  = "transaction"
 	Transactions = "transactions"
+	Slot         = "slot!"
+	Slots        = "slots!"
 )

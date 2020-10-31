@@ -5,6 +5,7 @@ import (
 	"omega/domain/eaccounting"
 	"omega/domain/eaccounting/eacmodel"
 	"omega/domain/eaccounting/eacterm"
+	"omega/domain/eaccounting/enum/transactiontype"
 	"omega/domain/service"
 	"omega/internal/core"
 	"omega/internal/core/corterm"
@@ -78,9 +79,9 @@ func (p *TransactionAPI) List(c *gin.Context) {
 		JSON(data)
 }
 
-// Create transaction
-func (p *TransactionAPI) Create(c *gin.Context) {
-	resp := response.New(p.Engine, c, eaccounting.Domain)
+// ManualTransfer transaction
+func (p *TransactionAPI) ManualTransfer(c *gin.Context) {
+	resp, params := response.NewParam(p.Engine, c, eacterm.Transactions, eaccounting.Domain)
 	var transaction, createdTransaction eacmodel.Transaction
 	var err error
 
@@ -101,12 +102,15 @@ func (p *TransactionAPI) Create(c *gin.Context) {
 		return
 	}
 
-	if createdTransaction, err = p.Service.Create(transaction); err != nil {
+	transaction.Type = transactiontype.Manual
+	transaction.CreatedBy = params.UserID
+
+	if createdTransaction, err = p.Service.Transfer(transaction); err != nil {
 		resp.Error(err).JSON()
 		return
 	}
 
-	resp.RecordCreate(eaccounting.CreateTransaction, transaction)
+	resp.RecordCreate(eaccounting.ManualTransfer, transaction)
 	resp.Status(http.StatusOK).
 		MessageT(corterm.VCreatedSuccessfully, eacterm.Transaction).
 		JSON(createdTransaction)
@@ -137,6 +141,9 @@ func (p *TransactionAPI) Update(c *gin.Context) {
 		return
 	}
 
+	transaction.CreatedBy = transactionBefore.CreatedBy
+	transaction.Hash = transactionBefore.Hash
+	transaction.Type = transactionBefore.Type
 	transaction.ID = fix.ID
 	transaction.CompanyID = fix.CompanyID
 	transaction.NodeID = fix.NodeID

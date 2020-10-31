@@ -35,6 +35,9 @@ func (p *extractor) getTag(t reflect.Type) {
 		}
 
 		column := field.Tag.Get("json")
+		if column == "" {
+			continue
+		}
 		column = p.re.FindString(column)
 		externalTable := field.Tag.Get("table")
 

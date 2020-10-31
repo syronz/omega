@@ -1,6 +1,7 @@
 package param
 
 import (
+	"omega/internal/consts"
 	"omega/internal/types"
 	"omega/pkg/dict"
 )
@@ -24,4 +25,11 @@ type Pagination struct {
 	Order  string
 	Limit  uint64
 	Offset uint64
+}
+
+func New() Param {
+	var param Param
+	param.Limit = consts.DefaultLimit
+
+	return param
 }

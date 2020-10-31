@@ -17,4 +17,5 @@ const (
 	ListTransaction   types.Event = "transaction-list"
 	ViewTransaction   types.Event = "transaction-view"
 	ExcelTransaction  types.Event = "transaction-excel"
+	ManualTransfer    types.Event = "transaction-manual"
 )

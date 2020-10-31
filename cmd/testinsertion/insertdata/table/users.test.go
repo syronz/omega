@@ -6,6 +6,7 @@ import (
 	"omega/domain/base/basrepo"
 	"omega/domain/service"
 	"omega/internal/core"
+	"omega/internal/types"
 	"omega/pkg/dict"
 	"omega/pkg/glog"
 )
@@ -20,7 +21,11 @@ func InsertUsers(engine *core.Engine) {
 
 	users := []basmodel.User{
 		{
-			ID:       11,
+			FixedCol: types.FixedCol{
+				ID:        11,
+				CompanyID: 1001,
+				NodeID:    101,
+			},
 			RoleID:   1,
 			Name:     engine.Envs[base.AdminUsername],
 			Username: engine.Envs[base.AdminUsername],
@@ -28,7 +33,11 @@ func InsertUsers(engine *core.Engine) {
 			Lang:     dict.Ku,
 		},
 		{
-			ID:       12,
+			FixedCol: types.FixedCol{
+				ID:        12,
+				CompanyID: 1001,
+				NodeID:    101,
+			},
 			RoleID:   2,
 			Name:     "cashier",
 			Username: "cashier",
@@ -36,7 +45,11 @@ func InsertUsers(engine *core.Engine) {
 			Lang:     dict.En,
 		},
 		{
-			ID:       13,
+			FixedCol: types.FixedCol{
+				ID:        13,
+				CompanyID: 1001,
+				NodeID:    101,
+			},
 			RoleID:   3,
 			Name:     "reader",
 			Username: "reader",

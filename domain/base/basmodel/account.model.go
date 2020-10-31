@@ -58,10 +58,6 @@ func (p *Account) Validate(act coract.Action) (err error) {
 
 	// TODO: it should be checked after API has been created
 	if ok, _ := helper.Includes(accounttype.List, p.Type); !ok {
-		// var str []string
-		// for _, v := range dict.Langs {
-		// 	str = append(str, string(v))
-		// }
 		return limberr.AddInvalidParam(err, "type",
 			corerr.AcceptedValueForVareV, dict.R(corterm.Type),
 			accounttype.Join())

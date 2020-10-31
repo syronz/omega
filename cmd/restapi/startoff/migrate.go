@@ -24,5 +24,8 @@ func Migrate(engine *core.Engine) {
 	engine.DB.Table(eacmodel.TransactionTable).AutoMigrate(&eacmodel.Transaction{}).
 		AddForeignKey("currency_id", "eac_currencies(id)", "RESTRICT", "RESTRICT").
 		AddForeignKey("created_by", "bas_users(id)", "RESTRICT", "RESTRICT")
-
+	engine.DB.Table(eacmodel.SlotTable).AutoMigrate(&eacmodel.Slot{}).
+		AddForeignKey("account_id", "bas_accounts(id)", "RESTRICT", "RESTRICT").
+		AddForeignKey("transaction_id", "eac_transactions(id)", "RESTRICT", "RESTRICT").
+		AddForeignKey("currency_id", "eac_currencies(id)", "RESTRICT", "RESTRICT")
 }

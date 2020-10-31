@@ -21,7 +21,7 @@ func initRoleTest() (engine *core.Engine, roleServ BasRoleServ) {
 	return
 }
 
-func TestCreateRole(t *testing.T) {
+func TestRoleCreate(t *testing.T) {
 	_, roleServ := initRoleTest()
 
 	samples := []struct {
@@ -30,6 +30,10 @@ func TestCreateRole(t *testing.T) {
 	}{
 		{
 			in: basmodel.Role{
+				FixedCol: types.FixedCol{
+					CompanyID: 1001,
+					NodeID:    101,
+				},
 				Name:        "created 1",
 				Resources:   string(base.SupperAccess),
 				Description: "created 1",
@@ -38,14 +42,22 @@ func TestCreateRole(t *testing.T) {
 		},
 		{
 			in: basmodel.Role{
+				FixedCol: types.FixedCol{
+					CompanyID: 1001,
+					NodeID:    101,
+				},
 				Name:        "created 1",
 				Resources:   string(base.SupperAccess),
-				Description: "created 1",
+				Description: "created 2",
 			},
 			err: errors.New("duplicate"),
 		},
 		{
 			in: basmodel.Role{
+				FixedCol: types.FixedCol{
+					CompanyID: 1001,
+					NodeID:    101,
+				},
 				Name:      "minimum fields",
 				Resources: string(base.SupperAccess),
 			},
@@ -77,7 +89,7 @@ func TestCreateRole(t *testing.T) {
 
 }
 
-func TestUpdateRole(t *testing.T) {
+func TestRoleUpdate(t *testing.T) {
 	_, roleServ := initRoleTest()
 
 	samples := []struct {
@@ -86,8 +98,10 @@ func TestUpdateRole(t *testing.T) {
 	}{
 		{
 			in: basmodel.Role{
-				GormCol: types.GormCol{
-					ID: 1001101000000005,
+				FixedCol: types.FixedCol{
+					ID:        5,
+					CompanyID: 1001,
+					NodeID:    101,
 				},
 				Name:        "num 1 update",
 				Resources:   string(base.SupperAccess),
@@ -97,8 +111,10 @@ func TestUpdateRole(t *testing.T) {
 		},
 		{
 			in: basmodel.Role{
-				GormCol: types.GormCol{
-					ID: 1001101000000006,
+				FixedCol: types.FixedCol{
+					ID:        6,
+					CompanyID: 1001,
+					NodeID:    101,
 				},
 				Name:        "num 2 update",
 				Description: "num 2 update",
@@ -116,32 +132,40 @@ func TestUpdateRole(t *testing.T) {
 
 }
 
-func TestDeleteRole(t *testing.T) {
+func TestRoleDelete(t *testing.T) {
 	_, roleServ := initRoleTest()
 
 	samples := []struct {
-		id  types.RowID
+		fix types.FixedCol
 		err error
 	}{
 		{
-			id:  7,
+			fix: types.FixedCol{
+				ID:        7,
+				CompanyID: 1001,
+				NodeID:    101,
+			},
 			err: nil,
 		},
 		{
-			id:  99999999,
+			fix: types.FixedCol{
+				ID:        99999999,
+				CompanyID: 1001,
+				NodeID:    101,
+			},
 			err: errors.New("record not found"),
 		},
 	}
 
 	for _, v := range samples {
-		_, err := roleServ.Delete(v.id)
+		_, err := roleServ.Delete(v.fix)
 		if (v.err == nil && err != nil) || (v.err != nil && err == nil) {
-			t.Errorf("ERROR FOR ::::%+v::: \nRETURNS :::%+v:::, \nIT SHOULD BE :::%+v:::", v.id, err, v.err)
+			t.Errorf("ERROR FOR ::::%+v::: \nRETURNS :::%+v:::, \nIT SHOULD BE :::%+v:::", v.fix.ID, err, v.err)
 		}
 	}
 }
 
-func TestListRole(t *testing.T) {
+func TestRoleList(t *testing.T) {
 	_, roleServ := initRoleTest()
 	regularParam := getRegularParam("bas_roles.id asc")
 	regularParam.Filter = "description[like]'searchTerm1'"

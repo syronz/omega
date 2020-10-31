@@ -4,6 +4,7 @@ import (
 	"omega/domain/base"
 	"omega/domain/base/basmodel"
 	"omega/domain/base/basrepo"
+	"omega/domain/eaccounting/eacmodel"
 	"omega/domain/service"
 	"omega/internal/core"
 	"omega/internal/types"
@@ -16,14 +17,19 @@ func InsertRoles(engine *core.Engine) {
 	roleService := service.ProvideBasRoleService(roleRepo)
 
 	// reset the roles table
+	roleRepo.Engine.DB.Table(eacmodel.SlotTable).Unscoped().Delete(eacmodel.Slot{})
+	roleRepo.Engine.DB.Table(eacmodel.TransactionTable).Unscoped().Delete(eacmodel.Transaction{})
+
 	roleRepo.Engine.DB.Table(basmodel.UserTable).Unscoped().Delete(basmodel.User{})
 	roleRepo.Engine.DB.Table(basmodel.AccountTable).Unscoped().Delete(basmodel.Account{})
 	roleRepo.Engine.DB.Table(basmodel.RoleTable).Unscoped().Delete(basmodel.Role{})
 
 	roles := []basmodel.Role{
 		{
-			GormCol: types.GormCol{
-				ID: 1,
+			FixedCol: types.FixedCol{
+				ID:        1,
+				CompanyID: 1001,
+				NodeID:    101,
 			},
 			Name: "Super-Admin",
 			Resources: types.ResourceJoin([]types.Resource{
@@ -35,8 +41,10 @@ func InsertRoles(engine *core.Engine) {
 			Description: "super-admin has all privileges - do not edit",
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 2,
+			FixedCol: types.FixedCol{
+				ID:        2,
+				CompanyID: 1001,
+				NodeID:    101,
 			},
 			Name: "Admin",
 			Resources: types.ResourceJoin([]types.Resource{
@@ -48,72 +56,90 @@ func InsertRoles(engine *core.Engine) {
 			Description: "admin has all privileges - do not edit",
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 3,
+			FixedCol: types.FixedCol{
+				ID:        3,
+				CompanyID: 1001,
+				NodeID:    101,
 			},
 			Name:        "Cashier",
 			Resources:   types.ResourceJoin([]types.Resource{base.ActivitySelf}),
 			Description: "cashier has all privileges - after migration reset",
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 4,
+			FixedCol: types.FixedCol{
+				ID:        4,
+				CompanyID: 1001,
+				NodeID:    101,
 			},
 			Name:        "for foreign 1",
 			Resources:   string(base.SettingRead),
 			Description: "for foreign 1",
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 5,
+			FixedCol: types.FixedCol{
+				ID:        5,
+				CompanyID: 1001,
+				NodeID:    101,
 			},
 			Name:        "for update 1",
 			Resources:   string(base.SettingRead),
 			Description: "for update 1",
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 6,
+			FixedCol: types.FixedCol{
+				ID:        6,
+				CompanyID: 1001,
+				NodeID:    101,
 			},
 			Name:        "for update 2",
 			Resources:   string(base.SettingRead),
 			Description: "for update 2",
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 7,
+			FixedCol: types.FixedCol{
+				ID:        7,
+				CompanyID: 1001,
+				NodeID:    101,
 			},
 			Name:        "for delete 1",
 			Resources:   string(base.SettingRead),
 			Description: "for delete 1",
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 8,
+			FixedCol: types.FixedCol{
+				ID:        8,
+				CompanyID: 1001,
+				NodeID:    101,
 			},
 			Name:        "for search 1",
 			Resources:   string(base.SettingRead),
 			Description: "searchTerm1",
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 9,
+			FixedCol: types.FixedCol{
+				ID:        9,
+				CompanyID: 1001,
+				NodeID:    101,
 			},
 			Name:        "for search 2",
 			Resources:   string(base.SettingRead),
 			Description: "searchTerm1",
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 10,
+			FixedCol: types.FixedCol{
+				ID:        10,
+				CompanyID: 1001,
+				NodeID:    101,
 			},
 			Name:        "for search 3",
 			Resources:   string(base.SettingRead),
 			Description: "searchTerm1",
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 11,
+			FixedCol: types.FixedCol{
+				ID:        11,
+				CompanyID: 1001,
+				NodeID:    101,
 			},
 			Name:        "for delete 2",
 			Resources:   string(base.SettingRead),

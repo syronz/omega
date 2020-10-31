@@ -3,9 +3,9 @@ package table
 import (
 	"omega/domain/base/basmodel"
 	"omega/domain/base/basrepo"
+	"omega/domain/base/enum/accountstatus"
 	"omega/domain/base/enum/accounttype"
 	"omega/domain/service"
-	"omega/domain/sync/accountstatus"
 	"omega/internal/core"
 	"omega/internal/types"
 	"omega/pkg/glog"
@@ -21,124 +21,164 @@ func InsertAccounts(engine *core.Engine) {
 
 	accounts := []basmodel.Account{
 		{
-			GormCol: types.GormCol{
-				ID: 1,
+			FixedNode: types.FixedNode{
+				ID:        1,
+				CompanyID: 1001,
+				NodeID:    101,
 			},
-			Name:   "Fee",
-			Type:   accounttype.Fee,
+			Name:   "Asset",
+			Type:   accounttype.Asset,
 			Status: accountstatus.Active,
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 2,
+			FixedNode: types.FixedNode{
+				ID:        2,
+				CompanyID: 1001,
+				NodeID:    101,
 			},
-			Name:   "Trader",
-			Type:   accounttype.Fixer,
+			Name:   "Capital",
+			Type:   accounttype.Capital,
 			Status: accountstatus.Active,
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 3,
+			FixedNode: types.FixedNode{
+				ID:        3,
+				CompanyID: 1001,
+				NodeID:    101,
 			},
-			Name:   "Gold Provider",
-			Type:   accounttype.Provider,
+			Name:   "Cash",
+			Type:   accounttype.Cash,
 			Status: accountstatus.Inactive,
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 4,
+			FixedNode: types.FixedNode{
+				ID:        4,
+				CompanyID: 1001,
+				NodeID:    101,
 			},
 			Name:   "for foreign 1",
-			Type:   accounttype.Trader,
+			Type:   accounttype.Equity,
 			Status: accountstatus.Active,
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 5,
+			FixedNode: types.FixedNode{
+				ID:        5,
+				CompanyID: 1001,
+				NodeID:    101,
 			},
 			Name:   "for update 1",
-			Type:   accounttype.Trader,
+			Type:   accounttype.Partner,
 			Status: accountstatus.Inactive,
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 6,
+			FixedNode: types.FixedNode{
+				ID:        6,
+				CompanyID: 1001,
+				NodeID:    101,
 			},
 			Name:   "for update 2",
-			Type:   accounttype.Trader,
+			Type:   accounttype.Partner,
 			Status: accountstatus.Active,
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 7,
+			FixedNode: types.FixedNode{
+				ID:        7,
+				CompanyID: 1001,
+				NodeID:    101,
 			},
 			Name:   "for delete 1",
-			Type:   accounttype.Trader,
+			Type:   accounttype.Partner,
 			Status: accountstatus.Active,
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 8,
+			FixedNode: types.FixedNode{
+				ID:        8,
+				CompanyID: 1001,
+				NodeID:    101,
 			},
 			Name:   "for search 1, searchTerm1",
-			Type:   accounttype.Trader,
+			Type:   accounttype.Partner,
 			Status: accountstatus.Active,
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 9,
+			FixedNode: types.FixedNode{
+				ID:        9,
+				CompanyID: 1001,
+				NodeID:    101,
 			},
 			Name:   "for search 2, searchTerm1",
-			Type:   accounttype.Trader,
+			Type:   accounttype.Partner,
 			Status: accountstatus.Active,
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 10,
+			FixedNode: types.FixedNode{
+				ID:        10,
+				CompanyID: 1001,
+				NodeID:    101,
 			},
 			Name:   "for search 3, searchTerm1",
-			Type:   accounttype.Trader,
+			Type:   accounttype.Partner,
 			Status: accountstatus.Active,
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 21,
+			FixedNode: types.FixedNode{
+				ID:        21,
+				CompanyID: 1001,
+				NodeID:    101,
 			},
 			Name:   "for delete 2",
-			Type:   accounttype.Trader,
+			Type:   accounttype.Partner,
 			Status: accountstatus.Active,
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 30,
+			FixedNode: types.FixedNode{
+				ID:        30,
+				CompanyID: 1001,
+				NodeID:    101,
 			},
 			Name:   "active provider",
-			Type:   accounttype.Trader,
+			Type:   accounttype.Partner,
 			Status: accountstatus.Active,
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 31,
+			FixedNode: types.FixedNode{
+				ID:        31,
+				CompanyID: 1001,
+				NodeID:    101,
 			},
-			Name:   "active follower",
-			Type:   accounttype.Trader,
+			Name:   "A",
+			Type:   accounttype.Partner,
 			Status: accountstatus.Active,
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 32,
+			FixedNode: types.FixedNode{
+				ID:        32,
+				CompanyID: 1001,
+				NodeID:    101,
 			},
-			Name:   "inactive provider",
-			Type:   accounttype.Trader,
-			Status: accountstatus.Inactive,
+			Name:   "B",
+			Type:   accounttype.Partner,
+			Status: accountstatus.Active,
 		},
 		{
-			GormCol: types.GormCol{
-				ID: 33,
+			FixedNode: types.FixedNode{
+				ID:        33,
+				CompanyID: 1001,
+				NodeID:    101,
 			},
-			Name:   "inactive follower",
-			Type:   accounttype.Trader,
-			Status: accountstatus.Inactive,
+			Name:   "C",
+			Type:   accounttype.Partner,
+			Status: accountstatus.Active,
+		},
+		{
+			FixedNode: types.FixedNode{
+				ID:        34,
+				CompanyID: 1001,
+				NodeID:    101,
+			},
+			Name:   "D",
+			Type:   accounttype.Partner,
+			Status: accountstatus.Active,
 		},
 	}
 

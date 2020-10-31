@@ -28,8 +28,10 @@ func TestUpdateSetting(t *testing.T) {
 	}{
 		{
 			in: basmodel.Setting{
-				GormCol: types.GormCol{
-					ID: 20,
+				FixedCol: types.FixedCol{
+					ID:        20,
+					CompanyID: 1001,
+					NodeID:    101,
 				},
 				Property:    "num 1 updated",
 				Value:       "num 1 updated",
@@ -40,8 +42,10 @@ func TestUpdateSetting(t *testing.T) {
 		},
 		{
 			in: basmodel.Setting{
-				GormCol: types.GormCol{
-					ID: 21,
+				FixedCol: types.FixedCol{
+					ID:        21,
+					CompanyID: 1001,
+					NodeID:    101,
 				},
 				Value:       "num 2 updated",
 				Type:        "num 2 updated",

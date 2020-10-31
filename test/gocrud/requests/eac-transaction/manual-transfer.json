@@ -1,0 +1,12 @@
+{
+  "method":"post",
+  "url":"_URL_/companies/1001/transactions",
+  "authorization":"Bearer _TOKEN_",
+  "payload": {
+    "pioneer": 2,
+    "follower": 3,
+    "currency_id": 1,
+    "amount": 10000,
+    "post_date": "2020-02-19T13:15:32.000Z"
+  }
+}

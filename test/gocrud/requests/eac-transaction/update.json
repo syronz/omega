@@ -1,0 +1,30 @@
+{
+  "method":"put",
+	"url":"_URL_/companies/1001/nodes/101/transactions/23",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {
+    "pioneer": 2,
+    "follower": 3,
+    "currency_id": 1,
+    "amount": 10000,
+    "post_date": "2020-02-18T13:15:32.000Z",
+    "slots": [
+      {
+        "account_id": 2,
+        "company_id": 1001,
+        "credit": 5000,
+        "currency_id": 1,
+        "id": 3,
+        "node_id": 101
+      },
+      {
+        "account_id": 3,
+        "company_id": 1001,
+        "currency_id": 1,
+        "debit": 5000,
+        "id": 4,
+        "node_id": 101
+      }
+    ]
+  }
+}

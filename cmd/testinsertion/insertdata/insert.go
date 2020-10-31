@@ -1,7 +1,6 @@
 package insertdata
 
 import (
-	// "omega/cmd/testinsertion/insertdata/table"
 	"omega/cmd/testinsertion/insertdata/table"
 	"omega/internal/core"
 )
@@ -14,7 +13,7 @@ func Insert(engine *core.Engine) {
 		table.InsertRoles(engine)
 		table.InsertUsers(engine)
 		table.InsertAccounts(engine)
-
+		table.InsertCurrencies(engine)
 	}
 
 }

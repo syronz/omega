@@ -63,3 +63,17 @@ func initCurrencyAPI(e *core.Engine) eacapi.CurrencyAPI {
 	currencyAPI := eacapi.ProvideCurrencyAPI(eacCurrencyServ)
 	return currencyAPI
 }
+
+func initTransactionAPI(e *core.Engine, slotServ service.EacSlotServ) eacapi.TransactionAPI {
+	transactionRepo := eacrepo.ProvideTransactionRepo(e)
+	eacTransactionServ := service.ProvideEacTransactionService(transactionRepo, slotServ)
+	transactionAPI := eacapi.ProvideTransactionAPI(eacTransactionServ)
+	return transactionAPI
+}
+
+func initSlotAPI(e *core.Engine, currencyServ service.EacCurrencyServ, accountServ service.BasAccountServ) eacapi.SlotAPI {
+	slotRepo := eacrepo.ProvideSlotRepo(e)
+	eacSlotServ := service.ProvideEacSlotService(slotRepo, currencyServ, accountServ)
+	slotAPI := eacapi.ProvideSlotAPI(eacSlotServ)
+	return slotAPI
+}

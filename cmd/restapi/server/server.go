@@ -22,7 +22,7 @@ import (
 func Start(engine *core.Engine) *gin.Engine {
 
 	var r *gin.Engine
-	if engine.Envs[core.GindMode] == "debug" {
+	if engine.Envs[core.GinMode] == "debug" {
 		r = gin.Default()
 	} else {
 		r = gin.New()

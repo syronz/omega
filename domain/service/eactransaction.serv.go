@@ -4,25 +4,29 @@ import (
 	"fmt"
 	"omega/domain/eaccounting/eacmodel"
 	"omega/domain/eaccounting/eacrepo"
+	"omega/internal/consts"
 	"omega/internal/core"
 	"omega/internal/core/coract"
 	"omega/internal/core/corerr"
 	"omega/internal/param"
 	"omega/internal/types"
 	"omega/pkg/glog"
+	"time"
 )
 
 // EacTransactionServ for injecting auth eacrepo
 type EacTransactionServ struct {
-	Repo   eacrepo.TransactionRepo
-	Engine *core.Engine
+	Repo     eacrepo.TransactionRepo
+	Engine   *core.Engine
+	SlotServ EacSlotServ
 }
 
 // ProvideEacTransactionService for transaction is used in wire
-func ProvideEacTransactionService(p eacrepo.TransactionRepo) EacTransactionServ {
+func ProvideEacTransactionService(p eacrepo.TransactionRepo, slotServ EacSlotServ) EacTransactionServ {
 	return EacTransactionServ{
-		Repo:   p,
-		Engine: p.Engine,
+		Repo:     p,
+		Engine:   p.Engine,
+		SlotServ: slotServ,
 	}
 }
 
@@ -30,6 +34,13 @@ func ProvideEacTransactionService(p eacrepo.TransactionRepo) EacTransactionServ 
 func (p *EacTransactionServ) FindByID(fix types.FixedCol) (transaction eacmodel.Transaction, err error) {
 	if transaction, err = p.Repo.FindByID(fix); err != nil {
 		err = corerr.Tick(err, "E1463467", "can't fetch the transaction", fix.CompanyID, fix.NodeID, fix.ID)
+		return
+	}
+
+	if transaction.Slots, err = p.SlotServ.TransactionSlot(transaction.ID,
+		transaction.CompanyID, transaction.NodeID); err != nil {
+		err = corerr.Tick(err, "E1464213", "can't fetch the transactions slots",
+			fix.CompanyID, fix.NodeID, transaction.ID)
 		return
 	}
 
@@ -56,18 +67,77 @@ func (p *EacTransactionServ) List(params param.Param) (transactions []eacmodel.T
 	return
 }
 
+// Transfer activate create for special transfering
+func (p *EacTransactionServ) Transfer(transaction eacmodel.Transaction) (createdTransaction eacmodel.Transaction, err error) {
+	slots := []eacmodel.Slot{
+		{
+			AccountID:  transaction.Pioneer,
+			Credit:     transaction.Amount,
+			CurrencyID: transaction.CurrencyID,
+			PostDate:   transaction.PostDate,
+		},
+		{
+			AccountID:  transaction.Follower,
+			Debit:      transaction.Amount,
+			CurrencyID: transaction.CurrencyID,
+			PostDate:   transaction.PostDate,
+		},
+	}
+
+	slots[0].CompanyID = transaction.CompanyID
+	slots[1].CompanyID = transaction.CompanyID
+	slots[0].NodeID = transaction.NodeID
+	slots[1].NodeID = transaction.NodeID
+
+	createdTransaction, err = p.Create(transaction, slots)
+
+	return
+}
+
 // Create a transaction
-func (p *EacTransactionServ) Create(transaction eacmodel.Transaction) (createdTransaction eacmodel.Transaction, err error) {
+func (p *EacTransactionServ) Create(transaction eacmodel.Transaction,
+	slots []eacmodel.Slot) (createdTransaction eacmodel.Transaction, err error) {
 
 	if err = transaction.Validate(coract.Save); err != nil {
 		err = corerr.TickValidate(err, "E1433872", "validation failed in creating the transaction", transaction)
 		return
 	}
 
-	if createdTransaction, err = p.Repo.Create(transaction); err != nil {
+	clonedEngine := p.Engine.Clone()
+	clonedEngine.DB = clonedEngine.DB.Begin()
+
+	defer func() {
+		if r := recover(); r != nil {
+			glog.LogError(fmt.Errorf("panic happened in transaction mode for %v",
+				"eac_transactions table"), "rollback recover create transaction")
+			clonedEngine.DB.Rollback()
+		}
+	}()
+
+	transactionRepo := eacrepo.ProvideTransactionRepo(clonedEngine)
+	slotServ := ProvideEacSlotService(eacrepo.ProvideSlotRepo(clonedEngine),
+		p.SlotServ.CurrencyServ, p.SlotServ.AccountServ)
+
+	now := time.Now()
+	transaction.Hash = now.Format(consts.HashTimeLayout)
+
+	if createdTransaction, err = transactionRepo.Create(transaction); err != nil {
 		err = corerr.Tick(err, "E1479603", "transaction not created", transaction)
+
+		clonedEngine.DB.Rollback()
 		return
 	}
+
+	for _, v := range slots {
+		v.TransactionID = createdTransaction.ID
+		if _, err = slotServ.Create(v); err != nil {
+			err = corerr.Tick(err, "E1420630", "slot not saved in transaction creation", v)
+			clonedEngine.DB.Rollback()
+			return
+		}
+	}
+
+	clonedEngine.DB.Commit()
 
 	return
 }
@@ -79,10 +149,39 @@ func (p *EacTransactionServ) Save(transaction eacmodel.Transaction) (savedTransa
 		return
 	}
 
-	if savedTransaction, err = p.Repo.Save(transaction); err != nil {
-		err = corerr.Tick(err, "E1482909", "transaction not saved")
+	clonedEngine := p.Engine.Clone()
+	clonedEngine.DB = clonedEngine.DB.Begin()
+
+	defer func() {
+		if r := recover(); r != nil {
+			glog.LogError(fmt.Errorf("panic happened in transaction mode for %v",
+				"eac_transactions table"), "rollback recover update transaction")
+			clonedEngine.DB.Rollback()
+		}
+	}()
+
+	transactionRepo := eacrepo.ProvideTransactionRepo(clonedEngine)
+	slotServ := ProvideEacSlotService(eacrepo.ProvideSlotRepo(clonedEngine),
+		p.SlotServ.CurrencyServ, p.SlotServ.AccountServ)
+
+	if savedTransaction, err = transactionRepo.Save(transaction); err != nil {
+		err = corerr.Tick(err, "E1482909", "transaction not saved", transaction)
+
+		clonedEngine.DB.Rollback()
 		return
 	}
+
+	for _, v := range transaction.Slots {
+		v.PostDate = transaction.PostDate
+		v.TransactionID = transaction.ID
+		if _, err = slotServ.Save(v); err != nil {
+			err = corerr.Tick(err, "E1485649", "slot not saved in transaction edit", v)
+			clonedEngine.DB.Rollback()
+			return
+		}
+	}
+
+	clonedEngine.DB.Commit()
 
 	return
 }

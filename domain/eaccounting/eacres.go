@@ -10,7 +10,9 @@ const (
 	CurrencyRead  types.Resource = "currency:read"
 	CurrencyExcel types.Resource = "currency:excel"
 
-	TransactionRead  types.Resource = "transaction:read"
-	TransactionWrite types.Resource = "transaction:write"
-	TransactionExcel types.Resource = "transaction:excel"
+	TransactionRead   types.Resource = "transaction:read"
+	TransactionManual types.Resource = "transaction:manual"
+	TransactionUpdate types.Resource = "transaction:update"
+	TransactionDelete types.Resource = "transaction:delete"
+	TransactionExcel  types.Resource = "transaction:excel"
 )

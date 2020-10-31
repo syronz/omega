@@ -21,4 +21,9 @@ const (
 
 	// MinFloat64 = k
 	MinFloat64 = -1 * math.MaxFloat64
+
+	DefaultLimit = 10000
+
+	TimeLayout     = "2006-01-02 15:04:05"
+	TimeLayoutZone = "2006-01-02 15:04:05 -0700"
 )

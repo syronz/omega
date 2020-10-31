@@ -22,6 +22,8 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 
 	// EAccountig Domain
 	eacCurrencyAPI := initCurrencyAPI(engine)
+	eacSlotAPI := initSlotAPI(engine, eacCurrencyAPI.Service, basAccountAPI.Service)
+	eacTransactionAPI := initTransactionAPI(engine, eacSlotAPI.Service)
 
 	// Html Domain
 	rg.StaticFS("/public", http.Dir("public"))
@@ -104,5 +106,18 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 		access.Check(eaccounting.CurrencyWrite), eacCurrencyAPI.Delete)
 	rg.GET("/excel/companies/:companyID/currencies",
 		access.Check(eaccounting.CurrencyExcel), eacCurrencyAPI.Excel)
+
+	rg.GET("/companies/:companyID/transactions",
+		access.Check(eaccounting.TransactionRead), eacTransactionAPI.List)
+	rg.GET("/companies/:companyID/nodes/:nodeID/transactions/:transactionID",
+		access.Check(eaccounting.TransactionRead), eacTransactionAPI.FindByID)
+	rg.POST("/companies/:companyID/transactions",
+		access.Check(eaccounting.TransactionManual), eacTransactionAPI.ManualTransfer)
+	rg.PUT("/companies/:companyID/nodes/:nodeID/transactions/:transactionID",
+		access.Check(eaccounting.TransactionUpdate), eacTransactionAPI.Update)
+	rg.DELETE("/companies/:companyID/nodes/:nodeID/transactions/:transactionID",
+		access.Check(eaccounting.TransactionDelete), eacTransactionAPI.Delete)
+	rg.GET("/excel/companies/:companyID/transactions",
+		access.Check(eaccounting.TransactionExcel), eacTransactionAPI.Excel)
 
 }

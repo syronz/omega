@@ -37,7 +37,7 @@ func LoadEnvs() *core.Engine {
 	envs[core.ExcelMaxRows] = os.Getenv("OMEGA_CORE_EXCEL_MAX_ROWS")
 	envs[core.ErrPanel] = os.Getenv("OMEGA_CORE_ERR_PANEL")
 	envs[core.OriginalError] = os.Getenv("OMEGA_CORE_ORIGINAL_ERROR")
-	envs[core.GindMode] = os.Getenv("GIN_MODE")
+	envs[core.GinMode] = os.Getenv("GIN_MODE")
 
 	envs[base.PasswordSalt] = os.Getenv("OMEGA_BASE_PASSWORD_SALT")
 	envs[base.JWTSecretKey] = os.Getenv("OMEGA_BASE_JWT_SECRET_KEY")

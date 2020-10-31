@@ -54,3 +54,16 @@ func initCurrencyAPI(e *core.Engine) eacapi.CurrencyAPI {
 		eacapi.ProvideCurrencyAPI)
 	return eacapi.CurrencyAPI{}
 }
+
+func initTransactionAPI(e *core.Engine, slotServ service.EacSlotServ) eacapi.TransactionAPI {
+	wire.Build(eacrepo.ProvideTransactionRepo, service.ProvideEacTransactionService,
+		eacapi.ProvideTransactionAPI)
+	return eacapi.TransactionAPI{}
+}
+
+func initSlotAPI(e *core.Engine, currencyServ service.EacCurrencyServ,
+	accountServ service.BasAccountServ) eacapi.SlotAPI {
+	wire.Build(eacrepo.ProvideSlotRepo, service.ProvideEacSlotService,
+		eacapi.ProvideSlotAPI)
+	return eacapi.SlotAPI{}
+}
