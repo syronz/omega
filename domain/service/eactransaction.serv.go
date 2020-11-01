@@ -142,6 +142,36 @@ func (p *EacTransactionServ) Create(transaction eacmodel.Transaction,
 	return
 }
 
+// EditTransfer activate create for special transfering
+func (p *EacTransactionServ) EditTransfer(oldTr, tr eacmodel.Transaction) (updatedTr eacmodel.Transaction, err error) {
+	slots := []eacmodel.Slot{
+		{
+			AccountID:  tr.Pioneer,
+			Credit:     tr.Amount,
+			CurrencyID: tr.CurrencyID,
+			PostDate:   tr.PostDate,
+		},
+		{
+			AccountID:  tr.Follower,
+			Debit:      tr.Amount,
+			CurrencyID: tr.CurrencyID,
+			PostDate:   tr.PostDate,
+		},
+	}
+
+	slots[0].CompanyID = tr.CompanyID
+	slots[0].NodeID = tr.NodeID
+	slots[0].ID = oldTr.Slots[0].ID
+
+	slots[1].CompanyID = tr.CompanyID
+	slots[1].NodeID = tr.NodeID
+	slots[1].ID = oldTr.Slots[1].ID
+
+	updatedTr, err = p.Create(tr, slots)
+
+	return
+}
+
 // Save a transaction, if it is exist update it, if not create it
 func (p *EacTransactionServ) Save(transaction eacmodel.Transaction) (savedTransaction eacmodel.Transaction, err error) {
 	if err = transaction.Validate(coract.Save); err != nil {

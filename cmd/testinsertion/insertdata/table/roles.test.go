@@ -4,7 +4,6 @@ import (
 	"omega/domain/base"
 	"omega/domain/base/basmodel"
 	"omega/domain/base/basrepo"
-	"omega/domain/eaccounting/eacmodel"
 	"omega/domain/service"
 	"omega/internal/core"
 	"omega/internal/types"
@@ -16,9 +15,11 @@ func InsertRoles(engine *core.Engine) {
 	roleRepo := basrepo.ProvideRoleRepo(engine)
 	roleService := service.ProvideBasRoleService(roleRepo)
 
-	// reset the roles table
-	roleRepo.Engine.DB.Table(eacmodel.SlotTable).Unscoped().Delete(eacmodel.Slot{})
-	roleRepo.Engine.DB.Table(eacmodel.TransactionTable).Unscoped().Delete(eacmodel.Transaction{})
+	// reset the tables: roles, slots, transactions, accounts and users
+	roleRepo.Engine.DB.Exec("TRUNCATE TABLE eac_slots;")
+	roleRepo.Engine.DB.Exec("SET FOREIGN_KEY_CHECKS = 0;")
+	roleRepo.Engine.DB.Exec("TRUNCATE TABLE eac_transactions;")
+	roleRepo.Engine.DB.Exec("SET FOREIGN_KEY_CHECKS = 1;")
 
 	roleRepo.Engine.DB.Table(basmodel.UserTable).Unscoped().Delete(basmodel.User{})
 	roleRepo.Engine.DB.Table(basmodel.AccountTable).Unscoped().Delete(basmodel.Account{})
