@@ -130,6 +130,24 @@ func (p *SlotRepo) LastSlot(slotIn eacmodel.Slot) (slot eacmodel.Slot, err error
 	return
 }
 
+// LastSlotWithID returns the last slot before post_date
+func (p *SlotRepo) LastSlotWithID(slotIn eacmodel.Slot) (slot eacmodel.Slot, err error) {
+	err = p.Engine.DB.Table(eacmodel.SlotTable).
+		Where("company_id = ? AND account_id = ? AND currency_id = ? AND post_date <= ? AND id < ?",
+			slotIn.CompanyID, slotIn.AccountID, slotIn.CurrencyID, slotIn.PostDate, slotIn.ID).
+		Order(" post_date DESC, id DESC ").
+		Limit(1).
+		Find(&slot).Error
+
+	if gorm.IsRecordNotFoundError(err) {
+		err = nil
+	}
+
+	err = p.dbError(err, "E1495037", slot, corterm.List)
+
+	return
+}
+
 // RegulateBalances will adjust all balances after the post_date
 func (p *SlotRepo) RegulateBalances(slotIn eacmodel.Slot, adjust float64) (err error) {
 	err = p.Engine.DB.Table(eacmodel.SlotTable).

@@ -106,6 +106,26 @@ func (p *EacSlotServ) Create(slot eacmodel.Slot) (createdSlot eacmodel.Slot, err
 	return
 }
 
+// Reset will remove affect of transaction on journal, similar to delete but don't delete the
+// records
+func (p *EacSlotServ) Reset(slot eacmodel.Slot) (err error) {
+	adjust := slot.Credit - slot.Debit
+	slot.Debit = 0
+	slot.Credit = 0
+	slot.Balance = 0
+	if slot, err = p.Repo.Save(slot); err != nil {
+		err = corerr.Tick(err, "E1445231", "error in resetting the slot", slot)
+		return
+	}
+
+	if err = p.Repo.RegulateBalancesSave(slot, adjust); err != nil {
+		err = corerr.Tick(err, "E1491272", "regulate balances faced error in reset", slot, adjust)
+		return
+	}
+
+	return
+}
+
 // Save a slot, if it is exist update it, if not create it
 func (p *EacSlotServ) Save(slot eacmodel.Slot) (savedSlot eacmodel.Slot, err error) {
 	if err = slot.Validate(coract.Save); err != nil {
@@ -126,36 +146,57 @@ func (p *EacSlotServ) Save(slot eacmodel.Slot) (savedSlot eacmodel.Slot, err err
 		return
 	}
 
-	var adjust float64
+	p.Reset(oldSlot)
 
-	if oldSlot.AccountID != slot.AccountID {
-		adjust = oldSlot.Credit - oldSlot.Debit
-		if err = p.Repo.RegulateBalancesSave(oldSlot, adjust); err != nil {
-			err = corerr.Tick(err, "E1483419", "regulate balances faced error in save", slot, adjust)
-			return
-		}
-
-		var lastSlot eacmodel.Slot
-		if lastSlot, err = p.Repo.LastSlot(slot); err != nil {
-			err = corerr.Tick(err, "E1433617", "last slot not found for save", slot)
-			return
-		}
-		adjust = slot.Debit - slot.Credit
-		slot.Balance = lastSlot.Balance + adjust
-	} else {
-		slot.Balance = oldSlot.Balance - oldSlot.Debit + oldSlot.Credit - slot.Credit + slot.Debit
-		adjust = slot.Debit - slot.Credit - oldSlot.Balance
+	var lastSlot eacmodel.Slot
+	if lastSlot, err = p.Repo.LastSlotWithID(slot); err != nil {
+		err = corerr.Tick(err, "E1433617", "last slot not found in save transaction", slot)
+		return
 	}
 
-	if savedSlot, err = p.Repo.Save(slot); err != nil {
-		err = corerr.Tick(err, "E1434918", "slot not saved")
+	adjust := slot.Debit - slot.Credit
+	slot.Balance = lastSlot.Balance + adjust
+
+	if slot, err = p.Repo.Save(slot); err != nil {
+		err = corerr.Tick(err, "E1475746", "error in saving the slot", slot)
 		return
 	}
 
 	if err = p.Repo.RegulateBalancesSave(slot, adjust); err != nil {
-		err = corerr.Tick(err, "E1421914", "regulate balances faced error in save", slot, adjust)
+		err = corerr.Tick(err, "E1454858", "regulate balances faced error in save", slot, adjust)
 		return
 	}
+
+	// var adjust float64
+
+	// if oldSlot.AccountID != slot.AccountID {
+	// 	adjust = oldSlot.Credit - oldSlot.Debit
+	// 	if err = p.Repo.RegulateBalancesSave(oldSlot, adjust); err != nil {
+	// 		err = corerr.Tick(err, "E1483419", "regulate balances faced error in save", slot, adjust)
+	// 		return
+	// 	}
+
+	// 	var lastSlot eacmodel.Slot
+	// 	if lastSlot, err = p.Repo.LastSlot(slot); err != nil {
+	// 		err = corerr.Tick(err, "", "last slot not found for save", slot)
+	// 		return
+	// 	}
+	// 	adjust = slot.Debit - slot.Credit
+	// 	slot.Balance = lastSlot.Balance + adjust
+	// } else {
+	// 	slot.Balance = oldSlot.Balance - oldSlot.Debit + oldSlot.Credit - slot.Credit + slot.Debit
+	// 	adjust = slot.Debit - slot.Credit - oldSlot.Balance
+	// }
+
+	// if savedSlot, err = p.Repo.Save(slot); err != nil {
+	// 	err = corerr.Tick(err, "E1434918", "slot not saved")
+	// 	return
+	// }
+
+	// if err = p.Repo.RegulateBalancesSave(slot, adjust); err != nil {
+	// 	err = corerr.Tick(err, "E1421914", "regulate balances faced error in save", slot, adjust)
+	// 	return
+	// }
 
 	return
 }

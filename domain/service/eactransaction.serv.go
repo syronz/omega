@@ -143,7 +143,7 @@ func (p *EacTransactionServ) Create(transaction eacmodel.Transaction,
 }
 
 // EditTransfer activate create for special transfering
-func (p *EacTransactionServ) EditTransfer(oldTr, tr eacmodel.Transaction) (updatedTr eacmodel.Transaction, err error) {
+func (p *EacTransactionServ) EditTransfer(tr eacmodel.Transaction) (updatedTr eacmodel.Transaction, err error) {
 	slots := []eacmodel.Slot{
 		{
 			AccountID:  tr.Pioneer,
@@ -159,6 +159,18 @@ func (p *EacTransactionServ) EditTransfer(oldTr, tr eacmodel.Transaction) (updat
 		},
 	}
 
+	fix := types.FixedCol{
+		CompanyID: tr.CompanyID,
+		NodeID:    tr.NodeID,
+		ID:        tr.ID,
+	}
+
+	var oldTr eacmodel.Transaction
+	if oldTr, err = p.FindByID(fix); err != nil {
+		err = corerr.Tick(err, "E1484155", "edit transfer can't find the transaction", fix.CompanyID, fix.NodeID, fix.ID)
+		return
+	}
+
 	slots[0].CompanyID = tr.CompanyID
 	slots[0].NodeID = tr.NodeID
 	slots[0].ID = oldTr.Slots[0].ID
@@ -167,9 +179,58 @@ func (p *EacTransactionServ) EditTransfer(oldTr, tr eacmodel.Transaction) (updat
 	slots[1].NodeID = tr.NodeID
 	slots[1].ID = oldTr.Slots[1].ID
 
-	updatedTr, err = p.Create(tr, slots)
+	updatedTr, err = p.Update(tr, slots)
 
 	return
+}
+
+// Update is used when a transaction has been changed
+func (p *EacTransactionServ) Update(tr eacmodel.Transaction,
+	slots []eacmodel.Slot) (updatedTr eacmodel.Transaction, err error) {
+
+	if err = tr.Validate(coract.Save); err != nil {
+		err = corerr.TickValidate(err, "E1469927", "validation failed in updating the transaction", tr)
+		return
+	}
+
+	clonedEngine := p.Engine.Clone()
+	clonedEngine.DB = clonedEngine.DB.Begin()
+
+	defer func() {
+		if r := recover(); r != nil {
+			glog.LogError(fmt.Errorf("panic happened in transaction mode for %v",
+				"eac_transactions table"), "rollback recover update transaction")
+			clonedEngine.DB.Rollback()
+		}
+	}()
+
+	transactionRepo := eacrepo.ProvideTransactionRepo(clonedEngine)
+	slotServ := ProvideEacSlotService(eacrepo.ProvideSlotRepo(clonedEngine),
+		p.SlotServ.CurrencyServ, p.SlotServ.AccountServ)
+
+	now := time.Now()
+	tr.Hash = now.Format(consts.HashTimeLayout)
+
+	if updatedTr, err = transactionRepo.Save(tr); err != nil {
+		err = corerr.Tick(err, "E1479603", "transaction not updated", tr)
+
+		clonedEngine.DB.Rollback()
+		return
+	}
+
+	for _, v := range slots {
+		v.TransactionID = updatedTr.ID
+		if _, err = slotServ.Save(v); err != nil {
+			err = corerr.Tick(err, "E1420630", "slot not saved in updating the transaction", v)
+			clonedEngine.DB.Rollback()
+			return
+		}
+	}
+
+	clonedEngine.DB.Commit()
+
+	return
+
 }
 
 // Save a transaction, if it is exist update it, if not create it

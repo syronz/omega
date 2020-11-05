@@ -66,7 +66,7 @@ func TestTransactionTransfer(t *testing.T) {
 
 func TestTransactionEditManual(t *testing.T) {
 	_, transactionServ := initTransactionTest()
-	time1, err := time.Parse(consts.TimeLayoutZone, "2020-10-20 15:10:00 +0300")
+	time1, err := time.Parse(consts.TimeLayoutZone, "2020-10-19 15:10:00 +0300")
 	if err != nil {
 		t.Errorf("error in parsing date %v in layout %v", consts.DefaultLimit, "2020-10-21 21:10:35")
 	}
@@ -82,10 +82,10 @@ func TestTransactionEditManual(t *testing.T) {
 					NodeID:    101,
 					ID:        1,
 				},
-				Pioneer:     31,
+				Pioneer:     33,
 				Follower:    32,
 				CurrencyID:  1,
-				Amount:      1000,
+				Amount:      500,
 				PostDate:    time1,
 				Description: helper.StrPointer("changed!, A -> C & 1000$ -> 500$"),
 				Type:        transactiontype.Manual,
@@ -96,7 +96,7 @@ func TestTransactionEditManual(t *testing.T) {
 	}
 
 	for _, v := range samples {
-		_, err := transactionServ.Transfer(v.in)
+		_, err := transactionServ.EditTransfer(v.in)
 		if (v.err == nil && err != nil) || (v.err != nil && err == nil) {
 			t.Errorf("\nERROR FOR :::%+v::: \nRETURNS :::%+v:::, \nIT SHOULD BE :::%+v:::", v.in, err, v.err)
 		}

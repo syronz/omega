@@ -13,6 +13,7 @@ import (
 	"omega/internal/param"
 	"omega/internal/types"
 	"omega/pkg/glog"
+	"omega/pkg/limberr"
 	"omega/pkg/password"
 )
 
@@ -33,7 +34,8 @@ func ProvideBasUserService(p basrepo.UserRepo) BasUserServ {
 // FindByID for getting user by it's id
 func (p *BasUserServ) FindByID(fix types.FixedCol) (user basmodel.User, err error) {
 	if user, err = p.Repo.FindByID(fix); err != nil {
-		err = corerr.Tick(err, "E1066324", "can't fetch the user", fix.CompanyID, fix.NodeID, fix.ID)
+		// err = corerr.Tick(err, "E1066324", "can't fetch the user", fix.CompanyID, fix.NodeID, fix.ID)
+		err = limberr.AddCode(err, "E1066324")
 		return
 	}
 
