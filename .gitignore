@@ -26,3 +26,4 @@ tags
 logs/*
 !logs/.gitkeep
 cloud
+~*
