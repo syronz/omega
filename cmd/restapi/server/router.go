@@ -5,6 +5,7 @@ import (
 	"omega/domain/base"
 	"omega/domain/base/basmid"
 	"omega/domain/eaccounting"
+	"omega/domain/material"
 	"omega/internal/core"
 
 	"github.com/gin-gonic/gin"
@@ -24,6 +25,9 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 	eacCurrencyAPI := initCurrencyAPI(engine)
 	eacSlotAPI := initSlotAPI(engine, eacCurrencyAPI.Service, basAccountAPI.Service)
 	eacTransactionAPI := initTransactionAPI(engine, eacSlotAPI.Service)
+
+	// Material Domain
+	matCompanyAPI := initMatCompanyAPI(engine)
 
 	// Html Domain
 	rg.StaticFS("/public", http.Dir("public"))
@@ -119,5 +123,19 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 		access.Check(eaccounting.TransactionDelete), eacTransactionAPI.Delete)
 	rg.GET("/excel/companies/:companyID/transactions",
 		access.Check(eaccounting.TransactionExcel), eacTransactionAPI.Excel)
+
+	// Material Domain
+	rg.GET("/companies/:companyID/companies",
+		access.Check(material.CompanyRead), matCompanyAPI.List)
+	rg.GET("/companies/:companyID/nodes/:nodeID/companies/:companyID",
+		access.Check(material.CompanyRead), matCompanyAPI.FindByID)
+	rg.POST("/companies/:companyID/companies",
+		access.Check(material.CompanyWrite), matCompanyAPI.Create)
+	rg.PUT("/companies/:companyID/nodes/:nodeID/companies/:companyID",
+		access.Check(material.CompanyWrite), matCompanyAPI.Update)
+	rg.DELETE("/companies/:companyID/nodes/:nodeID/companies/:companyID",
+		access.Check(material.CompanyWrite), matCompanyAPI.Delete)
+	rg.GET("/excel/companies/:companyID/companies",
+		access.Check(material.CompanyExcel), matCompanyAPI.Excel)
 
 }

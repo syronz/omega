@@ -46,7 +46,7 @@ func TestRoleCreate(t *testing.T) {
 					CompanyID: 1001,
 					NodeID:    101,
 				},
-				Name:        "created 1",
+				Name:        "created 2",
 				Resources:   string(base.SupperAccess),
 				Description: "created 2",
 			},

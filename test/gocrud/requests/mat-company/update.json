@@ -1,0 +1,10 @@
+{
+  "method":"put",
+	"url":"_URL_/companies/1001/nodes/101/companies/4",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {
+		"name": "updated",
+		"symbol": "_RANDOM_NAME_",
+		"code": "this is edidted"
+	}
+}

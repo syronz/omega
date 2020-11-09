@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"omega/domain/base/basmodel"
 	"omega/domain/eaccounting/eacmodel"
+	"omega/domain/material/matmodel"
 	"omega/internal/core"
 )
 
@@ -28,4 +29,7 @@ func Migrate(engine *core.Engine) {
 		AddForeignKey("account_id", "bas_accounts(id)", "RESTRICT", "RESTRICT").
 		AddForeignKey("transaction_id", "eac_transactions(id)", "RESTRICT", "RESTRICT").
 		AddForeignKey("currency_id", "eac_currencies(id)", "RESTRICT", "RESTRICT")
+
+	// Material Domain
+	engine.DB.Table(matmodel.CompanyTable).AutoMigrate(&matmodel.Company{})
 }

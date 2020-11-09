@@ -1,0 +1,6 @@
+{
+  "method":"get",
+	"url":"_URL_/excel/companies/1001/companies",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {}
+}

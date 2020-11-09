@@ -1,0 +1,13 @@
+{
+  "method":"post",
+	"url":"_URL_/companies/1001/companies",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {
+		"name": "_RANDOM_NAME_",
+		"website": "_RANDOM_NAME_",
+		"phone": "_RANDOM_NUMBER_",
+		"email": "_RANDOM_NAME_",
+		"address": "_RANDOM_NAME_",
+		"notes": "_RANDOM_NAME_"
+	}
+}

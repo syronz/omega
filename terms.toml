@@ -313,6 +313,16 @@ en = 'accounts'
 ku = 'hazhmarakan'
 ar = 'accounts'
 
+[company]
+en = 'company'
+ku = 'compania'
+ar = 'company'
+
+[companies]
+en = 'companies'
+ku = 'companieakan'
+ar = 'companies'
+
 ["user loged in successfully"]
 en = 'user loged in successfully'
 ku = 'user ba sarkawtooyi daxl boo'

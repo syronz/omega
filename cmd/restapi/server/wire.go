@@ -7,6 +7,8 @@ import (
 	"omega/domain/base/basrepo"
 	"omega/domain/eaccounting/eacapi"
 	"omega/domain/eaccounting/eacrepo"
+	"omega/domain/material/matapi"
+	"omega/domain/material/matrepo"
 	"omega/domain/service"
 
 	"omega/internal/core"
@@ -66,4 +68,11 @@ func initSlotAPI(e *core.Engine, currencyServ service.EacCurrencyServ,
 	wire.Build(eacrepo.ProvideSlotRepo, service.ProvideEacSlotService,
 		eacapi.ProvideSlotAPI)
 	return eacapi.SlotAPI{}
+}
+
+// Material Domain
+func initMatCompanyAPI(e *core.Engine) matapi.CompanyAPI {
+	wire.Build(matrepo.ProvideCompanyRepo, service.ProvideMatCompanyService,
+		matapi.ProvideCompanyAPI)
+	return matapi.CompanyAPI{}
 }

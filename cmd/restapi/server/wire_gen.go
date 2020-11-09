@@ -10,12 +10,15 @@ import (
 	"omega/domain/base/basrepo"
 	"omega/domain/eaccounting/eacapi"
 	"omega/domain/eaccounting/eacrepo"
+	"omega/domain/material/matapi"
+	"omega/domain/material/matrepo"
 	"omega/domain/service"
 	"omega/internal/core"
 )
 
 // Injectors from wire.go:
 
+// Base Domain
 func initSettingAPI(e *core.Engine) basapi.SettingAPI {
 	settingRepo := basrepo.ProvideSettingRepo(e)
 	basSettingServ := service.ProvideBasSettingService(settingRepo)
@@ -57,6 +60,7 @@ func initAccountAPI(e *core.Engine) basapi.AccountAPI {
 	return accountAPI
 }
 
+// EAccountig Domain
 func initCurrencyAPI(e *core.Engine) eacapi.CurrencyAPI {
 	currencyRepo := eacrepo.ProvideCurrencyRepo(e)
 	eacCurrencyServ := service.ProvideEacCurrencyService(currencyRepo)
@@ -76,4 +80,12 @@ func initSlotAPI(e *core.Engine, currencyServ service.EacCurrencyServ, accountSe
 	eacSlotServ := service.ProvideEacSlotService(slotRepo, currencyServ, accountServ)
 	slotAPI := eacapi.ProvideSlotAPI(eacSlotServ)
 	return slotAPI
+}
+
+// Material Domain
+func initMatCompanyAPI(e *core.Engine) matapi.CompanyAPI {
+	companyRepo := matrepo.ProvideCompanyRepo(e)
+	matCompanyServ := service.ProvideMatCompanyService(companyRepo)
+	companyAPI := matapi.ProvideCompanyAPI(matCompanyServ)
+	return companyAPI
 }
