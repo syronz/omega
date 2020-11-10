@@ -1,0 +1,6 @@
+{
+  "method":"get",
+	"url":"_URL_/companies/1001/colors?order_by=mat_colors.name&direction=asc&page=0&page_size=10000&select=mat_colors.id,mat_colors.name",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {}
+}

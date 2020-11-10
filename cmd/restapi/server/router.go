@@ -28,6 +28,7 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 
 	// Material Domain
 	matCompanyAPI := initMatCompanyAPI(engine)
+	matColorAPI := initMatColorAPI(engine)
 
 	// Html Domain
 	rg.StaticFS("/public", http.Dir("public"))
@@ -127,15 +128,28 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 	// Material Domain
 	rg.GET("/companies/:companyID/companies",
 		access.Check(material.CompanyRead), matCompanyAPI.List)
-	rg.GET("/companies/:companyID/nodes/:nodeID/companies/:companyID",
+	rg.GET("/companies/:companyID/nodes/:nodeID/companies/:compID",
 		access.Check(material.CompanyRead), matCompanyAPI.FindByID)
 	rg.POST("/companies/:companyID/companies",
 		access.Check(material.CompanyWrite), matCompanyAPI.Create)
-	rg.PUT("/companies/:companyID/nodes/:nodeID/companies/:companyID",
+	rg.PUT("/companies/:companyID/nodes/:nodeID/companies/:compID",
 		access.Check(material.CompanyWrite), matCompanyAPI.Update)
-	rg.DELETE("/companies/:companyID/nodes/:nodeID/companies/:companyID",
+	rg.DELETE("/companies/:companyID/nodes/:nodeID/companies/:compID",
 		access.Check(material.CompanyWrite), matCompanyAPI.Delete)
 	rg.GET("/excel/companies/:companyID/companies",
 		access.Check(material.CompanyExcel), matCompanyAPI.Excel)
+
+	rg.GET("/companies/:companyID/colors",
+		access.Check(material.ColorRead), matColorAPI.List)
+	rg.GET("/companies/:companyID/nodes/:nodeID/colors/:colorID",
+		access.Check(material.ColorRead), matColorAPI.FindByID)
+	rg.POST("/companies/:companyID/colors",
+		access.Check(material.ColorWrite), matColorAPI.Create)
+	rg.PUT("/companies/:companyID/nodes/:nodeID/colors/:colorID",
+		access.Check(material.ColorWrite), matColorAPI.Update)
+	rg.DELETE("/companies/:companyID/nodes/:nodeID/colors/:colorID",
+		access.Check(material.ColorWrite), matColorAPI.Delete)
+	rg.GET("/excel/companies/:companyID/colors",
+		access.Check(material.ColorExcel), matColorAPI.Excel)
 
 }

@@ -12,6 +12,8 @@ const (
 	Accounts  = "accounts"
 	Company   = "company"
 	Companies = "companies"
+	Color     = "color"
+	Colors    = "colors"
 
 	UserLogedInSuccessfully    = "user loged in successfully"
 	UsernameAndPassword        = "username and password"

@@ -89,3 +89,10 @@ func initMatCompanyAPI(e *core.Engine) matapi.CompanyAPI {
 	companyAPI := matapi.ProvideCompanyAPI(matCompanyServ)
 	return companyAPI
 }
+
+func initMatColorAPI(e *core.Engine) matapi.ColorAPI {
+	colorRepo := matrepo.ProvideColorRepo(e)
+	matColorServ := service.ProvideMatColorService(colorRepo)
+	colorAPI := matapi.ProvideColorAPI(matColorServ)
+	return colorAPI
+}

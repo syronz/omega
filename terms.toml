@@ -323,6 +323,16 @@ en = 'companies'
 ku = 'companieakan'
 ar = 'companies'
 
+[color]
+en = 'color'
+ku = 'rang'
+ar = 'color'
+
+[colors]
+en = 'colors'
+ku = 'rangakan'
+ar = 'colors'
+
 ["user loged in successfully"]
 en = 'user loged in successfully'
 ku = 'user ba sarkawtooyi daxl boo'

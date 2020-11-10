@@ -76,3 +76,9 @@ func initMatCompanyAPI(e *core.Engine) matapi.CompanyAPI {
 		matapi.ProvideCompanyAPI)
 	return matapi.CompanyAPI{}
 }
+
+func initMatColorAPI(e *core.Engine) matapi.ColorAPI {
+	wire.Build(matrepo.ProvideColorRepo, service.ProvideMatColorService,
+		matapi.ProvideColorAPI)
+	return matapi.ColorAPI{}
+}

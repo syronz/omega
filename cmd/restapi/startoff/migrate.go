@@ -32,4 +32,5 @@ func Migrate(engine *core.Engine) {
 
 	// Material Domain
 	engine.DB.Table(matmodel.CompanyTable).AutoMigrate(&matmodel.Company{})
+	engine.DB.Table(matmodel.ColorTable).AutoMigrate(&matmodel.Color{})
 }

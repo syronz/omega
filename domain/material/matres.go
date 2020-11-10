@@ -9,4 +9,8 @@ const (
 	CompanyWrite types.Resource = "company:write"
 	CompanyRead  types.Resource = "company:read"
 	CompanyExcel types.Resource = "company:excel"
+
+	ColorWrite types.Resource = "color:write"
+	ColorRead  types.Resource = "color:read"
+	ColorExcel types.Resource = "color:excel"
 )

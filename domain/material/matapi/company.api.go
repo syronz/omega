@@ -33,7 +33,7 @@ func (p *CompanyAPI) FindByID(c *gin.Context) {
 	var company matmodel.Company
 	var fix types.FixedCol
 
-	if fix, err = resp.GetFixedCol(c.Param("companyID"), "E1484534", basterm.Company); err != nil {
+	if fix, err = resp.GetFixedCol(c.Param("compID"), "E7142676", basterm.Company); err != nil {
 		return
 	}
 
@@ -59,7 +59,7 @@ func (p *CompanyAPI) List(c *gin.Context) {
 	data := make(map[string]interface{})
 	var err error
 
-	if params.CompanyID, err = resp.GetCompanyID("E1464860"); err != nil {
+	if params.CompanyID, err = resp.GetCompanyID("E7137019"); err != nil {
 		return
 	}
 
@@ -84,12 +84,12 @@ func (p *CompanyAPI) Create(c *gin.Context) {
 	var company, createdCompany matmodel.Company
 	var err error
 
-	if company.CompanyID, company.NodeID, err = resp.GetCompanyNode("E1490109", material.Domain); err != nil {
+	if company.CompanyID, company.NodeID, err = resp.GetCompanyNode("E7148684", material.Domain); err != nil {
 		resp.Error(err).JSON()
 		return
 	}
 
-	if company.CompanyID, err = resp.GetCompanyID("E1490109"); err != nil {
+	if company.CompanyID, err = resp.GetCompanyID("E7128449"); err != nil {
 		return
 	}
 
@@ -97,7 +97,7 @@ func (p *CompanyAPI) Create(c *gin.Context) {
 		return
 	}
 
-	if err = resp.Bind(&company, "E1412634", material.Domain, basterm.Company); err != nil {
+	if err = resp.Bind(&company, "E7129072", material.Domain, basterm.Company); err != nil {
 		return
 	}
 
@@ -120,7 +120,7 @@ func (p *CompanyAPI) Update(c *gin.Context) {
 	var company, companyBefore, companyUpdated matmodel.Company
 	var fix types.FixedCol
 
-	if fix, err = resp.GetFixedCol(c.Param("companyID"), "E1487831", basterm.Company); err != nil {
+	if fix, err = resp.GetFixedCol(c.Param("compID"), "E7163288", basterm.Company); err != nil {
 		return
 	}
 
@@ -128,7 +128,7 @@ func (p *CompanyAPI) Update(c *gin.Context) {
 		return
 	}
 
-	if err = resp.Bind(&company, "E1487442", material.Domain, basterm.Company); err != nil {
+	if err = resp.Bind(&company, "E7147246", material.Domain, basterm.Company); err != nil {
 		return
 	}
 
@@ -158,7 +158,7 @@ func (p *CompanyAPI) Delete(c *gin.Context) {
 	var company matmodel.Company
 	var fix types.FixedCol
 
-	if fix, err = resp.GetFixedCol(c.Param("companyID"), "E1477642", basterm.Company); err != nil {
+	if fix, err = resp.GetFixedCol(c.Param("compID"), "E7168083", basterm.Company); err != nil {
 		return
 	}
 
@@ -178,7 +178,7 @@ func (p *CompanyAPI) Excel(c *gin.Context) {
 	resp, params := response.NewParam(p.Engine, c, basterm.Companies, material.Domain)
 	var err error
 
-	if params.CompanyID, err = resp.GetCompanyID("E1435727"); err != nil {
+	if params.CompanyID, err = resp.GetCompanyID("E7166407"); err != nil {
 		return
 	}
 
