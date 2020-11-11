@@ -4,4 +4,6 @@ package matterm
 const (
 	Group  = "group"
 	Groups = "groups"
+	Unit   = "unit"
+	Units  = "units"
 )

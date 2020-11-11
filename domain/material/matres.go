@@ -17,4 +17,8 @@ const (
 	GroupWrite types.Resource = "group:write"
 	GroupRead  types.Resource = "group:read"
 	GroupExcel types.Resource = "group:excel"
+
+	UnitWrite types.Resource = "unit:write"
+	UnitRead  types.Resource = "unit:read"
+	UnitExcel types.Resource = "unit:excel"
 )

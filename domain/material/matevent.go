@@ -24,4 +24,11 @@ const (
 	ListGroup   types.Event = "group-list"
 	ViewGroup   types.Event = "group-view"
 	ExcelGroup  types.Event = "group-excel"
+
+	CreateUnit types.Event = "unit-create"
+	UpdateUnit types.Event = "unit-update"
+	DeleteUnit types.Event = "unit-delete"
+	ListUnit   types.Event = "unit-list"
+	ViewUnit   types.Event = "unit-view"
+	ExcelUnit  types.Event = "unit-excel"
 )

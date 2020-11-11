@@ -37,6 +37,7 @@ func InsertRoles(engine *core.Engine) {
 				material.CompanyRead, material.CompanyWrite, material.CompanyExcel,
 				material.ColorRead, material.ColorWrite, material.ColorExcel,
 				material.GroupRead, material.GroupWrite, material.GroupExcel,
+				material.UnitRead, material.UnitWrite, material.UnitExcel,
 			}),
 			Description: "admin has all privileges - do not edit",
 		},

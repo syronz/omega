@@ -103,3 +103,10 @@ func initMatGroupAPI(e *core.Engine) matapi.GroupAPI {
 	groupAPI := matapi.ProvideGroupAPI(matGroupServ)
 	return groupAPI
 }
+
+func initMatUnitAPI(e *core.Engine) matapi.UnitAPI {
+	unitRepo := matrepo.ProvideUnitRepo(e)
+	matUnitServ := service.ProvideMatUnitService(unitRepo)
+	unitAPI := matapi.ProvideUnitAPI(matUnitServ)
+	return unitAPI
+}

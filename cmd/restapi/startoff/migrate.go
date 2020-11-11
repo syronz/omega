@@ -35,4 +35,5 @@ func Migrate(engine *core.Engine) {
 	engine.DB.Table(matmodel.ColorTable).AutoMigrate(&matmodel.Color{})
 	engine.DB.Table(matmodel.GroupTable).AutoMigrate(&matmodel.Group{}).
 		AddForeignKey("parent_id", "mat_groups", "RESTRICT", "RESTRICT")
+	engine.DB.Table(matmodel.UnitTable).AutoMigrate(&matmodel.Unit{})
 }

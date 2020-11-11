@@ -384,3 +384,15 @@ ar = 'transaction'
 en = 'transactions'
 ku = 'transactions'
 ar = 'transactions'
+
+# domain/material/matterm/matterm.go ----------------------------------------------------
+["unit"]
+en = 'unit'
+ku = 'unit'
+ar = 'unit'
+
+["units"]
+en = 'units'
+ku = 'units'
+ar = 'units'
+
