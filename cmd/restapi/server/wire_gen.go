@@ -96,3 +96,10 @@ func initMatColorAPI(e *core.Engine) matapi.ColorAPI {
 	colorAPI := matapi.ProvideColorAPI(matColorServ)
 	return colorAPI
 }
+
+func initMatGroupAPI(e *core.Engine) matapi.GroupAPI {
+	groupRepo := matrepo.ProvideGroupRepo(e)
+	matGroupServ := service.ProvideMatGroupService(groupRepo)
+	groupAPI := matapi.ProvideGroupAPI(matGroupServ)
+	return groupAPI
+}

@@ -36,6 +36,7 @@ func InsertRoles(engine *core.Engine) {
 				eaccounting.TransactionRead, eaccounting.TransactionManual, eaccounting.TransactionUpdate, eaccounting.TransactionExcel,
 				material.CompanyRead, material.CompanyWrite, material.CompanyExcel,
 				material.ColorRead, material.ColorWrite, material.ColorExcel,
+				material.GroupRead, material.GroupWrite, material.GroupExcel,
 			}),
 			Description: "admin has all privileges - do not edit",
 		},

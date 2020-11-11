@@ -17,4 +17,11 @@ const (
 	ListColor   types.Event = "color-list"
 	ViewColor   types.Event = "color-view"
 	ExcelColor  types.Event = "color-excel"
+
+	CreateGroup types.Event = "group-create"
+	UpdateGroup types.Event = "group-update"
+	DeleteGroup types.Event = "group-delete"
+	ListGroup   types.Event = "group-list"
+	ViewGroup   types.Event = "group-view"
+	ExcelGroup  types.Event = "group-excel"
 )

@@ -1,0 +1,7 @@
+{
+  "method":"get",
+	"url":"_URL_/companies/1001/groups?filter=mat_companies.id[gt]'7'",
+	"url":"_URL_/companies/1001/groups",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {}
+}

@@ -13,4 +13,8 @@ const (
 	ColorWrite types.Resource = "color:write"
 	ColorRead  types.Resource = "color:read"
 	ColorExcel types.Resource = "color:excel"
+
+	GroupWrite types.Resource = "group:write"
+	GroupRead  types.Resource = "group:read"
+	GroupExcel types.Resource = "group:excel"
 )

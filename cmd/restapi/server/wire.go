@@ -82,3 +82,9 @@ func initMatColorAPI(e *core.Engine) matapi.ColorAPI {
 		matapi.ProvideColorAPI)
 	return matapi.ColorAPI{}
 }
+
+func initMatGroupAPI(e *core.Engine) matapi.GroupAPI {
+	wire.Build(matrepo.ProvideGroupRepo, service.ProvideMatGroupService,
+		matapi.ProvideGroupAPI)
+	return matapi.GroupAPI{}
+}

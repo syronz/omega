@@ -1,0 +1,12 @@
+{
+  "method":"post",
+	"url":"_URL_/companies/1001/groups",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {
+		"name": "_RANDOM_NAME_",
+		"latin_name": "_RANDOM_NAME_",
+		"code": "_RANDOM_NUMBER_",
+		"notes": "notes: _RANDOM_NUMBER_",
+		"caption": "this is a caption"
+	}
+}
