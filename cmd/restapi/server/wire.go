@@ -50,6 +50,12 @@ func initAccountAPI(e *core.Engine) basapi.AccountAPI {
 	return basapi.AccountAPI{}
 }
 
+func initBasPhoneAPI(e *core.Engine) basapi.PhoneAPI {
+	wire.Build(basrepo.ProvidePhoneRepo, service.ProvideBasPhoneService,
+		basapi.ProvidePhoneAPI)
+	return basapi.PhoneAPI{}
+}
+
 // EAccountig Domain
 func initCurrencyAPI(e *core.Engine) eacapi.CurrencyAPI {
 	wire.Build(eacrepo.ProvideCurrencyRepo, service.ProvideEacCurrencyService,

@@ -20,6 +20,7 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 	basSettingAPI := initSettingAPI(engine)
 	basActivityAPI := initActivityAPI(engine)
 	basAccountAPI := initAccountAPI(engine)
+	basPhoneAPI := initBasPhoneAPI(engine)
 
 	// EAccountig Domain
 	eacCurrencyAPI := initCurrencyAPI(engine)
@@ -81,6 +82,19 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 		access.Check(base.AccountWrite), basAccountAPI.Delete)
 	rg.GET("/excel/companies/:companyID/accounts",
 		access.Check(base.AccountExcel), basAccountAPI.Excel)
+
+	rg.GET("/companies/:companyID/phones",
+		access.Check(base.PhoneRead), basPhoneAPI.List)
+	rg.GET("/companies/:companyID/nodes/:nodeID/phones/:phoneID",
+		access.Check(base.PhoneRead), basPhoneAPI.FindByID)
+	rg.POST("/companies/:companyID/phones",
+		access.Check(base.PhoneWrite), basPhoneAPI.Create)
+	rg.PUT("/companies/:companyID/nodes/:nodeID/phones/:phoneID",
+		access.Check(base.PhoneWrite), basPhoneAPI.Update)
+	rg.DELETE("/companies/:companyID/nodes/:nodeID/phones/:phoneID",
+		access.Check(base.PhoneWrite), basPhoneAPI.Delete)
+	rg.GET("/excel/companies/:companyID/phones",
+		access.Check(base.PhoneExcel), basPhoneAPI.Excel)
 
 	rg.GET("/username/:username",
 		access.Check(base.UserRead), basUserAPI.FindByUsername)
