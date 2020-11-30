@@ -27,5 +27,9 @@ const (
 	ActivitySelf types.Resource = "activity:self"
 	ActivityAll  types.Resource = "activity:all"
 
+	PhoneRead  types.Resource = "phone:read"
+	PhoneWrite types.Resource = "phone:write"
+	PhoneExcel types.Resource = "phone:excel"
+
 	Ping types.Resource = "ping"
 )

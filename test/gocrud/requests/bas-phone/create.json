@@ -1,0 +1,10 @@
+{
+  "method":"post",
+  "url":"_URL_/companies/1001/phones",
+  "authorization":"Bearer _TOKEN_",
+  "payload": {
+    "account_id": 1,
+    "phone":"07505149171",
+    "notes":"this is notes"
+  }
+}

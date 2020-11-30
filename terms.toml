@@ -240,6 +240,11 @@ en = 'scope'
 ku = 'scope'
 ar = 'scope'
 
+[notes]
+en = 'notes'
+ku = 'notes'
+ar = 'notes'
+
 ["%v created successfully"]
 en = '%v created successfully'
 ku = '%v ba sarkawtooyi drwst kra'
@@ -332,6 +337,16 @@ ar = 'color'
 en = 'colors'
 ku = 'rangakan'
 ar = 'colors'
+
+[phone]
+en = 'phone'
+ku = 'phone'
+ar = 'phone'
+
+[phones]
+en = 'phones'
+ku = 'phones'
+ar = 'phones'
 
 ["user loged in successfully"]
 en = 'user loged in successfully'

@@ -19,6 +19,10 @@ func Migrate(engine *core.Engine) {
 		AddForeignKey("role_id", fmt.Sprintf("%v(id)", basmodel.RoleTable), "RESTRICT", "RESTRICT").
 		AddForeignKey("id", "bas_accounts(id)", "RESTRICT", "RESTRICT")
 	engine.ActivityDB.Table(basmodel.ActivityTable).AutoMigrate(&basmodel.Activity{})
+	engine.DB.Table(basmodel.PhoneTable).AutoMigrate(&basmodel.Phone{})
+	engine.DB.Table(basmodel.AccountPhoneTable).AutoMigrate(&basmodel.AccountPhone{}).
+		AddForeignKey("account_id", "bas_accounts", "RESTRICT", "RESTRICT").
+		AddForeignKey("phone_id", "bas_phones", "RESTRICT", "RESTRICT")
 
 	// EAccounting Domain
 	engine.DB.Table(eacmodel.CurrencyTable).AutoMigrate(&eacmodel.Currency{})

@@ -14,6 +14,8 @@ const (
 	Companies = "companies"
 	Color     = "color"
 	Colors    = "colors"
+	Phone     = "phone"
+	Phones    = "phones"
 
 	UserLogedInSuccessfully    = "user loged in successfully"
 	UsernameAndPassword        = "username and password"
