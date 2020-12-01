@@ -13,6 +13,8 @@ import (
 	"omega/pkg/helper"
 	"omega/pkg/limberr"
 	"reflect"
+
+	"github.com/jinzhu/gorm"
 )
 
 // PhoneRepo for injecting engine
@@ -41,12 +43,24 @@ func (p *PhoneRepo) FindByID(fix types.FixedNode) (phone basmodel.Phone, err err
 	return
 }
 
+// FindAccountPhoneByID finds the phone via its id
+func (p *PhoneRepo) FindAccountPhoneByID(fix types.FixedNode) (aPhone basmodel.AccountPhone, err error) {
+	err = p.Engine.DB.Table(basmodel.AccountPhoneTable).
+		Where("id = ? AND company_id = ? AND node_id = ?", fix.ID.ToUint64(), fix.CompanyID, fix.NodeID).
+		First(&aPhone).Error
+
+	aPhone.ID = fix.ID
+	err = p.dbError(err, "E1038915", basmodel.Phone{}, corterm.List)
+
+	return
+}
+
 // FindByPhone finds the phone via its id
 func (p *PhoneRepo) FindByPhone(phoneNumber string) (phone basmodel.Phone, err error) {
 	err = p.Engine.DB.Table(basmodel.PhoneTable).
 		Where("phone LIKE ?", phoneNumber).First(&phone).Error
 
-	err = p.dbError(err, "E1057421", phone, corterm.List)
+	err = p.dbError(err, "E1059422", phone, corterm.List)
 
 	return
 }
@@ -108,6 +122,42 @@ func (p *PhoneRepo) Create(phone basmodel.Phone) (u basmodel.Phone, err error) {
 	if err = p.Engine.DB.Table(basmodel.PhoneTable).Create(&phone).Scan(&u).Error; err != nil {
 		err = p.dbError(err, "E1029788", phone, corterm.Created)
 	}
+	return
+}
+
+// TxCreate a phone
+func (p *PhoneRepo) TxCreate(db *gorm.DB, phone basmodel.Phone) (u basmodel.Phone, err error) {
+	if err = db.Table(basmodel.PhoneTable).Create(&phone).Scan(&u).Error; err != nil {
+		err = p.dbError(err, "E1029788", phone, corterm.Created)
+	}
+	return
+}
+
+// JoinAccountPhone will connect account with phone
+func (p *PhoneRepo) JoinAccountPhone(account basmodel.Account,
+	phone basmodel.Phone, def byte) (aphCreated basmodel.AccountPhone, err error) {
+	var accountPhone basmodel.AccountPhone
+	accountPhone.AccountID = account.ID
+	accountPhone.CompanyID = account.CompanyID
+	accountPhone.NodeID = account.NodeID
+	accountPhone.Default = def
+	accountPhone.PhoneID = phone.ID
+
+	if err = p.Engine.DB.Table(basmodel.AccountPhoneTable).Create(&accountPhone).
+		Scan(&aphCreated).Error; err != nil {
+		err = p.dbError(err, "E1077823", phone, corterm.Created)
+	}
+
+	return
+}
+
+// SeparateAccountPhone delete a row in bas_account_phones
+func (p *PhoneRepo) SeparateAccountPhone(accountPhone basmodel.AccountPhone) (err error) {
+	if err = p.Engine.DB.Table(basmodel.AccountPhoneTable).Unscoped().
+		Delete(&accountPhone).Error; err != nil {
+		err = p.dbError(err, "E1041406", basmodel.Phone{}, corterm.Deleted)
+	}
+
 	return
 }
 

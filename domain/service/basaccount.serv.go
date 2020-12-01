@@ -11,6 +11,8 @@ import (
 	"omega/internal/param"
 	"omega/internal/types"
 	"omega/pkg/glog"
+
+	"github.com/jinzhu/gorm"
 )
 
 // BasAccountServ for injecting auth basrepo
@@ -55,13 +57,51 @@ func (p *BasAccountServ) List(params param.Param) (accounts []basmodel.Account,
 
 // Create a account
 func (p *BasAccountServ) Create(account basmodel.Account) (createdAccount basmodel.Account, err error) {
+	db := p.Engine.DB.Begin()
 
+	defer func() {
+		if r := recover(); r != nil {
+			glog.LogError(fmt.Errorf("panic happened in transaction mode for %v",
+				"users table"), "rollback recover create user")
+			db.Rollback()
+		}
+	}()
+
+	if createdAccount, err = p.TxCreate(p.Repo.Engine.DB, account); err != nil {
+		err = corerr.Tick(err, "E1014394", "error in creating account for user", createdAccount)
+
+		db.Rollback()
+		return
+	}
+
+	phoneServ := ProvideBasPhoneService(basrepo.ProvidePhoneRepo(p.Engine))
+	glog.Debug(createdAccount)
+
+	for _, phone := range account.Phones {
+		phone.CompanyID = createdAccount.CompanyID
+		phone.NodeID = createdAccount.NodeID
+		phone.AccountID = createdAccount.ID
+		if _, err = phoneServ.TxCreate(db, phone); err != nil {
+			err = corerr.Tick(err, "E1040913", "error in creating phone for account", phone)
+
+			db.Rollback()
+			return
+		}
+	}
+
+	db.Commit()
+
+	return
+}
+
+// TxCreate is used for creating an account in case of transaction activated
+func (p *BasAccountServ) TxCreate(db *gorm.DB, account basmodel.Account) (createdAccount basmodel.Account, err error) {
 	if err = account.Validate(coract.Save); err != nil {
 		err = corerr.TickValidate(err, "E1076780", "validation failed in creating the account", account)
 		return
 	}
 
-	if createdAccount, err = p.Repo.Create(account); err != nil {
+	if createdAccount, err = p.Repo.TxCreate(db, account); err != nil {
 		err = corerr.Tick(err, "E1065508", "account not created", account)
 		return
 	}

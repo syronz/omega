@@ -158,6 +158,28 @@ func (p *PhoneAPI) Delete(c *gin.Context) {
 		JSON()
 }
 
+// Separate phone
+func (p *PhoneAPI) Separate(c *gin.Context) {
+	resp := response.New(p.Engine, c, base.Domain)
+	var err error
+	var aPhone basmodel.AccountPhone
+	var fix types.FixedNode
+
+	if fix, err = resp.GetFixedNode(c.Param("accountPhoneID"), "E1042479", basterm.Phone); err != nil {
+		return
+	}
+
+	if aPhone, err = p.Service.Separate(fix); err != nil {
+		resp.Error(err).JSON()
+		return
+	}
+
+	resp.Record(base.DeletePhone, aPhone)
+	resp.Status(http.StatusOK).
+		MessageT(corterm.VDeletedSuccessfully, basterm.Phone).
+		JSON()
+}
+
 // Excel generate excel files based on search
 func (p *PhoneAPI) Excel(c *gin.Context) {
 	resp, params := response.NewParam(p.Engine, c, basterm.Phones, base.Domain)

@@ -20,7 +20,10 @@ type Phone struct {
 	ID        types.RowID `gorm:"primary_key" json:"id,omitempty"`
 	Phone     string      `gorm:"not null;unique" json:"phone,omitempty"`
 	Notes     string      `json:"notes"`
+	CompanyID uint64      `sql:"-" json:"company_id"`
+	NodeID    uint64      `sql:"-" json:"node_id"`
 	AccountID types.RowID `sql:"-" json:"account_id"`
+	Default   byte        `sql:"-" json:"default"`
 }
 
 // Validate check the type of fields

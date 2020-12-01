@@ -15,6 +15,8 @@ import (
 	"omega/pkg/helper"
 	"omega/pkg/limberr"
 	"reflect"
+
+	"github.com/jinzhu/gorm"
 )
 
 // UserRepo for injecting engine
@@ -120,6 +122,14 @@ func (p *UserRepo) Save(user basmodel.User) (u basmodel.User, err error) {
 func (p *UserRepo) Create(user basmodel.User) (u basmodel.User, err error) {
 	if err = p.Engine.DB.Table(basmodel.UserTable).Create(&user).Scan(&u).Error; err != nil {
 		err = p.dbError(err, "E1095328", user, corterm.Created)
+	}
+	return
+}
+
+// TxCreate a user
+func (p *UserRepo) TxCreate(db *gorm.DB, user basmodel.User) (u basmodel.User, err error) {
+	if err = db.Table(basmodel.UserTable).Create(&user).Scan(&u).Error; err != nil {
+		err = p.dbError(err, "E1047736", user, corterm.Created)
 	}
 	return
 }

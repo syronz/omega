@@ -68,8 +68,7 @@ func (p *BasUserServ) List(params param.Param) (users []basmodel.User,
 	return
 }
 
-// Create a user
-func (p *BasUserServ) Create(user basmodel.User) (createdUser basmodel.User, err error) {
+func (p *BasUserServ) Create_Deprecated(user basmodel.User) (createdUser basmodel.User, err error) {
 
 	if err = user.Validate(coract.Create); err != nil {
 		err = corerr.TickValidate(err, "E1043810", "validatation failed in creating user", user)
@@ -121,6 +120,59 @@ func (p *BasUserServ) Create(user basmodel.User) (createdUser basmodel.User, err
 	createdUser.Password = ""
 
 	return
+}
+
+// Create a user
+func (p *BasUserServ) Create(user basmodel.User) (createdUser basmodel.User, err error) {
+
+	if err = user.Validate(coract.Create); err != nil {
+		err = corerr.TickValidate(err, "E1043810", "validatation failed in creating user", user)
+		return
+	}
+
+	db := p.Engine.DB.Begin()
+
+	defer func() {
+		if r := recover(); r != nil {
+			glog.LogError(fmt.Errorf("panic happened in transaction mode for %v",
+				"users table"), "rollback recover create user")
+			db.Rollback()
+		}
+	}()
+
+	accountServ := ProvideBasAccountService(basrepo.ProvideAccountRepo(p.Engine))
+	account := basmodel.Account{
+		Name:   user.Name,
+		Type:   accounttype.User,
+		Status: accountstatus.Inactive,
+	}
+	account.CompanyID = user.CompanyID
+	account.NodeID = user.NodeID
+
+	var createdAccount basmodel.Account
+	if createdAccount, err = accountServ.TxCreate(db, account); err != nil {
+		err = corerr.Tick(err, "E1032795", "error in creating account for user", user)
+
+		db.Rollback()
+		return
+	}
+
+	user.ID = createdAccount.ID
+	user.Password, err = password.Hash(user.Password, p.Engine.Envs[base.PasswordSalt])
+	glog.CheckError(err, fmt.Sprintf("Hashing password failed for %+v", user))
+
+	if createdUser, err = p.Repo.TxCreate(db, user); err != nil {
+		err = corerr.Tick(err, "E1064180", "error in creating user", user)
+
+		db.Rollback()
+		return
+	}
+
+	db.Commit()
+	createdUser.Password = ""
+
+	return
+
 }
 
 // Save user

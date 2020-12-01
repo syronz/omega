@@ -10,6 +10,9 @@ import (
 	"omega/internal/param"
 	"omega/internal/types"
 	"omega/pkg/glog"
+	"omega/pkg/limberr"
+
+	"github.com/jinzhu/gorm"
 )
 
 // BasPhoneServ for injecting auth basrepo
@@ -39,7 +42,10 @@ func (p *BasPhoneServ) FindByID(fix types.FixedNode) (phone basmodel.Phone, err 
 // FindByPhone for getting phone by it's id
 func (p *BasPhoneServ) FindByPhone(phoneNumber string) (phone basmodel.Phone, err error) {
 	if phone, err = p.Repo.FindByPhone(phoneNumber); err != nil {
-		err = corerr.Tick(err, "E1048291", "can't fetch the phone by phone-number", phoneNumber)
+		// do not log error if it is not-found
+		if limberr.GetCustom(err) != corerr.NotFoundErr {
+			err = corerr.Tick(err, "E1048291", "can't fetch the phone by phone-number", phoneNumber)
+		}
 		return
 	}
 
@@ -64,14 +70,46 @@ func (p *BasPhoneServ) List(params param.Param) (phones []basmodel.Phone,
 
 // Create a phone
 func (p *BasPhoneServ) Create(phone basmodel.Phone) (createdPhone basmodel.Phone, err error) {
+	return p.TxCreate(p.Repo.Engine.DB, phone)
 
+}
+
+// TxCreate used in case of transaction activated
+func (p *BasPhoneServ) TxCreate(db *gorm.DB, phone basmodel.Phone) (createdPhone basmodel.Phone, err error) {
 	if err = phone.Validate(coract.Save); err != nil {
 		err = corerr.TickValidate(err, "E1067746", "validation failed in creating the phone", phone)
 		return
 	}
 
-	if createdPhone, err = p.Repo.Create(phone); err != nil {
-		err = corerr.Tick(err, "E1091571", "phone not created", phone)
+	var phoneExist basmodel.Phone
+
+	if phoneExist, err = p.FindByPhone(phone.Phone); err != nil {
+		if limberr.GetCustom(err) != corerr.NotFoundErr {
+			err = corerr.Tick(err, "E1064472", "can't fetch the phone by phone-number", phone.Phone)
+			return
+		}
+	}
+
+	var account basmodel.Account
+	account.ID = phone.AccountID
+	account.CompanyID = phone.CompanyID
+	account.NodeID = phone.NodeID
+
+	if phoneExist.Phone == "" {
+
+		if createdPhone, err = p.Repo.TxCreate(db, phone); err != nil {
+			err = corerr.Tick(err, "E1091571", "phone not created", phone)
+			return
+		}
+
+		return
+	}
+
+	phone = phoneExist
+
+	// var joiner basmodel.AccountPhone
+	if _, err = p.Repo.JoinAccountPhone(account, createdPhone, phone.Default); err != nil {
+		err = corerr.Tick(err, "E1062524", "phone-join not created", phone)
 		return
 	}
 
@@ -102,6 +140,21 @@ func (p *BasPhoneServ) Delete(fix types.FixedNode) (phone basmodel.Phone, err er
 
 	if err = p.Repo.Delete(phone); err != nil {
 		err = corerr.Tick(err, "E1032085", "phone not deleted")
+		return
+	}
+
+	return
+}
+
+// Separate phone, it is soft delete
+func (p *BasPhoneServ) Separate(fix types.FixedNode) (aPhone basmodel.AccountPhone, err error) {
+	if aPhone, err = p.Repo.FindAccountPhoneByID(fix); err != nil {
+		err = corerr.Tick(err, "E1049677", "account-phone not found for deleting")
+		return
+	}
+
+	if err = p.Repo.SeparateAccountPhone(aPhone); err != nil {
+		err = corerr.Tick(err, "E1040009", "account-phone not deleted")
 		return
 	}
 

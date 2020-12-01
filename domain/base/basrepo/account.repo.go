@@ -13,6 +13,8 @@ import (
 	"omega/pkg/helper"
 	"omega/pkg/limberr"
 	"reflect"
+
+	"github.com/jinzhu/gorm"
 )
 
 // AccountRepo for injecting engine
@@ -96,6 +98,14 @@ func (p *AccountRepo) Save(account basmodel.Account) (u basmodel.Account, err er
 // Create a account
 func (p *AccountRepo) Create(account basmodel.Account) (u basmodel.Account, err error) {
 	if err = p.Engine.DB.Table(basmodel.AccountTable).Create(&account).Scan(&u).Error; err != nil {
+		err = p.dbError(err, "E1054044", account, corterm.Created)
+	}
+	return
+}
+
+// TxCreate a account
+func (p *AccountRepo) TxCreate(db *gorm.DB, account basmodel.Account) (u basmodel.Account, err error) {
+	if err = db.Table(basmodel.AccountTable).Create(&account).Scan(&u).Error; err != nil {
 		err = p.dbError(err, "E1054044", account, corterm.Created)
 	}
 	return

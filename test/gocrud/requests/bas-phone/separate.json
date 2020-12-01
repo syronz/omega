@@ -1,0 +1,6 @@
+{
+  "method":"delete",
+  "url":"_URL_/companies/1001/nodes/101/separate/4",
+  "authorization":"Bearer _TOKEN_",
+  "payload": {}
+}

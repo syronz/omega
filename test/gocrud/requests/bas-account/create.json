@@ -5,6 +5,17 @@
   "payload": {
     "name": "_RANDOM_NAME_",
     "type":"partner",
-    "status":"active"
+    "status":"active",
+    "phones":[
+      {
+        "phone":"_RANDOM_NUMBER_",
+        "default":1,
+        "notes":"this is generated randomly"
+      },
+      {
+        "phone":"07505149171",
+        "default":0
+      }
+    ]
   }
 }

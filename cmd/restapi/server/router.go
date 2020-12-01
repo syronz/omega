@@ -95,6 +95,8 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 		access.Check(base.PhoneWrite), basPhoneAPI.Delete)
 	rg.GET("/excel/companies/:companyID/phones",
 		access.Check(base.PhoneExcel), basPhoneAPI.Excel)
+	rg.DELETE("/companies/:companyID/nodes/:nodeID/separate/:accountPhoneID",
+		access.Check(base.PhoneWrite), basPhoneAPI.Separate)
 
 	rg.GET("/username/:username",
 		access.Check(base.UserRead), basUserAPI.FindByUsername)

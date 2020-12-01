@@ -11,6 +11,7 @@ const (
 
 // AccountPhone model
 type AccountPhone struct {
+	types.FixedNode
 	AccountID types.RowID `json:"account_id"`
 	PhoneID   types.RowID `json:"phone_id"`
 	Default   byte        `gorm:"default:0" json:"default"`
