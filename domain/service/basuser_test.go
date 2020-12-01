@@ -290,7 +290,7 @@ func TestUserFindByID(test *testing.T) {
 	}{
 		{
 			user: types.FixedCol{
-				ID:        12,
+				ID:        2,
 				CompanyID: 1001,
 				NodeID:    101,
 			},
@@ -298,17 +298,57 @@ func TestUserFindByID(test *testing.T) {
 		},
 		{
 			user: types.FixedCol{
-				ID:        2525252,
+				ID:        32131312,
 				CompanyID: 1001,
 				NodeID:    101,
 			},
-			err: errors.New("Record was not found for deletion"),
+			err: errors.New("User was not found"),
 		},
 	}
 
 	for _, value := range collector {
-		_, err := userService.Delete(value.user)
-		test.Errorf("\nERROR FOR :::%+v::: \nRETURNS :::%+v:::, \nIT SHOULD BE :::%+v:::", value.user.ID, err, value.err)
+		user, err := userService.FindByID(value.user)
+		if value.err == nil && err != nil {
+			test.Errorf("\nERROR FOR :::%+v::: \nRETURNS :::%+v:::, \nIT SHOULD BE :::%+v:::", value.user, user.ID, value.user.ID)
+		}
+
+	}
+}
+
+func TestUserFindByUsername(test *testing.T) {
+	//the engine is skipped
+	_, userService := initUserTest()
+	type err error
+	collector := []struct {
+		fix      types.FixedCol
+		username string
+		err      error
+	}{
+		{
+			fix: types.FixedCol{
+				ID:        11,
+				CompanyID: 1001,
+				NodeID:    101,
+			},
+			username: "admin",
+			err:      nil,
+		},
+		{
+			fix: types.FixedCol{
+				ID:        0,
+				CompanyID: 1001,
+				NodeID:    101,
+			},
+			username: "unknownUser",
+			err:      nil,
+		},
+	}
+
+	for _, value := range collector {
+		user, err := userService.FindByUsername(value.username)
+		if (value.err == nil && err != nil) || (value.err != nil && err == nil) {
+			test.Errorf("\nERROR FOR :::%+v::: \nRETURNS :::%+v:::, \nIT SHOULD BE :::%+v:::", value.username, user.ID, value.fix.ID)
+		}
 
 	}
 }
