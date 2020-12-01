@@ -32,6 +32,7 @@ func InsertRoles(engine *core.Engine) {
 				base.ActivitySelf, base.ActivityAll,
 				base.RoleRead, base.RoleWrite, base.RoleExcel,
 				base.AccountRead, base.AccountWrite, base.AccountExcel,
+				base.PhoneRead, base.PhoneWrite, base.PhoneExcel,
 				eaccounting.CurrencyRead, eaccounting.CurrencyWrite, eaccounting.CurrencyExcel,
 				eaccounting.TransactionRead, eaccounting.TransactionManual, eaccounting.TransactionUpdate, eaccounting.TransactionExcel,
 				material.CompanyRead, material.CompanyWrite, material.CompanyExcel,

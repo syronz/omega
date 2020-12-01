@@ -20,6 +20,7 @@ const (
 	Type        = "type"
 	Code        = "code"
 	Scope       = "scope"
+	Notes       = "notes"
 
 	VCreatedSuccessfully = "%v created successfully"
 	VUpdatedSuccessfully = "%v updated successfully"
