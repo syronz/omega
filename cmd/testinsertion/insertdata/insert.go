@@ -15,6 +15,7 @@ func Insert(engine *core.Engine) {
 		table.InsertAccounts(engine)
 		table.InsertCurrencies(engine)
 		table.InsertTransactions(engine)
+		table.InsertPhones(engine)
 	}
 
 }
