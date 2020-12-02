@@ -27,6 +27,7 @@ func InsertRoles(engine *core.Engine) {
 			},
 			Name: "Admin",
 			Resources: types.ResourceJoin([]types.Resource{
+				sync.SuperAdmin,
 				base.SettingRead, base.SettingWrite, base.SettingExcel,
 				base.UserWrite, base.UserRead, base.UserExcel,
 				base.ActivitySelf, base.ActivityAll,

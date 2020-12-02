@@ -1,21 +1,25 @@
 package companytype
 
+import "omega/internal/types"
+
 // Company types
 const (
-	Base                        = "base"
-	MultiBranchCentralFinance   = "multi branch with centeral finance"
-	MultiBranchScatteredFinance = "multi branch with scattered finance"
-	CarpetStore                 = "carpet store"
-	SimplePOS                   = "simple POS"
-	Other                       = "other"
+	Base                        types.Enum = "base"
+	MultiBranchCentralFinance   types.Enum = "multi branch with centeral finance"
+	MultiBranchScatteredFinance types.Enum = "multi branch with scattered finance"
+	SimplePOS                   types.Enum = "simple POS"
+	Other                       types.Enum = "other"
 )
 
-// Types is list of account types for checking
-var Types = []string{
+var List = []types.Enum{
 	Base,
 	MultiBranchCentralFinance,
 	MultiBranchScatteredFinance,
-	CarpetStore,
 	SimplePOS,
 	Other,
+}
+
+// Join make a string for showing in the api
+func Join() string {
+	return types.JoinEnum(List)
 }
