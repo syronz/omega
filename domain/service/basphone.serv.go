@@ -83,32 +83,36 @@ func (p *BasPhoneServ) TxCreate(db *gorm.DB, phone basmodel.Phone) (createdPhone
 
 	var phoneExist basmodel.Phone
 
-	if phoneExist, err = p.FindByPhone(phone.Phone); err != nil {
-		if limberr.GetCustom(err) != corerr.NotFoundErr {
-			err = corerr.Tick(err, "E1064472", "can't fetch the phone by phone-number", phone.Phone)
-			return
-		}
-	}
+	phoneExist, err = p.FindByPhone(phone.Phone)
 
 	var account basmodel.Account
 	account.ID = phone.AccountID
 	account.CompanyID = phone.CompanyID
 	account.NodeID = phone.NodeID
 
-	if phoneExist.Phone == "" {
+	switch {
 
+	//not found
+	case limberr.GetCustom(err) == corerr.NotFoundErr:
 		if createdPhone, err = p.Repo.TxCreate(db, phone); err != nil {
 			err = corerr.Tick(err, "E1091571", "phone not created", phone)
 			return
 		}
+		phone = createdPhone
 
+		// database error
+	case err != nil:
+		err = corerr.Tick(err, "E1064472", "can't fetch the phone by phone-number", phone.Phone)
 		return
+
+		// found
+	default:
+		phone = phoneExist
+
 	}
 
-	phone = phoneExist
-
 	// var joiner basmodel.AccountPhone
-	if _, err = p.Repo.JoinAccountPhone(account, createdPhone, phone.Default); err != nil {
+	if _, err = p.Repo.JoinAccountPhone(account, phone, phone.Default); err != nil {
 		err = corerr.Tick(err, "E1062524", "phone-join not created", phone)
 		return
 	}

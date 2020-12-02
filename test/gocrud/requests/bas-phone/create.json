@@ -5,9 +5,9 @@
   "payload": {
     "company_id": 1001,
     "node_id": 101,
-    "account_id": 3,
+    "account_id": 2,
     "phone":"_RANDOM_NUMBER_",
-    "phone":"07505149171",
+    "phone":"07505149172",
     "default":1,
     "notes":"this is notes"
   }

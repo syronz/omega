@@ -8,6 +8,17 @@
     "username": "_RANDOM_NAME_",
     "password": "1234567890",
     "lang":"ku",
-    "email":"sabina.diako@gmail.com"
+    "email":"sabina.diako@gmail.com",
+    "phones":[
+      {
+        "phone":"_RANDOM_NUMBER_",
+        "default":1,
+        "notes":"this is generated randomly"
+      },
+      {
+        "phone":"07505149173",
+        "default":0
+      }
+    ]
   }
 }

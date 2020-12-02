@@ -12,7 +12,7 @@ const (
 // AccountPhone model
 type AccountPhone struct {
 	types.FixedNode
-	AccountID types.RowID `json:"account_id"`
-	PhoneID   types.RowID `json:"phone_id"`
+	AccountID types.RowID `gorm:"not null;unique_index:idx_acount_phone" json:"account_id"`
+	PhoneID   types.RowID `gorm:"not null;unique_index:idx_acount_phone" json:"phone_id"`
 	Default   byte        `gorm:"default:0" json:"default"`
 }

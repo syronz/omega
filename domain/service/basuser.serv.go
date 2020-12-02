@@ -148,6 +148,7 @@ func (p *BasUserServ) Create(user basmodel.User) (createdUser basmodel.User, err
 	}
 	account.CompanyID = user.CompanyID
 	account.NodeID = user.NodeID
+	account.Phones = user.Phones
 
 	var createdAccount basmodel.Account
 	if createdAccount, err = accountServ.TxCreate(db, account); err != nil {

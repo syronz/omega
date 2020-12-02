@@ -32,6 +32,7 @@ type User struct {
 	Extra     interface{} `sql:"-" json:"user_extra,omitempty" table:"-"`
 	Resources string      `sql:"-" json:"resources,omitempty" table:"bas_roles.resources"`
 	Role      string      `sql:"-" json:"role,omitempty" table:"bas_roles.name as role"`
+	Phones    []Phone     `sql:"-" json:"phones"`
 }
 
 // Validate check the type of

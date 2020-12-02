@@ -188,7 +188,7 @@ func (p *PhoneRepo) dbError(err error, code string, phone basmodel.Phone, action
 		err = limberr.Take(err, code).
 			Message(corerr.VWithValueVAlreadyExist, dict.R(basterm.Phone), phone.Phone).
 			Custom(corerr.DuplicateErr).Build()
-		err = limberr.AddInvalidParam(err, "name", corerr.VisAlreadyExist, phone.Phone)
+		err = limberr.AddInvalidParam(err, "phone", corerr.VisAlreadyExist, phone.Phone)
 
 	case corerr.ValidationFailedErr:
 		err = corerr.ValidationFailedHelper(err, code)
