@@ -1,0 +1,7 @@
+{
+  "method":"get",
+	"url":"_URL_/companies/1002/nodes/101/companies/4",
+	"url":"_URL_/companies/1001/nodes/101/companies/4",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {}
+}

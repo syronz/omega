@@ -13,11 +13,22 @@ import (
 	"omega/domain/material/matapi"
 	"omega/domain/material/matrepo"
 	"omega/domain/service"
+	"omega/domain/sync/synapi"
+	"omega/domain/sync/synrepo"
 	"omega/internal/core"
 )
 
 // Injectors from wire.go:
 
+// Sync Domain
+func initSynCompanyAPI(e *core.Engine) synapi.CompanyAPI {
+	companyRepo := synrepo.ProvideCompanyRepo(e)
+	synCompanyServ := service.ProvideSynCompanyService(companyRepo)
+	companyAPI := synapi.ProvideCompanyAPI(synCompanyServ)
+	return companyAPI
+}
+
+// Base Domain
 func initSettingAPI(e *core.Engine) basapi.SettingAPI {
 	settingRepo := basrepo.ProvideSettingRepo(e)
 	basSettingServ := service.ProvideBasSettingService(settingRepo)
@@ -66,6 +77,7 @@ func initBasPhoneAPI(e *core.Engine) basapi.PhoneAPI {
 	return phoneAPI
 }
 
+// EAccountig Domain
 func initCurrencyAPI(e *core.Engine) eacapi.CurrencyAPI {
 	currencyRepo := eacrepo.ProvideCurrencyRepo(e)
 	eacCurrencyServ := service.ProvideEacCurrencyService(currencyRepo)
@@ -87,6 +99,7 @@ func initSlotAPI(e *core.Engine, currencyServ service.EacCurrencyServ, accountSe
 	return slotAPI
 }
 
+// Material Domain
 func initMatCompanyAPI(e *core.Engine) matapi.CompanyAPI {
 	companyRepo := matrepo.ProvideCompanyRepo(e)
 	matCompanyServ := service.ProvideMatCompanyService(companyRepo)

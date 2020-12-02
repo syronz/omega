@@ -6,6 +6,7 @@ import (
 	"omega/domain/base/basmid"
 	"omega/domain/eaccounting"
 	"omega/domain/material"
+	"omega/domain/sync"
 	"omega/internal/core"
 
 	"github.com/gin-gonic/gin"
@@ -13,6 +14,9 @@ import (
 
 // Route trigger router and api methods
 func Route(rg gin.RouterGroup, engine *core.Engine) {
+	// Sync Domain
+	synCompanyAPI := initSynCompanyAPI(engine)
+
 	// Base Domain
 	basAuthAPI := initAuthAPI(engine)
 	basUserAPI := initUserAPI(engine)
@@ -44,6 +48,18 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 	access := basmid.NewAccessMid(engine)
 
 	rg.POST("/logout", basAuthAPI.Logout)
+
+	// Sync Domain
+	rg.GET("/sync/companies",
+		access.Check(sync.SuperAdmin), synCompanyAPI.List)
+	rg.GET("/sync/companies/:companyID",
+		access.Check(sync.SuperAdmin), synCompanyAPI.FindByID)
+	rg.POST("/sync/companies",
+		access.Check(sync.SuperAdmin), synCompanyAPI.Create)
+	rg.PUT("/sync/companies/:companyID",
+		access.Check(sync.SuperAdmin), synCompanyAPI.Update)
+	rg.GET("/excel/sync/companies",
+		access.Check(sync.SuperAdmin), synCompanyAPI.Excel)
 
 	// Base Domain
 	rg.GET("/temporary/token", basAuthAPI.TemporaryToken)

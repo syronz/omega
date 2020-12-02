@@ -1,0 +1,19 @@
+{
+  "method":"post",
+	"url":"_URL_/sync/companies",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {
+		"name": "_RANDOM_NAME_",
+		"legal_name": "_RANDOM_NAME_",
+		"key": "12345",
+		"server_address": "127.0.0.1",
+		"license": "this is a license",
+		"plan": "this is a plan",
+		"detail": "this is detail",
+		"phone": "_RANDOM_NUMBER_",
+		"email": "_RANDOM_NAME_",
+		"website": "_RANDOM_NAME_",
+		"type": "base",
+		"code": "001234"
+	}
+}

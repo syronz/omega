@@ -10,11 +10,20 @@ import (
 	"omega/domain/material/matapi"
 	"omega/domain/material/matrepo"
 	"omega/domain/service"
+	"omega/domain/sync/synapi"
+	"omega/domain/sync/synrepo"
 
 	"omega/internal/core"
 
 	"github.com/google/wire"
 )
+
+// Sync Domain
+func initSynCompanyAPI(e *core.Engine) synapi.CompanyAPI {
+	wire.Build(synrepo.ProvideCompanyRepo, service.ProvideSynCompanyService,
+		synapi.ProvideCompanyAPI)
+	return synapi.CompanyAPI{}
+}
 
 // Base Domain
 func initSettingAPI(e *core.Engine) basapi.SettingAPI {

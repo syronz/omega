@@ -5,11 +5,15 @@ import (
 	"omega/domain/base/basmodel"
 	"omega/domain/eaccounting/eacmodel"
 	"omega/domain/material/matmodel"
+	"omega/domain/sync/synmodel"
 	"omega/internal/core"
 )
 
 // Migrate the database for creating tables
 func Migrate(engine *core.Engine) {
+	// Sync Domain
+	engine.DB.Table(synmodel.CompanyTable).AutoMigrate(&synmodel.Company{})
+
 	// Base Domain
 	engine.DB.Table(basmodel.SettingTable).AutoMigrate(&basmodel.Setting{})
 	engine.DB.Table(basmodel.RoleTable).AutoMigrate(&basmodel.Role{})

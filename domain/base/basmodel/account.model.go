@@ -24,7 +24,7 @@ type Account struct {
 	Name     string       `gorm:"not null;unique" json:"name,omitempty"`
 	Type     types.Enum   `json:"type,omitempty"`
 	Status   types.Enum   `json:"status,omitempty"`
-	Phones   []Phone      `sql:"-" json:"phones"`
+	Phones   []Phone      `sql:"-" json:"phones" table:"-"`
 }
 
 // Validate check the type of fields
