@@ -128,7 +128,7 @@ func (p *CompanyRepo) dbError(err error, code string, company synmodel.Company, 
 		err = limberr.Take(err, code).
 			Message(corerr.VWithValueVAlreadyExist, dict.R(basterm.Company), company.Name).
 			Custom(corerr.DuplicateErr).Build()
-		err = limberr.AddInvalidParam(err, "name", corerr.VisAlreadyExist, company.Name)
+		err = limberr.AddInvalidParam(err, "name, license", corerr.VisAlreadyExist, company.Name)
 
 	case corerr.ValidationFailedErr:
 		err = corerr.ValidationFailedHelper(err, code)

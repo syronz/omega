@@ -8,6 +8,7 @@ import (
 	"omega/internal/core/corterm"
 	"omega/internal/types"
 	"omega/pkg/dict"
+	"omega/pkg/glog"
 	"omega/pkg/helper"
 	"omega/pkg/limberr"
 	"time"
@@ -67,7 +68,9 @@ func (p *Company) Validate(act coract.Action) (err error) {
 				dict.R(synterm.Detail), 255)
 		}
 
-		if ok, _ := helper.Includes(companytype.List, p.Type); !ok {
+		glog.Debug(companytype.List, p.Type)
+
+		if ok, _ := helper.Includes(companytype.List, types.Enum(p.Type)); !ok {
 			return limberr.AddInvalidParam(err, "type",
 				corerr.AcceptedValueForVareV, dict.R(corterm.Type),
 				companytype.Join())

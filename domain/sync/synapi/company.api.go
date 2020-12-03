@@ -84,6 +84,8 @@ func (p *CompanyAPI) Create(c *gin.Context) {
 		return
 	}
 
+	// glog.Debug(company)
+
 	if createdCompany, err = p.Service.Create(company); err != nil {
 		resp.Error(err).JSON()
 		return
