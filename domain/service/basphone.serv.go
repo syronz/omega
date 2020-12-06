@@ -52,6 +52,16 @@ func (p *BasPhoneServ) FindByPhone(phoneNumber string) (phone basmodel.Phone, er
 	return
 }
 
+// AccountsPhones return list of phones assigned to an account
+func (p *BasPhoneServ) AccountsPhones(fix types.FixedNode) (phones []basmodel.Phone, err error) {
+	if phones, err = p.Repo.AccountsPhones(fix); err != nil {
+		err = corerr.Tick(err, "E1067138", "can't get account's phone", fix)
+		return
+	}
+
+	return
+}
+
 // List of phones, it support pagination and search and return back count
 func (p *BasPhoneServ) List(params param.Param) (phones []basmodel.Phone,
 	count uint64, err error) {

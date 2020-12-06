@@ -15,8 +15,9 @@ import (
 // InsertAccounts for add required accounts
 func InsertAccounts(engine *core.Engine) {
 	engine.DB.Exec("UPDATE bas_accounts SET deleted_at = null WHERE id IN (1,2,3)")
+	phoneServ := service.ProvideBasPhoneService(basrepo.ProvidePhoneRepo(engine))
 	accountRepo := basrepo.ProvideAccountRepo(engine)
-	accountService := service.ProvideBasAccountService(accountRepo)
+	accountService := service.ProvideBasAccountService(accountRepo, phoneServ)
 	accounts := []basmodel.Account{
 		{
 			FixedNode: types.FixedNode{

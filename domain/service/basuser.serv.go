@@ -68,59 +68,59 @@ func (p *BasUserServ) List(params param.Param) (users []basmodel.User,
 	return
 }
 
-func (p *BasUserServ) Create_Deprecated(user basmodel.User) (createdUser basmodel.User, err error) {
+// func (p *BasUserServ) Create_Deprecated(user basmodel.User) (createdUser basmodel.User, err error) {
 
-	if err = user.Validate(coract.Create); err != nil {
-		err = corerr.TickValidate(err, "E1043810", "validatation failed in creating user", user)
-		return
-	}
+// 	if err = user.Validate(coract.Create); err != nil {
+// 		err = corerr.TickValidate(err, "E1043810", "validatation failed in creating user", user)
+// 		return
+// 	}
 
-	clonedEngine := p.Engine.Clone()
-	clonedEngine.DB = clonedEngine.DB.Begin()
+// 	clonedEngine := p.Engine.Clone()
+// 	clonedEngine.DB = clonedEngine.DB.Begin()
 
-	defer func() {
-		if r := recover(); r != nil {
-			glog.LogError(fmt.Errorf("panic happened in transaction mode for %v",
-				"users table"), "rollback recover create user")
-			clonedEngine.DB.Rollback()
-		}
-	}()
+// 	defer func() {
+// 		if r := recover(); r != nil {
+// 			glog.LogError(fmt.Errorf("panic happened in transaction mode for %v",
+// 				"users table"), "rollback recover create user")
+// 			clonedEngine.DB.Rollback()
+// 		}
+// 	}()
 
-	userRepo := basrepo.ProvideUserRepo(clonedEngine)
-	accountServ := ProvideBasAccountService(basrepo.ProvideAccountRepo(clonedEngine))
+// 	userRepo := basrepo.ProvideUserRepo(clonedEngine)
+// 	accountServ := ProvideBasAccountService(basrepo.ProvideAccountRepo(clonedEngine))
 
-	account := basmodel.Account{
-		Name:   user.Name,
-		Type:   accounttype.User,
-		Status: accountstatus.Inactive,
-	}
-	account.CompanyID = user.CompanyID
-	account.NodeID = user.NodeID
+// 	account := basmodel.Account{
+// 		Name:   user.Name,
+// 		Type:   accounttype.User,
+// 		Status: accountstatus.Inactive,
+// 	}
+// 	account.CompanyID = user.CompanyID
+// 	account.NodeID = user.NodeID
 
-	var createdAccount basmodel.Account
-	if createdAccount, err = accountServ.Create(account); err != nil {
-		err = corerr.Tick(err, "E1067890", "error in creating account for user", user)
+// 	var createdAccount basmodel.Account
+// 	if createdAccount, err = accountServ.Create(account); err != nil {
+// 		err = corerr.Tick(err, "E1067890", "error in creating account for user", user)
 
-		clonedEngine.DB.Rollback()
-		return
-	}
+// 		clonedEngine.DB.Rollback()
+// 		return
+// 	}
 
-	user.ID = createdAccount.ID
-	user.Password, err = password.Hash(user.Password, p.Engine.Envs[base.PasswordSalt])
-	glog.CheckError(err, fmt.Sprintf("Hashing password failed for %+v", user))
+// 	user.ID = createdAccount.ID
+// 	user.Password, err = password.Hash(user.Password, p.Engine.Envs[base.PasswordSalt])
+// 	glog.CheckError(err, fmt.Sprintf("Hashing password failed for %+v", user))
 
-	if createdUser, err = userRepo.Create(user); err != nil {
-		err = corerr.Tick(err, "E1036118", "error in creating user", user)
+// 	if createdUser, err = userRepo.Create(user); err != nil {
+// 		err = corerr.Tick(err, "E1036118", "error in creating user", user)
 
-		clonedEngine.DB.Rollback()
-		return
-	}
+// 		clonedEngine.DB.Rollback()
+// 		return
+// 	}
 
-	clonedEngine.DB.Commit()
-	createdUser.Password = ""
+// 	clonedEngine.DB.Commit()
+// 	createdUser.Password = ""
 
-	return
-}
+// 	return
+// }
 
 // Create a user
 func (p *BasUserServ) Create(user basmodel.User) (createdUser basmodel.User, err error) {
@@ -140,7 +140,8 @@ func (p *BasUserServ) Create(user basmodel.User) (createdUser basmodel.User, err
 		}
 	}()
 
-	accountServ := ProvideBasAccountService(basrepo.ProvideAccountRepo(p.Engine))
+	phoneServ := ProvideBasPhoneService(basrepo.ProvidePhoneRepo(p.Engine))
+	accountServ := ProvideBasAccountService(basrepo.ProvideAccountRepo(p.Engine), phoneServ)
 	account := basmodel.Account{
 		Name:   user.Name,
 		Type:   accounttype.User,
@@ -211,7 +212,8 @@ func (p *BasUserServ) Save(user basmodel.User) (createdUser basmodel.User, err e
 	}
 
 	userRepo := basrepo.ProvideUserRepo(clonedEngine)
-	accountServ := ProvideBasAccountService(basrepo.ProvideAccountRepo(clonedEngine))
+	phoneServ := ProvideBasPhoneService(basrepo.ProvidePhoneRepo(p.Engine))
+	accountServ := ProvideBasAccountService(basrepo.ProvideAccountRepo(clonedEngine), phoneServ)
 
 	account := basmodel.Account{
 		Name:   user.Name,

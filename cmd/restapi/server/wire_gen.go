@@ -63,9 +63,9 @@ func initActivityAPI(engine *core.Engine) basapi.ActivityAPI {
 	return activityAPI
 }
 
-func initAccountAPI(e *core.Engine) basapi.AccountAPI {
+func initAccountAPI(e *core.Engine, phoneServ service.BasPhoneServ) basapi.AccountAPI {
 	accountRepo := basrepo.ProvideAccountRepo(e)
-	basAccountServ := service.ProvideBasAccountService(accountRepo)
+	basAccountServ := service.ProvideBasAccountService(accountRepo, phoneServ)
 	accountAPI := basapi.ProvideAccountAPI(basAccountServ)
 	return accountAPI
 }

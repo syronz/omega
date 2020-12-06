@@ -55,6 +55,18 @@ func (p *PhoneRepo) FindAccountPhoneByID(fix types.FixedNode) (aPhone basmodel.A
 	return
 }
 
+// AccountsPhones return list of phones assigned to an account
+func (p *PhoneRepo) AccountsPhones(fix types.FixedNode) (phones []basmodel.Phone, err error) {
+	err = p.Engine.DB.Table(basmodel.AccountPhoneTable).
+		Joins("INNER JOIN bas_phones on bas_account_phones.phone_id = bas_phones.id").
+		Where("bas_account_phones.account_id = ? AND bas_account_phones.company_id = ? AND bas_account_phones.node_id = ?",
+			fix.ID.ToUint64(), fix.CompanyID, fix.NodeID).
+		Find(&phones).Error
+	err = p.dbError(err, "E1061411", basmodel.Phone{}, corterm.List)
+
+	return
+}
+
 // FindByPhone finds the phone via its id
 func (p *PhoneRepo) FindByPhone(phoneNumber string) (phone basmodel.Phone, err error) {
 	err = p.Engine.DB.Table(basmodel.PhoneTable).

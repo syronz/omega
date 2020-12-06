@@ -17,15 +17,17 @@ import (
 
 // BasAccountServ for injecting auth basrepo
 type BasAccountServ struct {
-	Repo   basrepo.AccountRepo
-	Engine *core.Engine
+	Repo      basrepo.AccountRepo
+	Engine    *core.Engine
+	PhoneServ BasPhoneServ
 }
 
 // ProvideBasAccountService for account is used in wire
-func ProvideBasAccountService(p basrepo.AccountRepo) BasAccountServ {
+func ProvideBasAccountService(p basrepo.AccountRepo, phoneServ BasPhoneServ) BasAccountServ {
 	return BasAccountServ{
-		Repo:   p,
-		Engine: p.Engine,
+		Repo:      p,
+		Engine:    p.Engine,
+		PhoneServ: phoneServ,
 	}
 }
 
@@ -34,6 +36,12 @@ func (p *BasAccountServ) FindByID(fix types.FixedNode) (account basmodel.Account
 	if account, err = p.Repo.FindByID(fix); err != nil {
 		err = corerr.Tick(err, "E1049049", "can't fetch the account", fix.ID, fix.CompanyID, fix.NodeID)
 		return
+	}
+
+	if account.Phones, err = p.PhoneServ.AccountsPhones(fix); err != nil {
+		err = corerr.Tick(err, "E1017084", "can't fetch the account's phones", fix.ID, fix.CompanyID, fix.NodeID)
+		return
+
 	}
 
 	return
@@ -74,21 +82,6 @@ func (p *BasAccountServ) Create(account basmodel.Account) (createdAccount basmod
 		return
 	}
 
-	phoneServ := ProvideBasPhoneService(basrepo.ProvidePhoneRepo(p.Engine))
-	glog.Debug(createdAccount)
-
-	for _, phone := range account.Phones {
-		phone.CompanyID = createdAccount.CompanyID
-		phone.NodeID = createdAccount.NodeID
-		phone.AccountID = createdAccount.ID
-		if _, err = phoneServ.TxCreate(db, phone); err != nil {
-			err = corerr.Tick(err, "E1040913", "error in creating phone for account", phone)
-
-			db.Rollback()
-			return
-		}
-	}
-
 	db.Commit()
 
 	return
@@ -104,6 +97,19 @@ func (p *BasAccountServ) TxCreate(db *gorm.DB, account basmodel.Account) (create
 	if createdAccount, err = p.Repo.TxCreate(db, account); err != nil {
 		err = corerr.Tick(err, "E1065508", "account not created", account)
 		return
+	}
+
+	phoneServ := ProvideBasPhoneService(basrepo.ProvidePhoneRepo(p.Engine))
+
+	for _, phone := range account.Phones {
+		phone.CompanyID = createdAccount.CompanyID
+		phone.NodeID = createdAccount.NodeID
+		phone.AccountID = createdAccount.ID
+		if _, err = phoneServ.TxCreate(db, phone); err != nil {
+			err = corerr.Tick(err, "E1040913", "error in creating phone for account", phone)
+
+			return
+		}
 	}
 
 	return

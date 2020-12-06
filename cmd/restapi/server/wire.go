@@ -53,7 +53,7 @@ func initActivityAPI(engine *core.Engine) basapi.ActivityAPI {
 	return basapi.ActivityAPI{}
 }
 
-func initAccountAPI(e *core.Engine) basapi.AccountAPI {
+func initAccountAPI(e *core.Engine, phoneServ service.BasPhoneServ) basapi.AccountAPI {
 	wire.Build(basrepo.ProvideAccountRepo, service.ProvideBasAccountService,
 		basapi.ProvideAccountAPI)
 	return basapi.AccountAPI{}

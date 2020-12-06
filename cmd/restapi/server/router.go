@@ -23,8 +23,8 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 	basRoleAPI := initRoleAPI(engine)
 	basSettingAPI := initSettingAPI(engine)
 	basActivityAPI := initActivityAPI(engine)
-	basAccountAPI := initAccountAPI(engine)
 	basPhoneAPI := initBasPhoneAPI(engine)
+	basAccountAPI := initAccountAPI(engine, basPhoneAPI.Service)
 
 	// EAccountig Domain
 	eacCurrencyAPI := initCurrencyAPI(engine)
