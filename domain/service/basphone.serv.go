@@ -12,7 +12,7 @@ import (
 	"omega/pkg/glog"
 	"omega/pkg/limberr"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // BasPhoneServ for injecting auth basrepo
@@ -64,7 +64,7 @@ func (p *BasPhoneServ) AccountsPhones(fix types.FixedNode) (phones []basmodel.Ph
 
 // List of phones, it support pagination and search and return back count
 func (p *BasPhoneServ) List(params param.Param) (phones []basmodel.Phone,
-	count uint64, err error) {
+	count int64, err error) {
 
 	if phones, err = p.Repo.List(params); err != nil {
 		glog.CheckError(err, "error in phones list")
@@ -177,7 +177,7 @@ func (p *BasPhoneServ) Separate(fix types.FixedNode) (aPhone basmodel.AccountPho
 
 // Excel is used for export excel file
 func (p *BasPhoneServ) Excel(params param.Param) (phones []basmodel.Phone, err error) {
-	params.Limit = p.Engine.Envs.ToUint64(core.ExcelMaxRows)
+	params.Limit = p.Engine.Envs.ToInt(core.ExcelMaxRows)
 	params.Offset = 0
 	params.Order = fmt.Sprintf("%v.id ASC", basmodel.PhoneTable)
 

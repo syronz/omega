@@ -12,7 +12,7 @@ import (
 	"omega/internal/types"
 	"omega/pkg/glog"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // BasSettingServ for injecting auth basrepo
@@ -41,7 +41,7 @@ func (p *BasSettingServ) FindByID(fix types.FixedCol) (setting basmodel.Setting,
 
 // List returns setting's property, it support pagination and search and return back count
 func (p *BasSettingServ) List(params param.Param) (settings []basmodel.Setting,
-	count uint64, err error) {
+	count int64, err error) {
 
 	if settings, err = p.Repo.List(params); err != nil {
 		glog.CheckError(err, "error in users list")
@@ -94,7 +94,7 @@ func (p *BasSettingServ) Update(setting basmodel.Setting) (savedSetting basmodel
 
 // Excel is used for export excel file
 func (p *BasSettingServ) Excel(params param.Param) (settings []basmodel.Setting, err error) {
-	params.Limit = p.Engine.Envs.ToUint64(core.ExcelMaxRows)
+	params.Limit = p.Engine.Envs.ToInt(core.ExcelMaxRows)
 	params.Offset = 0
 	params.Order = fmt.Sprintf("%v.id ASC", basmodel.SettingTable)
 

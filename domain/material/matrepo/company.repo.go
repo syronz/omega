@@ -68,7 +68,7 @@ func (p *CompanyRepo) List(params param.Param) (companies []matmodel.Company, er
 }
 
 // Count of companies, mainly calls with List
-func (p *CompanyRepo) Count(params param.Param) (count uint64, err error) {
+func (p *CompanyRepo) Count(params param.Param) (count int64, err error) {
 	var whereStr string
 	if whereStr, err = params.ParseWhere(p.Cols); err != nil {
 		err = limberr.Take(err, "E7159547").Custom(corerr.ValidationFailedErr).Build()

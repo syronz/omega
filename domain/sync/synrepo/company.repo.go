@@ -14,7 +14,7 @@ import (
 	"omega/pkg/limberr"
 	"reflect"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // CompanyRepo for injecting engine
@@ -70,7 +70,7 @@ func (p *CompanyRepo) List(params param.Param) (companies []synmodel.Company, er
 }
 
 // Count of companies, mainly calls with List
-func (p *CompanyRepo) Count(params param.Param) (count uint64, err error) {
+func (p *CompanyRepo) Count(params param.Param) (count int64, err error) {
 	var whereStr string
 	if whereStr, err = params.ParseWhere(p.Cols); err != nil {
 		err = limberr.Take(err, "E0959547").Custom(corerr.ValidationFailedErr).Build()

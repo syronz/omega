@@ -3,7 +3,7 @@ package core
 import (
 	"omega/internal/types"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 	"github.com/sirupsen/logrus"
 	goaes "github.com/syronz/goAES"
 )

@@ -12,9 +12,8 @@ import (
 	"omega/internal/corstartoff"
 	"omega/pkg/dict"
 	"omega/pkg/glog"
-
-	_ "github.com/jinzhu/gorm/dialects/mysql"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
+	// _ "gorm.io/gorm/dialects/mysql"
+	// _ "gorm.io/gorm/dialects/postgres"
 )
 
 var cpuprofile = flag.String("cpuprofile", "", "write cpu profile to `file`")

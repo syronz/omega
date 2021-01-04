@@ -69,7 +69,7 @@ func (p *TransactionRepo) List(params param.Param) (transactions []eacmodel.Tran
 }
 
 // Count of transactions, mainly calls with List
-func (p *TransactionRepo) Count(params param.Param) (count uint64, err error) {
+func (p *TransactionRepo) Count(params param.Param) (count int64, err error) {
 	var whereStr string
 	if whereStr, err = params.ParseWhere(p.Cols); err != nil {
 		err = limberr.Take(err, "E1436521").Custom(corerr.ValidationFailedErr).Build()

@@ -20,10 +20,10 @@ type Phone struct {
 	ID        types.RowID `gorm:"primary_key" json:"id,omitempty"`
 	Phone     string      `gorm:"not null;unique" json:"phone,omitempty"`
 	Notes     string      `json:"notes"`
-	CompanyID uint64      `sql:"-" json:"company_id" table:"-"`
-	NodeID    uint64      `sql:"-" json:"node_id" table:"-"`
-	AccountID types.RowID `sql:"-" json:"account_id" table:"-"`
-	Default   byte        `sql:"-" json:"default" table:"-"`
+	CompanyID uint64      `gorm:"-" json:"company_id" table:"-"`
+	NodeID    uint64      `gorm:"-" json:"node_id" table:"-"`
+	AccountID types.RowID `gorm:"-" json:"account_id" table:"-"`
+	Default   byte        `gorm:"-" json:"default" table:"-"`
 }
 
 // Validate check the type of fields

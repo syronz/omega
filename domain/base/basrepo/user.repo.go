@@ -16,7 +16,7 @@ import (
 	"omega/pkg/limberr"
 	"reflect"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // UserRepo for injecting engine
@@ -99,7 +99,7 @@ func (p *UserRepo) List(params param.Param) (users []basmodel.User, err error) {
 }
 
 // Count of users, mainly calls with List
-func (p *UserRepo) Count(params param.Param) (count uint64, err error) {
+func (p *UserRepo) Count(params param.Param) (count int64, err error) {
 	var whereStr string
 	if whereStr, err = params.ParseWhere(p.Cols); err != nil {
 		err = limberr.Take(err, "E1042198").Custom(corerr.ValidationFailedErr).Build()

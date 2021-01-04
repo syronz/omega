@@ -38,6 +38,7 @@ plog.ServerLog.Panic(err.Error())
 - [x] apilogger should be moved to other place
 - [ ] implement refresh token
 - [ ] common method for repo based on inheritance
+- [ ] fix log in the database.go
 
 # Requesed RMS part
 1. inventory import should lock the price for agent
@@ -59,5 +60,10 @@ plog.ServerLog.Panic(err.Error())
 8. unique serial for serial base items
 9. special process for updating the phone
 10. enable static ip
+
+## sed command for mass update
+```
+for i in $(grep -rl gorm);do sed -i 's/github.com\/jinzhu/gorm.io/' $i ;done
+```
 
 

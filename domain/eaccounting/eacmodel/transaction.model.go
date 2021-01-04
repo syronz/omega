@@ -26,10 +26,10 @@ type Transaction struct {
 	Type        types.Enum  `json:"type,omitempty"`
 	Description *string     `json:"description,omitempty"`
 	Amount      float64     `json:"amount,omitempty"`
-	Pioneer     types.RowID `sql:"-" json:"pioneer,omitempty" table:"-"`
-	Follower    types.RowID `sql:"-" json:"follower,omitempty" table:"-"`
-	PostDate    time.Time   `sql:"-" json:"post_date,omitempty" table:"-"`
-	Slots       []Slot      `sql:"-" json:"slots,omitempty" table:"-"`
+	Pioneer     types.RowID `gorm:"-" json:"pioneer,omitempty" table:"-"`
+	Follower    types.RowID `gorm:"-" json:"follower,omitempty" table:"-"`
+	PostDate    time.Time   `gorm:"-" json:"post_date,omitempty" table:"-"`
+	Slots       []Slot      `gorm:"-" json:"slots,omitempty" table:"-"`
 }
 
 // Validate check the type of fields

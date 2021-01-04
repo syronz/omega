@@ -38,7 +38,7 @@ func (p *MatGroupServ) FindByID(fix types.FixedCol) (group matmodel.Group, err e
 
 // List of groups, it support pagination and search and return back count
 func (p *MatGroupServ) List(params param.Param) (groups []matmodel.Group,
-	count uint64, err error) {
+	count int64, err error) {
 
 	if params.CompanyID != 0 {
 		params.PreCondition = fmt.Sprintf(" mat_groups.company_id = '%v' ", params.CompanyID)
@@ -104,7 +104,7 @@ func (p *MatGroupServ) Delete(fix types.FixedCol) (group matmodel.Group, err err
 
 // Excel is used for export excel file
 func (p *MatGroupServ) Excel(params param.Param) (groups []matmodel.Group, err error) {
-	params.Limit = p.Engine.Envs.ToUint64(core.ExcelMaxRows)
+	params.Limit = p.Engine.Envs.ToInt(core.ExcelMaxRows)
 	params.Offset = 0
 	params.Order = fmt.Sprintf("%v.id ASC", matmodel.GroupTable)
 

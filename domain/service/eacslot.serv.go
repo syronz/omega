@@ -43,7 +43,7 @@ func (p *EacSlotServ) FindByID(fix types.FixedCol) (slot eacmodel.Slot, err erro
 
 // List of slots, it support pagination and search and return back count
 func (p *EacSlotServ) List(params param.Param) (slots []eacmodel.Slot,
-	count uint64, err error) {
+	count int64, err error) {
 
 	if params.CompanyID != 0 {
 		params.PreCondition = fmt.Sprintf(" eac_slots.company_id = '%v' ", params.CompanyID)
@@ -218,7 +218,7 @@ func (p *EacSlotServ) Delete(fix types.FixedCol) (slot eacmodel.Slot, err error)
 
 // Excel is used for export excel file
 func (p *EacSlotServ) Excel(params param.Param) (slots []eacmodel.Slot, err error) {
-	params.Limit = p.Engine.Envs.ToUint64(core.ExcelMaxRows)
+	params.Limit = p.Engine.Envs.ToInt(core.ExcelMaxRows)
 	params.Offset = 0
 	params.Order = fmt.Sprintf("%v.id ASC", eacmodel.SlotTable)
 

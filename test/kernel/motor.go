@@ -6,8 +6,8 @@ import (
 	"omega/pkg/dict"
 	"omega/pkg/glog"
 
-	_ "github.com/jinzhu/gorm/dialects/mysql"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
+	_ "gorm.io/gorm/dialects/mysql"
+	_ "gorm.io/gorm/dialects/postgres"
 )
 
 // StartMotor for generating engine special for TDD

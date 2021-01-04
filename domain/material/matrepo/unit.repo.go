@@ -69,7 +69,7 @@ func (p *UnitRepo) List(params param.Param) (units []matmodel.Unit, err error) {
 }
 
 // Count of units, mainly calls with List
-func (p *UnitRepo) Count(params param.Param) (count uint64, err error) {
+func (p *UnitRepo) Count(params param.Param) (count int64, err error) {
 	var whereStr string
 	if whereStr, err = params.ParseWhere(p.Cols); err != nil {
 		err = limberr.Take(err, "E7160160").Custom(corerr.ValidationFailedErr).Build()

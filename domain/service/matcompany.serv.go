@@ -38,7 +38,7 @@ func (p *MatCompanyServ) FindByID(fix types.FixedCol) (company matmodel.Company,
 
 // List of companies, it support pagination and search and return back count
 func (p *MatCompanyServ) List(params param.Param) (companies []matmodel.Company,
-	count uint64, err error) {
+	count int64, err error) {
 
 	if params.CompanyID != 0 {
 		params.PreCondition = fmt.Sprintf(" mat_companies.company_id = '%v' ", params.CompanyID)
@@ -104,7 +104,7 @@ func (p *MatCompanyServ) Delete(fix types.FixedCol) (company matmodel.Company, e
 
 // Excel is used for export excel file
 func (p *MatCompanyServ) Excel(params param.Param) (companies []matmodel.Company, err error) {
-	params.Limit = p.Engine.Envs.ToUint64(core.ExcelMaxRows)
+	params.Limit = p.Engine.Envs.ToInt(core.ExcelMaxRows)
 	params.Offset = 0
 	params.Order = fmt.Sprintf("%v.id ASC", matmodel.CompanyTable)
 

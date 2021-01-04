@@ -12,7 +12,7 @@ import (
 	"omega/internal/types"
 	"omega/pkg/glog"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // BasAccountServ for injecting auth basrepo
@@ -49,7 +49,7 @@ func (p *BasAccountServ) FindByID(fix types.FixedNode) (account basmodel.Account
 
 // List of accounts, it support pagination and search and return back count
 func (p *BasAccountServ) List(params param.Param) (accounts []basmodel.Account,
-	count uint64, err error) {
+	count int64, err error) {
 
 	if accounts, err = p.Repo.List(params); err != nil {
 		glog.CheckError(err, "error in accounts list")
@@ -152,7 +152,7 @@ func (p *BasAccountServ) Delete(fix types.FixedNode) (account basmodel.Account, 
 
 // Excel is used for export excel file
 func (p *BasAccountServ) Excel(params param.Param) (accounts []basmodel.Account, err error) {
-	params.Limit = p.Engine.Envs.ToUint64(core.ExcelMaxRows)
+	params.Limit = p.Engine.Envs.ToInt(core.ExcelMaxRows)
 	params.Offset = 0
 	params.Order = fmt.Sprintf("%v.id ASC", basmodel.AccountTable)
 

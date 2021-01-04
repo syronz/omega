@@ -40,7 +40,7 @@ func (r RowID) Value() (driver.Value, error) {
 
 /*
 // TODO: I don't know what is the usage of this
-// https://github.com/jinzhu/gorm/issues/47
+// https://gorm.io/gorm/issues/47
 
 func (r *RowID) Scan(value interface{}) error {
 	value, _ = value.(uint64)

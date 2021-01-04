@@ -1,6 +1,7 @@
 package eacrepo
 
 import (
+	"errors"
 	"omega/domain/base/message/basterm"
 	"omega/domain/eaccounting/eacmodel"
 	"omega/domain/eaccounting/eacterm"
@@ -15,7 +16,7 @@ import (
 	"omega/pkg/limberr"
 	"reflect"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // SlotRepo for injecting engine
@@ -71,7 +72,7 @@ func (p *SlotRepo) List(params param.Param) (slots []eacmodel.Slot, err error) {
 }
 
 // Count of slots, mainly calls with List
-func (p *SlotRepo) Count(params param.Param) (count uint64, err error) {
+func (p *SlotRepo) Count(params param.Param) (count int64, err error) {
 	var whereStr string
 	if whereStr, err = params.ParseWhere(p.Cols); err != nil {
 		err = limberr.Take(err, "E1428251").Custom(corerr.ValidationFailedErr).Build()
@@ -121,7 +122,7 @@ func (p *SlotRepo) LastSlot(slotIn eacmodel.Slot) (slot eacmodel.Slot, err error
 		Limit(1).
 		Find(&slot).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		err = nil
 	}
 
@@ -139,7 +140,7 @@ func (p *SlotRepo) LastSlotWithID(slotIn eacmodel.Slot) (slot eacmodel.Slot, err
 		Limit(1).
 		Find(&slot).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		err = nil
 	}
 

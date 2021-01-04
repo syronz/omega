@@ -18,7 +18,7 @@ import (
 	"omega/pkg/dict"
 	"omega/pkg/glog"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // SynCompanyServ for injecting auth synrepo
@@ -47,7 +47,7 @@ func (p *SynCompanyServ) FindByID(id types.RowID) (company synmodel.Company, err
 
 // List of companies, it support pagination and search and return back count
 func (p *SynCompanyServ) List(params param.Param) (companies []synmodel.Company,
-	count uint64, err error) {
+	count int64, err error) {
 
 	if params.CompanyID != 0 {
 		params.PreCondition = fmt.Sprintf(" syn_companies.company_id = '%v' ", params.CompanyID)
@@ -309,7 +309,7 @@ func (p *SynCompanyServ) UploadImage(company synmodel.Company, imageType string)
 
 // Excel is used for export excel file
 func (p *SynCompanyServ) Excel(params param.Param) (companies []synmodel.Company, err error) {
-	params.Limit = p.Engine.Envs.ToUint64(core.ExcelMaxRows)
+	params.Limit = p.Engine.Envs.ToInt(core.ExcelMaxRows)
 	params.Offset = 0
 	params.Order = fmt.Sprintf("%v.id ASC", synmodel.CompanyTable)
 

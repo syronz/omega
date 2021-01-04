@@ -1,6 +1,7 @@
 package basrepo
 
 import (
+	"gorm.io/gorm"
 	"omega/domain/base/basmodel"
 	"omega/domain/base/message/basterm"
 	"omega/internal/core"
@@ -13,8 +14,6 @@ import (
 	"omega/pkg/helper"
 	"omega/pkg/limberr"
 	"reflect"
-
-	"github.com/jinzhu/gorm"
 )
 
 // RoleRepo for injecting engine
@@ -70,7 +69,7 @@ func (p *RoleRepo) List(params param.Param) (roles []basmodel.Role, err error) {
 }
 
 // Count of roles, mainly calls with List
-func (p *RoleRepo) Count(params param.Param) (count uint64, err error) {
+func (p *RoleRepo) Count(params param.Param) (count int64, err error) {
 	var whereStr string
 	if whereStr, err = params.ParseWhere(p.Cols); err != nil {
 		err = limberr.Take(err, "E1032288").Custom(corerr.ValidationFailedErr).Build()

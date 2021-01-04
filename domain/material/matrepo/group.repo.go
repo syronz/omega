@@ -68,7 +68,7 @@ func (p *GroupRepo) List(params param.Param) (groups []matmodel.Group, err error
 }
 
 // Count of groups, mainly calls with List
-func (p *GroupRepo) Count(params param.Param) (count uint64, err error) {
+func (p *GroupRepo) Count(params param.Param) (count int64, err error) {
 	var whereStr string
 	if whereStr, err = params.ParseWhere(p.Cols); err != nil {
 		err = limberr.Take(err, "E7149464").Custom(corerr.ValidationFailedErr).Build()

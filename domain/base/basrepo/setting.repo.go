@@ -14,7 +14,7 @@ import (
 	"omega/pkg/limberr"
 	"reflect"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // SettingRepo for injecting engine
@@ -84,7 +84,7 @@ func (p *SettingRepo) List(params param.Param) (settings []basmodel.Setting, err
 }
 
 // Count of settings
-func (p *SettingRepo) Count(params param.Param) (count uint64, err error) {
+func (p *SettingRepo) Count(params param.Param) (count int64, err error) {
 	var whereStr string
 	if whereStr, err = params.ParseWhere(p.Cols); err != nil {
 		err = limberr.Take(err, "E1051896").Custom(corerr.ValidationFailedErr).Build()

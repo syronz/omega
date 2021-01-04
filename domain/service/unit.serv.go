@@ -38,7 +38,7 @@ func (p *MatUnitServ) FindByID(fix types.FixedCol) (unit matmodel.Unit, err erro
 
 // List of units, it support pagination and search and return back count
 func (p *MatUnitServ) List(params param.Param) (units []matmodel.Unit,
-	count uint64, err error) {
+	count int64, err error) {
 
 	if params.CompanyID != 0 {
 		params.PreCondition = fmt.Sprintf(" mat_units.company_id = '%v' ", params.CompanyID)
@@ -104,7 +104,7 @@ func (p *MatUnitServ) Delete(fix types.FixedCol) (unit matmodel.Unit, err error)
 
 // Excel is used for export excel file
 func (p *MatUnitServ) Excel(params param.Param) (units []matmodel.Unit, err error) {
-	params.Limit = p.Engine.Envs.ToUint64(core.ExcelMaxRows)
+	params.Limit = p.Engine.Envs.ToInt(core.ExcelMaxRows)
 	params.Offset = 0
 	params.Order = fmt.Sprintf("%v.id ASC", matmodel.UnitTable)
 

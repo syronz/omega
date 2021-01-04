@@ -37,9 +37,9 @@ type Company struct {
 	Logo          string     `json:"logo,omitempty"`
 	Banner        string     `json:"banner,omitempty"`
 	Footer        string     `json:"footer,omitempty"`
-	AdminUsername string     `sql:"-" json:"admin_username,omitempty" table:"-"`
-	AdminPassword string     `sql:"-" json:"admin_password,omitempty" table:"-"`
-	Lang          dict.Lang  `sql:"-" josn:"lang,omitempty" table:"-"`
+	AdminUsername string     `gorm:"-" json:"admin_username,omitempty" table:"-"`
+	AdminPassword string     `gorm:"-" json:"admin_password,omitempty" table:"-"`
+	Lang          dict.Lang  `gorm:"-" josn:"lang,omitempty" table:"-"`
 }
 
 // Validate check the type of

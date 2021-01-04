@@ -68,7 +68,7 @@ func (p *ColorRepo) List(params param.Param) (colors []matmodel.Color, err error
 }
 
 // Count of colors, mainly calls with List
-func (p *ColorRepo) Count(params param.Param) (count uint64, err error) {
+func (p *ColorRepo) Count(params param.Param) (count int64, err error) {
 	var whereStr string
 	if whereStr, err = params.ParseWhere(p.Cols); err != nil {
 		err = limberr.Take(err, "E7131878").Custom(corerr.ValidationFailedErr).Build()

@@ -10,8 +10,8 @@ import (
 	"omega/pkg/glog"
 	"omega/test/kernel"
 
-	_ "github.com/jinzhu/gorm/dialects/mysql"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
+	_ "gorm.io/gorm/dialects/mysql"
+	_ "gorm.io/gorm/dialects/postgres"
 )
 
 var noReset bool

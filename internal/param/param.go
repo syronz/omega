@@ -23,8 +23,8 @@ type Param struct {
 type Pagination struct {
 	Select string
 	Order  string
-	Limit  uint64
-	Offset uint64
+	Limit  int
+	Offset int
 }
 
 func New() Param {

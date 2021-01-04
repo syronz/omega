@@ -54,7 +54,7 @@ func (p *BasUserServ) FindByUsername(username string) (user basmodel.User, err e
 
 // List of users, it support pagination and search and return back count
 func (p *BasUserServ) List(params param.Param) (users []basmodel.User,
-	count uint64, err error) {
+	count int64, err error) {
 
 	if users, err = p.Repo.List(params); err != nil {
 		glog.CheckError(err, "error in users list")
@@ -285,7 +285,7 @@ func (p *BasUserServ) Delete(fix types.FixedCol) (user basmodel.User, err error)
 
 // Excel is used for export excel file
 func (p *BasUserServ) Excel(params param.Param) (users []basmodel.User, err error) {
-	params.Limit = p.Engine.Envs.ToUint64(core.ExcelMaxRows)
+	params.Limit = p.Engine.Envs.ToInt(core.ExcelMaxRows)
 	params.Offset = 0
 	params.Order = fmt.Sprintf("%v.id ASC", basmodel.UserTable)
 

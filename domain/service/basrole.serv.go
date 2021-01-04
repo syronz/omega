@@ -11,7 +11,7 @@ import (
 	"omega/internal/types"
 	"omega/pkg/glog"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // BasRoleServ for injecting auth basrepo
@@ -40,7 +40,7 @@ func (p *BasRoleServ) FindByID(fix types.FixedCol) (role basmodel.Role, err erro
 
 // List of roles, it support pagination and search and return back count
 func (p *BasRoleServ) List(params param.Param) (roles []basmodel.Role,
-	count uint64, err error) {
+	count int64, err error) {
 
 	if params.CompanyID != 0 {
 		params.PreCondition = fmt.Sprintf(" bas_roles.company_id = '%v' ", params.CompanyID)
@@ -112,7 +112,7 @@ func (p *BasRoleServ) Delete(fix types.FixedCol) (role basmodel.Role, err error)
 
 // Excel is used for export excel file
 func (p *BasRoleServ) Excel(params param.Param) (roles []basmodel.Role, err error) {
-	params.Limit = p.Engine.Envs.ToUint64(core.ExcelMaxRows)
+	params.Limit = p.Engine.Envs.ToInt(core.ExcelMaxRows)
 	params.Offset = 0
 	params.Order = fmt.Sprintf("%v.id ASC", basmodel.RoleTable)
 

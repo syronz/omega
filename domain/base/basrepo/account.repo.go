@@ -14,7 +14,7 @@ import (
 	"omega/pkg/limberr"
 	"reflect"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // AccountRepo for injecting engine
@@ -70,7 +70,7 @@ func (p *AccountRepo) List(params param.Param) (accounts []basmodel.Account, err
 }
 
 // Count of accounts, mainly calls with List
-func (p *AccountRepo) Count(params param.Param) (count uint64, err error) {
+func (p *AccountRepo) Count(params param.Param) (count int64, err error) {
 	var whereStr string
 	if whereStr, err = params.ParseWhere(p.Cols); err != nil {
 		err = limberr.Take(err, "E1037218").Custom(corerr.ValidationFailedErr).Build()

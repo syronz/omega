@@ -69,7 +69,7 @@ func (p *CurrencyRepo) List(params param.Param) (currencies []eacmodel.Currency,
 }
 
 // Count of currencies, mainly calls with List
-func (p *CurrencyRepo) Count(params param.Param) (count uint64, err error) {
+func (p *CurrencyRepo) Count(params param.Param) (count int64, err error) {
 	var whereStr string
 	if whereStr, err = params.ParseWhere(p.Cols); err != nil {
 		err = limberr.Take(err, "E1439729").Custom(corerr.ValidationFailedErr).Build()

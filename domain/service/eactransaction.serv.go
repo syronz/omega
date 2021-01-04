@@ -49,7 +49,7 @@ func (p *EacTransactionServ) FindByID(fix types.FixedCol) (transaction eacmodel.
 
 // List of transactions, it support pagination and search and return back count
 func (p *EacTransactionServ) List(params param.Param) (transactions []eacmodel.Transaction,
-	count uint64, err error) {
+	count int64, err error) {
 
 	if params.CompanyID != 0 {
 		params.PreCondition = fmt.Sprintf(" eac_transactions.company_id = '%v' ", params.CompanyID)
@@ -294,7 +294,7 @@ func (p *EacTransactionServ) Delete(fix types.FixedCol) (transaction eacmodel.Tr
 
 // Excel is used for export excel file
 func (p *EacTransactionServ) Excel(params param.Param) (transactions []eacmodel.Transaction, err error) {
-	params.Limit = p.Engine.Envs.ToUint64(core.ExcelMaxRows)
+	params.Limit = p.Engine.Envs.ToInt(core.ExcelMaxRows)
 	params.Offset = 0
 	params.Order = fmt.Sprintf("%v.id ASC", eacmodel.TransactionTable)
 

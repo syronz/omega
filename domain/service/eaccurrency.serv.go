@@ -38,7 +38,7 @@ func (p *EacCurrencyServ) FindByID(fix types.FixedCol) (currency eacmodel.Curren
 
 // List of currencies, it support pagination and search and return back count
 func (p *EacCurrencyServ) List(params param.Param) (currencies []eacmodel.Currency,
-	count uint64, err error) {
+	count int64, err error) {
 
 	if params.CompanyID != 0 {
 		params.PreCondition = fmt.Sprintf(" eac_currencies.company_id = '%v' ", params.CompanyID)
@@ -104,7 +104,7 @@ func (p *EacCurrencyServ) Delete(fix types.FixedCol) (currency eacmodel.Currency
 
 // Excel is used for export excel file
 func (p *EacCurrencyServ) Excel(params param.Param) (currencies []eacmodel.Currency, err error) {
-	params.Limit = p.Engine.Envs.ToUint64(core.ExcelMaxRows)
+	params.Limit = p.Engine.Envs.ToInt(core.ExcelMaxRows)
 	params.Offset = 0
 	params.Order = fmt.Sprintf("%v.id ASC", eacmodel.CurrencyTable)
 

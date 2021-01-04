@@ -20,6 +20,11 @@ func (p Envs) ToUint64(key Envkey) uint64 {
 	return num
 }
 
+func (p Envs) ToInt64(key Envkey) int64 {
+	num, _ := strconv.ParseInt(p[key], 10, 64)
+	return num
+}
+
 func (p Envs) ToByte(key Envkey) []byte {
 	return []byte(p[key])
 }

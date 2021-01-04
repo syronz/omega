@@ -67,7 +67,7 @@ func generateLimit(c *gin.Context, param *Param) {
 	var err error
 	param.Limit = 10
 	if c.Query("page_size") != "" {
-		param.Limit, err = strconv.ParseUint(c.Query("page_size"), 10, 16)
+		param.Limit, err = strconv.Atoi(c.Query("page_size"))
 		if err != nil {
 			// TODO: get path from gin.Context
 			glog.CheckError(err, "Limit is not a number")
@@ -77,11 +77,11 @@ func generateLimit(c *gin.Context, param *Param) {
 }
 
 func generateOffset(c *gin.Context, param *Param) {
-	var page uint64
-	page = 0
+	var page int
 	var err error
 	if c.Query("page") != "" {
-		page, err = strconv.ParseUint(c.Query("page"), 10, 16)
+		// page, err = strconv.ParseUint(c.Query("page"), 10, 16)
+		page, err = strconv.Atoi(c.Query("page"))
 		if err != nil {
 			// TODO: get path from gin.Context
 			glog.CheckError(err, "Offset is not a positive number")

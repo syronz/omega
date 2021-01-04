@@ -38,7 +38,7 @@ func (p *MatColorServ) FindByID(fix types.FixedCol) (color matmodel.Color, err e
 
 // List of colors, it support pagination and search and return back count
 func (p *MatColorServ) List(params param.Param) (colors []matmodel.Color,
-	count uint64, err error) {
+	count int64, err error) {
 
 	if params.CompanyID != 0 {
 		params.PreCondition = fmt.Sprintf(" mat_colors.company_id = '%v' ", params.CompanyID)
@@ -104,7 +104,7 @@ func (p *MatColorServ) Delete(fix types.FixedCol) (color matmodel.Color, err err
 
 // Excel is used for export excel file
 func (p *MatColorServ) Excel(params param.Param) (colors []matmodel.Color, err error) {
-	params.Limit = p.Engine.Envs.ToUint64(core.ExcelMaxRows)
+	params.Limit = p.Engine.Envs.ToInt(core.ExcelMaxRows)
 	params.Offset = 0
 	params.Order = fmt.Sprintf("%v.id ASC", matmodel.ColorTable)
 

@@ -1,10 +1,11 @@
 package corerr
 
 import (
+	"errors"
 	"omega/pkg/limberr"
 	"strings"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // ClearDbErr find out what type of errors happened: duplicate, foreign keys or internal error
@@ -23,7 +24,7 @@ func ClearDbErr(err error) limberr.CustomError {
 		return ValidationFailedErr
 	}
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return NotFoundErr
 	}
 
