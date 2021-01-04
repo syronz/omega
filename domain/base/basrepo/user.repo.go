@@ -36,7 +36,12 @@ func ProvideUserRepo(engine *core.Engine) UserRepo {
 // FindByID finds the user via its id
 func (p *UserRepo) FindByID(fix types.FixedCol) (user basmodel.User, err error) {
 	err = p.Engine.DB.Table(basmodel.UserTable).
-		Where("company_id = ? AND node_id = ? AND id = ?", fix.CompanyID, fix.NodeID, fix.ID.ToUint64()).
+		Select("bas_users.*,bas_roles.*,bas_accounts.*,bas_account_phones.*,bas_phones.*").
+		Joins("INNER JOIN bas_roles ON bas_roles.id = bas_users.role_id").
+		Joins("INNER JOIN bas_accounts ON bas_accounts.id = bas_users.id").
+		Joins("LEFT JOIN bas_account_phones ON bas_accounts.id = bas_account_phones.account_id").
+		Joins("LEFT JOIN bas_phones ON bas_phones.id = bas_account_phones.phone_id").
+		Where("bas_users.company_id = ? AND bas_users.node_id = ? AND bas_users.id = ?", fix.CompanyID, fix.NodeID, fix.ID.ToUint64()).
 		First(&user).Error
 
 	user.ID = fix.ID
@@ -76,6 +81,8 @@ func (p *UserRepo) List(params param.Param) (users []basmodel.User, err error) {
 	err = p.Engine.DB.Table(basmodel.UserTable).Select(colsStr).
 		Joins("INNER JOIN bas_roles ON bas_roles.id = bas_users.role_id").
 		Joins("INNER JOIN bas_accounts ON bas_accounts.id = bas_users.id").
+		Joins("LEFT JOIN bas_account_phones ON bas_accounts.id = bas_account_phones.account_id").
+		Joins("LEFT JOIN bas_phones ON bas_phones.id = bas_account_phones.phone_id").
 		Where(whereStr).
 		Order(params.Order).
 		Limit(params.Limit).
@@ -101,6 +108,9 @@ func (p *UserRepo) Count(params param.Param) (count uint64, err error) {
 
 	err = p.Engine.DB.Table(basmodel.UserTable).
 		Joins("INNER JOIN bas_roles ON bas_roles.id = bas_users.role_id").
+		Joins("INNER JOIN bas_accounts ON bas_accounts.id = bas_users.id").
+		Joins("LEFT JOIN bas_account_phones ON bas_accounts.id = bas_account_phones.account_id").
+		Joins("LEFT JOIN bas_phones ON bas_phones.id = bas_account_phones.phone_id").
 		Where(whereStr).
 		Count(&count).Error
 
@@ -108,13 +118,13 @@ func (p *UserRepo) Count(params param.Param) (count uint64, err error) {
 	return
 }
 
-// Save the user, in case it is not exist create it
-func (p *UserRepo) Save(user basmodel.User) (u basmodel.User, err error) {
-	if err = p.Engine.DB.Table(basmodel.UserTable).Save(&user).Error; err != nil {
+// TxSave the user, in case it is not exist create it
+func (p *UserRepo) TxSave(db *gorm.DB, user basmodel.User) (u basmodel.User, err error) {
+	if err = db.Table(basmodel.UserTable).Save(&user).Error; err != nil {
 		err = p.dbError(err, "E1056429", user, corterm.Updated)
 	}
 
-	p.Engine.DB.Table(basmodel.UserTable).Where("id = ?", user.ID).Find(&u)
+	db.Table(basmodel.UserTable).Where("id = ?", user.ID).Find(&u)
 	return
 }
 
@@ -136,7 +146,7 @@ func (p *UserRepo) TxCreate(db *gorm.DB, user basmodel.User) (u basmodel.User, e
 
 // Delete the user
 func (p *UserRepo) Delete(user basmodel.User) (err error) {
-	if err = p.Engine.DB.Table(basmodel.UserTable).Delete(&user).Error; err != nil {
+	if err = p.Engine.DB.Unscoped().Table(basmodel.UserTable).Delete(&user).Error; err != nil {
 		err = p.dbError(err, "E1044329", user, corterm.Deleted)
 	}
 	return

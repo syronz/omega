@@ -85,13 +85,13 @@ func (p *AccountRepo) Count(params param.Param) (count uint64, err error) {
 	return
 }
 
-// Save the account, in case it is not exist create it
-func (p *AccountRepo) Save(account basmodel.Account) (u basmodel.Account, err error) {
-	if err = p.Engine.DB.Table(basmodel.AccountTable).Save(&account).Error; err != nil {
+// TxSave the account, in case it is not exist create it
+func (p *AccountRepo) TxSave(db *gorm.DB, account basmodel.Account) (u basmodel.Account, err error) {
+	if err = db.Table(basmodel.AccountTable).Save(&account).Error; err != nil {
 		err = p.dbError(err, "E1070874", account, corterm.Updated)
 	}
 
-	p.Engine.DB.Table(basmodel.AccountTable).Where("id = ?", account.ID).Find(&u)
+	db.Table(basmodel.AccountTable).Where("id = ?", account.ID).Find(&u)
 	return
 }
 

@@ -106,7 +106,7 @@ func getBody(reader io.Reader) interface{} {
 
 	if err := json.NewDecoder(buf).Decode(&obj); err != nil {
 		if err.Error() != "EOF" {
-			glog.Debug(err, obj, err.Error())
+			// glog.Info(err, obj, err.Error())
 		}
 	}
 

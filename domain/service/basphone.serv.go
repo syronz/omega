@@ -122,7 +122,7 @@ func (p *BasPhoneServ) TxCreate(db *gorm.DB, phone basmodel.Phone) (createdPhone
 	}
 
 	// var joiner basmodel.AccountPhone
-	if _, err = p.Repo.JoinAccountPhone(account, phone, phone.Default); err != nil {
+	if _, err = p.Repo.JoinAccountPhone(db, account, phone, phone.Default); err != nil {
 		err = corerr.Tick(err, "E1062524", "phone-join not created", phone)
 		return
 	}

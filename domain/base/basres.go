@@ -24,8 +24,9 @@ const (
 	SettingWrite types.Resource = "setting:write"
 	SettingExcel types.Resource = "setting:excel"
 
-	ActivitySelf types.Resource = "activity:self"
-	ActivityAll  types.Resource = "activity:all"
+	//for activity all companies we use SuperAdmin resource
+	ActivityCompany types.Resource = "activity:company"
+	ActivitySelf    types.Resource = "activity:self"
 
 	PhoneRead  types.Resource = "phone:read"
 	PhoneWrite types.Resource = "phone:write"

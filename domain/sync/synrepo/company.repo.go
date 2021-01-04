@@ -13,6 +13,8 @@ import (
 	"omega/pkg/helper"
 	"omega/pkg/limberr"
 	"reflect"
+
+	"github.com/jinzhu/gorm"
 )
 
 // CompanyRepo for injecting engine
@@ -32,7 +34,7 @@ func ProvideCompanyRepo(engine *core.Engine) CompanyRepo {
 // FindByID finds the company via its id
 func (p *CompanyRepo) FindByID(id types.RowID) (company synmodel.Company, err error) {
 	err = p.Engine.DB.Table(synmodel.CompanyTable).
-		Where("company_id = ? AND node_id = ? AND id = ?", id).
+		Where("id = ? ", id).
 		First(&company).Error
 
 	company.ID = id
@@ -93,9 +95,9 @@ func (p *CompanyRepo) Save(company synmodel.Company) (u synmodel.Company, err er
 	return
 }
 
-// Create a company
-func (p *CompanyRepo) Create(company synmodel.Company) (u synmodel.Company, err error) {
-	if err = p.Engine.DB.Table(synmodel.CompanyTable).Create(&company).Scan(&u).Error; err != nil {
+// TxCreate a company
+func (p *CompanyRepo) TxCreate(db *gorm.DB, company synmodel.Company) (u synmodel.Company, err error) {
+	if err = db.Table(synmodel.CompanyTable).Create(&company).Scan(&u).Error; err != nil {
 		err = p.dbError(err, "E0918953", company, corterm.Created)
 	}
 	return
@@ -106,6 +108,21 @@ func (p *CompanyRepo) Delete(company synmodel.Company) (err error) {
 	if err = p.Engine.DB.Table(synmodel.CompanyTable).Delete(&company).Error; err != nil {
 		err = p.dbError(err, "E0954485", company, corterm.Deleted)
 	}
+	return
+}
+
+// save the path of the new picture of company table
+func (p *CompanyRepo) UpdateImage(company synmodel.Company, imageType string) (u synmodel.Company, err error) {
+	var imageUpdate synmodel.Company
+
+	if imageType == "logo" {
+		imageUpdate = synmodel.Company{Logo: company.Logo}
+	} else if imageType == "banner" {
+		imageUpdate = synmodel.Company{Banner: company.Banner}
+	} else if imageType == "footer" {
+		imageUpdate = synmodel.Company{Footer: company.Footer}
+	}
+	err = p.Engine.DB.Model(&company).Updates(imageUpdate).Scan(&u).Error
 	return
 }
 

@@ -130,6 +130,17 @@ func (p *BasUserServ) Create(user basmodel.User) (createdUser basmodel.User, err
 		return
 	}
 
+	roleServ := ProvideBasRoleService(basrepo.ProvideRoleRepo(p.Engine))
+	fix := types.FixedCol{
+		ID:        user.RoleID,
+		CompanyID: user.CompanyID,
+		NodeID:    user.NodeID,
+	}
+	if _, err = roleServ.FindByID(fix); err != nil {
+		err = corerr.TickValidate(err, "E1093935", "role_id is out of scope", user)
+		return
+	}
+
 	db := p.Engine.DB.Begin()
 
 	defer func() {
@@ -145,7 +156,7 @@ func (p *BasUserServ) Create(user basmodel.User) (createdUser basmodel.User, err
 	account := basmodel.Account{
 		Name:   user.Name,
 		Type:   accounttype.User,
-		Status: accountstatus.Inactive,
+		Status: accountstatus.Active,
 	}
 	account.CompanyID = user.CompanyID
 	account.NodeID = user.NodeID
@@ -179,27 +190,39 @@ func (p *BasUserServ) Create(user basmodel.User) (createdUser basmodel.User, err
 
 // Save user
 func (p *BasUserServ) Save(user basmodel.User) (createdUser basmodel.User, err error) {
-	var oldUser basmodel.User
-	fix := types.FixedCol{
-		CompanyID: user.CompanyID,
-		NodeID:    user.NodeID,
-		ID:        user.ID,
-	}
-	oldUser, _ = p.FindByID(fix)
-
 	if err = user.Validate(coract.Update); err != nil {
 		err = corerr.TickValidate(err, "E1098252", corerr.ValidationFailed, user)
 		return
 	}
 
-	clonedEngine := p.Engine.Clone()
-	clonedEngine.DB = clonedEngine.DB.Begin()
+	roleServ := ProvideBasRoleService(basrepo.ProvideRoleRepo(p.Engine))
+	fix := types.FixedCol{
+		ID:        user.RoleID,
+		CompanyID: user.CompanyID,
+		NodeID:    user.NodeID,
+	}
+	if _, err = roleServ.FindByID(fix); err != nil {
+		err = corerr.TickValidate(err, "E1072771", "role_id is out of scope", user)
+		return
+	}
 
+	var oldUser basmodel.User
+	fix = types.FixedCol{
+		ID:        user.ID,
+		CompanyID: user.CompanyID,
+		NodeID:    user.NodeID,
+	}
+	oldUser, _ = p.FindByID(fix)
+
+	// clonedEngine := p.Engine.Clone()
+	// clonedEngine.DB = clonedEngine.DB.Begin()
+
+	db := p.Engine.DB.Begin()
 	defer func() {
 		if r := recover(); r != nil {
 			glog.LogError(fmt.Errorf("panic happened in transaction mode for %v",
 				"users table"), "rollback recover save user")
-			clonedEngine.DB.Rollback()
+			db.Rollback()
 		}
 	}()
 
@@ -211,14 +234,13 @@ func (p *BasUserServ) Save(user basmodel.User) (createdUser basmodel.User, err e
 		user.Password = oldUser.Password
 	}
 
-	userRepo := basrepo.ProvideUserRepo(clonedEngine)
+	userRepo := basrepo.ProvideUserRepo(p.Engine)
 	phoneServ := ProvideBasPhoneService(basrepo.ProvidePhoneRepo(p.Engine))
-	accountServ := ProvideBasAccountService(basrepo.ProvideAccountRepo(clonedEngine), phoneServ)
-
+	accountServ := ProvideBasAccountService(basrepo.ProvideAccountRepo(p.Engine), phoneServ)
 	account := basmodel.Account{
 		Name:   user.Name,
 		Type:   accounttype.User,
-		Status: accountstatus.Inactive,
+		Status: user.Status,
 	}
 	account.ID = user.ID
 	account.CompanyID = user.CompanyID
@@ -227,20 +249,20 @@ func (p *BasUserServ) Save(user basmodel.User) (createdUser basmodel.User, err e
 	if _, err = accountServ.Save(account); err != nil {
 		err = corerr.Tick(err, "E1098648", "error in saving account inside the user", user)
 
-		clonedEngine.DB.Rollback()
+		db.Rollback()
 		return
 	}
 
-	if createdUser, err = userRepo.Save(user); err != nil {
+	if createdUser, err = userRepo.TxSave(db, user); err != nil {
 		err = corerr.Tick(err, "E1062983", "error in saving user", user)
 
-		clonedEngine.DB.Rollback()
+		db.Rollback()
 		return
 	}
 
 	BasAccessDeleteFromCache(user.ID)
 
-	clonedEngine.DB.Commit()
+	db.Commit()
 	createdUser.Password = ""
 
 	return

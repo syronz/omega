@@ -37,7 +37,7 @@ func (p *CompanyAPI) FindByID(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(fix.CompanyID, fix.NodeID) {
+	if !resp.CheckRange(fix.CompanyID) {
 		return
 	}
 
@@ -63,7 +63,7 @@ func (p *CompanyAPI) List(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(params.CompanyID, 0) {
+	if !resp.CheckRange(params.CompanyID) {
 		return
 	}
 
@@ -93,7 +93,7 @@ func (p *CompanyAPI) Create(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(company.CompanyID, company.NodeID) {
+	if !resp.CheckRange(company.CompanyID) {
 		return
 	}
 
@@ -124,7 +124,7 @@ func (p *CompanyAPI) Update(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(fix.CompanyID, fix.NodeID) {
+	if !resp.CheckRange(fix.CompanyID) {
 		return
 	}
 
@@ -182,7 +182,7 @@ func (p *CompanyAPI) Excel(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(params.CompanyID, 0) {
+	if !resp.CheckRange(params.CompanyID) {
 		return
 	}
 

@@ -144,6 +144,26 @@ en = '%v is inactive'
 ku = '%v wastenrawa'
 ar = '%v is inactive'
 
+["minimum accepted value for %v is %v"]
+en = 'minimum accepted value for %v is %v'
+ku = '%v abe ba lani kam %v be'
+ar = 'minimum accepted value for %v is %v'
+
+["maximum accepted value for %v is %v"]
+en = 'maximum accepted value for %v is %v'
+ku = '%v ziater la %v warnagre'
+ar = 'maximum accepted value for %v is %v'
+
+["%v shouldn't be less than %v"]
+en = "%v shouldn't be less than %v"
+ku = "%v nabe la %v kamtr be"
+ar = "%v shouldn't be less than %v"
+
+["%v shouldn't be more than %v"]
+en = "%v shouldn't be more than %v"
+ku = "%v nabe la %v ziatr be"
+ar = "%v shouldn't be more than %v"
+
 # corterm/terms.go ----------------------------------------------------------------------
 [username]
 en = 'username'
@@ -347,6 +367,16 @@ ar = 'phone'
 en = 'phones'
 ku = 'phones'
 ar = 'phones'
+
+[activity]
+en = 'activity'
+ku = 'activity'
+ar = 'activity'
+
+[activities]
+en = 'activities'
+ku = 'activities'
+ar = 'activities'
 
 ["user loged in successfully"]
 en = 'user loged in successfully'

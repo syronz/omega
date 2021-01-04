@@ -11,6 +11,8 @@ import (
 	"omega/internal/param"
 	"omega/internal/types"
 	"omega/pkg/glog"
+
+	"github.com/jinzhu/gorm"
 )
 
 // BasSettingServ for injecting auth basrepo
@@ -51,6 +53,11 @@ func (p *BasSettingServ) List(params param.Param) (settings []basmodel.Setting,
 	}
 
 	return
+}
+
+// TxCreate is used for creating settings in transaction mode
+func (p *BasSettingServ) TxCreate(db *gorm.DB, setting basmodel.Setting) (u basmodel.Setting, err error) {
+	return p.Repo.TxCreate(db, setting)
 }
 
 // Save setting
@@ -96,5 +103,14 @@ func (p *BasSettingServ) Excel(params param.Param) (settings []basmodel.Setting,
 		return
 	}
 
+	return
+}
+
+//FindByProperty is used to find setting by property
+func (p *BasSettingServ) FindByProperty(property string) (setting basmodel.Setting, err error) {
+	if setting, err = p.Repo.FindByProperty(property); err != nil {
+		err = corerr.Tick(err, "E1088844", "can't fetch the setting by property", setting)
+		return
+	}
 	return
 }

@@ -28,6 +28,12 @@ func Get(c *gin.Context, engine *core.Engine, part string) (param Param) {
 		param.UserID = userID.(types.RowID)
 	}
 
+	companyID, ok := c.Get("COMPANY_ID")
+	if ok {
+		glog.CheckInfo(err, "Company ID is not exist")
+		param.CompanyID = companyID.(uint64)
+	}
+
 	param.Lang = core.GetLang(c, engine)
 
 	param.ErrPanel = engine.Envs[core.ErrPanel]

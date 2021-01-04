@@ -1,20 +1,18 @@
 package basapi
 
 import (
+	"fmt"
 	"net/http"
 	"omega/domain/base"
 	"omega/domain/base/basmodel"
+	"omega/domain/base/message/basterm"
 	"omega/domain/service"
 	"omega/internal/core"
 	"omega/internal/core/corterm"
-	"omega/internal/param"
 	"omega/internal/response"
 
 	"github.com/gin-gonic/gin"
 )
-
-const thisActivity = "activity"
-const thisActivities = "bas_activities"
 
 // ActivityAPI for injecting activity service
 type ActivityAPI struct {
@@ -48,11 +46,9 @@ func (p *ActivityAPI) Create(c *gin.Context) {
 		JSON(createdActivity)
 }
 
-// List of activities
-func (p *ActivityAPI) List(c *gin.Context) {
-	resp := response.New(p.Engine, c, base.Domain)
-
-	params := param.Get(c, p.Engine, thisActivities)
+// ListAll of all activities among all companies
+func (p *ActivityAPI) ListAll(c *gin.Context) {
+	resp, params := response.NewParam(p.Engine, c, basmodel.ActivityTable, base.Domain)
 
 	data, err := p.Service.List(params)
 	if err != nil {
@@ -62,6 +58,56 @@ func (p *ActivityAPI) List(c *gin.Context) {
 
 	resp.Record(base.AllActivity)
 	resp.Status(http.StatusOK).
-		MessageT(corterm.ListOfV, thisActivities).
+		MessageT(corterm.ListOfV, basterm.Activities).
+		JSON(data)
+}
+
+// ListCompany of all activities among all companies
+func (p *ActivityAPI) ListCompany(c *gin.Context) {
+	resp, params := response.NewParam(p.Engine, c, basmodel.ActivityTable, base.Domain)
+	var err error
+
+	if params.CompanyID, err = resp.GetCompanyID("E1029386"); err != nil {
+		return
+	}
+
+	if !resp.CheckRange(params.CompanyID) {
+		return
+	}
+
+	params.PreCondition = fmt.Sprintf("(bas_activities.company_id = %v) ", params.CompanyID)
+
+	data, err := p.Service.List(params)
+	if err != nil {
+		resp.Error(err).JSON()
+		return
+	}
+
+	resp.Record(base.AllActivity)
+	resp.Status(http.StatusOK).
+		MessageT(corterm.ListOfV, basterm.Activities).
+		JSON(data)
+}
+
+// ListSelf of all activities among all companies
+func (p *ActivityAPI) ListSelf(c *gin.Context) {
+	resp, params := response.NewParam(p.Engine, c, basmodel.ActivityTable, base.Domain)
+	var err error
+
+	// if params.CompanyID, err = resp.GetCompanyID("E1027519"); err != nil {
+	// 	return
+	// }
+
+	params.PreCondition = fmt.Sprintf("bas_activities.user_id = %v", params.UserID)
+
+	data, err := p.Service.List(params)
+	if err != nil {
+		resp.Error(err).JSON()
+		return
+	}
+
+	resp.Record(base.AllActivity)
+	resp.Status(http.StatusOK).
+		MessageT(corterm.ListOfV, basterm.Activities).
 		JSON(data)
 }

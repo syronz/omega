@@ -10,6 +10,8 @@ import (
 	"omega/internal/param"
 	"omega/internal/types"
 	"omega/pkg/glog"
+
+	"github.com/jinzhu/gorm"
 )
 
 // BasRoleServ for injecting auth basrepo
@@ -58,13 +60,17 @@ func (p *BasRoleServ) List(params param.Param) (roles []basmodel.Role,
 
 // Create a role
 func (p *BasRoleServ) Create(role basmodel.Role) (createdRole basmodel.Role, err error) {
+	return p.TxCreate(p.Engine.DB, role)
+}
 
+// TxCreate is used in case of transaction activated
+func (p *BasRoleServ) TxCreate(db *gorm.DB, role basmodel.Role) (createdRole basmodel.Role, err error) {
 	if err = role.Validate(coract.Save); err != nil {
 		err = corerr.TickValidate(err, "E1098554", "validation failed in creating the role", role)
 		return
 	}
 
-	if createdRole, err = p.Repo.Create(role); err != nil {
+	if createdRole, err = p.Repo.TxCreate(db, role); err != nil {
 		err = corerr.Tick(err, "E1042894", "role not created", role)
 		return
 	}

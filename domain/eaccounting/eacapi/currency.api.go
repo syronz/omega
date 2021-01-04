@@ -37,7 +37,7 @@ func (p *CurrencyAPI) FindByID(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(fix.CompanyID, fix.NodeID) {
+	if !resp.CheckRange(fix.CompanyID) {
 		return
 	}
 
@@ -63,7 +63,7 @@ func (p *CurrencyAPI) List(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(params.CompanyID, 0) {
+	if !resp.CheckRange(params.CompanyID) {
 		return
 	}
 
@@ -93,7 +93,7 @@ func (p *CurrencyAPI) Create(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(currency.CompanyID, currency.NodeID) {
+	if !resp.CheckRange(currency.CompanyID) {
 		return
 	}
 
@@ -124,7 +124,7 @@ func (p *CurrencyAPI) Update(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(fix.CompanyID, fix.NodeID) {
+	if !resp.CheckRange(fix.CompanyID) {
 		return
 	}
 
@@ -182,7 +182,7 @@ func (p *CurrencyAPI) Excel(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(params.CompanyID, 0) {
+	if !resp.CheckRange(params.CompanyID) {
 		return
 	}
 

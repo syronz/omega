@@ -37,7 +37,7 @@ func (p *SlotAPI) FindByID(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(fix.CompanyID, fix.NodeID) {
+	if !resp.CheckRange(fix.CompanyID) {
 		return
 	}
 
@@ -62,7 +62,7 @@ func (p *SlotAPI) List(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(params.CompanyID, 0) {
+	if !resp.CheckRange(params.CompanyID) {
 		return
 	}
 
@@ -91,7 +91,7 @@ func (p *SlotAPI) Create(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(slot.CompanyID, slot.NodeID) {
+	if !resp.CheckRange(slot.CompanyID) {
 		return
 	}
 
@@ -122,7 +122,7 @@ func (p *SlotAPI) Update(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(fix.CompanyID, fix.NodeID) {
+	if !resp.CheckRange(fix.CompanyID) {
 		return
 	}
 
@@ -177,7 +177,7 @@ func (p *SlotAPI) Excel(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(params.CompanyID, 0) {
+	if !resp.CheckRange(params.CompanyID) {
 		return
 	}
 

@@ -28,3 +28,8 @@ func (p Envs) ToDuration(key Envkey) time.Duration {
 	num := p.ToUint64(key)
 	return time.Duration(num)
 }
+
+func (p Envs) ToInt(key Envkey) int {
+	num, _ := strconv.Atoi(p[key])
+	return num
+}

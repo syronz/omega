@@ -1,7 +1,6 @@
 package startoff
 
 import (
-	"fmt"
 	"omega/domain/base/basmodel"
 	"omega/domain/eaccounting/eacmodel"
 	"omega/domain/material/matmodel"
@@ -16,11 +15,14 @@ func Migrate(engine *core.Engine) {
 
 	// Base Domain
 	engine.DB.Table(basmodel.SettingTable).AutoMigrate(&basmodel.Setting{})
+	engine.DB.Exec("ALTER TABLE `bas_settings` ADD UNIQUE `idx_bas_settings_companyID_property`(`company_id`, `property`)")
 	engine.DB.Table(basmodel.RoleTable).AutoMigrate(&basmodel.Role{})
+	engine.DB.Exec("ALTER TABLE `bas_roles` ADD UNIQUE `idx_bas_roles_companyID_name`(`company_id`, `name`)")
+
 	engine.DB.Table(basmodel.AccountTable).AutoMigrate(&basmodel.Account{}).
 		AddForeignKey("parent_id", "bas_accounts(id)", "RESTRICT", "RESTRICT")
 	engine.DB.Table(basmodel.UserTable).AutoMigrate(&basmodel.User{}).
-		AddForeignKey("role_id", fmt.Sprintf("%v(id)", basmodel.RoleTable), "RESTRICT", "RESTRICT").
+		AddForeignKey("role_id", "bas_roles(id)", "RESTRICT", "RESTRICT").
 		AddForeignKey("id", "bas_accounts(id)", "RESTRICT", "RESTRICT")
 	engine.ActivityDB.Table(basmodel.ActivityTable).AutoMigrate(&basmodel.Activity{})
 	engine.DB.Table(basmodel.PhoneTable).AutoMigrate(&basmodel.Phone{})

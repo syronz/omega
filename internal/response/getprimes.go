@@ -28,9 +28,6 @@ func (r *Response) GetCompanyNode(code, domain string) (companyID, nodeID uint64
 	}
 	nodeID = intNodeID.(uint64)
 
-	// err = limberr.Take(err, code).Domain(domain).
-	// 	Message(corerr.ErrorInBindingV, dict.R(part)).
-	// 	Custom(corerr.Forbidden).Build()
 
 	return
 }

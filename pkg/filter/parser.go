@@ -32,6 +32,10 @@ func Parser(str string, cols []string) (string, error) {
 		if strings.Contains(v, ".") {
 			reducedCols = append(reducedCols, regAfterDot.FindString(v))
 		}
+		if strings.Contains(v, "as") {
+			splitString := strings.Split(v, " ")
+			reducedCols = append(reducedCols, splitString[0])
+		}
 	}
 
 	cols = append(cols, reducedCols...)

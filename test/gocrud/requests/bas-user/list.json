@@ -7,6 +7,7 @@
 	"url":"_URL_/users?username=reader",
 	"url":"_URL_/companies/1001/users",
 	"url":"_URL_/companies/1001/users?filter=bas_users.username[eq]'super'",
+	"url":"_URL_/companies/1001/users?filter=bas_users.company_id[eq]1001",
 	"authorization":"Bearer _TOKEN_",
 	"payload": {}
 }

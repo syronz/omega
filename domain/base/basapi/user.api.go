@@ -5,11 +5,12 @@ import (
 	"net/http"
 	"omega/domain/base"
 	"omega/domain/base/basmodel"
+	"omega/domain/base/basrepo"
 	"omega/domain/base/message/basterm"
 	"omega/domain/service"
+	"omega/domain/sync"
 	"omega/internal/core"
 	"omega/internal/core/corterm"
-	"omega/internal/param"
 	"omega/internal/response"
 	"omega/internal/types"
 	"omega/pkg/dict"
@@ -41,7 +42,7 @@ func (p *UserAPI) FindByID(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(fix.CompanyID, fix.NodeID) {
+	if !resp.CheckRange(fix.CompanyID) {
 		return
 	}
 
@@ -62,6 +63,16 @@ func (p *UserAPI) FindByID(c *gin.Context) {
 func (p *UserAPI) FindByUsername(c *gin.Context) {
 	resp := response.New(p.Engine, c, base.Domain)
 	username := c.Param("username")
+	var err error
+	var fix types.FixedCol
+
+	if fix.CompanyID, err = resp.GetCompanyID("E1034598"); err != nil {
+		return
+	}
+
+	if !resp.CheckRange(fix.CompanyID) {
+		return
+	}
 
 	user, err := p.Service.FindByUsername(username)
 	if err != nil {
@@ -79,7 +90,7 @@ func (p *UserAPI) List(c *gin.Context) {
 	resp, params := response.NewParam(p.Engine, c, basmodel.UserTable, base.Domain)
 
 	if username := c.Query("username"); username != "" {
-		params.Filter = fmt.Sprintf("username[eq]'%v'", username)
+		params.Filter = fmt.Sprintf("bas_users.username[eq]'%v'", username)
 	}
 
 	data := make(map[string]interface{})
@@ -89,8 +100,12 @@ func (p *UserAPI) List(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(params.CompanyID, 0) {
-		return
+	accessService := service.ProvideBasAccessService(basrepo.ProvideAccessRepo(p.Engine))
+	accessResult := accessService.CheckAccess(c, sync.SuperAdmin)
+	if accessResult == true {
+		if !resp.CheckRange(params.CompanyID) {
+			return
+		}
 	}
 
 	if data["list"], data["count"], err = p.Service.List(params); err != nil {
@@ -109,6 +124,15 @@ func (p *UserAPI) Create(c *gin.Context) {
 	resp := response.New(p.Engine, c, base.Domain)
 	var user, createdUser basmodel.User
 	var err error
+	var fix types.FixedCol
+
+	if fix.CompanyID, err = resp.GetCompanyID("E1097541"); err != nil {
+		return
+	}
+
+	if !resp.CheckRange(fix.CompanyID) {
+		return
+	}
 
 	if user.CompanyID, user.NodeID, err = resp.GetCompanyNode("E1061527", base.Domain); err != nil {
 		resp.Error(err).JSON()
@@ -119,7 +143,7 @@ func (p *UserAPI) Create(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(user.CompanyID, user.NodeID) {
+	if !resp.CheckRange(user.CompanyID) {
 		return
 	}
 
@@ -152,7 +176,7 @@ func (p *UserAPI) Update(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(fix.CompanyID, fix.NodeID) {
+	if !resp.CheckRange(fix.CompanyID) {
 		return
 	}
 
@@ -174,11 +198,9 @@ func (p *UserAPI) Update(c *gin.Context) {
 	}
 
 	resp.Record(base.UpdateUser, userBefore, userUpdated)
-
 	resp.Status(http.StatusOK).
-		MessageT(corterm.VUpdatedSuccessfully, basterm.User).
+		MessageT(corterm.VUpdatedSuccessfully, dict.R(basterm.User)).
 		JSON(userUpdated)
-
 }
 
 // Delete user
@@ -205,9 +227,16 @@ func (p *UserAPI) Delete(c *gin.Context) {
 
 // Excel generate excel files based on search
 func (p *UserAPI) Excel(c *gin.Context) {
-	resp := response.New(p.Engine, c, base.Domain)
+	resp, params := response.NewParam(p.Engine, c, basterm.Users, base.Domain)
+	var err error
 
-	params := param.Get(c, p.Engine, basterm.Users)
+	if params.CompanyID, err = resp.GetCompanyID("E1066535"); err != nil {
+		return
+	}
+
+	if !resp.CheckRange(params.CompanyID) {
+		return
+	}
 
 	users, err := p.Service.Excel(params)
 	if err != nil {

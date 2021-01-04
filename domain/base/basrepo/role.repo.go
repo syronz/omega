@@ -13,6 +13,8 @@ import (
 	"omega/pkg/helper"
 	"omega/pkg/limberr"
 	"reflect"
+
+	"github.com/jinzhu/gorm"
 )
 
 // RoleRepo for injecting engine
@@ -93,9 +95,9 @@ func (p *RoleRepo) Save(role basmodel.Role) (u basmodel.Role, err error) {
 	return
 }
 
-// Create a role
-func (p *RoleRepo) Create(role basmodel.Role) (u basmodel.Role, err error) {
-	if err = p.Engine.DB.Table(basmodel.RoleTable).Create(&role).Scan(&u).Error; err != nil {
+// TxCreate a role
+func (p *RoleRepo) TxCreate(db *gorm.DB, role basmodel.Role) (u basmodel.Role, err error) {
+	if err = db.Table(basmodel.RoleTable).Create(&role).Scan(&u).Error; err != nil {
 		err = p.dbError(err, "E1053287", role, corterm.Created)
 	}
 	return

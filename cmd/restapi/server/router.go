@@ -99,15 +99,15 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 	rg.GET("/excel/companies/:companyID/accounts",
 		access.Check(base.AccountExcel), basAccountAPI.Excel)
 
-	rg.GET("/companies/:companyID/phones",
-		access.Check(base.PhoneRead), basPhoneAPI.List)
-	rg.GET("/companies/:companyID/nodes/:nodeID/phones/:phoneID",
+	rg.GET("/phones",
+		access.Check(sync.SuperAdmin), basPhoneAPI.List)
+	rg.GET("/phones/:phoneID",
 		access.Check(base.PhoneRead), basPhoneAPI.FindByID)
 	rg.POST("/companies/:companyID/phones",
 		access.Check(base.PhoneWrite), basPhoneAPI.Create)
-	rg.PUT("/companies/:companyID/nodes/:nodeID/phones/:phoneID",
-		access.Check(base.PhoneWrite), basPhoneAPI.Update)
-	rg.DELETE("/companies/:companyID/nodes/:nodeID/phones/:phoneID",
+	rg.PUT("/phones/:phoneID",
+		access.Check(sync.SuperAdmin), basPhoneAPI.Update)
+	rg.DELETE("/phones/:phoneID",
 		access.Check(base.PhoneWrite), basPhoneAPI.Delete)
 	rg.GET("/excel/companies/:companyID/phones",
 		access.Check(base.PhoneExcel), basPhoneAPI.Excel)
@@ -130,7 +130,11 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 		access.Check(base.UserExcel), basUserAPI.Excel)
 
 	rg.GET("/activities",
-		access.Check(base.ActivityAll), basActivityAPI.List)
+		access.Check(sync.SuperAdmin), basActivityAPI.ListAll)
+	rg.GET("/activities/companies/:companyID",
+		access.Check(base.ActivityCompany), basActivityAPI.ListCompany)
+	rg.GET("/activities/self",
+		access.Check(base.ActivitySelf), basActivityAPI.ListSelf)
 
 	// EAccountig Domain
 	rg.GET("/companies/:companyID/currencies",

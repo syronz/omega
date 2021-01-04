@@ -17,7 +17,7 @@ const (
 // Setting model
 type Setting struct {
 	types.FixedCol
-	Property    types.Setting `gorm:"not null;unique_index:idx_companyID_property" json:"property,omitempty"`
+	Property    types.Setting `gorm:"not null" json:"property,omitempty"`
 	Value       string        `gorm:"type:text" json:"value,omitempty"`
 	Type        string        `json:"type,omitempty"`
 	Description string        `json:"description,omitempty"`

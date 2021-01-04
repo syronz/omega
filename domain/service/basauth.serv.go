@@ -5,13 +5,13 @@ import (
 	"omega/domain/base/basmodel"
 	"omega/domain/base/basrepo"
 	"omega/domain/base/message/baserr"
-	"omega/domain/sync"
 	"omega/internal/consts"
 	"omega/internal/core"
 	"omega/internal/core/coract"
 	"omega/internal/core/corerr"
 	"omega/internal/param"
 	"omega/internal/types"
+	"omega/pkg/dict"
 	"omega/pkg/glog"
 	"omega/pkg/limberr"
 	"omega/pkg/password"
@@ -55,11 +55,13 @@ func (p *BasAuthServ) Login(auth basmodel.Auth, params param.Param) (user basmod
 		expirationTime := time.Now().
 			Add(p.Engine.Envs.ToDuration(base.JWTExpiration) * time.Second)
 		claims := &types.JWTClaims{
-			Username:  auth.Username,
-			ID:        user.ID,
-			Lang:      user.Lang,
-			CompanyID: p.Engine.Envs.ToUint64(sync.CompanyID),
-			NodeID:    p.Engine.Envs.ToUint64(sync.NodeID),
+			Username: auth.Username,
+			ID:       user.ID,
+			Lang:     user.Lang,
+			// CompanyID: p.Engine.Envs.ToUint64(sync.CompanyID),
+			// NodeID:    p.Engine.Envs.ToUint64(sync.NodeID),
+			CompanyID: user.CompanyID,
+			NodeID:    user.NodeID,
 			StandardClaims: jwt.StandardClaims{
 				ExpiresAt: expirationTime.Unix(),
 			},
@@ -99,8 +101,10 @@ func (p *BasAuthServ) TemporaryToken(params param.Param) (tmpKey string, err err
 
 	expirationTime := time.Now().Add(consts.TemporaryTokenDuration * time.Second)
 	claims := &types.JWTClaims{
-		ID:   params.UserID,
-		Lang: params.Lang,
+		ID:        params.UserID,
+		Lang:      params.Lang,
+		CompanyID: params.CompanyID,
+		NodeID:    params.NodeID,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},
@@ -109,6 +113,28 @@ func (p *BasAuthServ) TemporaryToken(params param.Param) (tmpKey string, err err
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	if tmpKey, err = token.SignedString(jwtKey); err != nil {
 		err = corerr.Tick(err, "E1044682", "temporary token not generated")
+		return
+	}
+
+	return
+}
+
+// TemporaryTokenHour generate instant token for downloading excels and etc
+func (p *BasAuthServ) TemporaryTokenHour(hour int, lang dict.Lang) (tmpKey string, err error) {
+	jwtKey := p.Engine.Envs.ToByte(base.JWTSecretKey)
+
+	expirationTime := time.Now().Add(time.Duration(hour) * time.Hour)
+	claims := &types.JWTClaims{
+		ID:   consts.UserResultViewerID,
+		Lang: lang,
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: expirationTime.Unix(),
+		},
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	if tmpKey, err = token.SignedString(jwtKey); err != nil {
+		err = corerr.Tick(err, "E1077735", "temporary token hour not generated")
 		return
 	}
 

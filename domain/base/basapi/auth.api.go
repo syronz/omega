@@ -11,6 +11,10 @@ import (
 	"omega/internal/core/corterm"
 	"omega/internal/param"
 	"omega/internal/response"
+	"omega/pkg/dict"
+	"omega/pkg/helper"
+	"omega/pkg/limberr"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -79,6 +83,53 @@ func (p *AuthAPI) TemporaryToken(c *gin.Context) {
 		Message(corterm.TemporaryToken).
 		JSON(tmpKey)
 
+}
+
+// TemporaryTokenHour is used for creating temporary access token for download excel and etc
+func (p *AuthAPI) TemporaryTokenHour(c *gin.Context) {
+	// var auth basmodel.Auth
+	resp := response.New(p.Engine, c, base.Domain)
+
+	var hour int
+	var err error
+	if hour, err = strconv.Atoi(c.Param("hour")); err != nil {
+		err := limberr.New("hour is not a number", "E4269633").
+			Domain(base.Domain).
+			Message(corerr.VisNotValid, "hour").
+			Custom(corerr.ForbiddenErr).Build()
+		resp.Error(err).JSON()
+		return
+	}
+
+	if p.Engine.Envs.ToInt(base.MaxHourTemporaryToken) < hour {
+		err := limberr.New("hour exceeds the limit, choose smaller number", "E4285615").
+			Domain(base.Domain).
+			Message(corerr.VisNotValid, "hour").
+			Custom(corerr.ForbiddenErr).Build()
+		resp.Error(err).JSON()
+		return
+	}
+
+	lang := dict.Lang(c.Param("lang"))
+
+	if ok, _ := helper.Includes(dict.Langs, lang); !ok {
+		err := limberr.New("language is not accepted", "E4244811").
+			Domain(base.Domain).
+			Message(corerr.AcceptedValueForVareV, dict.R(corterm.Language), dict.Langs).
+			Custom(corerr.ValidationFailedErr).Build()
+		resp.Error(err).JSON()
+		return
+	}
+
+	tmpKey, err := p.Service.TemporaryTokenHour(hour, lang)
+	if err != nil {
+		resp.Status(http.StatusInternalServerError).Error(corerr.YouDontHavePermission).JSON()
+		return
+	}
+
+	resp.Status(http.StatusOK).
+		Message(corterm.TemporaryToken).
+		JSON(tmpKey)
 }
 
 // Register a user

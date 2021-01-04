@@ -8,7 +8,6 @@ import (
 	"omega/internal/core/corterm"
 	"omega/internal/types"
 	"omega/pkg/dict"
-	"omega/pkg/glog"
 	"omega/pkg/helper"
 	"omega/pkg/limberr"
 	"time"
@@ -22,21 +21,25 @@ const (
 // Company model
 type Company struct {
 	types.GormCol
-	Name          string      `gorm:"not null" json:"name,omitempty"`
-	LegalName     string      `gorm:"not null;unique" json:"legal_name,omitempty"`
-	Key           string      `gorm:"type:text" json:"key,omitempty"`
-	ServerAddress string      `json:"server_address,omitempty"`
-	Expiration    time.Time   `json:"expiration,omitempty"`
-	License       string      `gorm:"unique" json:"license,omitempty"`
-	Plan          string      `json:"plan,omitempty"`
-	Detail        string      `json:"detail,omitempty"`
-	Phone         string      `gorm:"not null" json:"phone,omitempty"`
-	Email         string      `gorm:"not null" json:"email,omitempty"`
-	Website       string      `gorm:"not null" json:"website,omitempty"`
-	Type          string      `gorm:"not null" json:"type,omitempty"`
-	Code          string      `gorm:"not null" json:"code,omitempty"`
-	Extra         interface{} `sql:"-" json:"extra_company,omitempty"`
-	Error         error       `sql:"-" json:"error,omitempty"`
+	Name          string     `gorm:"not null" json:"name,omitempty"`
+	LegalName     string     `gorm:"not null;unique" json:"legal_name,omitempty"`
+	Key           string     `gorm:"type:text" json:"key,omitempty"`
+	ServerAddress string     `json:"server_address,omitempty"`
+	Expiration    *time.Time `json:"expiration,omitempty"`
+	License       string     `gorm:"unique" json:"license,omitempty"`
+	Plan          string     `json:"plan,omitempty"`
+	Detail        string     `json:"detail,omitempty"`
+	Phone         string     `gorm:"not null" json:"phone,omitempty"`
+	Email         string     `gorm:"not null" json:"email,omitempty"`
+	Website       string     `gorm:"not null" json:"website,omitempty"`
+	Type          string     `gorm:"not null" json:"type,omitempty"`
+	Code          string     `gorm:"not null" json:"code,omitempty"`
+	Logo          string     `json:"logo,omitempty"`
+	Banner        string     `json:"banner,omitempty"`
+	Footer        string     `json:"footer,omitempty"`
+	AdminUsername string     `sql:"-" json:"admin_username,omitempty" table:"-"`
+	AdminPassword string     `sql:"-" json:"admin_password,omitempty" table:"-"`
+	Lang          dict.Lang  `sql:"-" josn:"lang,omitempty" table:"-"`
 }
 
 // Validate check the type of
@@ -58,8 +61,8 @@ func (p *Company) Validate(act coract.Action) (err error) {
 		}
 
 		if p.Code == "" {
-			err = limberr.AddInvalidParam(err, "resources",
-				corerr.VisRequired, dict.R(corterm.Resources))
+			err = limberr.AddInvalidParam(err, "code",
+				corerr.VisRequired, dict.R(corterm.Code))
 		}
 
 		if len(p.Detail) > 255 {
@@ -67,8 +70,6 @@ func (p *Company) Validate(act coract.Action) (err error) {
 				corerr.MaximumAcceptedCharacterForVisV,
 				dict.R(synterm.Detail), 255)
 		}
-
-		glog.Debug(companytype.List, p.Type)
 
 		if ok, _ := helper.Includes(companytype.List, types.Enum(p.Type)); !ok {
 			return limberr.AddInvalidParam(err, "type",

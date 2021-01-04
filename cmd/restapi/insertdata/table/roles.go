@@ -30,7 +30,7 @@ func InsertRoles(engine *core.Engine) {
 				sync.SuperAdmin,
 				base.SettingRead, base.SettingWrite, base.SettingExcel,
 				base.UserWrite, base.UserRead, base.UserExcel,
-				base.ActivitySelf, base.ActivityAll,
+				base.ActivitySelf,
 				base.RoleRead, base.RoleWrite, base.RoleExcel,
 				base.AccountRead, base.AccountWrite, base.AccountExcel,
 				base.PhoneRead, base.PhoneWrite, base.PhoneExcel,

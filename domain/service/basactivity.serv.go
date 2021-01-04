@@ -47,6 +47,7 @@ func (p *BasActivityServ) Save(activity basmodel.Activity) (createdActivity basm
 // Record will save the activity
 func (p *BasActivityServ) Record(c *gin.Context, ev types.Event, data ...interface{}) {
 	var userID types.RowID
+	var companyID, nodeID uint64
 	var username string
 
 	recordType := p.findRecordType(data...)
@@ -63,6 +64,12 @@ func (p *BasActivityServ) Record(c *gin.Context, ev types.Event, data ...interfa
 	if p.isRecordSetInEnvironment(recordType) {
 		return
 	}
+	if companyIDtmp, ok := c.Get("COMPANY_ID"); ok {
+		companyID = companyIDtmp.(uint64)
+	}
+	if nodeIDtmp, ok := c.Get("NODE_ID"); ok {
+		nodeID = nodeIDtmp.(uint64)
+	}
 	if userIDtmp, ok := c.Get("USER_ID"); ok {
 		userID = userIDtmp.(types.RowID)
 	}
@@ -71,6 +78,10 @@ func (p *BasActivityServ) Record(c *gin.Context, ev types.Event, data ...interfa
 	}
 
 	activity := basmodel.Activity{
+		FixedCol: types.FixedCol{
+			CompanyID: companyID,
+			NodeID:    nodeID,
+		},
 		Event:    ev.String(),
 		UserID:   userID,
 		Username: username,

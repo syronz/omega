@@ -17,7 +17,7 @@ const (
 // Role model
 type Role struct {
 	types.FixedCol
-	Name        string `gorm:"not null;unique" json:"name,omitempty"`
+	Name        string `gorm:"not null" json:"name,omitempty"`
 	Resources   string `gorm:"type:text" json:"resources,omitempty"`
 	Description string `json:"description,omitempty"`
 }

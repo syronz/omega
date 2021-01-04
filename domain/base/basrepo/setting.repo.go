@@ -1,6 +1,7 @@
 package basrepo
 
 import (
+	"log"
 	"omega/domain/base/basmodel"
 	"omega/domain/base/message/basterm"
 	"omega/internal/core"
@@ -12,6 +13,8 @@ import (
 	"omega/pkg/helper"
 	"omega/pkg/limberr"
 	"reflect"
+
+	"github.com/jinzhu/gorm"
 )
 
 // SettingRepo for injecting engine
@@ -36,6 +39,20 @@ func (p *SettingRepo) FindByID(fix types.FixedCol) (setting basmodel.Setting, er
 
 	setting.ID = fix.ID
 	err = p.dbError(err, "E1063890", setting, corterm.List)
+
+	return
+}
+
+//FindByProperty finds the setting via its property
+func (p *SettingRepo) FindByProperty(property string) (setting basmodel.Setting, err error) {
+	err = p.Engine.DB.Table(basmodel.SettingTable).
+		Select("bas_settings.*").
+		Where("property = ?", property).
+		Scan(&setting).Error
+
+	log.Printf("found setting : %v", setting)
+	//setting.Property = property
+	err = p.dbError(err, "E1043108", setting, corterm.List)
 
 	return
 }
@@ -79,6 +96,15 @@ func (p *SettingRepo) Count(params param.Param) (count uint64, err error) {
 		Count(&count).Error
 
 	err = p.dbError(err, "E1021898", basmodel.Setting{}, corterm.List)
+	return
+}
+
+// TxCreate is used for creating setting in transaction mode
+func (p *SettingRepo) TxCreate(db *gorm.DB, setting basmodel.Setting) (u basmodel.Setting, err error) {
+	if err = db.Table(basmodel.SettingTable).Create(&setting).Scan(&u).Error; err != nil {
+		err = p.dbError(err, "E1075110", setting, corterm.Created)
+	}
+
 	return
 }
 

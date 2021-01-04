@@ -7,6 +7,7 @@
 	"url":"_URL_/roles?filter=bas_roles2.name[eq]'admin'",
 	"url":"_URL_/roles?order_by=bas_roles.id&direction=asc&page_size=4",
 	"url":"_URL_/roles?select=bas_roles.name,bas_roles.id&lang=ku",
+	"url":"_URL_/companies/1002/roles",
 	"url":"_URL_/companies/1001/roles",
 	"authorization":"Bearer _TOKEN_",
 	"payload": {}

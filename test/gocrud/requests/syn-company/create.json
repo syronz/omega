@@ -15,6 +15,9 @@
 		"email": "_RANDOM_NAME_",
 		"website": "_RANDOM_NAME_",
 		"type": "base",
-		"code": "001234"
+		"code": "001234",
+		"admin_username": "_RANDOM_NAME_",
+		"admin_password": "_RANDOM_NAME_",
+		"lang": "ku"
 	}
 }

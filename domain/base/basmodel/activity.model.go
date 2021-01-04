@@ -26,6 +26,8 @@ type Activity struct {
 func (p Activity) Pattern() string {
 	return `(
 		bas_activities.id = '%[1]v' OR
+		bas_activities.company_id = '%[1]v' OR
+		bas_activities.node_id = '%[1]v' OR
 		bas_activities.event LIKE '%[1]v%%' OR
 		bas_activities.username LIKE '%[1]v%%' OR
 		bas_activities.ip LIKE '%[1]v' OR
@@ -40,6 +42,8 @@ func (p Activity) Pattern() string {
 func (p Activity) Columns(variate string) (string, error) {
 	full := []string{
 		"bas_activities.id",
+		"bas_activities.company_id",
+		"bas_activities.node_id",
 		"bas_activities.event",
 		"bas_activities.user_id",
 		"bas_activities.username",

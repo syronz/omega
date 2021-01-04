@@ -37,7 +37,7 @@ func (p *RoleAPI) FindByID(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(fix.CompanyID, fix.NodeID) {
+	if !resp.CheckRange(fix.CompanyID) {
 		return
 	}
 
@@ -63,7 +63,7 @@ func (p *RoleAPI) List(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(params.CompanyID, 0) {
+	if !resp.CheckRange(params.CompanyID) {
 		return
 	}
 
@@ -93,7 +93,7 @@ func (p *RoleAPI) Create(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(role.CompanyID, role.NodeID) {
+	if !resp.CheckRange(role.CompanyID) {
 		return
 	}
 
@@ -124,7 +124,7 @@ func (p *RoleAPI) Update(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(fix.CompanyID, fix.NodeID) {
+	if !resp.CheckRange(fix.CompanyID) {
 		return
 	}
 
@@ -162,6 +162,10 @@ func (p *RoleAPI) Delete(c *gin.Context) {
 		return
 	}
 
+	if !resp.CheckRange(fix.CompanyID) {
+		return
+	}
+
 	if role, err = p.Service.Delete(fix); err != nil {
 		resp.Error(err).JSON()
 		return
@@ -182,7 +186,7 @@ func (p *RoleAPI) Excel(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(params.CompanyID, 0) {
+	if !resp.CheckRange(params.CompanyID) {
 		return
 	}
 

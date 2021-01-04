@@ -34,7 +34,7 @@ func ProvidePhoneRepo(engine *core.Engine) PhoneRepo {
 // FindByID finds the phone via its id
 func (p *PhoneRepo) FindByID(fix types.FixedNode) (phone basmodel.Phone, err error) {
 	err = p.Engine.DB.Table(basmodel.PhoneTable).
-		Where("id = ? AND company_id = ? AND node_id = ?", fix.ID.ToUint64(), fix.CompanyID, fix.NodeID).
+		Where("id = ?", fix.ID.ToUint64()).
 		First(&phone).Error
 
 	phone.ID = fix.ID
@@ -58,6 +58,7 @@ func (p *PhoneRepo) FindAccountPhoneByID(fix types.FixedNode) (aPhone basmodel.A
 // AccountsPhones return list of phones assigned to an account
 func (p *PhoneRepo) AccountsPhones(fix types.FixedNode) (phones []basmodel.Phone, err error) {
 	err = p.Engine.DB.Table(basmodel.AccountPhoneTable).
+		Select("*").
 		Joins("INNER JOIN bas_phones on bas_account_phones.phone_id = bas_phones.id").
 		Where("bas_account_phones.account_id = ? AND bas_account_phones.company_id = ? AND bas_account_phones.node_id = ?",
 			fix.ID.ToUint64(), fix.CompanyID, fix.NodeID).
@@ -146,7 +147,7 @@ func (p *PhoneRepo) TxCreate(db *gorm.DB, phone basmodel.Phone) (u basmodel.Phon
 }
 
 // JoinAccountPhone will connect account with phone
-func (p *PhoneRepo) JoinAccountPhone(account basmodel.Account,
+func (p *PhoneRepo) JoinAccountPhone(db *gorm.DB, account basmodel.Account,
 	phone basmodel.Phone, def byte) (aphCreated basmodel.AccountPhone, err error) {
 	var accountPhone basmodel.AccountPhone
 	accountPhone.AccountID = account.ID
@@ -155,7 +156,7 @@ func (p *PhoneRepo) JoinAccountPhone(account basmodel.Account,
 	accountPhone.Default = def
 	accountPhone.PhoneID = phone.ID
 
-	if err = p.Engine.DB.Table(basmodel.AccountPhoneTable).Create(&accountPhone).
+	if err = db.Table(basmodel.AccountPhoneTable).Create(&accountPhone).
 		Scan(&aphCreated).Error; err != nil {
 		err = p.dbError(err, "E1077823", phone, corterm.Created)
 	}

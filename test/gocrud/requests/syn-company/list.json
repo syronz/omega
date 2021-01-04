@@ -6,8 +6,8 @@
 	"url":"_URL_/companies?filter='name2[eq];%20select%20name%20from%20bas_users'",
 	"url":"_URL_/companies?order_by=bas_roles.id&direction=asc&page_size=4",
 	"url":"_URL_/companies?select=bas_roles.name,bas_roles.id&lang=ku",
-	"url":"_URL_/companies/1001/companies",
 	"url":"_URL_/companies/1001/companies?filter=mat_companies.id[gt]'7'",
+	"url":"_URL_/sync/companies",
 	"authorization":"Bearer _TOKEN_",
 	"payload": {}
 }

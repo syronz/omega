@@ -33,11 +33,7 @@ func (p *PhoneAPI) FindByID(c *gin.Context) {
 	var phone basmodel.Phone
 	var fix types.FixedNode
 
-	if fix, err = resp.GetFixedNode(c.Param("phoneID"), "E1030412", basterm.Phone); err != nil {
-		return
-	}
-
-	if !resp.CheckRange(fix.CompanyID, fix.NodeID) {
+	if fix.ID, err = types.StrToRowID(c.Param("phoneID")); err != nil {
 		return
 	}
 
@@ -63,7 +59,7 @@ func (p *PhoneAPI) List(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(params.CompanyID, 0) {
+	if !resp.CheckRange(params.CompanyID) {
 		return
 	}
 
@@ -107,11 +103,7 @@ func (p *PhoneAPI) Update(c *gin.Context) {
 	var phone, phoneBefore, phoneUpdated basmodel.Phone
 	var fix types.FixedNode
 
-	if fix, err = resp.GetFixedNode(c.Param("phoneID"), "E1056260", basterm.Phone); err != nil {
-		return
-	}
-
-	if !resp.CheckRange(fix.CompanyID, fix.NodeID) {
+	if fix.ID, err = types.StrToRowID(c.Param("phoneID")); err != nil {
 		return
 	}
 
@@ -143,7 +135,7 @@ func (p *PhoneAPI) Delete(c *gin.Context) {
 	var phone basmodel.Phone
 	var fix types.FixedNode
 
-	if fix, err = resp.GetFixedNode(c.Param("phoneID"), "E1076860", basterm.Phone); err != nil {
+	if fix.ID, err = types.StrToRowID(c.Param("phoneID")); err != nil {
 		return
 	}
 
@@ -189,7 +181,7 @@ func (p *PhoneAPI) Excel(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(params.CompanyID, 0) {
+	if !resp.CheckRange(params.CompanyID) {
 		return
 	}
 

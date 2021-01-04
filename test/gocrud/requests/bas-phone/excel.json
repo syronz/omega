@@ -2,7 +2,7 @@
   "method":"get",
 	"url":"_URL_/excel/companies/1001/accounts?select=bas_users.id2",
 	"url":"_URL_/excel/companies/1001/accounts?select=bas_users.id2",
-	"url":"_URL_/excel/companies/1001/accounts",
+	"url":"_URL_/excel/companies/1001/phones",
 	"authorization":"Bearer _TOKEN_",
 	"payload": {}
 }

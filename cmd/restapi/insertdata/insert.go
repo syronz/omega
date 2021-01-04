@@ -9,6 +9,7 @@ import (
 func Insert(engine *core.Engine) {
 
 	if engine.Envs.ToBool(core.AutoMigrate) {
+		table.InsertCompanys(engine)
 		table.InsertRoles(engine)
 		table.InsertAccounts(engine)
 		table.InsertUsers(engine)

@@ -1,5 +1,7 @@
 package synterm
 
 const (
-	Detail = "detail"
+	Detail    = "detail"
+	Company   = "company"
+	Companies = "companies"
 )

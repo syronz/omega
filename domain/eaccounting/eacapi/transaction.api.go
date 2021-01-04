@@ -38,7 +38,7 @@ func (p *TransactionAPI) FindByID(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(fix.CompanyID, fix.NodeID) {
+	if !resp.CheckRange(fix.CompanyID) {
 		return
 	}
 
@@ -64,7 +64,7 @@ func (p *TransactionAPI) List(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(params.CompanyID, 0) {
+	if !resp.CheckRange(params.CompanyID) {
 		return
 	}
 
@@ -94,7 +94,7 @@ func (p *TransactionAPI) ManualTransfer(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(transaction.CompanyID, transaction.NodeID) {
+	if !resp.CheckRange(transaction.CompanyID) {
 		return
 	}
 
@@ -128,7 +128,7 @@ func (p *TransactionAPI) Update(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(fix.CompanyID, fix.NodeID) {
+	if !resp.CheckRange(fix.CompanyID) {
 		return
 	}
 
@@ -189,7 +189,7 @@ func (p *TransactionAPI) Excel(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(params.CompanyID, 0) {
+	if !resp.CheckRange(params.CompanyID) {
 		return
 	}
 

@@ -117,12 +117,17 @@ func (p *BasAccountServ) TxCreate(db *gorm.DB, account basmodel.Account) (create
 
 // Save a account, if it is exist update it, if not create it
 func (p *BasAccountServ) Save(account basmodel.Account) (savedAccount basmodel.Account, err error) {
+	return p.TxSave(p.Engine.DB, account)
+}
+
+// TxSave a account, if it is exist update it, if not create it
+func (p *BasAccountServ) TxSave(db *gorm.DB, account basmodel.Account) (savedAccount basmodel.Account, err error) {
 	if err = account.Validate(coract.Save); err != nil {
 		err = corerr.TickValidate(err, "E1064761", corerr.ValidationFailed, account)
 		return
 	}
 
-	if savedAccount, err = p.Repo.Save(account); err != nil {
+	if savedAccount, err = p.Repo.TxSave(db, account); err != nil {
 		err = corerr.Tick(err, "E1084087", "account not saved")
 		return
 	}

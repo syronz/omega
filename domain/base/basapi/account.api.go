@@ -37,7 +37,7 @@ func (p *AccountAPI) FindByID(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(fix.CompanyID, fix.NodeID) {
+	if !resp.CheckRange(fix.CompanyID) {
 		return
 	}
 
@@ -63,7 +63,7 @@ func (p *AccountAPI) List(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(params.CompanyID, 0) {
+	if !resp.CheckRange(params.CompanyID) {
 		return
 	}
 
@@ -93,7 +93,7 @@ func (p *AccountAPI) Create(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(account.CompanyID, account.NodeID) {
+	if !resp.CheckRange(account.CompanyID) {
 		return
 	}
 
@@ -124,7 +124,7 @@ func (p *AccountAPI) Update(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(fix.CompanyID, fix.NodeID) {
+	if !resp.CheckRange(fix.CompanyID) {
 		return
 	}
 
@@ -162,6 +162,10 @@ func (p *AccountAPI) Delete(c *gin.Context) {
 		return
 	}
 
+	if !resp.CheckRange(fix.CompanyID) {
+		return
+	}
+
 	if account, err = p.Service.Delete(fix); err != nil {
 		resp.Error(err).JSON()
 		return
@@ -182,7 +186,7 @@ func (p *AccountAPI) Excel(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(params.CompanyID, 0) {
+	if !resp.CheckRange(params.CompanyID) {
 		return
 	}
 

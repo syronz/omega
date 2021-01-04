@@ -24,6 +24,19 @@ const (
 
 	DefaultLimit = 10000
 
+	DateLayout     = "2006-01-02"
 	TimeLayout     = "2006-01-02 15:04:05"
 	TimeLayoutZone = "2006-01-02 15:04:05 -0700"
+
+	UserSuperAdminID   = 11
+	UserResultViewerID = 12
+
+	DefaultNodeID = 101
+
+	DefaultTemplate = "default.tmpl"
+	DefaultLogo     = "default_logo.png"
+	DefaultBanner   = "default_header.png"
+	DefaultFooter   = "default_footer.png"
+
+
 )

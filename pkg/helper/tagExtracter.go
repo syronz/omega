@@ -29,7 +29,9 @@ func (p *extractor) getTag(t reflect.Type) {
 	for i := 0; i < t.NumField(); i++ {
 		field := t.Field(i)
 
-		if field.Type.Kind() == reflect.Struct {
+		externalTable := field.Tag.Get("table")
+
+		if field.Type.Kind() == reflect.Struct && externalTable != "-" {
 			p.getTag(field.Type)
 			continue
 		}
@@ -39,7 +41,6 @@ func (p *extractor) getTag(t reflect.Type) {
 			continue
 		}
 		column = p.re.FindString(column)
-		externalTable := field.Tag.Get("table")
 
 		switch {
 		case externalTable == "-":

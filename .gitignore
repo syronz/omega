@@ -27,3 +27,5 @@ logs/*
 !logs/.gitkeep
 cloud
 ~*
+*.jpg
+*.jpeg

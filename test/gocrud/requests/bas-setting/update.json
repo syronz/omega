@@ -1,6 +1,6 @@
 {
   "method":"put",
-  "url":"_URL_/companies/1001/nodes/101/settings/5",
+  "url":"_URL_/companies/1002/nodes/101/settings/15",
   "authorization":"Bearer _TOKEN_",
   "payload": {
     "value": "new logo path"

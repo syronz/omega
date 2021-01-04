@@ -31,4 +31,8 @@ const (
 	ForbiddenToVV                   = "forbidden to %v %v"
 	Forbidden                       = "forbidden"
 	VisInactive                     = "%v is inactive"
+	MinimumAcceptedValueForVisV     = "minimum accepted value for %v is %v"
+	MaximumAcceptedValueForVisV     = "maximum accepted value for %v is %v"
+	VShouldntLessThanV              = "%v shouldn't be less than %v"
+	VShouldntMoreThanV              = "%v shouldn't be more than %v"
 )

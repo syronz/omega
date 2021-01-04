@@ -4,14 +4,15 @@ import (
 	"net/http"
 	"omega/domain/base"
 	"omega/domain/base/basmodel"
+	"omega/domain/base/basrepo"
 	"omega/domain/base/message/basterm"
 	"omega/domain/service"
+	"omega/domain/sync"
 	"omega/internal/core"
 	"omega/internal/core/corterm"
 	"omega/internal/response"
 	"omega/internal/types"
 	"omega/pkg/excel"
-	"omega/pkg/glog"
 
 	"github.com/gin-gonic/gin"
 )
@@ -38,8 +39,12 @@ func (p *SettingAPI) FindByID(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(fix.CompanyID, fix.NodeID) {
-		return
+	accessService := service.ProvideBasAccessService(basrepo.ProvideAccessRepo(p.Engine))
+	accessResult := accessService.CheckAccess(c, sync.SuperAdmin)
+	if accessResult == true {
+		if !resp.CheckRange(fix.CompanyID) {
+			return
+		}
 	}
 
 	if setting, err = p.Service.FindByID(fix); err != nil {
@@ -57,8 +62,6 @@ func (p *SettingAPI) FindByID(c *gin.Context) {
 func (p *SettingAPI) List(c *gin.Context) {
 	resp, params := response.NewParam(p.Engine, c, basmodel.SettingTable, base.Domain)
 
-	glog.Debug(params)
-
 	data := make(map[string]interface{})
 	var err error
 
@@ -66,7 +69,7 @@ func (p *SettingAPI) List(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(params.CompanyID, 0) {
+	if !resp.CheckRange(params.CompanyID) {
 		return
 	}
 
@@ -93,7 +96,7 @@ func (p *SettingAPI) Update(c *gin.Context) {
 		return
 	}
 
-	if !resp.CheckRange(fix.CompanyID, fix.NodeID) {
+	if !resp.CheckRange(fix.CompanyID) {
 		return
 	}
 
@@ -123,6 +126,15 @@ func (p *SettingAPI) Update(c *gin.Context) {
 // Excel generate excel files based on search
 func (p *SettingAPI) Excel(c *gin.Context) {
 	resp, params := response.NewParam(p.Engine, c, basterm.Setting, base.Domain)
+	var err error
+
+	if params.CompanyID, err = resp.GetCompanyID("E1072378"); err != nil {
+		return
+	}
+
+	if !resp.CheckRange(params.CompanyID) {
+		return
+	}
 
 	settings, err := p.Service.Excel(params)
 	if err != nil {
@@ -138,7 +150,7 @@ func (p *SettingAPI) Excel(c *gin.Context) {
 		SetPageMargins(0.2).
 		SetHeaderFooter().
 		SetColWidth("A", "C", 12).
-		SetColWidth("D", "E", 15.3).
+		SetColWidth("D", "E", 20).
 		SetColWidth("G", "G", 75).
 		SetColWidth("H", "I", 30).
 		SetColWidth("N", "O", 20).

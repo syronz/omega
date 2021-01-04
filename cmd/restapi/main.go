@@ -1,9 +1,13 @@
 package main
 
 import (
+	"flag"
 	"omega/cmd/restapi/insertdata"
 	"omega/cmd/restapi/server"
 	"omega/cmd/restapi/startoff"
+	"omega/cmd/restapi/startoff/event"
+	"omega/cmd/restapi/startoff/procedure"
+	"omega/cmd/restapi/startoff/view"
 	"omega/internal/core"
 	"omega/internal/corstartoff"
 	"omega/pkg/dict"
@@ -12,6 +16,10 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
+
+var cpuprofile = flag.String("cpuprofile", "", "write cpu profile to `file`")
+
+//var memprofile = flag.String("memprofile", "../performance/mem.prof", "write memory profile to `file`")
 
 func main() {
 
@@ -30,6 +38,17 @@ func main() {
 	startoff.Migrate(engine)
 
 	insertdata.Insert(engine)
+
+	//init of views
+	view.InitViewReports(engine)
+	view.InitDasboardViews(engine)
+
+	//init of procedures
+	procedure.InitDashboardProcedure(engine)
+	procedure.InitReportProcedure(engine)
+	//init of events
+	event.InitdashboardEvent(engine)
+	event.InitreportEvent(engine)
 
 	corstartoff.LoadSetting(engine)
 
