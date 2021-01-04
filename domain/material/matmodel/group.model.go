@@ -17,13 +17,13 @@ const (
 // Group model
 type Group struct {
 	types.FixedCol
-	ParentID  *uint64 `json:"parent_id,omitempty"`
-	Name      string  `gorm:"not null;unique" json:"name,omitempty"`
-	LatinName string  `gorm:"not null;unique" json:"latin_name,omitempty"`
-	Code      string  `gorm:"not null;unique" json:"code,omitempty"`
-	Leaf      bool    `json:"leaf,omitempty"`
-	Notes     string  `json:"notes,omitempty"`
-	Caption   string  `json:"caption,omitempty"`
+	ParentID  *types.RowID `json:"parent_id,omitempty"`
+	Name      string       `gorm:"not null;unique" json:"name,omitempty"`
+	LatinName string       `gorm:"not null;unique" json:"latin_name,omitempty"`
+	Code      string       `gorm:"not null;unique" json:"code,omitempty"`
+	Leaf      bool         `json:"leaf,omitempty"`
+	Notes     string       `json:"notes,omitempty"`
+	Caption   string       `json:"caption,omitempty"`
 }
 
 // Validate check the type of fields

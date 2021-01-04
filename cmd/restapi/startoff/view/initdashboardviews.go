@@ -1,19 +1,17 @@
 package view
 
-import (
-	"omega/internal/core"
-)
-
 type temp struct {
 	Total     int    `json:"total"`
 	CompanyID uint64 `json:"company_id"`
 }
 
+/*
 //InitDasboardViews will create necessary views for the dashboard
 func InitDasboardViews(engine *core.Engine) {
 
 	//creating a dashboard materialized view.
 	//this table will be used for fetching the necessary data for the dashboard based on the company
+
 	engine.DB.Raw(`DROP TABLE IF EXISTS dashboard_mv;`).Scan(&temp{})
 
 	dashboardMV := `
@@ -44,7 +42,7 @@ func InitDasboardViews(engine *core.Engine) {
 	//view for total patients,gender, and age based on company_id
 	patients := `
 	CREATE OR REPLACE VIEW dashboard_patients_report AS
-	SELECT 
+	SELECT
 		count(*) as total,
 		count(case when DATEDIFF(now(),dob )/365.25 <13 then 1 end) as age0to12,
 		count(case when DATEDIFF(now(),dob )/365.25 >=13 and DATEDIFF(now(),dob )/365.25 <18   then 1 end) as age13to17,
@@ -56,7 +54,7 @@ func InitDasboardViews(engine *core.Engine) {
 		count(case when DATEDIFF(now(),dob )/365.25 >=65 then 1 end) as agefrom65,
 		company_id
 	FROM
-		sam_patients 
+		sam_patients
 	GROUP BY company_id
 	`
 
@@ -65,19 +63,19 @@ func InitDasboardViews(engine *core.Engine) {
 	//view for total trials based on company_id
 	trials := `
 	CREATE OR REPLACE VIEW dashboard_trials_report AS
-	SELECT 
+	SELECT
 		COUNT(resultTrials.id) as total,
 		resultTrials.company_id as company_id
 	FROM (
 		SELECT
 			result.id as id, result.created_at as date, result.company_id as company_id
 		FROM
-			sam_results result	
+			sam_results result
 		INNER JOIN
 	    	sam_result_trials trial
 		ON
 			result.id=trial.result_id and trial.created_at >=CURRENT_DATE()
-	)AS resultTrials 
+	)AS resultTrials
 	GROUP BY company_id;`
 
 	engine.DB.Raw(trials).Scan(&temp{})
@@ -85,20 +83,20 @@ func InitDasboardViews(engine *core.Engine) {
 	//view for total resulsts based on company_id
 	results := `
 	CREATE OR REPLACE VIEW dashboard_results_report AS
-	SELECT 
+	SELECT
 		COUNT(id) as total,
 		COUNT(DISTINCT patient_id) as today_patients,
 		company_id
 	FROM
 		sam_results
-	WHERE 
+	WHERE
 		created_at>=CURRENT_DATE()
 	GROUP BY company_id`
 	engine.DB.Raw(results).Scan(&temp{})
 
 	todaySales := `
 	CREATE OR REPLACE VIEW dashboard_balance_report AS
-	SELECT 
+	SELECT
 	(sum(total)-sum(discount)) as today_balance,
 		company_id
 	FROM
@@ -111,7 +109,7 @@ func InitDasboardViews(engine *core.Engine) {
 	//view for count of gender based on tests based on company_id
 	trialGender := `
 	CREATE OR REPLACE VIEW dashboard_trialgender_report AS
-	SELECT 
+	SELECT
 		count(resultTrials.id) as total_trials,
 		count(case when resultTrials.gender="male" then 1 end) as male_ctn,
 		count(case when resultTrials.gender="female" then 1 end) as female_ctn,
@@ -121,13 +119,14 @@ func InitDasboardViews(engine *core.Engine) {
 		SELECT
 			result.id as id, result.created_at as date, result.gender, result.company_id as company_id
 		FROM
-			sam_results result	
+			sam_results result
 		INNER JOIN
 	    	sam_result_trials trial
-		ON 
+		ON
 			result.id=trial.result_id
-	)AS resultTrials 
+	)AS resultTrials
 	GROUP BY company_id;`
 	engine.DB.Raw(trialGender).Scan(&temp{})
 
 }
+*/

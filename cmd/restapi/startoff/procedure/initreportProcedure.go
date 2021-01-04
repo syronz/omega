@@ -1,9 +1,6 @@
 package procedure
 
-import (
-	"omega/internal/core"
-)
-
+/*
 //InitReportProcedure will create report procedure
 func InitReportProcedure(engine *core.Engine) {
 
@@ -11,7 +8,7 @@ func InitReportProcedure(engine *core.Engine) {
 	engine.DB.Raw(`DROP PROCEDURE IF EXISTS refresh_report_mv;`).Scan(&temp{})
 
 	//Preparing the ' referesh report materialized views' procedure
-	dailyReportProcedure := `	
+	dailyReportProcedure := `
 		CREATE PROCEDURE refresh_report_mv()
 			BEGIN
 
@@ -30,7 +27,7 @@ func InitReportProcedure(engine *core.Engine) {
 			FROM
 				sam_patients
 			GROUP BY date,company_id;
-			
+
 			INSERT INTO monthly_patients_report_mv
 			SELECT
 				DATE_FORMAT(created_at,'%Y-%m') as date,
@@ -84,17 +81,17 @@ func InitReportProcedure(engine *core.Engine) {
 				COUNT(resultTrials.id) as total,
 				resultTrials.company_id as company_id
 			FROM (
-				SELECT 
-					result.id as id, result.updated_at as date, result.company_id as company_id 
-				FROM 
-					sam_results result 
-				INNER JOIN 
-					sam_result_trials trial 
+				SELECT
+					result.id as id, result.updated_at as date, result.company_id as company_id
+				FROM
+					sam_results result
+				INNER JOIN
+					sam_result_trials trial
 				ON
 					result.id=trial.result_id
 			) AS resultTrials
 			GROUP BY DATE_FORMAT(resultTrials.date,'%Y-%m'),company_id;
-			
+
 			END;`
 
 	//executing the dashboard procedure
@@ -104,3 +101,4 @@ func InitReportProcedure(engine *core.Engine) {
 	//engine.DB.Raw(`call refresh_report_mv();`).Scan(&temp{})
 
 }
+*/

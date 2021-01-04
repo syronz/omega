@@ -39,6 +39,7 @@ plog.ServerLog.Panic(err.Error())
 - [ ] implement refresh token
 - [ ] common method for repo based on inheritance
 - [ ] fix log in the database.go
+- [ ] log and activity record should be run in seperate go routine
 
 # Requesed RMS part
 1. inventory import should lock the price for agent

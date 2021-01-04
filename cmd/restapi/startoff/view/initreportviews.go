@@ -1,14 +1,12 @@
 package view
 
-import (
-	"omega/internal/core"
-)
-
 type tempStruct struct {
 	Date      string `json:"date"`
 	Total     int    `json:"total"`
 	CompanyID uint64 `json:"company_id"`
 }
+
+/*
 
 //InitViewReports will create views for the reports
 func InitViewReports(engine *core.Engine) {
@@ -29,7 +27,7 @@ func InitViewReports(engine *core.Engine) {
 
 	//Monthly results ..is special case as we have to consider patients too.. used in dashboard
 	query := `
-	CREATE TABLE  monthly_results_report_mv( 
+	CREATE TABLE  monthly_results_report_mv(
 		date varchar(7) NOT NULL,
 		total INT NOT NULL,
 		total_patients INT NOT NULL,
@@ -50,7 +48,7 @@ func writeQuery(table string, tableType string, engine *core.Engine) {
 	var query string
 	if tableType == "daily" {
 		query = `
-		CREATE TABLE  ` + table + `( 
+		CREATE TABLE  ` + table + `(
 			 date DATE NOT NULL,
 			 total INT NOT NULL,
 			 company_id BIGINT NOT NULL,
@@ -60,7 +58,7 @@ func writeQuery(table string, tableType string, engine *core.Engine) {
 
 	} else if tableType == "monthly" {
 		query = `
-		CREATE TABLE  ` + table + `( 
+		CREATE TABLE  ` + table + `(
 			 date varchar(7) NOT NULL,
 			 total INT NOT NULL,
 			 company_id BIGINT NOT NULL,
@@ -78,3 +76,4 @@ func dropCreateMview(table string, query string, engine *core.Engine) {
 	//(re)creating the materialized view
 	engine.DB.Raw(query).Scan(&tempStruct{})
 }
+*/

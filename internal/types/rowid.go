@@ -34,8 +34,7 @@ func StrToRowID(strNum string) (rowID RowID, err error) {
 
 // Value is used to save to the database
 func (r RowID) Value() (driver.Value, error) {
-	// TODO: instead of sprintf use number conversion
-	return fmt.Sprint(r), nil
+	return int64(r), nil
 }
 
 /*

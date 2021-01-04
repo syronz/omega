@@ -5,15 +5,10 @@ import (
 	"omega/cmd/restapi/insertdata"
 	"omega/cmd/restapi/server"
 	"omega/cmd/restapi/startoff"
-	"omega/cmd/restapi/startoff/event"
-	"omega/cmd/restapi/startoff/procedure"
-	"omega/cmd/restapi/startoff/view"
 	"omega/internal/core"
 	"omega/internal/corstartoff"
 	"omega/pkg/dict"
 	"omega/pkg/glog"
-	// _ "gorm.io/gorm/dialects/mysql"
-	// _ "gorm.io/gorm/dialects/postgres"
 )
 
 var cpuprofile = flag.String("cpuprofile", "", "write cpu profile to `file`")
@@ -38,16 +33,17 @@ func main() {
 
 	insertdata.Insert(engine)
 
-	//init of views
-	view.InitViewReports(engine)
-	view.InitDasboardViews(engine)
-
-	//init of procedures
-	procedure.InitDashboardProcedure(engine)
-	procedure.InitReportProcedure(engine)
-	//init of events
-	event.InitdashboardEvent(engine)
-	event.InitreportEvent(engine)
+	/*
+		//init of views
+		view.InitViewReports(engine)
+		view.InitDasboardViews(engine)
+		//init of procedures
+		procedure.InitDashboardProcedure(engine)
+		procedure.InitReportProcedure(engine)
+		//init of events
+		event.InitdashboardEvent(engine)
+		event.InitreportEvent(engine)
+	*/
 
 	corstartoff.LoadSetting(engine)
 
