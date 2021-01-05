@@ -16,3 +16,7 @@ func (r *Response) Record(ev types.Event, data ...interface{}) {
 	activityServ := service.ProvideBasActivityService(basrepo.ProvideActivityRepo(r.Engine))
 	activityServ.Record(r.Context, ev, data...)
 }
+
+func (r *Response) SendRecordCreate(ev types.Event, newData interface{}) {
+	r.Record(ev, nil, newData)
+}
