@@ -33,7 +33,7 @@ func ProvidePhoneRepo(engine *core.Engine) PhoneRepo {
 
 // FindByID finds the phone via its id
 func (p *PhoneRepo) FindByID(fix types.FixedNode) (phone basmodel.Phone, err error) {
-	err = p.Engine.DB.Table(basmodel.PhoneTable).
+	err = p.Engine.ReadDB.Table(basmodel.PhoneTable).
 		Where("id = ?", fix.ID.ToUint64()).
 		First(&phone).Error
 
@@ -45,7 +45,7 @@ func (p *PhoneRepo) FindByID(fix types.FixedNode) (phone basmodel.Phone, err err
 
 // FindAccountPhoneByID finds the phone via its id
 func (p *PhoneRepo) FindAccountPhoneByID(fix types.FixedNode) (aPhone basmodel.AccountPhone, err error) {
-	err = p.Engine.DB.Table(basmodel.AccountPhoneTable).
+	err = p.Engine.ReadDB.Table(basmodel.AccountPhoneTable).
 		Where("id = ? AND company_id = ? AND node_id = ?", fix.ID.ToUint64(), fix.CompanyID, fix.NodeID).
 		First(&aPhone).Error
 
@@ -57,7 +57,7 @@ func (p *PhoneRepo) FindAccountPhoneByID(fix types.FixedNode) (aPhone basmodel.A
 
 // AccountsPhones return list of phones assigned to an account
 func (p *PhoneRepo) AccountsPhones(fix types.FixedNode) (phones []basmodel.Phone, err error) {
-	err = p.Engine.DB.Table(basmodel.AccountPhoneTable).
+	err = p.Engine.ReadDB.Table(basmodel.AccountPhoneTable).
 		Select("*").
 		Joins("INNER JOIN bas_phones on bas_account_phones.phone_id = bas_phones.id").
 		Where("bas_account_phones.account_id = ? AND bas_account_phones.company_id = ? AND bas_account_phones.node_id = ?",
@@ -70,7 +70,7 @@ func (p *PhoneRepo) AccountsPhones(fix types.FixedNode) (phones []basmodel.Phone
 
 // FindByPhone finds the phone via its id
 func (p *PhoneRepo) FindByPhone(phoneNumber string) (phone basmodel.Phone, err error) {
-	err = p.Engine.DB.Table(basmodel.PhoneTable).
+	err = p.Engine.ReadDB.Table(basmodel.PhoneTable).
 		Where("phone LIKE ?", phoneNumber).First(&phone).Error
 
 	err = p.dbError(err, "E1059422", phone, corterm.List)
@@ -92,7 +92,7 @@ func (p *PhoneRepo) List(params param.Param) (phones []basmodel.Phone, err error
 		return
 	}
 
-	err = p.Engine.DB.Table(basmodel.PhoneTable).Select(colsStr).
+	err = p.Engine.ReadDB.Table(basmodel.PhoneTable).Select(colsStr).
 		Where(whereStr).
 		Order(params.Order).
 		Limit(params.Limit).
@@ -112,7 +112,7 @@ func (p *PhoneRepo) Count(params param.Param) (count int64, err error) {
 		return
 	}
 
-	err = p.Engine.DB.Table(basmodel.PhoneTable).
+	err = p.Engine.ReadDB.Table(basmodel.PhoneTable).
 		Where(whereStr).
 		Count(&count).Error
 

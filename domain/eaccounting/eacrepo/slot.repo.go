@@ -35,7 +35,7 @@ func ProvideSlotRepo(engine *core.Engine) SlotRepo {
 
 // FindByID finds the slot via its id
 func (p *SlotRepo) FindByID(fix types.FixedCol) (slot eacmodel.Slot, err error) {
-	err = p.Engine.DB.Table(eacmodel.SlotTable).
+	err = p.Engine.ReadDB.Table(eacmodel.SlotTable).
 		Where("company_id = ? AND node_id = ? AND id = ?", fix.CompanyID, fix.NodeID, fix.ID.ToUint64()).
 		First(&slot).Error
 
@@ -59,7 +59,7 @@ func (p *SlotRepo) List(params param.Param) (slots []eacmodel.Slot, err error) {
 		return
 	}
 
-	err = p.Engine.DB.Table(eacmodel.SlotTable).Select(colsStr).
+	err = p.Engine.ReadDB.Table(eacmodel.SlotTable).Select(colsStr).
 		Where(whereStr).
 		Order(params.Order).
 		Limit(params.Limit).
@@ -79,7 +79,7 @@ func (p *SlotRepo) Count(params param.Param) (count int64, err error) {
 		return
 	}
 
-	err = p.Engine.DB.Table(eacmodel.SlotTable).
+	err = p.Engine.ReadDB.Table(eacmodel.SlotTable).
 		Where(whereStr).
 		Count(&count).Error
 
@@ -115,7 +115,7 @@ func (p *SlotRepo) Delete(slot eacmodel.Slot) (err error) {
 
 // LastSlot returns the last slot before post_date
 func (p *SlotRepo) LastSlot(slotIn eacmodel.Slot) (slot eacmodel.Slot, err error) {
-	err = p.Engine.DB.Table(eacmodel.SlotTable).
+	err = p.Engine.ReadDB.Table(eacmodel.SlotTable).
 		Where("company_id = ? AND account_id = ? AND currency_id = ? AND post_date <= ?",
 			slotIn.CompanyID, slotIn.AccountID, slotIn.CurrencyID, slotIn.PostDate).
 		Order(" post_date DESC, id DESC ").
@@ -133,7 +133,7 @@ func (p *SlotRepo) LastSlot(slotIn eacmodel.Slot) (slot eacmodel.Slot, err error
 
 // LastSlotWithID returns the last slot before post_date
 func (p *SlotRepo) LastSlotWithID(slotIn eacmodel.Slot) (slot eacmodel.Slot, err error) {
-	err = p.Engine.DB.Table(eacmodel.SlotTable).
+	err = p.Engine.ReadDB.Table(eacmodel.SlotTable).
 		Where("company_id = ? AND account_id = ? AND currency_id = ? AND post_date <= ? AND id < ?",
 			slotIn.CompanyID, slotIn.AccountID, slotIn.CurrencyID, slotIn.PostDate, slotIn.ID).
 		Order(" post_date DESC, id DESC ").

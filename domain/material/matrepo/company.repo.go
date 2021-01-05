@@ -32,7 +32,7 @@ func ProvideCompanyRepo(engine *core.Engine) CompanyRepo {
 
 // FindByID finds the company via its id
 func (p *CompanyRepo) FindByID(fix types.FixedCol) (company matmodel.Company, err error) {
-	err = p.Engine.DB.Table(matmodel.CompanyTable).
+	err = p.Engine.ReadDB.Table(matmodel.CompanyTable).
 		Where("company_id = ? AND node_id = ? AND id = ?", fix.CompanyID, fix.NodeID, fix.ID.ToUint64()).
 		First(&company).Error
 
@@ -56,7 +56,7 @@ func (p *CompanyRepo) List(params param.Param) (companies []matmodel.Company, er
 		return
 	}
 
-	err = p.Engine.DB.Table(matmodel.CompanyTable).Select(colsStr).
+	err = p.Engine.ReadDB.Table(matmodel.CompanyTable).Select(colsStr).
 		Where(whereStr).
 		Order(params.Order).
 		Limit(params.Limit).
@@ -76,7 +76,7 @@ func (p *CompanyRepo) Count(params param.Param) (count int64, err error) {
 		return
 	}
 
-	err = p.Engine.DB.Table(matmodel.CompanyTable).
+	err = p.Engine.ReadDB.Table(matmodel.CompanyTable).
 		Where(whereStr).
 		Count(&count).Error
 

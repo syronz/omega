@@ -16,7 +16,8 @@ type TestEnvs struct {
 	Core struct {
 		Port                 string `json:"port"`
 		Addr                 string `json:"addr"`
-		DatabaseDataDSN      string `json:"database_data_dsn"`
+		DatabaseDataWriteDSN string `json:"database_data_write_dsn"`
+		DatabaseDataReadDSN  string `json:"database_data_read_dsn"`
 		DatabaseDataType     string `json:"database_data_type"`
 		DatabaseDataLog      string `json:"database_data_log"`
 		DatabaseActivityDSN  string `json:"database_activity_dsn"`
@@ -74,7 +75,8 @@ func LoadTestEnv() *core.Engine {
 	envs = make(types.Envs, 28)
 	envs[core.Port] = testEnvs.Core.Port
 	envs[core.Addr] = testEnvs.Core.Addr
-	envs[core.DatabaseDataDSN] = testEnvs.Core.DatabaseDataDSN
+	envs[core.DatabaseDataWriteDSN] = testEnvs.Core.DatabaseDataWriteDSN
+	envs[core.DatabaseDataReadDSN] = testEnvs.Core.DatabaseDataReadDSN
 	envs[core.DatabaseDataType] = testEnvs.Core.DatabaseDataType
 	envs[core.DatabaseDataLog] = testEnvs.Core.DatabaseDataLog
 	envs[core.DatabaseActivityDSN] = testEnvs.Core.DatabaseActivityDSN

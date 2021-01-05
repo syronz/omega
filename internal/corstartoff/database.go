@@ -25,7 +25,16 @@ func ConnectDB(engine *core.Engine, printQueries bool) {
 	)
 
 	if engine.Envs[core.DatabaseDataType] == "mysql" {
-		engine.DB, err = gorm.Open(mysql.Open(engine.Envs[core.DatabaseDataDSN]),
+		engine.DB, err = gorm.Open(mysql.Open(engine.Envs[core.DatabaseDataWriteDSN]),
+			&gorm.Config{
+				Logger: newLogger,
+			})
+
+		if err != nil {
+			log.Fatalln(err.Error())
+		}
+
+		engine.ReadDB, err = gorm.Open(mysql.Open(engine.Envs[core.DatabaseDataReadDSN]),
 			&gorm.Config{
 				Logger: newLogger,
 			})

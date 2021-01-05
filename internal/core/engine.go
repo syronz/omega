@@ -3,15 +3,16 @@ package core
 import (
 	"omega/internal/types"
 
-	"gorm.io/gorm"
 	"github.com/sirupsen/logrus"
 	goaes "github.com/syronz/goAES"
+	"gorm.io/gorm"
 )
 
 // Engine to keep all database connections and
 // logs configuration and environments and etc
 type Engine struct {
 	DB         *gorm.DB
+	ReadDB     *gorm.DB
 	ActivityDB *gorm.DB
 	APILog     *logrus.Logger
 	Envs       types.Envs

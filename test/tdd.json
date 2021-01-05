@@ -2,7 +2,8 @@
 	"core": {
     "port": "8184",
     "addr": "localhost",
-    "database_data_dsn":  "travis@tcp(127.0.0.1:3306)/omega_test?charset=utf8&parseTime=True&loc=Asia%2FBaghdad",
+    "database_data_write_dsn":  "travis@tcp(127.0.0.1:3306)/omega_test?charset=utf8&parseTime=True&loc=Asia%2FBaghdad",
+    "database_data_read_dsn":  "travis@tcp(127.0.0.1:3306)/omega_test?charset=utf8&parseTime=True&loc=Asia%2FBaghdad",
     "database_data_type": "mysql",
     "database_data_log": "false",
     "database_activity_dsn":  "travis@tcp(127.0.0.1:3306)/omega_test?charset=utf8&parseTime=True&loc=Local",

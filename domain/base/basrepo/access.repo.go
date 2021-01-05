@@ -21,7 +21,7 @@ func (p *AccessRepo) GetUserResources(userID types.RowID) (result string, err er
 		Resources string
 	}{}
 
-	err = p.Engine.DB.Table("bas_users").Select("bas_roles.resources").
+	err = p.Engine.ReadDB.Table("bas_users").Select("bas_roles.resources").
 		Joins("INNER JOIN bas_roles ON bas_users.role_id = bas_roles.id").
 		Where("bas_users.id = ?", userID).Scan(&resources).Error
 

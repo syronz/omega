@@ -16,7 +16,8 @@ func LoadEnvs() *core.Engine {
 
 	envs[core.Port] = os.Getenv("OMEGA_CORE_PORT")
 	envs[core.Addr] = os.Getenv("OMEGA_CORE_ADDR")
-	envs[core.DatabaseDataDSN] = os.Getenv("OMEGA_CORE_DATABASE_DATA_DSN")
+	envs[core.DatabaseDataWriteDSN] = os.Getenv("OMEGA_CORE_DATABASE_DATA_WRITE_DSN")
+	envs[core.DatabaseDataReadDSN] = os.Getenv("OMEGA_CORE_DATABASE_DATA_READ_DSN")
 	envs[core.DatabaseDataType] = os.Getenv("OMEGA_CORE_DATABASE_DATA_TYPE")
 	envs[core.DatabaseDataLog] = os.Getenv("OMEGA_CORE_DATABASE_DATA_LOG")
 	envs[core.DatabaseActivityDSN] = os.Getenv("OMEGA_CORE_DATABASE_ACTIVITY_DSN")

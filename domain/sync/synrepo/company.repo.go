@@ -33,7 +33,7 @@ func ProvideCompanyRepo(engine *core.Engine) CompanyRepo {
 
 // FindByID finds the company via its id
 func (p *CompanyRepo) FindByID(id types.RowID) (company synmodel.Company, err error) {
-	err = p.Engine.DB.Table(synmodel.CompanyTable).
+	err = p.Engine.ReadDB.Table(synmodel.CompanyTable).
 		Where("id = ? ", id).
 		First(&company).Error
 
@@ -57,7 +57,7 @@ func (p *CompanyRepo) List(params param.Param) (companies []synmodel.Company, er
 		return
 	}
 
-	err = p.Engine.DB.Table(synmodel.CompanyTable).Select(colsStr).
+	err = p.Engine.ReadDB.Table(synmodel.CompanyTable).Select(colsStr).
 		Where(whereStr).
 		Order(params.Order).
 		Limit(params.Limit).
@@ -77,7 +77,7 @@ func (p *CompanyRepo) Count(params param.Param) (count int64, err error) {
 		return
 	}
 
-	err = p.Engine.DB.Table(synmodel.CompanyTable).
+	err = p.Engine.ReadDB.Table(synmodel.CompanyTable).
 		Where(whereStr).
 		Count(&count).Error
 

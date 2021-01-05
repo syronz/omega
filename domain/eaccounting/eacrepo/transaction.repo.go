@@ -32,7 +32,7 @@ func ProvideTransactionRepo(engine *core.Engine) TransactionRepo {
 
 // FindByID finds the transaction via its id
 func (p *TransactionRepo) FindByID(fix types.FixedCol) (transaction eacmodel.Transaction, err error) {
-	err = p.Engine.DB.Table(eacmodel.TransactionTable).
+	err = p.Engine.ReadDB.Table(eacmodel.TransactionTable).
 		Where("company_id = ? AND node_id = ? AND id = ?", fix.CompanyID, fix.NodeID, fix.ID.ToUint64()).
 		First(&transaction).Error
 
@@ -56,7 +56,7 @@ func (p *TransactionRepo) List(params param.Param) (transactions []eacmodel.Tran
 		return
 	}
 
-	err = p.Engine.DB.Table(eacmodel.TransactionTable).Select(colsStr).
+	err = p.Engine.ReadDB.Table(eacmodel.TransactionTable).Select(colsStr).
 		Where(whereStr).
 		Order(params.Order).
 		Limit(params.Limit).
@@ -76,7 +76,7 @@ func (p *TransactionRepo) Count(params param.Param) (count int64, err error) {
 		return
 	}
 
-	err = p.Engine.DB.Table(eacmodel.TransactionTable).
+	err = p.Engine.ReadDB.Table(eacmodel.TransactionTable).
 		Where(whereStr).
 		Count(&count).Error
 

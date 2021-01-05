@@ -35,7 +35,7 @@ func ProvideUserRepo(engine *core.Engine) UserRepo {
 
 // FindByID finds the user via its id
 func (p *UserRepo) FindByID(fix types.FixedCol) (user basmodel.User, err error) {
-	err = p.Engine.DB.Table(basmodel.UserTable).
+	err = p.Engine.ReadDB.Table(basmodel.UserTable).
 		Select("bas_users.*,bas_roles.*,bas_accounts.*,bas_account_phones.*,bas_phones.*").
 		Joins("INNER JOIN bas_roles ON bas_roles.id = bas_users.role_id").
 		Joins("INNER JOIN bas_accounts ON bas_accounts.id = bas_users.id").
@@ -52,7 +52,7 @@ func (p *UserRepo) FindByID(fix types.FixedCol) (user basmodel.User, err error) 
 
 // FindByUsername finds the user via its username
 func (p *UserRepo) FindByUsername(username string) (user basmodel.User, err error) {
-	err = p.Engine.DB.Table(basmodel.UserTable).
+	err = p.Engine.ReadDB.Table(basmodel.UserTable).
 		Select("bas_users.*, bas_roles.resources, bas_roles.name as role").
 		Where("bas_users.username = ?", username).
 		Joins("INNER JOIN bas_roles on bas_roles.id = bas_users.role_id").
@@ -78,7 +78,7 @@ func (p *UserRepo) List(params param.Param) (users []basmodel.User, err error) {
 		return
 	}
 
-	err = p.Engine.DB.Table(basmodel.UserTable).Select(colsStr).
+	err = p.Engine.ReadDB.Table(basmodel.UserTable).Select(colsStr).
 		Joins("INNER JOIN bas_roles ON bas_roles.id = bas_users.role_id").
 		Joins("INNER JOIN bas_accounts ON bas_accounts.id = bas_users.id").
 		Joins("LEFT JOIN bas_account_phones ON bas_accounts.id = bas_account_phones.account_id").
@@ -106,7 +106,7 @@ func (p *UserRepo) Count(params param.Param) (count int64, err error) {
 		return
 	}
 
-	err = p.Engine.DB.Table(basmodel.UserTable).
+	err = p.Engine.ReadDB.Table(basmodel.UserTable).
 		Joins("INNER JOIN bas_roles ON bas_roles.id = bas_users.role_id").
 		Joins("INNER JOIN bas_accounts ON bas_accounts.id = bas_users.id").
 		Joins("LEFT JOIN bas_account_phones ON bas_accounts.id = bas_account_phones.account_id").

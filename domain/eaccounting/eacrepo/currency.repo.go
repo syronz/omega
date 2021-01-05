@@ -32,7 +32,7 @@ func ProvideCurrencyRepo(engine *core.Engine) CurrencyRepo {
 
 // FindByID finds the currency via its id
 func (p *CurrencyRepo) FindByID(fix types.FixedCol) (currency eacmodel.Currency, err error) {
-	err = p.Engine.DB.Table(eacmodel.CurrencyTable).
+	err = p.Engine.ReadDB.Table(eacmodel.CurrencyTable).
 		Where("company_id = ? AND node_id = ? AND id = ?", fix.CompanyID, fix.NodeID, fix.ID.ToUint64()).
 		First(&currency).Error
 
@@ -56,7 +56,7 @@ func (p *CurrencyRepo) List(params param.Param) (currencies []eacmodel.Currency,
 		return
 	}
 
-	err = p.Engine.DB.Table(eacmodel.CurrencyTable).Select(colsStr).
+	err = p.Engine.ReadDB.Table(eacmodel.CurrencyTable).Select(colsStr).
 		Where(whereStr).
 		Order(params.Order).
 		Limit(params.Limit).
@@ -76,7 +76,7 @@ func (p *CurrencyRepo) Count(params param.Param) (count int64, err error) {
 		return
 	}
 
-	err = p.Engine.DB.Table(eacmodel.CurrencyTable).
+	err = p.Engine.ReadDB.Table(eacmodel.CurrencyTable).
 		Where(whereStr).
 		Count(&count).Error
 

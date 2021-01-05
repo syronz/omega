@@ -31,7 +31,7 @@ func ProvideColorRepo(engine *core.Engine) ColorRepo {
 
 // FindByID finds the color via its id
 func (p *ColorRepo) FindByID(fix types.FixedCol) (color matmodel.Color, err error) {
-	err = p.Engine.DB.Table(matmodel.ColorTable).
+	err = p.Engine.ReadDB.Table(matmodel.ColorTable).
 		Where("company_id = ? AND node_id = ? AND id = ?", fix.CompanyID, fix.NodeID, fix.ID.ToUint64()).
 		First(&color).Error
 
@@ -55,7 +55,7 @@ func (p *ColorRepo) List(params param.Param) (colors []matmodel.Color, err error
 		return
 	}
 
-	err = p.Engine.DB.Table(matmodel.ColorTable).Select(colsStr).
+	err = p.Engine.ReadDB.Table(matmodel.ColorTable).Select(colsStr).
 		Where(whereStr).
 		Order(params.Order).
 		Limit(params.Limit).
@@ -75,7 +75,7 @@ func (p *ColorRepo) Count(params param.Param) (count int64, err error) {
 		return
 	}
 
-	err = p.Engine.DB.Table(matmodel.ColorTable).
+	err = p.Engine.ReadDB.Table(matmodel.ColorTable).
 		Where(whereStr).
 		Count(&count).Error
 

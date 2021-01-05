@@ -32,7 +32,7 @@ func ProvideUnitRepo(engine *core.Engine) UnitRepo {
 
 // FindByID finds the unit via its id
 func (p *UnitRepo) FindByID(fix types.FixedCol) (unit matmodel.Unit, err error) {
-	err = p.Engine.DB.Table(matmodel.UnitTable).
+	err = p.Engine.ReadDB.Table(matmodel.UnitTable).
 		Where("company_id = ? AND node_id = ? AND id = ?", fix.CompanyID, fix.NodeID, fix.ID.ToUint64()).
 		First(&unit).Error
 
@@ -56,7 +56,7 @@ func (p *UnitRepo) List(params param.Param) (units []matmodel.Unit, err error) {
 		return
 	}
 
-	err = p.Engine.DB.Table(matmodel.UnitTable).Select(colsStr).
+	err = p.Engine.ReadDB.Table(matmodel.UnitTable).Select(colsStr).
 		Where(whereStr).
 		Order(params.Order).
 		Limit(params.Limit).
@@ -76,7 +76,7 @@ func (p *UnitRepo) Count(params param.Param) (count int64, err error) {
 		return
 	}
 
-	err = p.Engine.DB.Table(matmodel.UnitTable).
+	err = p.Engine.ReadDB.Table(matmodel.UnitTable).
 		Where(whereStr).
 		Count(&count).Error
 

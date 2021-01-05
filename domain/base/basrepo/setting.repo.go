@@ -33,7 +33,7 @@ func ProvideSettingRepo(engine *core.Engine) SettingRepo {
 
 // FindByID finds the setting via its id
 func (p *SettingRepo) FindByID(fix types.FixedCol) (setting basmodel.Setting, err error) {
-	err = p.Engine.DB.Table(basmodel.SettingTable).
+	err = p.Engine.ReadDB.Table(basmodel.SettingTable).
 		Where("company_id = ? AND node_id = ? AND id = ?", fix.CompanyID, fix.NodeID, fix.ID.ToUint64()).
 		First(&setting).Error
 
@@ -45,7 +45,7 @@ func (p *SettingRepo) FindByID(fix types.FixedCol) (setting basmodel.Setting, er
 
 //FindByProperty finds the setting via its property
 func (p *SettingRepo) FindByProperty(property string) (setting basmodel.Setting, err error) {
-	err = p.Engine.DB.Table(basmodel.SettingTable).
+	err = p.Engine.ReadDB.Table(basmodel.SettingTable).
 		Select("bas_settings.*").
 		Where("property = ?", property).
 		Scan(&setting).Error
@@ -71,7 +71,7 @@ func (p *SettingRepo) List(params param.Param) (settings []basmodel.Setting, err
 		return
 	}
 
-	err = p.Engine.DB.Table(basmodel.SettingTable).Select(colsStr).
+	err = p.Engine.ReadDB.Table(basmodel.SettingTable).Select(colsStr).
 		Where(whereStr).
 		Order(params.Order).
 		Limit(params.Limit).
@@ -91,7 +91,7 @@ func (p *SettingRepo) Count(params param.Param) (count int64, err error) {
 		return
 	}
 
-	err = p.Engine.DB.Table(basmodel.SettingTable).
+	err = p.Engine.ReadDB.Table(basmodel.SettingTable).
 		Where(whereStr).
 		Count(&count).Error
 

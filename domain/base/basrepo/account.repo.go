@@ -33,7 +33,7 @@ func ProvideAccountRepo(engine *core.Engine) AccountRepo {
 
 // FindByID finds the account via its id
 func (p *AccountRepo) FindByID(fix types.FixedNode) (account basmodel.Account, err error) {
-	err = p.Engine.DB.Table(basmodel.AccountTable).
+	err = p.Engine.ReadDB.Table(basmodel.AccountTable).
 		Where("id = ? AND company_id = ? AND node_id = ?", fix.ID.ToUint64(), fix.CompanyID, fix.NodeID).
 		First(&account).Error
 
@@ -57,7 +57,7 @@ func (p *AccountRepo) List(params param.Param) (accounts []basmodel.Account, err
 		return
 	}
 
-	err = p.Engine.DB.Table(basmodel.AccountTable).Select(colsStr).
+	err = p.Engine.ReadDB.Table(basmodel.AccountTable).Select(colsStr).
 		Where(whereStr).
 		Order(params.Order).
 		Limit(params.Limit).
@@ -77,7 +77,7 @@ func (p *AccountRepo) Count(params param.Param) (count int64, err error) {
 		return
 	}
 
-	err = p.Engine.DB.Table(basmodel.AccountTable).
+	err = p.Engine.ReadDB.Table(basmodel.AccountTable).
 		Where(whereStr).
 		Count(&count).Error
 

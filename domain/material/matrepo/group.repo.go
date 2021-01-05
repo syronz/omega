@@ -31,7 +31,7 @@ func ProvideGroupRepo(engine *core.Engine) GroupRepo {
 
 // FindByID finds the group via its id
 func (p *GroupRepo) FindByID(fix types.FixedCol) (group matmodel.Group, err error) {
-	err = p.Engine.DB.Table(matmodel.GroupTable).
+	err = p.Engine.ReadDB.Table(matmodel.GroupTable).
 		Where("company_id = ? AND node_id = ? AND id = ?", fix.CompanyID, fix.NodeID, fix.ID.ToUint64()).
 		First(&group).Error
 
@@ -55,7 +55,7 @@ func (p *GroupRepo) List(params param.Param) (groups []matmodel.Group, err error
 		return
 	}
 
-	err = p.Engine.DB.Table(matmodel.GroupTable).Select(colsStr).
+	err = p.Engine.ReadDB.Table(matmodel.GroupTable).Select(colsStr).
 		Where(whereStr).
 		Order(params.Order).
 		Limit(params.Limit).
@@ -75,7 +75,7 @@ func (p *GroupRepo) Count(params param.Param) (count int64, err error) {
 		return
 	}
 
-	err = p.Engine.DB.Table(matmodel.GroupTable).
+	err = p.Engine.ReadDB.Table(matmodel.GroupTable).
 		Where(whereStr).
 		Count(&count).Error
 
