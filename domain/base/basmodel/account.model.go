@@ -19,12 +19,13 @@ const (
 // Account model
 type Account struct {
 	types.FixedNode
-	ParentID *types.RowID `json:"parent_id"`
-	Code     *string      `gorm:"unique" json:"code"`
-	Name     string       `gorm:"not null;unique" json:"name,omitempty"`
-	Type     types.Enum   `json:"type,omitempty"`
-	Status   types.Enum   `json:"status,omitempty"`
-	Phones   []Phone      `gorm:"-" json:"phones" table:"-"`
+	ParentID  *types.RowID `json:"parent_id"`
+	Code      *string      `gorm:"unique" json:"code"`
+	Name      string       `gorm:"not null;unique" json:"name,omitempty"`
+	Type      types.Enum   `json:"type,omitempty"`
+	Status    types.Enum   `json:"status,omitempty"`
+	Phones    []Phone      `gorm:"-" json:"phones" table:"-"`
+	Childrens []Account    `gorm:"-" json:"childrens" table:"-"`
 }
 
 // Validate check the type of fields
