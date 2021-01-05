@@ -6,7 +6,8 @@ import "omega/internal/types"
 const (
 	Domain string = "base"
 
-	SupperAccess types.Resource = "supper:access"
+	SuperAccess types.Resource = "supper:access"
+	ReadDeleted types.Resource = "deleted:read"
 
 	UserWrite types.Resource = "user:write"
 	UserRead  types.Resource = "user:read"

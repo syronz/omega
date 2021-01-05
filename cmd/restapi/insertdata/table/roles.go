@@ -27,7 +27,7 @@ func InsertRoles(engine *core.Engine) {
 			},
 			Name: "Admin",
 			Resources: types.ResourceJoin([]types.Resource{
-				sync.SuperAdmin,
+				base.SuperAccess, base.ReadDeleted,
 				base.SettingRead, base.SettingWrite, base.SettingExcel,
 				base.UserWrite, base.UserRead, base.UserExcel,
 				base.ActivitySelf,
@@ -64,7 +64,6 @@ func InsertRoles(engine *core.Engine) {
 			},
 			Name: "Reader",
 			Resources: types.ResourceJoin([]types.Resource{
-				base.SupperAccess,
 				base.SettingRead, base.SettingExcel,
 				base.UserRead, base.UserExcel,
 				base.RoleRead, base.RoleExcel,
@@ -79,7 +78,6 @@ func InsertRoles(engine *core.Engine) {
 			},
 			Name: "should_be_deleted",
 			Resources: types.ResourceJoin([]types.Resource{
-				base.SupperAccess,
 				base.SettingRead, base.SettingExcel,
 				base.UserRead, base.UserExcel,
 				base.RoleRead, base.RoleExcel,

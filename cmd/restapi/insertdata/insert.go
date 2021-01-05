@@ -1,6 +1,7 @@
 package insertdata
 
 import (
+	"omega/cmd/restapi/insertdata/table"
 	"omega/internal/core"
 )
 
@@ -8,13 +9,13 @@ import (
 func Insert(engine *core.Engine) {
 
 	if engine.Envs.ToBool(core.AutoMigrate) {
-		// table.InsertCompanys(engine)
-		// table.InsertRoles(engine)
-		// table.InsertAccounts(engine)
-		// table.InsertUsers(engine)
-		// table.InsertSettings(engine)
+		table.InsertCompanys(engine)
+		table.InsertRoles(engine)
+		table.InsertAccounts(engine)
+		table.InsertUsers(engine)
+		table.InsertSettings(engine)
 
-		// table.InsertCurrencies(engine)
+		table.InsertCurrencies(engine)
 	}
 
 }

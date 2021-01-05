@@ -2,6 +2,7 @@ package basmid
 
 import (
 	"net/http"
+	"omega/domain/base"
 	"omega/domain/base/basrepo"
 	"omega/domain/service"
 	"omega/internal/core"
@@ -28,11 +29,17 @@ func (p *accessMid) Check(resource types.Resource) gin.HandlerFunc {
 
 		accessService := service.ProvideBasAccessService(basrepo.ProvideAccessRepo(p.engine))
 		accessResult := accessService.CheckAccess(c, resource)
+
+		if c.Query("deleted") == "true" {
+			accessResult = accessService.CheckAccess(c, base.ReadDeleted)
+		}
+
 		if accessResult {
 			//TODO: Implement custom error handling
 			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"msg": "you don't have permission"})
 			return
 		}
+
 		c.Next()
 
 	}

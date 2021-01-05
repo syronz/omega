@@ -1,8 +1,8 @@
 package service
 
 import (
+	"omega/domain/base"
 	"omega/domain/base/basrepo"
-	"omega/domain/sync"
 	"omega/internal/core"
 	"omega/internal/types"
 	"omega/pkg/glog"
@@ -53,7 +53,7 @@ func (p *BasAccessServ) CheckAccess(c *gin.Context, resource types.Resource) boo
 }
 
 func IsSuperAdmin(userID types.RowID) bool {
-	return strings.Contains(cacheResource[userID], string(sync.SuperAdmin))
+	return strings.Contains(cacheResource[userID], string(base.SuperAccess))
 }
 
 // CheckRange is used for checking if user has access to special range of data

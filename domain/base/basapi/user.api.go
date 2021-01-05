@@ -8,7 +8,6 @@ import (
 	"omega/domain/base/basrepo"
 	"omega/domain/base/message/basterm"
 	"omega/domain/service"
-	"omega/domain/sync"
 	"omega/internal/core"
 	"omega/internal/core/corterm"
 	"omega/internal/response"
@@ -101,7 +100,7 @@ func (p *UserAPI) List(c *gin.Context) {
 	}
 
 	accessService := service.ProvideBasAccessService(basrepo.ProvideAccessRepo(p.Engine))
-	accessResult := accessService.CheckAccess(c, sync.SuperAdmin)
+	accessResult := accessService.CheckAccess(c, base.SuperAccess)
 	if accessResult == true {
 		if !resp.CheckRange(params.CompanyID) {
 			return

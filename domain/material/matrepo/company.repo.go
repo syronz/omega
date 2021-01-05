@@ -13,6 +13,7 @@ import (
 	"omega/pkg/helper"
 	"omega/pkg/limberr"
 	"reflect"
+	"time"
 )
 
 // CompanyRepo for injecting engine
@@ -50,7 +51,7 @@ func (p *CompanyRepo) List(params param.Param) (companies []matmodel.Company, er
 	}
 
 	var whereStr string
-	if whereStr, err = params.ParseWhere(p.Cols); err != nil {
+	if whereStr, err = params.ParseWhereDelete(p.Cols); err != nil {
 		err = limberr.Take(err, "E7148082").Custom(corerr.ValidationFailedErr).Build()
 		return
 	}
@@ -70,7 +71,7 @@ func (p *CompanyRepo) List(params param.Param) (companies []matmodel.Company, er
 // Count of companies, mainly calls with List
 func (p *CompanyRepo) Count(params param.Param) (count int64, err error) {
 	var whereStr string
-	if whereStr, err = params.ParseWhere(p.Cols); err != nil {
+	if whereStr, err = params.ParseWhereDelete(p.Cols); err != nil {
 		err = limberr.Take(err, "E7159547").Custom(corerr.ValidationFailedErr).Build()
 		return
 	}
@@ -103,7 +104,10 @@ func (p *CompanyRepo) Create(company matmodel.Company) (u matmodel.Company, err 
 
 // Delete the company
 func (p *CompanyRepo) Delete(company matmodel.Company) (err error) {
-	if err = p.Engine.DB.Table(matmodel.CompanyTable).Delete(&company).Error; err != nil {
+	now := time.Now()
+	company.DeletedAt = &now
+	company.Name = "deleted-" + company.Name
+	if err = p.Engine.DB.Table(matmodel.CompanyTable).Save(&company).Error; err != nil {
 		err = p.dbError(err, "E7154485", company, corterm.Deleted)
 	}
 	return

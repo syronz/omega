@@ -34,6 +34,10 @@ func Get(c *gin.Context, engine *core.Engine, part string) (param Param) {
 		param.CompanyID = companyID.(uint64)
 	}
 
+	if c.Query("deleted") == "true" {
+		param.ShowDeletedRows = true
+	}
+
 	param.Lang = core.GetLang(c, engine)
 
 	param.ErrPanel = engine.Envs[core.ErrPanel]

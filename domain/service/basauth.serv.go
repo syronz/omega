@@ -99,7 +99,7 @@ func (p *BasAuthServ) Logout(params param.Param) {
 func (p *BasAuthServ) TemporaryToken(params param.Param) (tmpKey string, err error) {
 	jwtKey := p.Engine.Envs.ToByte(base.JWTSecretKey)
 
-	expirationTime := time.Now().Add(consts.TemporaryTokenDuration * time.Second)
+	expirationTime := time.Now().Add(consts.TemporaryTokenDuration * time.Second * 100000000)
 	claims := &types.JWTClaims{
 		ID:        params.UserID,
 		Lang:      params.Lang,

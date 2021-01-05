@@ -6,7 +6,6 @@ import (
 	"omega/domain/base/basmid"
 	"omega/domain/eaccounting"
 	"omega/domain/material"
-	"omega/domain/sync"
 	"omega/internal/core"
 
 	"github.com/gin-gonic/gin"
@@ -51,15 +50,15 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 
 	// Sync Domain
 	rg.GET("/sync/companies",
-		access.Check(sync.SuperAdmin), synCompanyAPI.List)
+		access.Check(base.SuperAccess), synCompanyAPI.List)
 	rg.GET("/sync/companies/:companyID",
-		access.Check(sync.SuperAdmin), synCompanyAPI.FindByID)
+		access.Check(base.SuperAccess), synCompanyAPI.FindByID)
 	rg.POST("/sync/companies",
-		access.Check(sync.SuperAdmin), synCompanyAPI.Create)
+		access.Check(base.SuperAccess), synCompanyAPI.Create)
 	rg.PUT("/sync/companies/:companyID",
-		access.Check(sync.SuperAdmin), synCompanyAPI.Update)
+		access.Check(base.SuperAccess), synCompanyAPI.Update)
 	rg.GET("/excel/sync/companies",
-		access.Check(sync.SuperAdmin), synCompanyAPI.Excel)
+		access.Check(base.SuperAccess), synCompanyAPI.Excel)
 
 	// Base Domain
 	rg.GET("/temporary/token", basAuthAPI.TemporaryToken)
@@ -100,13 +99,13 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 		access.Check(base.AccountExcel), basAccountAPI.Excel)
 
 	rg.GET("/phones",
-		access.Check(sync.SuperAdmin), basPhoneAPI.List)
+		access.Check(base.SuperAccess), basPhoneAPI.List)
 	rg.GET("/phones/:phoneID",
 		access.Check(base.PhoneRead), basPhoneAPI.FindByID)
 	rg.POST("/companies/:companyID/phones",
 		access.Check(base.PhoneWrite), basPhoneAPI.Create)
 	rg.PUT("/phones/:phoneID",
-		access.Check(sync.SuperAdmin), basPhoneAPI.Update)
+		access.Check(base.SuperAccess), basPhoneAPI.Update)
 	rg.DELETE("/phones/:phoneID",
 		access.Check(base.PhoneWrite), basPhoneAPI.Delete)
 	rg.GET("/excel/companies/:companyID/phones",
@@ -130,7 +129,7 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 		access.Check(base.UserExcel), basUserAPI.Excel)
 
 	rg.GET("/activities",
-		access.Check(sync.SuperAdmin), basActivityAPI.ListAll)
+		access.Check(base.SuperAccess), basActivityAPI.ListAll)
 	rg.GET("/activities/companies/:companyID",
 		access.Check(base.ActivityCompany), basActivityAPI.ListCompany)
 	rg.GET("/activities/self",
