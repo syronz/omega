@@ -16,7 +16,7 @@ func InsertSettings(engine *core.Engine) {
 	settingService := service.ProvideBasSettingService(settingRepo)
 
 	// reset the table by deleting everything
-	settingRepo.Engine.DB.Table(basmodel.SettingTable).Unscoped().Delete(basmodel.Setting{})
+	engine.DB.Exec("TRUNCATE TABLE bas_settings;")
 
 	settings := []basmodel.Setting{
 		{

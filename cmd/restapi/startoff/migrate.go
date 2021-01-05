@@ -37,7 +37,7 @@ func Migrate(engine *core.Engine) {
 	engine.DB.Table(eacmodel.CurrencyTable).AutoMigrate(&eacmodel.Currency{})
 	engine.DB.Table(eacmodel.TransactionTable).AutoMigrate(&eacmodel.Transaction{})
 	engine.DB.Exec("ALTER TABLE eac_transactions ADD CONSTRAINT `fk_eac_transactions_eac_currencies` FOREIGN KEY (currency_id) REFERENCES eac_currencies(id) ON DELETE RESTRICT ON UPDATE RESTRICT;")
-	engine.DB.Exec("ALTER TABLE eac_transactions ADD CONSTRAINT `fk_eac_transactions_bas_users` FOREIGN KEY (currency_id) REFERENCES bas_users(id) ON DELETE RESTRICT ON UPDATE RESTRICT;")
+	engine.DB.Exec("ALTER TABLE eac_transactions ADD CONSTRAINT `fk_eac_transactions_bas_users` FOREIGN KEY (created_by) REFERENCES bas_users(id) ON DELETE RESTRICT ON UPDATE RESTRICT;")
 
 	engine.DB.Table(eacmodel.SlotTable).AutoMigrate(&eacmodel.Slot{})
 	engine.DB.Exec("ALTER TABLE eac_slots ADD CONSTRAINT `fk_eac_slot_bas_accounts` FOREIGN KEY (account_id) REFERENCES bas_accounts(id) ON DELETE RESTRICT ON UPDATE RESTRICT;")

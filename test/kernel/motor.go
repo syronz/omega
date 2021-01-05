@@ -5,9 +5,6 @@ import (
 	"omega/internal/corstartoff"
 	"omega/pkg/dict"
 	"omega/pkg/glog"
-
-	_ "gorm.io/gorm/dialects/mysql"
-	_ "gorm.io/gorm/dialects/postgres"
 )
 
 // StartMotor for generating engine special for TDD

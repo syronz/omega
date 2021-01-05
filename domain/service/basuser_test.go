@@ -231,7 +231,7 @@ func TestUserExcel(test *testing.T) {
 
 	collector := []struct {
 		params param.Param
-		count  uint64
+		count  int64
 		err    error
 	}{
 		{
@@ -243,8 +243,8 @@ func TestUserExcel(test *testing.T) {
 
 	for _, value := range collector {
 		users, err := userService.Excel(value.params)
-		if (value.err == nil && err != nil) || (value.err != nil && err == nil) || uint64(len(users)) < value.count {
-			test.Errorf("\nERROR FOR :::%+v::: \nRETURNS :::%+v:::, \nIT SHOULD BE :::%+v::: \nErr :::%+v:::", value.params, uint64(len(users)), value.count, err)
+		if (value.err == nil && err != nil) || (value.err != nil && err == nil) || int64(len(users)) < value.count {
+			test.Errorf("\nERROR FOR :::%+v::: \nRETURNS :::%+v:::, \nIT SHOULD BE :::%+v::: \nErr :::%+v:::", value.params, int64(len(users)), value.count, err)
 		}
 	}
 }
@@ -256,7 +256,7 @@ func TestUserList(t *testing.T) {
 
 	collection := []struct {
 		params param.Param
-		count  uint64
+		count  int64
 		err    error
 	}{
 		{

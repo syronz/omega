@@ -8,13 +8,10 @@ import (
 	"omega/pkg/glog"
 )
 
-// InsertPhone for add required users
+// InsertPhones for add required users
 func InsertPhones(engine *core.Engine) {
 	phoneRepo := basrepo.ProvidePhoneRepo(engine)
 	phoneService := service.ProvideBasPhoneService(phoneRepo)
-
-	// reset the users table
-	phoneRepo.Engine.DB.Table(basmodel.PhoneTable).Unscoped().Delete(basmodel.User{})
 
 	phones := []basmodel.Phone{
 

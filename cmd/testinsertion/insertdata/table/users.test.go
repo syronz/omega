@@ -16,9 +16,6 @@ func InsertUsers(engine *core.Engine) {
 	userRepo := basrepo.ProvideUserRepo(engine)
 	userService := service.ProvideBasUserService(userRepo)
 
-	// reset the users table
-	userRepo.Engine.DB.Table(basmodel.UserTable).Unscoped().Delete(basmodel.User{})
-
 	users := []basmodel.User{
 		{
 			FixedCol: types.FixedCol{

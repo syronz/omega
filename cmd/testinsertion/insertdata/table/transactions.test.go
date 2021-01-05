@@ -16,8 +16,9 @@ import (
 
 // InsertTransactions for add required accounts
 func InsertTransactions(engine *core.Engine) {
+	phoneServ := service.ProvideBasPhoneService(basrepo.ProvidePhoneRepo(engine))
 	accountRepo := basrepo.ProvideAccountRepo(engine)
-	accountService := service.ProvideBasAccountService(accountRepo)
+	accountService := service.ProvideBasAccountService(accountRepo, phoneServ)
 
 	currencyRepo := eacrepo.ProvideCurrencyRepo(engine)
 	currencyService := service.ProvideEacCurrencyService(currencyRepo)

@@ -13,8 +13,9 @@ import (
 
 // InsertAccounts for add required accounts
 func InsertAccounts(engine *core.Engine) {
+	phoneServ := service.ProvideBasPhoneService(basrepo.ProvidePhoneRepo(engine))
 	accountRepo := basrepo.ProvideAccountRepo(engine)
-	accountService := service.ProvideBasAccountService(accountRepo)
+	accountService := service.ProvideBasAccountService(accountRepo, phoneServ)
 
 	// reset the accounts table
 	// reset in the roles.test.go

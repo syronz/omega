@@ -35,7 +35,7 @@ func TestRoleCreate(t *testing.T) {
 					NodeID:    101,
 				},
 				Name:        "created 1",
-				Resources:   string(base.SupperAccess),
+				Resources:   string(base.SuperAccess),
 				Description: "created 1",
 			},
 			err: nil,
@@ -47,7 +47,7 @@ func TestRoleCreate(t *testing.T) {
 					NodeID:    101,
 				},
 				Name:        "created 1",
-				Resources:   string(base.SupperAccess),
+				Resources:   string(base.SuperAccess),
 				Description: "created 2",
 			},
 			err: errors.New("duplicate"),
@@ -59,21 +59,21 @@ func TestRoleCreate(t *testing.T) {
 					NodeID:    101,
 				},
 				Name:      "minimum fields",
-				Resources: string(base.SupperAccess),
+				Resources: string(base.SuperAccess),
 			},
 			err: nil,
 		},
 		{
 			in: basmodel.Role{
 				Name:        "long name: big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name big name",
-				Resources:   string(base.SupperAccess),
+				Resources:   string(base.SuperAccess),
 				Description: "created 2",
 			},
 			err: errors.New("data too long for name"),
 		},
 		{
 			in: basmodel.Role{
-				Resources:   string(base.SupperAccess),
+				Resources:   string(base.SuperAccess),
 				Description: "created 3",
 			},
 			err: errors.New("name is required"),
@@ -104,7 +104,7 @@ func TestRoleUpdate(t *testing.T) {
 					NodeID:    101,
 				},
 				Name:        "num 1 update",
-				Resources:   string(base.SupperAccess),
+				Resources:   string(base.SuperAccess),
 				Description: "num 1 update",
 			},
 			err: nil,
@@ -172,7 +172,7 @@ func TestRoleList(t *testing.T) {
 
 	samples := []struct {
 		params param.Param
-		count  uint64
+		count  int64
 		err    error
 	}{
 		{
@@ -203,7 +203,7 @@ func TestRoleExcel(t *testing.T) {
 
 	samples := []struct {
 		params param.Param
-		count  uint64
+		count  int64
 		err    error
 	}{
 		{
@@ -215,9 +215,9 @@ func TestRoleExcel(t *testing.T) {
 
 	for _, v := range samples {
 		data, err := roleServ.Excel(v.params)
-		if (v.err == nil && err != nil) || (v.err != nil && err == nil) || uint64(len(data)) < v.count {
+		if (v.err == nil && err != nil) || (v.err != nil && err == nil) || int64(len(data)) < v.count {
 			t.Errorf("FOR ::::%+v::: \nRETURNS :::%+v:::, \nIT SHOULD BE :::%+v::: \nErr :::%+v:::",
-				v.params, uint64(len(data)), v.count, err)
+				v.params, int64(len(data)), v.count, err)
 		}
 	}
 }

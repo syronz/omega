@@ -18,7 +18,8 @@ func initTransactionTest() (engine *core.Engine, transactionServ EacTransactionS
 	logQuery, debugLevel := initServiceTest()
 	engine = kernel.StartMotor(logQuery, debugLevel)
 
-	accountServ := ProvideBasAccountService(basrepo.ProvideAccountRepo(engine))
+	phoneServ := ProvideBasPhoneService(basrepo.ProvidePhoneRepo(engine))
+	accountServ := ProvideBasAccountService(basrepo.ProvideAccountRepo(engine), phoneServ)
 	currencyServ := ProvideEacCurrencyService(eacrepo.ProvideCurrencyRepo(engine))
 	slotServ := ProvideEacSlotService(eacrepo.ProvideSlotRepo(engine), currencyServ, accountServ)
 	transactionServ = ProvideEacTransactionService(eacrepo.ProvideTransactionRepo(engine), slotServ)

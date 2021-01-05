@@ -72,7 +72,7 @@ func TestListSetting(t *testing.T) {
 
 	samples := []struct {
 		params param.Param
-		count  uint64
+		count  int64
 		err    error
 	}{
 		{
@@ -101,7 +101,7 @@ func TestSettingExcel(t *testing.T) {
 
 	samples := []struct {
 		params param.Param
-		count  uint64
+		count  int64
 		err    error
 	}{
 		{
@@ -113,9 +113,9 @@ func TestSettingExcel(t *testing.T) {
 
 	for _, v := range samples {
 		data, err := settingServ.Excel(v.params)
-		if (v.err == nil && err != nil) || (v.err != nil && err == nil) || uint64(len(data)) < v.count {
+		if (v.err == nil && err != nil) || (v.err != nil && err == nil) || int64(len(data)) < v.count {
 			t.Errorf("FOR ::::%+v::: \nRETURNS :::%+v:::, \nIT SHOULD BE :::%+v::: \nErr :::%+v:::",
-				v.params, uint64(len(data)), v.count, err)
+				v.params, int64(len(data)), v.count, err)
 		}
 	}
 }

@@ -16,14 +16,15 @@ func InsertRoles(engine *core.Engine) {
 	roleService := service.ProvideBasRoleService(roleRepo)
 
 	// reset the tables: roles, slots, transactions, accounts and users
-	roleRepo.Engine.DB.Exec("TRUNCATE TABLE eac_slots;")
 	roleRepo.Engine.DB.Exec("SET FOREIGN_KEY_CHECKS = 0;")
+	roleRepo.Engine.DB.Exec("TRUNCATE TABLE eac_slots;")
 	roleRepo.Engine.DB.Exec("TRUNCATE TABLE eac_transactions;")
+	roleRepo.Engine.DB.Exec("TRUNCATE TABLE bas_users;")
+	roleRepo.Engine.DB.Exec("TRUNCATE TABLE bas_accounts;")
+	roleRepo.Engine.DB.Exec("TRUNCATE TABLE bas_account_phones;")
+	roleRepo.Engine.DB.Exec("TRUNCATE TABLE bas_phones;")
+	roleRepo.Engine.DB.Exec("TRUNCATE TABLE bas_roles;")
 	roleRepo.Engine.DB.Exec("SET FOREIGN_KEY_CHECKS = 1;")
-
-	roleRepo.Engine.DB.Table(basmodel.UserTable).Unscoped().Delete(basmodel.User{})
-	roleRepo.Engine.DB.Table(basmodel.AccountTable).Unscoped().Delete(basmodel.Account{})
-	roleRepo.Engine.DB.Table(basmodel.RoleTable).Unscoped().Delete(basmodel.Role{})
 
 	roles := []basmodel.Role{
 		{
@@ -36,7 +37,7 @@ func InsertRoles(engine *core.Engine) {
 			Resources: types.ResourceJoin([]types.Resource{
 				base.SettingRead, base.SettingWrite, base.SettingExcel,
 				base.UserWrite, base.UserRead, base.UserExcel,
-				base.ActivitySelf, base.ActivityAll,
+				base.ActivitySelf, base.ActivityCompany,
 				base.RoleRead, base.RoleWrite, base.RoleExcel,
 			}),
 			Description: "super-admin has all privileges - do not edit",
@@ -51,7 +52,7 @@ func InsertRoles(engine *core.Engine) {
 			Resources: types.ResourceJoin([]types.Resource{
 				base.SettingRead, base.SettingWrite, base.SettingExcel,
 				base.UserWrite, base.UserRead, base.UserExcel,
-				base.ActivitySelf, base.ActivityAll,
+				base.ActivitySelf, base.ActivityCompany,
 				base.RoleRead, base.RoleWrite, base.RoleExcel,
 			}),
 			Description: "admin has all privileges - do not edit",

@@ -9,9 +9,6 @@ import (
 	"omega/pkg/dict"
 	"omega/pkg/glog"
 	"omega/test/kernel"
-
-	_ "gorm.io/gorm/dialects/mysql"
-	_ "gorm.io/gorm/dialects/postgres"
 )
 
 var noReset bool
