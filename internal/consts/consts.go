@@ -1,6 +1,9 @@
 package consts
 
-import "math"
+import (
+	"math"
+	"omega/internal/types"
+)
 
 // constants which used inside the app
 const (
@@ -39,5 +42,11 @@ const (
 	DefaultBanner   = "default_header.png"
 	DefaultFooter   = "default_footer.png"
 
-	MaxChildrenForChartOfAccounts = 3
+	// it is used in chart of accounts after this numbers show more button emerge
+	MaxChildrenForChartOfAccounts = 20
+)
+
+var (
+	// DefaultUsersParentID user code for account, it is under asset and user
+	DefaultUsersParentID = types.RowID(3)
 )

@@ -34,6 +34,7 @@ type User struct {
 	Phone     string      `gorm:"-" json:"phone,omitempty" table:"bas_phones.phone"`
 	Phones    []Phone     `gorm:"-" json:"phones,omitempty" table:"-"`
 	Status    types.Enum  `gorm:"-" json:"status,omitempty" table:"-"`
+	Code      string      `gorm:"-" json:"code,omitempty" table:"-"`
 }
 
 // Validate check the type of

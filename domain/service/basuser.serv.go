@@ -7,6 +7,7 @@ import (
 	"omega/domain/base/basrepo"
 	"omega/domain/base/enum/accountstatus"
 	"omega/domain/base/enum/accounttype"
+	"omega/internal/consts"
 	"omega/internal/core"
 	"omega/internal/core/coract"
 	"omega/internal/core/corerr"
@@ -153,10 +154,13 @@ func (p *BasUserServ) Create(user basmodel.User) (createdUser basmodel.User, err
 
 	phoneServ := ProvideBasPhoneService(basrepo.ProvidePhoneRepo(p.Engine))
 	accountServ := ProvideBasAccountService(basrepo.ProvideAccountRepo(p.Engine), phoneServ)
+
 	account := basmodel.Account{
-		Name:   user.Name,
-		Type:   accounttype.User,
-		Status: accountstatus.Active,
+		Name:     user.Name,
+		Code:     user.Code,
+		ParentID: &consts.DefaultUsersParentID,
+		Type:     accounttype.User,
+		Status:   accountstatus.Active,
 	}
 	account.CompanyID = user.CompanyID
 	account.NodeID = user.NodeID
@@ -238,9 +242,11 @@ func (p *BasUserServ) Save(user basmodel.User) (createdUser basmodel.User, err e
 	phoneServ := ProvideBasPhoneService(basrepo.ProvidePhoneRepo(p.Engine))
 	accountServ := ProvideBasAccountService(basrepo.ProvideAccountRepo(p.Engine), phoneServ)
 	account := basmodel.Account{
-		Name:   user.Name,
-		Type:   accounttype.User,
-		Status: user.Status,
+		Name:     user.Name,
+		Code:     user.Code,
+		ParentID: &consts.DefaultUsersParentID,
+		Type:     accounttype.User,
+		Status:   user.Status,
 	}
 	account.ID = user.ID
 	account.CompanyID = user.CompanyID

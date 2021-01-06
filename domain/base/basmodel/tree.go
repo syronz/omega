@@ -8,7 +8,7 @@ type Tree struct {
 	CompanyID uint64       `json:"company_id"`
 	NodeID    uint64       `json:"node_id"`
 	ParentID  *types.RowID `json:"parent_id"`
-	Code      *string      `json:"code"`
+	Code      string       `json:"code"`
 	Name      string       `json:"name"`
 	Type      types.Enum   `json:"type"`
 	Children  []*Tree      `json:"children"`

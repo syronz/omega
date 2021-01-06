@@ -4,8 +4,9 @@
   "authorization":"Bearer _TOKEN_",
   "payload": {
     "name": "_RANDOM_NAME_",
-    "type":"partner",
-    "status":"active",
+    "type": "partner",
+    "status": "active",
+    "code":"_RANDOM_NUMBER_",
     "phones":[
       {
         "phone":"_RANDOM_NUMBER_",

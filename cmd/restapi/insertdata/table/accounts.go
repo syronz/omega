@@ -14,7 +14,7 @@ import (
 
 // InsertAccounts for add required accounts
 func InsertAccounts(engine *core.Engine) {
-	engine.DB.Exec("UPDATE bas_accounts SET deleted_at = null WHERE id IN (1,2,3)")
+	engine.DB.Exec("UPDATE bas_accounts SET deleted_at = null WHERE id IN (1,2,3,4,5)")
 	phoneServ := service.ProvideBasPhoneService(basrepo.ProvidePhoneRepo(engine))
 	accountRepo := basrepo.ProvideAccountRepo(engine)
 	accountService := service.ProvideBasAccountService(accountRepo, phoneServ)
@@ -26,6 +26,7 @@ func InsertAccounts(engine *core.Engine) {
 				NodeID:    engine.Envs.ToUint64(sync.NodeID),
 			},
 			Name:   "Asset",
+			Code:   "1",
 			Type:   accounttype.Asset,
 			Status: accountstatus.Active,
 		},
@@ -35,9 +36,11 @@ func InsertAccounts(engine *core.Engine) {
 				CompanyID: engine.Envs.ToUint64(sync.CompanyID),
 				NodeID:    engine.Envs.ToUint64(sync.NodeID),
 			},
-			Name:   "Capital",
-			Type:   accounttype.Capital,
-			Status: accountstatus.Active,
+			Name:     "Cash",
+			ParentID: types.RowIDPointer(1),
+			Code:     "11",
+			Type:     accounttype.Cash,
+			Status:   accountstatus.Active,
 		},
 		{
 			FixedNode: types.FixedNode{
@@ -45,9 +48,11 @@ func InsertAccounts(engine *core.Engine) {
 				CompanyID: engine.Envs.ToUint64(sync.CompanyID),
 				NodeID:    engine.Envs.ToUint64(sync.NodeID),
 			},
-			Name:   "Cash",
-			Type:   accounttype.Cash,
-			Status: accountstatus.Active,
+			Name:     "Users",
+			ParentID: types.RowIDPointer(1),
+			Code:     "12",
+			Type:     accounttype.User,
+			Status:   accountstatus.Active,
 		},
 		{
 			FixedNode: types.FixedNode{
@@ -56,8 +61,21 @@ func InsertAccounts(engine *core.Engine) {
 				NodeID:    engine.Envs.ToUint64(sync.NodeID),
 			},
 			Name:   "Equity",
+			Code:   "2",
 			Type:   accounttype.Equity,
 			Status: accountstatus.Active,
+		},
+		{
+			FixedNode: types.FixedNode{
+				ID:        5,
+				CompanyID: engine.Envs.ToUint64(sync.CompanyID),
+				NodeID:    engine.Envs.ToUint64(sync.NodeID),
+			},
+			Name:     "Capital",
+			ParentID: types.RowIDPointer(4),
+			Code:     "21",
+			Type:     accounttype.Capital,
+			Status:   accountstatus.Active,
 		},
 	}
 

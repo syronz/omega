@@ -1,7 +1,6 @@
 package service
 
 import (
-	"encoding/json"
 	"fmt"
 	"omega/domain/base/basmodel"
 	"omega/domain/base/basrepo"
@@ -177,7 +176,7 @@ func (p *BasAccountServ) IsActive(fix types.FixedNode) (bool, basmodel.Account, 
 	return account.Status == accountstatus.Active, account, nil
 }
 
-func makeTreeChartOfAccounts(accounts []basmodel.Account) {
+func treeChartOfAccounts(accounts []basmodel.Account) (root basmodel.Tree) {
 	arr := make([]basmodel.Tree, len(accounts))
 
 	for i, v := range accounts {
@@ -192,7 +191,6 @@ func makeTreeChartOfAccounts(accounts []basmodel.Account) {
 
 	pMap := make(map[types.RowID]*basmodel.Tree, 1)
 
-	var root basmodel.Tree
 	pMap[0] = &root
 
 	exceed := basmodel.Tree{
@@ -216,13 +214,7 @@ func makeTreeChartOfAccounts(accounts []basmodel.Account) {
 
 	}
 
-	b, err := json.MarshalIndent(root, "", "    ")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	fmt.Println(string(b))
-
+	return
 }
 
 func parseParent(pID *types.RowID) types.RowID {
@@ -230,4 +222,22 @@ func parseParent(pID *types.RowID) types.RowID {
 		return 0
 	}
 	return *pID
+}
+
+// ChartOfAccount is a tree shape of accounts implemented in the nested app
+func (p *BasAccountServ) ChartOfAccount(params param.Param) (root basmodel.Tree,
+	err error) {
+
+	var accounts []basmodel.Account
+	params.Limit = consts.MaxRowsCount
+	params.Order = "bas_accounts.code ASC"
+
+	if accounts, err = p.Repo.List(params); err != nil {
+		glog.CheckError(err, "error in accounts list")
+		return
+	}
+
+	root = treeChartOfAccounts(accounts)
+
+	return
 }

@@ -70,14 +70,13 @@ func TestChartOfAccounts(t *testing.T) {
 		fmt.Println(v.Name, v.ID)
 	}
 
-	b, err := json.MarshalIndent(accounts, "", " ")
+	root := treeChartOfAccounts(accounts)
+
+	b, err := json.MarshalIndent(root, "", "    ")
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 	fmt.Println(string(b))
 
-	makeTreeChartOfAccounts(accounts)
-
-	t.Log("here is we testing", accounts)
 }

@@ -226,3 +226,29 @@ func (p *AccountAPI) Excel(c *gin.Context) {
 	c.Data(http.StatusOK, "application/octet-stream", buffer.Bytes())
 
 }
+
+// ChartOfAccount of accounts
+func (p *AccountAPI) ChartOfAccount(c *gin.Context) {
+	resp, params := response.NewParam(p.Engine, c, basmodel.AccountTable, base.Domain)
+
+	data := make(map[string]interface{})
+	var err error
+
+	if params.CompanyID, err = resp.GetCompanyID("E1080813"); err != nil {
+		return
+	}
+
+	if !resp.CheckRange(params.CompanyID) {
+		return
+	}
+
+	if data["list"], err = p.Service.ChartOfAccount(params); err != nil {
+		resp.Error(err).JSON()
+		return
+	}
+
+	resp.Record(base.ListAccount)
+	resp.Status(http.StatusOK).
+		MessageT(corterm.ListOfV, basterm.Accounts).
+		JSON(data)
+}

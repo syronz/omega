@@ -45,13 +45,14 @@ func (p *BasActivityServ) Save(activity basmodel.Activity) (createdActivity basm
 }
 
 // Record will save the activity
+// TODO: Record is deprecated we should go with channels
 func (p *BasActivityServ) Record(c *gin.Context, ev types.Event, data ...interface{}) {
 	var userID types.RowID
 	var companyID, nodeID uint64
 	var username string
 
-	recordType := p.findRecordType(data...)
-	before, after := p.fillBeforeAfter(recordType, data...)
+	recordType := p.FindRecordType(data...)
+	before, after := p.FillBeforeAfter(recordType, data...)
 
 	if len(data) > 0 && !p.Engine.Envs.ToBool(base.RecordWrite) {
 		return
@@ -95,7 +96,15 @@ func (p *BasActivityServ) Record(c *gin.Context, ev types.Event, data ...interfa
 	glog.CheckError(err, fmt.Sprintf("Failed in saving activity for %+v", activity))
 }
 
-func (p *BasActivityServ) fillBeforeAfter(recordType RecordType, data ...interface{}) (before, after []byte) {
+// RecordCh is based on channel
+func (p *BasActivityServ) RecordCh(activityCh chan basmodel.Activity) {
+	for a := range activityCh {
+		glog.Debug(a)
+
+	}
+}
+
+func (p *BasActivityServ) FillBeforeAfter(recordType RecordType, data ...interface{}) (before, after []byte) {
 	var err error
 	if recordType == writeBefore || recordType == writeBoth {
 		before, err = json.Marshal(data[0])
@@ -109,7 +118,7 @@ func (p *BasActivityServ) fillBeforeAfter(recordType RecordType, data ...interfa
 	return
 }
 
-func (p *BasActivityServ) findRecordType(data ...interface{}) RecordType {
+func (p *BasActivityServ) FindRecordType(data ...interface{}) RecordType {
 	switch len(data) {
 	case 0:
 		return read

@@ -106,7 +106,7 @@ func (p *CompanyAPI) Create(c *gin.Context) {
 		return
 	}
 
-	go resp.SendRecordCreate(material.CreateCompany, company)
+	resp.SendRecordCreate(material.CreateCompany, company)
 	resp.Status(http.StatusOK).
 		MessageT(corterm.VCreatedSuccessfully, basterm.Company).
 		JSON(createdCompany)

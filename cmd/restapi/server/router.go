@@ -97,6 +97,8 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 		access.Check(base.AccountWrite), basAccountAPI.Delete)
 	rg.GET("/excel/companies/:companyID/accounts",
 		access.Check(base.AccountExcel), basAccountAPI.Excel)
+	rg.GET("/companies/:companyID/charts/accounts",
+		access.Check(base.AccountRead), basAccountAPI.ChartOfAccount)
 
 	rg.GET("/phones",
 		access.Check(base.SuperAccess), basPhoneAPI.List)

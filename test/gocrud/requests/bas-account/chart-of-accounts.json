@@ -1,0 +1,6 @@
+{
+  "method":"get",
+	"url":"_URL_/companies/1001/charts/accounts",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {}
+}

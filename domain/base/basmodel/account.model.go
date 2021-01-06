@@ -20,7 +20,7 @@ const (
 type Account struct {
 	types.FixedNode
 	ParentID  *types.RowID `json:"parent_id"`
-	Code      *string      `gorm:"unique" json:"code"`
+	Code      string       `gorm:"unique" json:"code"`
 	Name      string       `gorm:"not null;unique" json:"name,omitempty"`
 	Type      types.Enum   `json:"type,omitempty"`
 	Status    types.Enum   `json:"status,omitempty"`
@@ -46,10 +46,10 @@ func (p *Account) Validate(act coract.Action) (err error) {
 	// 			dict.R(corterm.Name), 255)
 	// 	}
 
-	// 	if p.Resources == "" {
-	// 		err = limberr.AddInvalidParam(err, "resources",
-	// 			corerr.VisRequired, dict.R(corterm.Resources))
-	// 	}
+	if p.Code == "" {
+		err = limberr.AddInvalidParam(err, "code",
+			corerr.VisRequired, dict.R(corterm.Code))
+	}
 
 	// 	if len(p.Description) > 255 {
 	// 		err = limberr.AddInvalidParam(err, "description",

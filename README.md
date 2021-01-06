@@ -67,4 +67,7 @@ plog.ServerLog.Panic(err.Error())
 for i in $(grep -rl gorm);do sed -i 's/github.com\/jinzhu/gorm.io/' $i ;done
 ```
 
+#questions?
+1. I decide to don't let code column for account be null, what is the point of null for code in
+   bas_accounts table?
 
