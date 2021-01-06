@@ -38,4 +38,6 @@ const (
 	DefaultLogo     = "default_logo.png"
 	DefaultBanner   = "default_header.png"
 	DefaultFooter   = "default_footer.png"
+
+	MaxChildrenForChartOfAccounts = 3
 )

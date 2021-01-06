@@ -1,10 +1,12 @@
 package service
 
 import (
+	"encoding/json"
 	"fmt"
 	"omega/domain/base/basmodel"
 	"omega/domain/base/basrepo"
 	"omega/domain/base/enum/accountstatus"
+	"omega/internal/consts"
 	"omega/internal/core"
 	"omega/internal/core/coract"
 	"omega/internal/core/corerr"
@@ -173,4 +175,59 @@ func (p *BasAccountServ) IsActive(fix types.FixedNode) (bool, basmodel.Account, 
 	}
 
 	return account.Status == accountstatus.Active, account, nil
+}
+
+func makeTreeChartOfAccounts(accounts []basmodel.Account) {
+	arr := make([]basmodel.Tree, len(accounts))
+
+	for i, v := range accounts {
+		arr[i].ID = v.ID
+		arr[i].CompanyID = v.CompanyID
+		arr[i].NodeID = v.NodeID
+		arr[i].ParentID = v.ParentID
+		arr[i].Code = v.Code
+		arr[i].Name = v.Name
+		arr[i].Type = v.Type
+	}
+
+	pMap := make(map[types.RowID]*basmodel.Tree, 1)
+
+	var root basmodel.Tree
+	pMap[0] = &root
+
+	exceed := basmodel.Tree{
+		Name: "exceed",
+	}
+
+	for i, v := range arr {
+		pMap[v.ID] = &arr[i]
+
+		pID := parseParent(v.ParentID)
+
+		pMap[pID].Counter++
+		if pMap[pID].Counter < consts.MaxChildrenForChartOfAccounts {
+			pMap[pID].Children = append(pMap[pID].Children, &arr[i])
+		} else {
+			if pMap[pID].Counter == consts.MaxChildrenForChartOfAccounts {
+				exceed.ParentID = v.ParentID
+				pMap[pID].Children = append(pMap[pID].Children, &exceed)
+			}
+		}
+
+	}
+
+	b, err := json.MarshalIndent(root, "", "    ")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(string(b))
+
+}
+
+func parseParent(pID *types.RowID) types.RowID {
+	if pID == nil {
+		return 0
+	}
+	return *pID
 }

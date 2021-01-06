@@ -38,6 +38,32 @@ func TestChartOfAccounts(t *testing.T) {
 			Name:     "Cash IQD",
 			Type:     accounttype.Cash,
 		},
+		{
+			FixedNode: types.FixedNode{
+				ID: 4,
+			},
+			Code: helper.StrPointer("3"),
+			Name: "Expense",
+			Type: accounttype.Expense,
+		},
+		{
+			FixedNode: types.FixedNode{
+				ID: 5,
+			},
+			ParentID: types.RowIDPointer(4),
+			Code:     helper.StrPointer("31"),
+			Name:     "Building",
+			Type:     accounttype.Expense,
+		},
+		{
+			FixedNode: types.FixedNode{
+				ID: 6,
+			},
+			ParentID: types.RowIDPointer(1),
+			Code:     helper.StrPointer("311"),
+			Name:     "HQ",
+			Type:     accounttype.Expense,
+		},
 	}
 
 	for _, v := range accounts {
@@ -50,6 +76,8 @@ func TestChartOfAccounts(t *testing.T) {
 		return
 	}
 	fmt.Println(string(b))
+
+	makeTreeChartOfAccounts(accounts)
 
 	t.Log("here is we testing", accounts)
 }
