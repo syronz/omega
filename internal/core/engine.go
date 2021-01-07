@@ -1,6 +1,7 @@
 package core
 
 import (
+	"omega/domain/base/basmodel"
 	"omega/internal/types"
 
 	"github.com/sirupsen/logrus"
@@ -18,6 +19,7 @@ type Engine struct {
 	Envs       types.Envs
 	AES        goaes.BuildModel
 	Setting    map[types.Setting]types.SettingMap
+	ActivityCh chan basmodel.Activity
 }
 
 // Clone return an engine just like before

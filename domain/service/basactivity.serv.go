@@ -44,6 +44,13 @@ func (p *BasActivityServ) Save(activity basmodel.Activity) (createdActivity basm
 	return
 }
 
+// ActivityWatcher is used for watching activity channel
+func (p *BasActivityServ) ActivityWatcher() {
+	for a := range p.Engine.ActivityCh {
+		fmt.Println("inside activity >>>>..... ", a)
+	}
+}
+
 // Record will save the activity
 // TODO: Record is deprecated we should go with channels
 func (p *BasActivityServ) Record(c *gin.Context, ev types.Event, data ...interface{}) {
@@ -62,7 +69,7 @@ func (p *BasActivityServ) Record(c *gin.Context, ev types.Event, data ...interfa
 		return
 	}
 
-	if p.isRecordSetInEnvironment(recordType) {
+	if p.IsRecordSetInEnvironment(recordType) {
 		return
 	}
 	if companyIDtmp, ok := c.Get("COMPANY_ID"); ok {
@@ -100,7 +107,6 @@ func (p *BasActivityServ) Record(c *gin.Context, ev types.Event, data ...interfa
 func (p *BasActivityServ) RecordCh(activityCh chan basmodel.Activity) {
 	for a := range activityCh {
 		glog.Debug(a)
-
 	}
 }
 
@@ -133,7 +139,7 @@ func (p *BasActivityServ) FindRecordType(data ...interface{}) RecordType {
 	return writeBefore
 }
 
-func (p *BasActivityServ) isRecordSetInEnvironment(recordType RecordType) bool {
+func (p *BasActivityServ) IsRecordSetInEnvironment(recordType RecordType) bool {
 	switch recordType {
 	case read:
 		if !p.Engine.Envs.ToBool(base.RecordRead) {

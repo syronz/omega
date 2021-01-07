@@ -5,6 +5,9 @@ import (
 	"omega/cmd/restapi/insertdata"
 	"omega/cmd/restapi/server"
 	"omega/cmd/restapi/startoff"
+	"omega/domain/base/basmodel"
+	"omega/domain/base/basrepo"
+	"omega/domain/service"
 	"omega/internal/core"
 	"omega/internal/corstartoff"
 	"omega/pkg/dict"
@@ -29,9 +32,15 @@ func main() {
 
 	corstartoff.ConnectDB(engine, false)
 	corstartoff.ConnectActivityDB(engine)
+	engine.ActivityCh = make(chan basmodel.Activity, 1)
 	startoff.Migrate(engine)
 
 	insertdata.Insert(engine)
+
+	activityRepo := basrepo.ProvideActivityRepo(engine)
+	basActivityServ := service.ProvideBasActivityService(activityRepo)
+	//ActivityWatcher is use a channel for checking all activities for recording
+	go basActivityServ.ActivityWatcher()
 
 	/*
 		//init of views

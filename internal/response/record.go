@@ -35,15 +35,15 @@ func (r *Response) initiateRecordCh(ev types.Event, data ...interface{}) {
 	recordType := activityServ.FindRecordType(data...)
 	before, after := activityServ.FillBeforeAfter(recordType, data...)
 
-	if len(data) > 0 && !p.Engine.Envs.ToBool(base.RecordWrite) {
+	if len(data) > 0 && !r.Engine.Envs.ToBool(base.RecordWrite) {
 		return
 	}
 
-	if len(data) == 0 && !p.Engine.Envs.ToBool(base.RecordRead) {
+	if len(data) == 0 && !r.Engine.Envs.ToBool(base.RecordRead) {
 		return
 	}
 
-	if p.isRecordSetInEnvironment(recordType) {
+	if activityServ.IsRecordSetInEnvironment(recordType) {
 		return
 	}
 	if companyIDtmp, ok := r.Context.Get("COMPANY_ID"); ok {
@@ -73,6 +73,9 @@ func (r *Response) initiateRecordCh(ev types.Event, data ...interface{}) {
 		After:    string(after),
 	}
 
-	activityServ.RecordCh(ac
+	r.Engine.ActivityCh <- activity
+
+	_ = activity
+	// activityServ.RecordCh(ac
 
 }
