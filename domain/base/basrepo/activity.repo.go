@@ -33,6 +33,14 @@ func (p *ActivityRepo) Create(activity basmodel.Activity) (u basmodel.Activity, 
 	return
 }
 
+// CreateBatch ActivityRepo
+func (p *ActivityRepo) CreateBatch(activities []basmodel.Activity) (u basmodel.Activity, err error) {
+	err = p.Engine.ActivityDB.
+		Table(basmodel.ActivityTable).
+		Create(&activities).Error
+	return
+}
+
 // List of activities
 func (p *ActivityRepo) List(params param.Param) (activities []basmodel.Activity, err error) {
 

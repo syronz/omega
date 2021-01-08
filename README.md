@@ -40,6 +40,8 @@ plog.ServerLog.Panic(err.Error())
 - [ ] common method for repo based on inheritance
 - [x] fix log in the database.go
 - [ ] log and activity record should be run in seperate go routine
+- [ ] change the name of row column in the eac_slots table
+- [ ] apilogger after a while should be zipped and new file created
 
 # Requesed RMS part
 1. inventory import should lock the price for agent

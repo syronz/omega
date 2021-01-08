@@ -45,6 +45,8 @@ func LoadEnvs() *core.Engine {
 	envs[base.JWTExpiration] = os.Getenv("OMEGA_BASE_JWT_EXPIRATION")
 	envs[base.RecordRead] = os.Getenv("OMEGA_BASE_RECORD_READ")
 	envs[base.RecordWrite] = os.Getenv("OMEGA_BASE_RECORD_WRITE")
+	envs[base.ActivityFileCounter] = os.Getenv("OMEGA_BASE_ACTIVITY_FILE_COUNTER")
+
 	envs[base.AdminUsername] = os.Getenv("OMEGA_BASE_ADMIN_USERNAME")
 	envs[base.AdminPassword] = os.Getenv("OMEGA_BASE_ADMIN_PASSWORD")
 

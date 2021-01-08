@@ -1,8 +1,10 @@
 {
   "method":"get",
-	"url":"_URL_/companies/1001/companies?filter=mat_companies.id[gt]'7'",
-	"url":"_URL_/companies/1001/companies",
 	"url":"_URL_/companies/1001/companies?deleted=true",
+	"url":"_URL_/companies/1001/companies?filter=mat_companies.id[gt]'2'",
+	"url":"_URL_/companies/1001/companies",
+	"url":"_URL_/companies/1001/companies?filter=mat_companies.id[eq]'2'&select=mat_companies.id,mat_companies.name",
+	"url":"_URL_/companies/1001/companies?select=mat_companies.id,mat_companies.name",
 	"authorization":"Bearer _TOKEN_",
 	"payload": {}
 }

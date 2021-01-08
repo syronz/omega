@@ -46,8 +46,18 @@ func (p *BasActivityServ) Save(activity basmodel.Activity) (createdActivity basm
 
 // ActivityWatcher is used for watching activity channel
 func (p *BasActivityServ) ActivityWatcher() {
+	var arr []basmodel.Activity
+	counter := 0
+
 	for a := range p.Engine.ActivityCh {
-		fmt.Println("inside activity >>>>..... ", a)
+		counter++
+		arr = append(arr, a)
+
+		if counter > p.Engine.Envs.ToInt(base.ActivityFileCounter) {
+			p.Repo.CreateBatch(arr)
+			counter = 0
+			arr = []basmodel.Activity{}
+		}
 	}
 }
 
