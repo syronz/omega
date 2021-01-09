@@ -1,0 +1,6 @@
+{
+	"method":"get",
+	"url":"_URL_/profile",
+	"authorization":"Bearer _TOKEN_",
+	"payload": {}
+}

@@ -265,6 +265,11 @@ en = 'notes'
 ku = 'notes'
 ar = 'notes'
 
+[profile]
+en = 'profile'
+ku = 'profile'
+ar = 'profile'
+
 ["%v created successfully"]
 en = '%v created successfully'
 ku = '%v ba sarkawtooyi drwst kra'

@@ -21,6 +21,7 @@ const (
 	Code        = "code"
 	Scope       = "scope"
 	Notes       = "notes"
+	Profile     = "profile"
 
 	VCreatedSuccessfully = "%v created successfully"
 	VUpdatedSuccessfully = "%v updated successfully"

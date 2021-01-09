@@ -42,7 +42,7 @@ func (p *UserRepo) FindByID(fix types.FixedCol) (user basmodel.User, err error) 
 		Joins("LEFT JOIN bas_account_phones ON bas_accounts.id = bas_account_phones.account_id").
 		Joins("LEFT JOIN bas_phones ON bas_phones.id = bas_account_phones.phone_id").
 		Where("bas_users.company_id = ? AND bas_users.node_id = ? AND bas_users.id = ?", fix.CompanyID, fix.NodeID, fix.ID.ToUint64()).
-		First(&user).Error
+		Scan(&user).Scan(&user.Account).Scan(&user.Role).Error
 
 	user.ID = fix.ID
 	err = p.dbError(err, "E1063251", user, corterm.List)

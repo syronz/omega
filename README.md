@@ -34,13 +34,13 @@ plog.ServerLog.Panic(err.Error())
 ```
 
 #TODO
-- [ ] if types.Resource not used in core it should moved to the base domain, in the future I decide about that
+- [x] if types.Resource not used in core it should moved to the base domain, in the future I decide about that
 - [x] apilogger should be moved to other place
 - [ ] implement refresh token
-- [ ] common method for repo based on inheritance
+- [x] common method for repo based on inheritance
 - [x] fix log in the database.go
 - [x] log and activity record should be run in seperate go routine
-- [ ] change the name of row column in the eac_slots table
+- [x] change the name of row column in the eac_slots table
 - [ ] apilogger after a while should be zipped and new file created
 
 # Requesed RMS part

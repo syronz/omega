@@ -25,7 +25,7 @@ type Slot struct {
 	Credit        float64     `json:"credit,omitempty"`
 	Balance       float64     `json:"balance,omitempty"`
 	Description   *string     `json:"description,omitempty"`
-	Row           int         `json:"row,omitempty"`
+	Rows          int         `json:"rows,omitempty"`
 	PostDate      time.Time   `json:"post_date,omitempty"`
 }
 

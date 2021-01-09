@@ -30,11 +30,13 @@ type User struct {
 	Name      string      `gorm:"-" json:"name,omitempty" table:"bas_accounts.name"`
 	Extra     interface{} `gorm:"-" json:"user_extra,omitempty" table:"-"`
 	Resources string      `gorm:"-" json:"resources,omitempty" table:"bas_roles.resources"`
-	Role      string      `gorm:"-" json:"role,omitempty" table:"bas_roles.name as role"`
-	Phone     string      `gorm:"-" json:"phone,omitempty" table:"bas_phones.phone"`
-	Phones    []Phone     `gorm:"-" json:"phones,omitempty" table:"-"`
-	Status    types.Enum  `gorm:"-" json:"status,omitempty" table:"-"`
-	Code      string      `gorm:"-" json:"code,omitempty" table:"-"`
+	// Role      string      `gorm:"-" json:"role,omitempty" table:"bas_roles.name as role"`
+	Phone   string     `gorm:"-" json:"phone,omitempty" table:"bas_phones.phone"`
+	Phones  []Phone    `gorm:"-" json:"phones,omitempty" table:"-"`
+	Status  types.Enum `gorm:"-" json:"status,omitempty" table:"-"`
+	Code    string     `gorm:"-" json:"code,omitempty" table:"-"`
+	Account Account    `gorm:"-" json:"account,omitempty" table:"-"`
+	Role    Role       `gorm:"-" json:"role,omitempty" table:"-"`
 }
 
 // Validate check the type of

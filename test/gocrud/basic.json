@@ -3,7 +3,8 @@
 		{
 			"cloud": {
 				"_URL_":"http://127.0.0.1:7173/api/restapi/v1",
-        "_TOKEN_":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InN1cGVyIiwiaWQiOjExLCJsYW5ndWFnZSI6Imt1IiwiY29tcGFueV9pZCI6MTAwMSwibm9kZV9pZCI6MTAxLCJleHAiOjE2MTQ4MzE2Nzl9.4MBfh_JHH4ys4UXiRJyN_9Xi4GIWnlcNrNW7ve8cgrM"
+        "_TOKEN_":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InN1cGVyIiwiaWQiOjExLCJsYW5ndWFnZSI6Imt1IiwiY29tcGFueV9pZCI6MTAwMSwibm9kZV9pZCI6MTAxLCJleHAiOjE2MTQ4MzE2Nzl9.4MBfh_JHH4ys4UXiRJyN_9Xi4GIWnlcNrNW7ve8cgrM",
+        "_TOKEN_":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InN1cGVyIiwiaWQiOjExLCJsYW5ndWFnZSI6Imt1IiwiY29tcGFueV9pZCI6MTAwMSwibm9kZV9pZCI6MTAxLCJleHAiOjE2MTUyMjQxODJ9.6U57vcT_sfDwr-yqZE4wGeQP_24ioVor7R_06cC6c3Y"
 			},
 			"node": {
 				"_URL_":"http://127.0.0.1:7173/api/restapi/v1",

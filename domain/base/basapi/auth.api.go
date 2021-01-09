@@ -55,6 +55,23 @@ func (p *AuthAPI) Login(c *gin.Context) {
 		JSON(user)
 }
 
+// Profile returns the user's information
+func (p *AuthAPI) Profile(c *gin.Context) {
+	resp, params := response.NewParam(p.Engine, c, basmodel.UserTable, base.Domain)
+
+	var user basmodel.User
+	var err error
+	if user, err = p.Service.Profile(params); err != nil {
+		resp.Error(err).JSON()
+		return
+	}
+
+	resp.Record(base.ViewProfile)
+	resp.Status(http.StatusOK).
+		MessageT("profile").
+		JSON(user)
+}
+
 // Logout will erase the resources from access.Cache
 func (p *AuthAPI) Logout(c *gin.Context) {
 	resp := response.New(p.Engine, c, base.Domain)

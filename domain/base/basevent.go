@@ -39,6 +39,7 @@ const (
 	BasLogout   types.Event = "logout"
 	LoginFailed types.Event = "login-failed"
 	Register    types.Event = "register"
+	ViewProfile types.Event = "profile-view"
 
 	CreatePhone types.Event = "phone-create"
 	UpdatePhone types.Event = "phone-update"

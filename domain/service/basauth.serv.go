@@ -90,6 +90,23 @@ func (p *BasAuthServ) Login(auth basmodel.Auth, params param.Param) (user basmod
 	return
 }
 
+// Profile return user's information
+func (p *BasAuthServ) Profile(params param.Param) (user basmodel.User, err error) {
+	userServ := ProvideBasUserService(basrepo.ProvideUserRepo(p.Engine))
+
+	fix := types.FixedCol{
+		CompanyID: params.CompanyID,
+		NodeID:    params.NodeID,
+		ID:        params.UserID,
+	}
+
+	if user, err = userServ.FindByID(fix); err != nil {
+		return
+	}
+
+	return
+}
+
 // Logout erase resources from the cache
 func (p *BasAuthServ) Logout(params param.Param) {
 	BasAccessResetCache(params.UserID)

@@ -44,6 +44,8 @@ func Route(rg gin.RouterGroup, engine *core.Engine) {
 
 	rg.Use(basmid.AuthGuard(engine))
 
+	rg.GET("/profile", basAuthAPI.Profile)
+
 	access := basmid.NewAccessMid(engine)
 
 	rg.POST("/logout", basAuthAPI.Logout)
