@@ -8,20 +8,25 @@ import (
 	"omega/internal/types"
 )
 
-// RecordCreate make it simpler for calling the record
-func (r *Response) RecordCreate(ev types.Event, newData interface{}) {
+// RecordCreateInstant make it simpler for calling the record
+func (r *Response) RecordCreateInstant(ev types.Event, newData interface{}) {
 	r.Record(ev, nil, newData)
 }
 
-// Record is used for saving activity
+// RecordInstant is used for saving activity
 // TODO: deprecated
-func (r *Response) Record(ev types.Event, data ...interface{}) {
+func (r *Response) RecordInstant(ev types.Event, data ...interface{}) {
 	activityServ := service.ProvideBasActivityService(basrepo.ProvideActivityRepo(r.Engine))
 	activityServ.Record(r.Context, ev, data...)
 }
 
-func (r *Response) SendRecordCreate(ev types.Event, newData interface{}) {
-	// r.Record(ev, nil, newData)
+// Record will send the activity for read/update/delete to the AcitivityCh
+func (r *Response) Record(ev types.Event, data ...interface{}) {
+	r.initiateRecordCh(ev, data)
+}
+
+// RecordCreate will send the activity for creation to the AcitivityCh
+func (r *Response) RecordCreate(ev types.Event, newData interface{}) {
 	r.initiateRecordCh(ev, nil, newData)
 }
 

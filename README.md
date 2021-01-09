@@ -39,7 +39,7 @@ plog.ServerLog.Panic(err.Error())
 - [ ] implement refresh token
 - [ ] common method for repo based on inheritance
 - [x] fix log in the database.go
-- [ ] log and activity record should be run in seperate go routine
+- [x] log and activity record should be run in seperate go routine
 - [ ] change the name of row column in the eac_slots table
 - [ ] apilogger after a while should be zipped and new file created
 

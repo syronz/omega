@@ -10,6 +10,7 @@ import (
 	"omega/internal/param"
 	"omega/internal/types"
 	"omega/pkg/glog"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -48,15 +49,26 @@ func (p *BasActivityServ) Save(activity basmodel.Activity) (createdActivity basm
 func (p *BasActivityServ) ActivityWatcher() {
 	var arr []basmodel.Activity
 	counter := 0
+	var activity basmodel.Activity
 
-	for a := range p.Engine.ActivityCh {
-		counter++
-		arr = append(arr, a)
+	tickTimer := time.Tick(p.Engine.Envs.ToDuration(base.ActivityTickTimer) * time.Second)
 
-		if counter > p.Engine.Envs.ToInt(base.ActivityFileCounter) {
-			p.Repo.CreateBatch(arr)
-			counter = 0
-			arr = []basmodel.Activity{}
+	for {
+		select {
+		case activity = <-p.Engine.ActivityCh:
+			counter++
+			arr = append(arr, activity)
+			if counter > p.Engine.Envs.ToInt(base.ActivityFileCounter) {
+				p.Repo.CreateBatch(arr)
+				counter = 0
+				arr = []basmodel.Activity{}
+			}
+		case <-tickTimer:
+			if len(arr) > 0 {
+				p.Repo.CreateBatch(arr)
+				counter = 0
+				arr = []basmodel.Activity{}
+			}
 		}
 	}
 }
@@ -111,13 +123,6 @@ func (p *BasActivityServ) Record(c *gin.Context, ev types.Event, data ...interfa
 
 	_, err := p.Repo.Create(activity)
 	glog.CheckError(err, fmt.Sprintf("Failed in saving activity for %+v", activity))
-}
-
-// RecordCh is based on channel
-func (p *BasActivityServ) RecordCh(activityCh chan basmodel.Activity) {
-	for a := range activityCh {
-		glog.Debug(a)
-	}
 }
 
 func (p *BasActivityServ) FillBeforeAfter(recordType RecordType, data ...interface{}) (before, after []byte) {
